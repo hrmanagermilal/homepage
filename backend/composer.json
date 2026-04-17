@@ -1,0 +1,42 @@
+{
+  "name": "milal/homepage-api",
+  "type": "project",
+  "description": "밀알교회 홈페이지 REST API",
+  "keywords": ["church", "api", "php", "rest"],
+  "homepage": "https://milal-church.kr",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Milal Church Development Team",
+      "email": "dev@milal-church.kr"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "firebase/php-jwt": "^6.4",
+    "intervention/image": "^2.7",
+    "monolog/monolog": "^2.0",
+    "guzzlehttp/guzzle": "^7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "MillalHomepage\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MillalHomepage\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "serve": "php -S localhost:8000 -t public"
+  },
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}
