@@ -12,14 +12,14 @@ class ResponseFormatter {
      */
     public static function success($data = null, $message = 'Success', $status = 200) {
         http_response_code($status);
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=utf-8');
         
         return json_encode([
             'success' => true,
             'status' => $status,
             'message' => $message,
             'data' => $data
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
     }
     
     /**
@@ -27,7 +27,7 @@ class ResponseFormatter {
      */
     public static function error($code, $message, $details = null, $status = 400) {
         http_response_code($status);
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=utf-8');
         
         return json_encode([
             'success' => false,
@@ -37,7 +37,7 @@ class ResponseFormatter {
                 'message' => $message,
                 'details' => $details
             ]
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
     }
     
     /**
@@ -45,7 +45,7 @@ class ResponseFormatter {
      */
     public static function paginated($data, $total, $page, $limit, $message = 'Success') {
         http_response_code(200);
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=utf-8');
         
         return json_encode([
             'success' => true,
@@ -58,7 +58,7 @@ class ResponseFormatter {
                 'limit' => $limit,
                 'pages' => ceil($total / $limit)
             ]
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
     }
 }
 ?>

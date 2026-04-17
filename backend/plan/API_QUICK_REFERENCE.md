@@ -186,9 +186,6 @@ CREATE INDEX idx_news_created ON news(created_at);
 CREATE INDEX idx_news_category ON news(category, created_at);
 CREATE INDEX idx_news_views ON news(views);
 
--- News_comments 테이블
-CREATE INDEX idx_news_comment_id ON news_comments(news_id);
-
 -- Hero 이미지 테이블
 CREATE INDEX idx_hero_bg_order ON hero_background_images(hero_id, `order`);
 CREATE INDEX idx_hero_front ON hero_front_images(hero_id);

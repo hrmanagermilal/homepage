@@ -239,16 +239,6 @@ CREATE TABLE news (
   INDEX idx_created_at (created_at),
   INDEX idx_views (views)
 );
-
-CREATE TABLE news_comments (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  news_id INT NOT NULL,
-  author VARCHAR(100),
-  content TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (news_id) REFERENCES news(id) ON DELETE CASCADE,
-  INDEX idx_news_id (news_id)
-);
 ```
 
 ---

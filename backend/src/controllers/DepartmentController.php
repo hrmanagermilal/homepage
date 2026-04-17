@@ -20,6 +20,28 @@ class DepartmentController {
     }
     
     /**
+     * GET /api/departments
+     * 모든 부서 목록 조회
+     */
+    public function getAll() {
+        try {
+            $departments = $this->departmentModel->getAll();
+            
+            return ResponseFormatter::success(
+                $departments,
+                'All departments retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return ResponseFormatter::error(
+                'DATABASE_ERROR',
+                'Failed to fetch departments: ' . $e->getMessage(),
+                null,
+                500
+            );
+        }
+    }
+    
+    /**
      * GET /api/nextgen
      * NextGen 부서 목록 조회
      */

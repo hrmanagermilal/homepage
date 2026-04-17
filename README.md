@@ -77,6 +77,30 @@ Client → Nginx (Reverse Proxy, Load Balancer, SSL/TLS)
 - UTF-8MB4 인코딩 (한글, 이모지 지원)
 - 자동 백업 설정 권장
 
+### 데이터베이스 테이블 구조
+
+| 테이블명 | 설명 | 주요 컬럼 |
+|---------|------|---------|
+| `heroes` | 메인 배너 섹션 | id, title, subtitle |
+| `sermons` | 설교 (YouTube 연동) | id, title, youtube_url, youtube_id |
+| `bulletins` | 주보 | id, title, week_number, year |
+| `announcements` | 공지사항 | id, title, content, category, is_pinned |
+| `together_items` | 함께하는 교회 | id, title, link, order |
+| `departments` | 부서 (다음세대/사역) | id, department_type, name, clergy_name |
+| `news` | 뉴스 및 소식 | id, title, content, author, category |
+| `users` | 관리자 계정 | id, username, email, password_hash, role |
+| `page_views` | 페이지 조회 기록 **(NEW)** | id, page_path, browser_name, browser_version, device_type, ip_address |
+
+**page_views 테이블 상세:**
+- `page_path`: 방문한 페이지 경로
+- `browser_name`: 브라우저 이름 (Chrome, Firefox, Safari 등)
+- `browser_version`: 브라우저 버전
+- `device_type`: 디바이스 타입 (mobile, tablet, desktop)
+- `ip_address`: 방문자 IP 주소
+- `user_agent`: HTTP User Agent 정보
+- `session_id`: 방문자 세션 ID
+- `viewed_at`: 조회 시간 (인덱싱됨)
+
 ---
 
 ## 4. 개발 환경 설정 (Development Setup)
@@ -118,13 +142,207 @@ docker compose logs -f
 
 ## 5. API 문서 (API Documentation)
 
-주요 엔드포인트:
+### 주요 엔드포인트
+
+#### 콘텐츠 API
 - `GET /api/sermons` — 설교 목록
 - `GET /api/news` — 뉴스 조회
 - `GET /api/bulletins` — 주보 조회
 - `GET /api/announcements` — 공지사항 조회
+
+#### 인증 API
 - `POST /api/auth/login` — 로그인
 - `POST /api/users` — 사용자 생성
+
+#### 페이지 뷰 트래킹 API (신규)
+
+##### 1. 페이지 뷰 기록 (클라이언트에서 호출)
+```
+POST /api/track/pageview
+
+Request Body:
+{
+  "page_path": "/home",
+  "browser_name": "Chrome",
+  "browser_version": "120.0",
+  "device_type": "mobile|tablet|desktop",
+  "referrer": "https://example.com",
+  "session_id": "session_unique_id"
+}
+
+Response:
+{
+  "success": true,
+  "status": 201,
+  "data": { "id": 12345 },
+  "message": "Page view tracked successfully"
+}
+```
+
+**기록 정보:**
+- **page_path**: 방문한 페이지 경로 (예: /home, /news, /sermon/123)
+- **browser_name**: 브라우저 이름 (예: Chrome, Firefox, Safari)
+- **browser_version**: 브라우저 버전 (예: 120.0.1234.5)
+- **device_type**: 디바이스 유형 (mobile, tablet, desktop)
+- **ip_address**: 방문자 IP 주소 (서버에서 자동 감지)
+- **user_agent**: HTTP User Agent (서버에서 자동 수집)
+- **referrer**: 이전 페이지 (리퍼러 정보)
+- **session_id**: 세션 ID (방문자 식별)
+- **viewed_at**: 조회 시간 (자동 기록)
+
+##### 2. 페이지별 조회 통계 (관리자 권한 필수)
+```
+GET /api/analytics/pages?start_date=2026-01-01&end_date=2026-12-31&limit=20
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "page_path": "/home",
+      "view_count": 1250,
+      "unique_visitors": 450,
+      "sessions": 650,
+      "first_view": "2026-01-01 08:30:00",
+      "last_view": "2026-12-25 18:45:00"
+    },
+    ...
+  ]
+}
+```
+
+##### 3. 디바이스 타입별 통계 (관리자 권한 필수)
+```
+GET /api/analytics/devices?start_date=2026-01-01&end_date=2026-12-31
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "device_type": "mobile",
+      "view_count": 5420,
+      "unique_visitors": 2100,
+      "percentage": 45.50
+    },
+    {
+      "device_type": "desktop",
+      "view_count": 5100,
+      "unique_visitors": 1800,
+      "percentage": 42.75
+    },
+    ...
+  ]
+}
+```
+
+##### 4. 브라우저별 통계 (관리자 권한 필수)
+```
+GET /api/analytics/browsers?start_date=2026-01-01&limit=10
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "browser_name": "Chrome",
+      "view_count": 7200,
+      "unique_visitors": 2800
+    },
+    {
+      "browser_name": "Safari",
+      "view_count": 2100,
+      "unique_visitors": 850
+    },
+    ...
+  ]
+}
+```
+
+##### 5. 최근 페이지 뷰 목록 (관리자 권한 필수)
+```
+GET /api/analytics/recent?limit=50
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "id": 12345,
+      "page_path": "/home",
+      "browser_name": "Chrome",
+      "browser_version": "120.0",
+      "device_type": "mobile",
+      "ip_address": "203.0.113.45",
+      "referrer": "https://google.com",
+      "viewed_at": "2026-04-17 15:30:22"
+    },
+    ...
+  ]
+}
+```
+
+### 프론트엔드 구현 예시 (JavaScript)
+
+```javascript
+// 페이지 로드 시 호출
+function trackPageView() {
+  const getBrowserInfo = () => {
+    const ua = navigator.userAgent;
+    let browserName = "Unknown";
+    let browserVersion = "Unknown";
+    
+    if (ua.indexOf("Firefox") > -1) {
+      browserName = "Firefox";
+      browserVersion = ua.match(/Firefox\/([0-9.]+)/)[1];
+    } else if (ua.indexOf("Chrome") > -1) {
+      browserName = "Chrome";
+      browserVersion = ua.match(/Chrome\/([0-9.]+)/)[1];
+    } else if (ua.indexOf("Safari") > -1) {
+      browserName = "Safari";
+      browserVersion = ua.match(/Version\/([0-9.]+)/)[1];
+    }
+    
+    return { browserName, browserVersion };
+  };
+  
+  const getDeviceType = () => {
+    const width = window.innerWidth;
+    if (width < 768) return "mobile";
+    if (width < 1024) return "tablet";
+    return "desktop";
+  };
+  
+  const { browserName, browserVersion } = getBrowserInfo();
+  
+  const payload = {
+    page_path: window.location.pathname,
+    browser_name: browserName,
+    browser_version: browserVersion,
+    device_type: getDeviceType(),
+    referrer: document.referrer,
+    session_id: getOrCreateSessionId()
+  };
+  
+  fetch('/api/track/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => console.log('Page view tracking:', err));
+}
+
+function getOrCreateSessionId() {
+  let sessionId = sessionStorage.getItem('milal_session_id');
+  if (!sessionId) {
+    sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    sessionStorage.setItem('milal_session_id', sessionId);
+  }
+  return sessionId;
+}
+
+// 페이지 로드 완료 후 트래킹
+document.addEventListener('DOMContentLoaded', trackPageView);
+```
 
 자세한 API 문서는 [backend/plan/API_OVERVIEW.md](backend/plan/API_OVERVIEW.md) 참고
 

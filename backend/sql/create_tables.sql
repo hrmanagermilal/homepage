@@ -3,6 +3,11 @@
 -- 밀알교회 홈페이지 API 데이터베이스
 -- ===============================================
 
+-- UTF-8 문자 집합 명시적 설정 (중요: 한글 문자 손상 방지)
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+SET COLLATION_CONNECTION = utf8mb4_unicode_ci;
+
 -- 데이터베이스 생성
 CREATE DATABASE IF NOT EXISTS milal_homepage 
 CHARACTER SET utf8mb4 
@@ -123,7 +128,7 @@ CREATE TABLE IF NOT EXISTS together_items (
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_order (order),
+  INDEX idx_order (`order`),
   INDEX idx_active (is_active)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -149,7 +154,7 @@ CREATE TABLE IF NOT EXISTS departments (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_type (department_type),
-  INDEX idx_order (order),
+  INDEX idx_order (`order`),
   INDEX idx_age_group (age_group),
   INDEX idx_ministry_type (ministry_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -187,14 +192,49 @@ CREATE TABLE IF NOT EXISTS news (
   INDEX idx_views (views)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS news_comments (
+
+
+-- ===============================================
+-- 11. PAGE VIEWS / ANALYTICS 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS page_views (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  news_id INT NOT NULL,
-  author VARCHAR(100),
-  content TEXT,
+  page_path VARCHAR(500) NOT NULL,
+  browser_name VARCHAR(100),
+  browser_version VARCHAR(50),
+  device_type ENUM('mobile', 'tablet', 'desktop') DEFAULT 'desktop',
+  ip_address VARCHAR(45),
+  user_agent TEXT,
+  referrer VARCHAR(500),
+  session_id VARCHAR(100),
+  viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_page_path (page_path),
+  INDEX idx_device_type (device_type),
+  INDEX idx_viewed_at (viewed_at),
+  INDEX idx_ip_address (ip_address),
+  INDEX idx_session_id (session_id),
+  INDEX idx_page_time (page_path, viewed_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
+-- 11. MEMBERS MANAGEMENT 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS members (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150),
+  title VARCHAR(100),
+  role VARCHAR(100),
+  picture VARCHAR(500),
+  is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (news_id) REFERENCES news(id) ON DELETE CASCADE,
-  INDEX idx_news (news_id),
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_name (name),
+  INDEX idx_email (email),
+  INDEX idx_role (role),
+  INDEX idx_active (is_active),
   INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

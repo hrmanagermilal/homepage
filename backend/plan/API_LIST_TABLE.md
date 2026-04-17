@@ -98,18 +98,15 @@
 
 ---
 
-### 📰 News Board (8개)
+### 📰 News Board (5개)
 
 | # | HTTP | 경로 | 설명 | 권한 | 파라미터 | 응답 DB 테이블 |
 |---|------|------|------|------|---------|-------------|
 | 48 | GET | `/api/news` | 게시글 목록 조회 | Public | page, limit, category, sort | news |
-| 49 | GET | `/api/news/:id` | 게시글 상세 조회 | Public | - | news, news_comments |
+| 49 | GET | `/api/news/:id` | 게시글 상세 조회 | Public | - | news |
 | 50 | POST | `/api/news` | 게시글 등록 | Editor | title, content, image, author, category, tags | news |
 | 51 | PUT | `/api/news/:id` | 게시글 수정 | Editor | title, content, image, category, tags | news |
-| 52 | DELETE | `/api/news/:id` | 게시글 삭제 | Editor | - | news, news_comments |
-| 53 | POST | `/api/news/:id/comments` | 댓글 등록 | Viewer | author, content | news_comments |
-| 54 | DELETE | `/api/news/:id/comments/:commentId` | 댓글 삭제 | Admin, User | - | news_comments |
-| 55 | GET | `/api/news/:id/comments` | 댓글 목록 조회 | Public | - | news_comments |
+| 52 | DELETE | `/api/news/:id` | 게시글 삭제 | Editor | - | news |
 
 ---
 
@@ -139,7 +136,6 @@
 | departments | 22 | CRUD | department_type, order |
 | department_announcements | 19 | CRUD | department_id |
 | news | 8 | CRUD | category, created_at, views |
-| news_comments | 3 | CR | news_id |
 
 ---
 
