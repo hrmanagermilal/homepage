@@ -1,0 +1,11 @@
+vendor/
+.git
+.gitignore
+*.md
+plan/
+logs/*.log
+uploads/**/*
+!uploads/**/.gitkeep
+docker-compose.yml
+Dockerfile
+.env

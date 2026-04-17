@@ -25,10 +25,10 @@ ini_set('error_log', __DIR__ . '/../logs/error.log');
 
 try {
     // Autoloader
-    require_once __DIR__ . '/../../vendor/autoload.php';
+    require_once __DIR__ . '/../vendor/autoload.php';
     
     // 환경설정 로드
-    require_once __DIR__ . '/config/env.php';
+    require_once __DIR__ . '/../src/config/env.php';
     
     // 라우터 초기화 및 실행
     $router = new \MillalHomepage\Routes\ApiRouter();
