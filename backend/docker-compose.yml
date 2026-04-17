@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: milal-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - certbot_www:/var/www/certbot:ro
+      - certbot_conf:/etc/letsencrypt:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - milal-net
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: milal-certbot
+    volumes:
+      - certbot_www:/var/www/certbot
+      - certbot_conf:/etc/letsencrypt
+    depends_on:
+      - nginx
+    # Renew certificates every 12 hours
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'"
+    restart: unless-stopped
+    networks:
+      - milal-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: milal-backend
+    expose:
+      - "80"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: milal_homepage
+      DB_USER: milal_user
+      DB_PASSWORD: milal_pass_2024
+      JWT_SECRET: change-this-to-a-secure-random-string
+      JWT_EXPIRY: 604800
+      UPLOADS_PATH: ./uploads
+      MAX_FILE_SIZE: 10485760
+    volumes:
+      - uploads_data:/var/www/html/uploads
+      - ./logs:/var/www/html/logs
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - milal-net
+
+  db:
+    image: mysql:8.0
+    container_name: milal-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: milal_root_2024
+      MYSQL_DATABASE: milal_homepage
+      MYSQL_USER: milal_user
+      MYSQL_PASSWORD: milal_pass_2024
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/01-create_tables.sql
+      - ./sql/insert_test_data.sql:/docker-entrypoint-initdb.d/02-insert_test_data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - milal-net
+
+volumes:
+  db_data:
+  uploads_data:
+  certbot_www:
+  certbot_conf:
+
+networks:
+  milal-net:
+    driver: bridge
