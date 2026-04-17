@@ -3,6 +3,11 @@
 -- 밀알교회 홈페이지 API
 -- ===============================================
 
+-- UTF-8 문자 집합 명시적 설정 (중요: 한글 문자 손상 방지)
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+SET COLLATION_CONNECTION = utf8mb4_unicode_ci;
+
 -- 주의: 비밀번호는 PHP에서 password_hash()를 사용하여 생성됨
 -- 테스트 계정:
 --   Username: admin / Password: admin123
@@ -16,10 +21,10 @@ USE milal_homepage;
 -- ===============================================
 
 INSERT INTO users (username, email, password_hash, name, role, is_active) VALUES 
-('admin', 'admin@milal-church.kr', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '관리자', 'manager', TRUE),
-('manager1', 'manager1@milal-church.kr', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '담당자', 'manager', TRUE),
-('viewer1', 'viewer1@milal-church.kr', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '사용자', 'viewer', TRUE),
-('viewer2', 'viewer2@milal-church.kr', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '방문자', 'viewer', TRUE);
+('admin', 'admin@milalchurch.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '관리자', 'manager', TRUE),
+('manager1', 'manager1@milalchurch.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '담당자', 'manager', TRUE),
+('viewer1', 'viewer1@milalchurch.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '사용자', 'viewer', TRUE),
+('viewer2', 'viewer2@milalchurch.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '방문자', 'viewer', TRUE);
 
 -- ===============================================
 -- 1. 히어로 섹션 테스트 데이터
@@ -113,11 +118,11 @@ INSERT INTO together_items (title, description, link, `order`, is_active) VALUES
 -- ===============================================
 
 INSERT INTO departments (department_type, name, description, age_group, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, `order`) VALUES 
-('nextgen', '유아부', '0-3세 영아를 위한 전담 보육 사역', '0-3세', '주일', '오전 10시 30분', '2층 유아실', '박영선 사역자', '담당 보육사', '010-1234-5678', 1),
-('nextgen', '유년부', '4-6세 유아 신앙교육', '4-6세', '주일', '오전 10시 30분', '2층 유년실', '김미영 사역자', '담당 교사', '010-2345-6789', 2),
-('nextgen', '초등부', '초등학교 학생 신앙교육', '7-12세', '주일', '오전 10시 30분', '3층 초등실', '이순신 사역자', '담당 목사', '010-3456-7890', 3),
-('nextgen', '중등부', '중학교 학생 신앙교육', '13-15세', '주일', '오전 10시 30분', '3층 중등실', '정준호 전도사', '담당 전도사', '010-4567-8901', 4),
-('nextgen', '고등부', '고등학교 학생 신앙교육 및 제자훈련', '16-18세', '주일', '오전 10시 30분', '4층 고등실', '강민수 전도사', '담당 전도사', '010-5678-9012', 5),
+('nextgen', '영아부', '0-3세 영아를 위한 전담 보육 사역', '0-3세', '주일', '오전 10시 30분', '2층 유아실', '박영선 사역자', '담당 보육사', '010-1234-5678', 1),
+('nextgen', '유치부', '4-6세 유아 신앙교육', '4-6세', '주일', '오전 10시 30분', '2층 유년실', '김미영 사역자', '담당 교사', '010-2345-6789', 2),
+('nextgen', '아동부', '초등학교 학생 신앙교육', '7-12세', '주일', '오전 10시 30분', '3층 초등실', '이순신 사역자', '담당 목사', '010-3456-7890', 3),
+('nextgen', 'EM 중고등부', '중학교 학생 신앙교육', '13-15세', '주일', '오전 10시 30분', '3층 중등실', '정준호 전도사', '담당 전도사', '010-4567-8901', 4),
+('nextgen', 'KM 중고등부', '고등학교 학생 신앙교육 및 제자훈련', '16-18세', '주일', '오전 10시 30분', '4층 고등실', '강민수 전도사', '담당 전도사', '010-5678-9012', 5),
 ('nextgen', '청년부', '대학생 및 미혼 청년 신앙공동체', '19-29세', '주일', '오전 11시', '본당', '최윤희 전도사', '담당 전도사', '010-6789-0123', 6);
 
 -- ===============================================
@@ -125,11 +130,11 @@ INSERT INTO departments (department_type, name, description, age_group, worship_
 -- ===============================================
 
 INSERT INTO departments (department_type, name, description, ministry_type, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, `order`) VALUES 
-('ministry', '선교부', '국내외 선교사역을 담당하는 부서', '선교', '주일', '오후 1시', '교육실', '박민준 목사', '담당 목사', '010-7890-1234', 1),
-('ministry', '교육부', '신앙교육 및 성경공부 리더십 개발', '교육', '수요일', '오후 7시 30분', '교육실', '유미희 전도사', '담당 전도사', '010-8901-2345', 2),
-('ministry', '기도중보부', '중보기도를 통한 영적 중보사역', '기도', '화요일', '오전 6시', '기도실', '남궁순임 집사', '회장', '010-9012-3456', 3),
-('ministry', '찬양팀', '예배 찬양 및 음악사역', '찬양', '토요일', '오후 2시 30분', '본당', '홍길동 집사', '팀장', '010-0123-4567', 4),
-('ministry', '봉사부', '지역사회 봉사 및 장애인 돌봄', '봉사', '둘째주일', '오후 2시', '교육실', '이순신 권사', '회장', '010-1234-5678', 5);
+('ministry', '선교', '국내외 선교사역을 담당하는 부서', '선교', '주일', '오후 1시', '교육실', '박민준 목사', '담당 목사', '010-7890-1234', 1),
+('ministry', '양육', '신앙교육 및 성경공부 리더십 개발', '교육', '수요일', '오후 7시 30분', '교육실', '유미희 전도사', '담당 전도사', '010-8901-2345', 2),
+('ministry', '소그룹', '중보기도를 통한 영적 중보사역', '기도', '화요일', '오전 6시', '기도실', '남궁순임 집사', '회장', '010-9012-3456', 3),
+('ministry', '가족', '예배 찬양 및 음악사역', '찬양', '토요일', '오후 2시 30분', '본당', '홍길동 집사', '팀장', '010-0123-4567', 4),
+('ministry', '가스펠오락관', '지역사회 봉사 및 장애인 돌봄', '봉사', '둘째주일', '오후 2시', '교육실', '이순신 권사', '회장', '010-1234-5678', 5);
 
 -- ===============================================
 -- 8. 뉴스/소식 테스트 데이터
@@ -143,16 +148,21 @@ INSERT INTO news (title, content, author, category) VALUES
 ('미션 트립 참가자 모집', '6월 해외 미션트립 참가자를 모집합니다. 관심 있는 분들은 사무실로 연락바랍니다.', '선교팀', 'update');
 
 -- ===============================================
--- 9. 뉴스 댓글 테스트 데이터
+-- 9. 멤버 관리 테스트 데이터
 -- ===============================================
 
-INSERT INTO news_comments (news_id, author, content) VALUES 
-(1, '김영희', '꽃 축제 정말 기대됩니다. 가족들과 함께 참석할 계획입니다.'),
-(1, '박준호', '올해도 좋은 행사 감사합니다.'),
-(2, '이순신', '새로운 직원분 환영합니다. 빨리 적응하기 바랍니다.'),
-(3, '최윤희', '사진이 정말 깔끔하게 잘 나왔네요. 감사합니다.'),
-(4, '남궁순임', '소그룹이 이렇게 늘어났다니 정말 기뻐요.'),
-(5, '홍길동', '해외 미션트립에 꼭 참가하고 싶습니다.');
+INSERT INTO members (name, email, title, role, picture, is_active) VALUES 
+('박진범', 'jbpark@milalchurch.com', '담임목사', 'Senior Pastor', '/uploads/members/pastor_jb.jpg', TRUE),
+('김미영', 'mykim@milalchurch.com', '부목사', 'Associate Pastor', '/uploads/members/pastor_my.jpg', TRUE),
+('이순신', 'sslee@milalchurch.com', '목사', 'Pastor', '/uploads/members/pastor_ss.jpg', TRUE),
+('박민준', 'mjpark@milalchurch.com', '전도사', 'Evangelist', '/uploads/members/evangelist_mj.jpg', TRUE),
+('유미희', 'mhyou@milalchurch.com', '전도사', 'Evangelist', '/uploads/members/evangelist_mh.jpg', TRUE),
+('홍길동', 'gdhong@milalchurch.com', '지도자', 'Leader', '/uploads/members/leader_gd.jpg', TRUE),
+('남궁순임', 'silnk@milalchurch.com', '지도자', 'Leader', '/uploads/members/leader_si.jpg', TRUE),
+('이미선', 'mslee@milalchurch.com', '찬양 인도자', 'Worship Leader', '/uploads/members/worship_ms.jpg', TRUE),
+('김주영', 'jykim@milalchurch.com', '피아니스트', 'Pianist', '/uploads/members/pianist_jy.jpg', TRUE),
+('박지우', 'jjwpark@milalchurch.com', '영상 담당', 'Media Director', '/uploads/members/media_jw.jpg', TRUE);
+
 
 -- ===============================================
 -- 데이터 삽입 완료
@@ -172,8 +182,6 @@ SELECT 'together_items', COUNT(*) FROM together_items
 UNION ALL
 SELECT 'departments', COUNT(*) FROM departments
 UNION ALL
-SELECT 'news', COUNT(*) FROM news
-UNION ALL
-SELECT 'news_comments', COUNT(*) FROM news_comments;
+SELECT 'news', COUNT(*) FROM news;
 
 COMMIT;

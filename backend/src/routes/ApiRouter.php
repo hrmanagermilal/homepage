@@ -65,6 +65,10 @@ class ApiRouter {
                 $this->handleTogether($id, $action);
                 break;
             
+            case 'departments':
+                $this->handleDepartments($id, $action);
+                break;
+            
             case 'nextgen':
                 $this->handleNextGen($id, $action, $sub_id);
                 break;
@@ -77,8 +81,20 @@ class ApiRouter {
                 $this->handleNews($id, $action, $sub_id);
                 break;
             
+            case 'members':
+                $this->handleMembers($id, $action);
+                break;
+            
             case 'users':
                 $this->handleUsers($id, $action);
+                break;
+            
+            case 'track':
+                $this->handleTracking($id, $action);
+                break;
+            
+            case 'analytics':
+                $this->handleAnalytics($id, $action);
                 break;
             
             default:
@@ -136,59 +152,357 @@ class ApiRouter {
     }
     
     private function handleHero($id, $action, $sub_id) {
-        echo ResponseFormatter::success(
-            ['message' => 'Hero endpoint called'],
-            'Hero section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\HeroController();
+            
+            // Route: GET /api/hero
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->get();
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Hero endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleHero: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleSermon($id, $action) {
-        echo ResponseFormatter::success(
-            ['message' => 'Sermon endpoint called'],
-            'Sermon section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\SermonController();
+            
+            // Route: GET /api/sermons
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+            
+            // Route: GET /api/sermons/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Sermon endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleSermon: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleBulletin($id, $action) {
-        echo ResponseFormatter::success(
-            ['message' => 'Bulletin endpoint called'],
-            'Bulletin section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\BulletinController();
+            
+            // Route: GET /api/bulletins
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+            
+            // Route: GET /api/bulletins/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Bulletin endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleBulletin: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleAnnouncement($id, $action) {
-        echo ResponseFormatter::success(
-            ['message' => 'Announcement endpoint called'],
-            'Announcement section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\AnnouncementController();
+            
+            // Route: GET /api/announcements
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+            
+            // Route: GET /api/announcements/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Announcement endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleAnnouncement: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleTogether($id, $action) {
-        echo ResponseFormatter::success(
-            ['message' => 'Together endpoint called'],
-            'Together section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\TogetherController();
+            
+            // Route: GET /api/together
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+            
+            // Route: GET /api/together/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Together endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleTogether: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
+    }
+    
+    private function handleDepartments($id, $action) {
+        try {
+            $controller = new \MillalHomepage\Controllers\DepartmentController();
+            
+            // Route: GET /api/departments
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+            
+            // Route: GET /api/departments/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Departments endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleDepartments: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleNextGen($id, $action, $sub_id) {
-        echo ResponseFormatter::success(
-            ['message' => 'NextGen endpoint called'],
-            'NextGen section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\DepartmentController();
+            
+            // Route: GET /api/nextgen
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getNextGen();
+                return;
+            }
+            
+            // Route: GET /api/nextgen/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'NextGen endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleNextGen: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleMinistry($id, $action, $sub_id) {
-        echo ResponseFormatter::success(
-            ['message' => 'Ministry endpoint called'],
-            'Ministry section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\DepartmentController();
+            
+            // Route: GET /api/ministry
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getMinistry();
+                return;
+            }
+            
+            // Route: GET /api/ministry/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Ministry endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleMinistry: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleNews($id, $action, $sub_id) {
-        echo ResponseFormatter::success(
-            ['message' => 'News endpoint called'],
-            'News section'
-        );
+        try {
+            $controller = new \MillalHomepage\Controllers\NewsController();
+            
+            // Route: GET /api/news
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+            
+            // Route: GET /api/news/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'News endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleNews: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
+    }
+    
+    private function handleMembers($id, $action) {
+        try {
+            $controller = new \MillalHomepage\Controllers\MemberController();
+            
+            // Route: GET /api/members
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+            
+            // Route: GET /api/members/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+            
+            // Route: GET /api/members/role/{role}
+            if ($this->request_method === 'GET' && $id && $action === 'role') {
+                echo $controller->getByRole($id);
+                return;
+            }
+            
+            // Route: POST /api/members
+            if ($this->request_method === 'POST' && !$id) {
+                echo $controller->create();
+                return;
+            }
+            
+            // Route: PUT /api/members/{id}
+            if ($this->request_method === 'PUT' && $id && !$action) {
+                echo $controller->update($id);
+                return;
+            }
+            
+            // Route: DELETE /api/members/{id}
+            if ($this->request_method === 'DELETE' && $id && !$action) {
+                echo $controller->delete($id);
+                return;
+            }
+            
+            // Route: POST /api/members/{id}/picture
+            if ($this->request_method === 'POST' && $id && $action === 'picture') {
+                echo $controller->uploadPicture($id);
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Member endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleMembers: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
     }
     
     private function handleUsers($id, $action) {
@@ -239,6 +553,78 @@ class ApiRouter {
             );
         } catch (\Exception $e) {
             error_log("Error in handleUsers: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
+    }
+    
+    private function handleTracking($action, $sub_action) {
+        try {
+            $controller = new \MillalHomepage\Controllers\PageViewController();
+            
+            // Route: POST /api/track/pageview
+            if ($this->request_method === 'POST' && $action === 'pageview') {
+                echo $controller->trackPageView();
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Tracking endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleTracking: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
+    }
+    
+    private function handleAnalytics($action, $sub_action) {
+        try {
+            $controller = new \MillalHomepage\Controllers\PageViewController();
+            
+            // Route: GET /api/analytics/pages
+            if ($this->request_method === 'GET' && $action === 'pages') {
+                echo $controller->getPageStats();
+                return;
+            }
+            
+            // Route: GET /api/analytics/devices
+            if ($this->request_method === 'GET' && $action === 'devices') {
+                echo $controller->getDeviceStats();
+                return;
+            }
+            
+            // Route: GET /api/analytics/browsers
+            if ($this->request_method === 'GET' && $action === 'browsers') {
+                echo $controller->getBrowserStats();
+                return;
+            }
+            
+            // Route: GET /api/analytics/recent
+            if ($this->request_method === 'GET' && $action === 'recent') {
+                echo $controller->getRecentViews();
+                return;
+            }
+            
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Analytics endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleAnalytics: " . $e->getMessage());
             echo ResponseFormatter::error(
                 'SERVER_ERROR',
                 'Internal server error',

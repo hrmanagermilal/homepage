@@ -1,0 +1,100 @@
+.api-tester {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tester-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.tester-header h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.tester-header p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.controls {
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  background-color: var(--bg-color);
+}
+
+.tester-container {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  min-height: 600px;
+}
+
+@media (max-width: 1024px) {
+  .tester-container {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+}
+
+.endpoints-panel {
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}
+
+@media (max-width: 1024px) {
+  .endpoints-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+.endpoints-panel h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.endpoint-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.response-panel {
+  padding: 30px;
+  overflow-y: auto;
+  background-color: white;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-light);
+  font-size: 16px;
+}
+
+.stats {
+  padding: 16px 30px;
+  background-color: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.stats strong {
+  color: var(--text-color);
+  font-weight: 600;
+}

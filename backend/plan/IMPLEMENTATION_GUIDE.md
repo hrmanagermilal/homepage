@@ -231,8 +231,7 @@ curl -H "Authorization: Bearer {JWT_TOKEN}" \
 9. **together_items** - 파트너 조직
 10. **departments** - 부서 (type: nextgen/ministry)
 11. **department_announcements** - 부서별 공지사항
-12. **news** - 뉴스 기사 (카테고리: news/update/photo)
-13. **news_comments** - 뉴스 댓글
+12. **news** - 공지 (카테고리: news/update/photo)
 
 ### 테스트 데이터 포함
 - ✅ 4개 사용자 (admin, manager1, viewer1, viewer2)
@@ -241,9 +240,9 @@ curl -H "Authorization: Bearer {JWT_TOKEN}" \
 - ✅ 3개 게시판 (각 6개 이미지)
 - ✅ 5개 공지사항 (카테고리별)
 - ✅ 5개 함께하는 교회
-- ✅ 6개 NextGen 부서 (유아부, 유년부, 초등부, 중등부, 고등부, 청년부)
-- ✅ 5개 Ministry 부서 (선교부, 교육부, 기도중보부, 찬양팀, 봉사부)
-- ✅ 5개 뉴스 + 6개 댓글
+- ✅ 6개 NextGen 부서 (영아부, 유치부, 아동부, EM/KM 중고등부, 청년부)
+- ✅ 5개 Ministry 부서 (선교, 양육, 소그룹, 가족, 가스펠오락관)
+- ✅ 5개 공지
 
 ## 🎨 주요 기능
 

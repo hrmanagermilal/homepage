@@ -48,6 +48,38 @@ class Department {
     }
     
     /**
+     * 모든 부서 목록 조회
+     */
+    public function getAll() {
+        try {
+            $stmt = $this->db->prepare("
+                SELECT * FROM departments 
+                ORDER BY department_type ASC, `order` ASC
+            ");
+            
+            $stmt->execute();
+            $departments = $stmt->fetchAll();
+            
+            // 각 부서의 공지사항 조회
+            foreach ($departments as &$dept) {
+                $announcementStmt = $this->db->prepare("
+                    SELECT id, title, content, link, created_at, updated_at
+                    FROM department_announcements 
+                    WHERE department_id = ? 
+                    ORDER BY created_at DESC
+                ");
+                $announcementStmt->execute([$dept['id']]);
+                $dept['announcements'] = $announcementStmt->fetchAll();
+            }
+            
+            return $departments;
+        } catch (\PDOException $e) {
+            error_log("Get all departments error: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
      * 부서 상세 조회
      */
     public function getById($id) {

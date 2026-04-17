@@ -41,6 +41,9 @@ class Database {
                 ]
             );
             
+            // Ensure UTF-8 encoding
+            $this->conn->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
+            
             return $this->conn;
         } catch (\PDOException $e) {
             error_log("Database Connection Error: " . $e->getMessage());
