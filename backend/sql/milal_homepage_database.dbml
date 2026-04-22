@@ -1,0 +1,286 @@
+// ============================================================
+// 밀알교회 홈페이지(조혁래) + Admin CMS(이현민) 머지 DB
+// DBML - dbdiagram.io 에서 import 하세요
+// 색상 범례:
+//   기존 밀알 DB: 변경 없음
+//   [추가] CMS에서 추가된 컬럼
+//   [수정] 병합으로 수정된 컬럼
+//   [신규] 신규 추가 테이블 전체
+//   [삭제] 삭제는 표기 안함
+// ============================================================
+
+// ============================================================
+// [신규] RBAC 권한 관리
+// ============================================================
+
+Table roles {
+  id int [pk, increment, note: '신규']
+  name varchar(100) [not null, note: '신규']
+  slug varchar(100) [unique, not null, note: '신규']
+  description text [note: '신규']
+  created_at timestamp [default: `now()`, note: '신규']
+  updated_at timestamp [note: '신규']
+}
+
+Table permissions {
+  id int [pk, increment, note: '신규']
+  name varchar(150) [not null, note: '신규']
+  slug varchar(150) [unique, not null, note: '신규']
+  module varchar(100) [not null, note: '신규 - e.g. slides, pastors, notices']
+  action varchar(20) [not null, note: '신규 - view|create|edit|delete']
+  created_at timestamp [default: `now()`, note: '신규']
+}
+
+Table role_permissions {
+  role_id int [ref: > roles.id, note: '신규']
+  permission_id int [ref: > permissions.id, note: '신규']
+
+  indexes {
+    (role_id, permission_id) [pk]
+  }
+}
+
+// ============================================================
+// 사용자 (구 users + admins 머지)
+// ============================================================
+
+Table users {
+  id int [pk, increment]
+  role_id int [ref: > roles.id, note: '추가 - CMS admins.role_id 흡수']
+  username varchar(100) [unique, not null, note: '추가 - CMS admins.username 흡수']
+  email varchar(150) [unique, not null]
+  password_hash varchar(255) [not null, note: '수정 - 컬럼명 password → password_hash 통일']
+  name varchar(100) [not null] 
+  role varchar(20) [note: 'viewer|manager - 기존 ENUM 유지']
+  is_active tinyint [default: 1]
+  last_login timestamp [null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+// ============================================================
+// 히어로 (구 heroes + slides 머지)
+// ============================================================
+
+Table heroes {
+  id int [pk, increment]
+  title varchar(255)
+  subtitle text
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+Table hero_background_images {
+  id int [pk, increment]
+  hero_id int [ref: > heroes.id]
+  image_url varchar(500)
+  order int [default: 0]
+  alt_text varchar(255)
+  uploaded_at timestamp [default: `now()`]
+}
+
+Table hero_front_images {
+  id int [pk, increment]
+  hero_id int [unique, ref: > heroes.id]
+  image_url varchar(500)
+  alt_text varchar(255)
+  uploaded_at timestamp [default: `now()`]
+}
+
+// ============================================================
+// 교인 (구 members + pastors 머지)
+// ============================================================
+
+Table members {
+  id int [pk, increment]
+  name varchar(100) [not null]
+  email varchar(150)
+  title varchar(100)
+  role varchar(100)
+  picture varchar(500) 
+  biography text [note: '추가 - pastors.biography 흡수']
+  sort_order int [default: 0, note: '추가 - pastors.sort_order 흡수']
+  is_active tinyint [default: 1]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+// ============================================================
+// 공지사항 (구 announcements + notices 머지)
+// ============================================================
+
+Table announcements {
+  id int [pk, increment]
+  admin_id int [ref: > users.id, note: '추가 - notices.admin_id FK 흡수, ON DELETE RESTRICT']
+  title varchar(255) [not null]
+  content longtext [not null]
+  link varchar(500)
+  image varchar(500)
+  category varchar(20) [note: 'general|event|urgent']
+  is_pinned boolean [default: false]
+  views int [default: 0]
+  is_active tinyint [default: 1, note: '추가 - notices.is_active 흡수']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+// ============================================================
+// 주보
+// ============================================================
+
+Table bulletins {
+  id int [pk, increment]
+  title varchar(255) [not null]
+  week_number int
+  year int
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+Table bulletin_images {
+  id int [pk, increment]
+  bulletin_id int [ref: > bulletins.id]
+  image_url varchar(500)
+  order int [default: 0]
+  uploaded_at timestamp [default: `now()`]
+}
+
+// ============================================================
+// 설교
+// ============================================================
+
+Table sermons {
+  id int [pk, increment]
+  title varchar(255) [not null]
+  youtube_url varchar(500) [unique, not null]
+  youtube_id varchar(50)
+  description text
+  preacher varchar(100)
+  sermon_date date
+  thumbnail varchar(500)
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+// ============================================================
+// 함께하는교회
+// ============================================================
+
+Table together_items {
+  id int [pk, increment]
+  title varchar(255) [not null]
+  description text
+  image varchar(500)
+  link varchar(500)
+  order int [default: 0]
+  is_active boolean [default: true]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+// ============================================================
+// 부서
+// ============================================================
+
+Table departments {
+  id int [pk, increment]
+  department_type varchar(10) [note: 'nextgen|ministry']
+  name varchar(100) [not null]
+  description text
+  image varchar(500)
+  age_group varchar(100)
+  ministry_type varchar(100)
+  worship_day varchar(50)
+  worship_time varchar(50)
+  worship_location varchar(100)
+  clergy_name varchar(100)
+  clergy_position varchar(100)
+  clergy_phone varchar(20)
+  order int [default: 0]
+  is_active boolean [default: true]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+Table department_announcements {
+  id int [pk, increment]
+  department_id int [ref: > departments.id]
+  title varchar(255) [not null]
+  content text [not null]
+  link varchar(500)
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+// ============================================================
+// 뉴스
+// ============================================================
+
+Table news {
+  id int [pk, increment]
+  admin_id int [ref: > users.id, note: '추가 ']
+  title varchar(255) [not null]
+  content text [not null]
+  image varchar(500)
+  author varchar(100)
+  category varchar(10) [note: 'news|update|photo']
+  views int [default: 0]
+  tags varchar(500)
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+// ============================================================
+// 페이지뷰 / 분석
+// ============================================================
+
+Table page_views {
+  id int [pk, increment]
+  page_path varchar(500) [not null]
+  browser_name varchar(100)
+  browser_version varchar(50)
+  device_type varchar(10) [note: 'mobile|tablet|desktop']
+  ip_address varchar(45)
+  user_agent text
+  referrer varchar(500)
+  session_id varchar(100)
+  viewed_at timestamp [default: `now()`]
+}
+
+// ============================================================
+// [신규] CMS 페이지 계층구조
+// ============================================================
+
+Table pages {
+  id int [pk, increment, note: '신규']
+  name varchar(200) [not null, note: '신규']
+  slug varchar(200) [unique, not null, note: '신규']
+  description text [note: '신규']
+  is_active tinyint [default: 1, note: '신규']
+  created_at timestamp [default: `now()`, note: '신규']
+  updated_at timestamp [note: '신규']
+}
+
+Table sections {
+  id int [pk, increment, note: '신규']
+  page_id int [ref: > pages.id, note: '신규']
+  name varchar(200) [not null, note: '신규']
+  slug varchar(200) [not null, note: '신규']
+  description text [note: '신규']
+  sort_order int [default: 0, note: '신규']
+  is_active tinyint [default: 1, note: '신규']
+  created_at timestamp [default: `now()`, note: '신규']
+  updated_at timestamp [note: '신규']
+}
+
+Table texts {
+  id int [pk, increment, note: '신규']
+  section_id int [ref: > sections.id, note: '신규']
+  key_name varchar(200) [not null, note: '신규']
+  content_ko longtext [not null, note: '신규']
+  content_en longtext [not null, note: '신규']
+  type varchar(10) [note: '신규 - text|textarea|html']
+  sort_order int [default: 0, note: '신규']
+  created_at timestamp [default: `now()`, note: '신규']
+  updated_at timestamp [note: '신규']
+}
