@@ -5,6 +5,8 @@ import '../styles/ApiTester.css'
 
 const API_ENDPOINTS = [
   { name: 'Hero', path: '/api/hero' },
+  { name: 'Hero Links', path: '/api/hero-links' },
+  { name: 'Landing Titles', path: '/api/landing-titles' },
   { name: 'Sermons', path: '/api/sermons' },
   { name: 'Bulletins', path: '/api/bulletins' },
   { name: 'Announcements', path: '/api/announcements' },
