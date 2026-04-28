@@ -97,6 +97,14 @@ class ApiRouter {
                 $this->handleAnalytics($id, $action);
                 break;
             
+            case 'hero-links':
+                $this->handleHeroLinks($id, $action);
+                break;
+            
+            case 'landing-titles':
+                $this->handleLandingTitles($id, $action);
+                break;
+            
             default:
                 echo ResponseFormatter::error(
                     'NOT_FOUND',
@@ -625,6 +633,108 @@ class ApiRouter {
             );
         } catch (\Exception $e) {
             error_log("Error in handleAnalytics: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
+    }
+
+    private function handleHeroLinks($id, $action) {
+        try {
+            $controller = new \MillalHomepage\Controllers\HeroLinkController();
+
+            // Route: GET /api/hero-links
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+
+            // Route: GET /api/hero-links/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+
+            // Route: POST /api/hero-links
+            if ($this->request_method === 'POST' && !$id) {
+                echo $controller->create();
+                return;
+            }
+
+            // Route: PUT /api/hero-links/{id}
+            if ($this->request_method === 'PUT' && $id && !$action) {
+                echo $controller->update($id);
+                return;
+            }
+
+            // Route: DELETE /api/hero-links/{id}
+            if ($this->request_method === 'DELETE' && $id && !$action) {
+                echo $controller->delete($id);
+                return;
+            }
+
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Hero link endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleHeroLinks: " . $e->getMessage());
+            echo ResponseFormatter::error(
+                'SERVER_ERROR',
+                'Internal server error',
+                null,
+                500
+            );
+        }
+    }
+
+    private function handleLandingTitles($id, $action) {
+        try {
+            $controller = new \MillalHomepage\Controllers\LandingPageTitleController();
+
+            // Route: GET /api/landing-titles
+            if ($this->request_method === 'GET' && !$id) {
+                echo $controller->getAll();
+                return;
+            }
+
+            // Route: GET /api/landing-titles/{id}
+            if ($this->request_method === 'GET' && $id && !$action) {
+                echo $controller->getById($id);
+                return;
+            }
+
+            // Route: POST /api/landing-titles
+            if ($this->request_method === 'POST' && !$id) {
+                echo $controller->create();
+                return;
+            }
+
+            // Route: PUT /api/landing-titles/{id}
+            if ($this->request_method === 'PUT' && $id && !$action) {
+                echo $controller->update($id);
+                return;
+            }
+
+            // Route: DELETE /api/landing-titles/{id}
+            if ($this->request_method === 'DELETE' && $id && !$action) {
+                echo $controller->delete($id);
+                return;
+            }
+
+            echo ResponseFormatter::error(
+                'NOT_FOUND',
+                'Landing title endpoint not found',
+                null,
+                404
+            );
+        } catch (\Exception $e) {
+            error_log("Error in handleLandingTitles: " . $e->getMessage());
             echo ResponseFormatter::error(
                 'SERVER_ERROR',
                 'Internal server error',
