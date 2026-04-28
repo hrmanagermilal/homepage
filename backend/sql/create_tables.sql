@@ -28,6 +28,16 @@ CREATE TABLE IF NOT EXISTS heroes (
   INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS hero_link (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255),
+  icon_url TEXT,
+  link_url TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS hero_background_images (
   id INT PRIMARY KEY AUTO_INCREMENT,
   hero_id INT NOT NULL,
@@ -101,7 +111,7 @@ CREATE TABLE IF NOT EXISTS bulletin_images (
 CREATE TABLE IF NOT EXISTS announcements (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
-  content TEXT NOT NULL,
+  content TEXT NOT NULL,  
   link VARCHAR(500),
   image VARCHAR(500),
   category ENUM('general', 'event', 'urgent') DEFAULT 'general',
@@ -261,8 +271,22 @@ CREATE TABLE IF NOT EXISTS users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===============================================
+-- 13. LANDING PAGE TITLE 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS landing_page_titles (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255),
+  descriptions TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
 -- 인덱스 검증
 -- ===============================================
+
 
 -- 모든 테이블 생성 완료
 COMMIT;

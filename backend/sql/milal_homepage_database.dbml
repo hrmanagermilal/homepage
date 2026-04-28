@@ -70,6 +70,16 @@ Table heroes {
   updated_at timestamp
 }
 
+
+Table hero_link {
+  id int [pk, increment, note: '신규']
+  title varchar(255)  [not null, note: '신규']
+  icon_url text [not null, note: '신규']
+  link_url text [not null, note: '신규']
+  created_at timestamp [default: `now()`, note: '신규']
+  updated_at timestamp [note: '신규']
+}
+
 Table hero_background_images {
   id int [pk, increment]
   hero_id int [ref: > heroes.id]
@@ -281,6 +291,15 @@ Table texts {
   content_en longtext [not null, note: '신규']
   type varchar(10) [note: '신규 - text|textarea|html']
   sort_order int [default: 0, note: '신규']
+  created_at timestamp [default: `now()`, note: '신규']
+  updated_at timestamp [note: '신규']
+}
+
+
+Table landing_page_titles {
+  id int [pk, increment, note: '신규']
+  title varchar(255) [not null, note: '신규']
+  descriptions text [not null, note: '신규']
   created_at timestamp [default: `now()`, note: '신규']
   updated_at timestamp [note: '신규']
 }
