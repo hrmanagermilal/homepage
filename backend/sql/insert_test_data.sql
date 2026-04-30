@@ -45,6 +45,14 @@ INSERT INTO hero_background_images (hero_id, image_url, `order`, alt_text) VALUE
 INSERT INTO hero_front_images (hero_id, image_url, alt_text) VALUES 
 (@hero_id, '/uploads/hero/front/hero_front.jpg', 'Welcome Image');
 
+-- 히어로 링크
+INSERT INTO hero_link (title, icon_url, link_url) VALUES 
+('예배 안내', NULL, '/worship'),
+('교회 소개', NULL, '/about'),
+('설교 영상', NULL, '/sermons'),
+('새신자 등록', NULL, '/register'),
+('오시는 길', NULL, '/location');
+
 -- ===============================================
 -- 2. 설교 테스트 데이터
 -- ===============================================
