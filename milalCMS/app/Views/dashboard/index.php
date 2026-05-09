@@ -21,11 +21,11 @@ $cards=[
   ['label'=>'주보',    'val'=>$stats['bulletins'],    'icon'=>'book-open','bg'=>'#fef3c7','color'=>'#d97706','url'=>'/bulletins'],
   ['label'=>'교인',    'val'=>$stats['members'],      'icon'=>'users',    'bg'=>'#fce7f3','color'=>'#db2777','url'=>'/members'],
   ['label'=>'부서',    'val'=>$stats['departments'],  'icon'=>'sitemap',  'bg'=>'#e0f2fe','color'=>'#0284c7','url'=>'/departments'],
-  ['label'=>'히어로',  'val'=>$stats['heroes'],       'icon'=>'images',   'bg'=>'#f0fdf4','color'=>'#16a34a','url'=>''],
+  ['label'=>'히어로',  'val'=>$stats['heroes'],       'icon'=>'images',   'bg'=>'#f0fdf4','color'=>'#16a34a','url'=>'/heroes'],
   ['label'=>'사용자',  'val'=>$stats['users'],        'icon'=>'user-cog', 'bg'=>'#f5f3ff','color'=>'#7c3aed','url'=>'/users'],
 ];
 
-//['label'=>'히어로',  'val'=>$stats['heroes'],       'icon'=>'images',   'bg'=>'#f0fdf4','color'=>'#16a34a','url'=>'/heroes'],
+
 foreach($cards as $c): ?>
 <a href="<?= BASE_URL . $c['url'] ?>" class="stat-card">
   <div class="stat-icon" style="background:<?= $c['bg'] ?>;color:<?= $c['color'] ?>">

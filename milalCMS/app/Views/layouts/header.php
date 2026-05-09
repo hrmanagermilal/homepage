@@ -129,11 +129,11 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <?php if(hasPerm('heroes.view')): ?>
   <div class="nav-section">디자인</div>
-   <a href="" class="nav-item <?= ($currentPage??'')==='heroes'?'active':'' ?>"><i class="fas fa-images"></i>히어로 관리</a>
-  <!-- <a href="<?// BASE_URL ?>/heroes" class="nav-item <? //($currentPage??'')==='heroes'?'active':'' ?>">
+ 
+   <a href="<?= BASE_URL ?>/heroes" class="nav-item <?= ($currentPage??'')==='heroes'?'active':'' ?>">
   
     <i class="fas fa-images"></i>히어로 관리
-  </a> -->
+  </a> 
   <?php endif; ?>
 
   <?php if(hasPerm('announcements.view')||hasPerm('news.view')||hasPerm('sermons.view')||hasPerm('bulletins.view')): ?>
