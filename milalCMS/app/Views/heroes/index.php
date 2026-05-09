@@ -40,12 +40,10 @@ $canDelete = AuthMiddleware::hasPermission('heroes.delete');
           <td class="fw-500"><?= htmlspecialchars($h['title']??'(제목 없음)') ?></td>
           <td class="text-sm text-muted truncate"><?= htmlspecialchars(mb_substr($h['subtitle']??'',0,40)) ?></td>
           <td>
-            <?php $bgs=$heroModel->getBgImages($h['id']); ?>
-            <span class="badge badge-blue"><?= count($bgs) ?>장</span>
+            <span class="badge badge-blue"><?= $h['bg_count'] ?>장</span>
           </td>
           <td>
-            <?php $fi=$heroModel->getFrontImage($h['id']); ?>
-            <?php if($fi): ?><span class="badge badge-green">있음</span><?php else: ?><span class="badge badge-gray">없음</span><?php endif; ?>
+            <?php if($h['has_front']): ?><span class="badge badge-green">있음</span><?php else: ?><span class="badge badge-gray">없음</span><?php endif; ?>
           </td>
           <td><span class="badge <?= $h['is_active']?'badge-green':'badge-gray' ?>"><?= $h['is_active']?'활성':'비활성' ?></span></td>
           <td><div class="flex gap-8">

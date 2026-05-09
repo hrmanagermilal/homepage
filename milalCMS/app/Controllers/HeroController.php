@@ -5,8 +5,15 @@ class HeroController extends BaseController {
 
     public function index(): void {
         AuthMiddleware::requirePermission('heroes.view');
-        $heroes=$this->heroModel->getAll();
+        $heroesRaw=$this->heroModel->getAll();
         $links=$this->heroModel->getLinks();
+        // View에서 $heroModel을 직접 쓰지 않도록 bg/front 데이터를 미리 준비
+        $heroes=[];
+        foreach($heroesRaw as $h){
+            $h['bg_count']  = count($this->heroModel->getBgImages((int)$h['id']));
+            $h['has_front'] = (bool)$this->heroModel->getFrontImage((int)$h['id']);
+            $heroes[] = $h;
+        }
         $pageTitle='히어로 관리'; $currentPage='heroes';
         include BASE_PATH.'/app/Views/heroes/index.php';
     }
