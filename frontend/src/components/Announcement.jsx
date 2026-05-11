@@ -1,11 +1,18 @@
 import { Card, CardContent, Chip, Container, Grid2 as Grid, Stack, Typography } from "@mui/material";
 
-export default function Announcement({ items = [] }) {
+export default function Announcement({ items = [], section = null }) {
+  const sectionTitle = section?.title ?? "Announcement";
+  const sectionSubtitle = section?.subtitle ?? null;
   return (
     <Container id="announcement" maxWidth="lg" sx={{ py: 2 }}>
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: 800 }}>
-        Announcement
+      <Typography variant="h4" sx={{ mb: sectionSubtitle ? 0.5 : 2, fontWeight: 800 }}>
+        {sectionTitle}
       </Typography>
+      {sectionSubtitle ? (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          {sectionSubtitle}
+        </Typography>
+      ) : null}
       <Grid container spacing={2}>
         {items.slice(0, 4).map((item) => (
           <Grid key={item.id} size={{ xs: 12, md: 6 }}>

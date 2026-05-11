@@ -3,7 +3,7 @@ import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import { Box, Fab, Link, Paper, Stack, Typography } from "@mui/material";
 
 export default function FloatingMenu({ quickLinks = [] }) {
-  const actionLink = quickLinks[0]?.link_url;
+  const actionLink = quickLinks[0]?.link || quickLinks[0]?.link_url;
 
   return (
     <Box sx={{ position: "fixed", right: 20, bottom: 20, zIndex: 1200 }}>
@@ -14,7 +14,7 @@ export default function FloatingMenu({ quickLinks = [] }) {
               Quick Links
             </Typography>
             {quickLinks.slice(0, 3).map((link) => (
-              <Link key={link.id} href={link.link_url || "#"} underline="hover" variant="caption">
+              <Link key={link.id} href={link.link || link.link_url || "#"} underline="hover" variant="caption">
                 {link.title || "Link"}
               </Link>
             ))}

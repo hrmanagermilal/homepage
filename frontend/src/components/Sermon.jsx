@@ -1,19 +1,24 @@
 import { Card, CardContent, Container, Grid2 as Grid, Stack, Typography } from "@mui/material";
 import SectionCard from "./SectionCard";
 
-export default function Sermon({ items = [] }) {
-  const speakerList = items
-    .map((item) => item.speaker)
+export default function Sermon({ items = [], section = null }) {
+  const sectionTitle = section?.title ?? "최신 설교";
+  const sectionSubtitle = section?.subtitle ?? "Latest sermons from API";
+  const sermonHighlights = items
+    .map((item) => {
+      const parts = [item.category_title, item.preacher].filter(Boolean);
+      return parts.join(" / ");
+    })
     .filter(Boolean)
     .slice(0, 3)
-    .map((speaker) => `Speaker: ${speaker}`);
+    .map((summary) => `Sermon: ${summary}`);
 
   return (
     <Container id="sermon" maxWidth="lg" sx={{ py: 2 }}>
       <SectionCard
         title="Sermon"
         subtitle="Latest sermons from API"
-        apiItems={speakerList}
+        apiItems={sermonHighlights}
       >
         <Typography variant="body2" color="text.secondary">
           Total loaded: {items.length}
@@ -27,7 +32,10 @@ export default function Sermon({ items = [] }) {
                 <Stack spacing={1}>
                   <Typography variant="h6">{item.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item.speaker || "-"}
+                    {item.preacher || "-"}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.category_title || "Uncategorized"}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
                     {item.youtube_url || ""}
@@ -35,6 +43,11 @@ export default function Sermon({ items = [] }) {
                   <Typography variant="caption" color="text.secondary">
                     {item.sermon_date || ""}
                   </Typography>
+                  {item.category_image ? (
+                    <Typography variant="caption" color="text.secondary">
+                      Category image: {item.category_image}
+                    </Typography>
+                  ) : null}
                 </Stack>
               </CardContent>
             </Card>

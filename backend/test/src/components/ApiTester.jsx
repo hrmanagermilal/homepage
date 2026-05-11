@@ -6,8 +6,11 @@ import '../styles/ApiTester.css'
 const API_ENDPOINTS = [
   { name: 'Hero', path: '/api/hero' },
   { name: 'Hero Links', path: '/api/hero-links' },
+  { name: 'Quick Links', path: '/api/quick-links' },
   { name: 'Landing Titles', path: '/api/landing-titles' },
-  { name: 'Sermons', path: '/api/sermons' },
+  { name: 'Sections', path: '/api/sections' },
+  { name: 'Vision Statements', path: '/api/vision-statements' },
+  { name: 'Sermons', path: '/api/sermons', note: 'Includes category_id, category_title, and category_image' },
   { name: 'Bulletins', path: '/api/bulletins' },
   { name: 'Announcements', path: '/api/announcements' },
   { name: 'Together Items', path: '/api/together' },
@@ -137,6 +140,9 @@ function ApiTester() {
               />
             ))}
           </div>
+          <p className="endpoint-hint">
+            Sermon responses now include joined category fields from `sermon_categories`.
+          </p>
         </div>
 
         <div className="response-panel">

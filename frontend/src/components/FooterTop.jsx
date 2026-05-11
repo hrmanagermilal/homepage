@@ -1,8 +1,9 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
-export default function FooterTop({ items = [] }) {
+export default function FooterTop({ items = [], section = null }) {
   const primary = items[0];
-  const title = primary?.title || "Join Sunday Worship With Us";
+  const title = section?.title ?? primary?.title ?? "Join Sunday Worship With Us";
+  const subtitle = section?.subtitle ?? null;
   const link = primary?.link || "#";
 
   return (
@@ -12,6 +13,11 @@ export default function FooterTop({ items = [] }) {
           <Typography variant="h5" sx={{ fontWeight: 800 }}>
             {title}
           </Typography>
+          {subtitle ? (
+            <Typography variant="body2" sx={{ opacity: 0.85 }}>
+              {subtitle}
+            </Typography>
+          ) : null}
           <Button variant="contained" color="secondary" sx={{ px: 3 }} href={link}>
             {primary?.title ? "Learn More" : "Visit Milal Church"}
           </Button>

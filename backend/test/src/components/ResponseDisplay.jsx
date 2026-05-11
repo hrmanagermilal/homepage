@@ -37,6 +37,28 @@ function ResponseDisplay({ endpoint, response }) {
     }
   }
 
+  const renderSermonNotes = () => {
+    if (endpoint !== '/api/sermons' || !response?.data?.data) {
+      return null
+    }
+
+    const items = Array.isArray(response.data.data)
+      ? response.data.data
+      : [response.data.data]
+
+    const firstSermon = items[0]
+    if (!firstSermon) {
+      return null
+    }
+
+    return (
+      <div className="response-meta">
+        <p><strong>Sermon fields:</strong> preacher, category_id, category_title, category_image</p>
+        <p><strong>First category:</strong> {firstSermon.category_title || 'None'}</p>
+      </div>
+    )
+  }
+
   return (
     <div className="response-display">
       <div className="response-header">
@@ -59,6 +81,8 @@ function ResponseDisplay({ endpoint, response }) {
             <p><strong>Message:</strong> {response.data.message || 'N/A'}</p>
             <p><strong>Status:</strong> {response.data.success ? 'Success' : 'Failed'}</p>
           </div>
+
+          {renderSermonNotes()}
 
           {renderDataPreview()}
 

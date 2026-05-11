@@ -53,20 +53,54 @@ INSERT INTO hero_link (title, icon_url, link_url) VALUES
 ('새신자 등록', NULL, '/register'),
 ('오시는 길', NULL, '/location');
 
+-- 퀵 링크
+INSERT INTO quick_links (title, link, image) VALUES
+('밀알도서관', '/library', '/uploads/quick-links/library.jpg'),
+('다니엘학교', '/daniel-school', '/uploads/quick-links/daniel-school.jpg'),
+('실시간 예배', '/live-worship', '/uploads/quick-links/live-worship.jpg');
+
+-- ===============================================
+-- 1-1. 섹션 테스트 데이터
+-- ===============================================
+
+INSERT INTO sections (title, subtitle) VALUES
+('최신 설교', '밀알교회는 찬양과 설교, 기도와 결단으로 이어지는 역동적인 예배공동체를 추구합니다.\n현장예배의 유튜브 영상을 확인하세요.'),
+('주보', '매주 발행되는 주보를 통해 교회 소식과 예배 순서를 확인하세요.'),
+('예배 시간', '각 부서별 예배 시간과 장소를 안내해 드립니다.'),
+('공지사항', '교회의 중요한 소식과 행사 일정을 확인하세요.'),
+('성도 연락처', '목회자 및 사역자들의 연락처를 안내해 드립니다.'),
+('함께하는 교회', '밀알교회와 함께하는 파트너 교회들을 소개합니다.');
+
+-- 비전 선언문
+INSERT INTO vision_statements (title, points, `order`, is_active) VALUES
+('예배 공동체', '찬양과 설교, 설교후 찬양, 결단의 흐름이 되는 역동적 예배\n각 예배의 차별화를 통한 영적 필요충족\n예배팀을 세우는 훈련과 예배 중보기도 활성화\n가정, 전세대가 같이 드리는 예배', 1, TRUE),
+('목양 공동체', '담임목사와 순장들의 깊은관계 속 동역자화\n''한 사람'' 철학을 통한 깊은 성도 목양\n간증과 기쁨의 스토리가 흐르는 교회\n공동체 내에서의 치유와 성장 중점', 2, TRUE),
+('훈련 공동체', '말씀으로 사람을 세우는 교회\n다음세대를 위한 체계적 지속적 훈련\n교회같은 가정을 이루는 가정 제자훈련 (Gospel Project/ Family talk)', 3, TRUE),
+('미셔널 공동체', 'Glocal (Global + Local)섬김과 지속적 선교\n전략 선교지역에 대한 지속적 선교\n가족선교 및 다음세대 선교를 통한 선교적 교회', 4, TRUE);
+
 -- ===============================================
 -- 2. 설교 테스트 데이터
 -- ===============================================
 
-INSERT INTO sermons (title, youtube_url, youtube_id, description, preacher, sermon_date, thumbnail) VALUES 
-('그리스도의 사랑', 'https://youtube.com/watch?v=dQw4w9WgXcQ', 'dQw4w9WgXcQ', 
+INSERT INTO sermon_categories (title, image) VALUES
+('주일예배', '/uploads/sermons/categories/sunday-worship.jpg'),
+('새벽예배', '/uploads/sermons/categories/dawn-worship.jpg'),
+('특별집회', '/uploads/sermons/categories/special-service.jpg');
+
+SET @sermon_category_sunday = (SELECT id FROM sermon_categories WHERE title = '주일예배' LIMIT 1);
+SET @sermon_category_dawn = (SELECT id FROM sermon_categories WHERE title = '새벽예배' LIMIT 1);
+SET @sermon_category_special = (SELECT id FROM sermon_categories WHERE title = '특별집회' LIMIT 1);
+
+INSERT INTO sermons (title, category_id, youtube_url, youtube_id, description, preacher, sermon_date, thumbnail) VALUES 
+('그리스도의 사랑', @sermon_category_sunday, 'https://youtube.com/watch?v=dQw4w9WgXcQ', 'dQw4w9WgXcQ', 
  '그리스도의 사랑에 대한 깊이 있는 말씀입니다.', '담임목사', '2026-04-17', 
  'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg'),
 
-('새로운 시작', 'https://youtube.com/watch?v=jNQXAC9IVRw', 'jNQXAC9IVRw', 
+('새로운 시작', @sermon_category_dawn, 'https://youtube.com/watch?v=jNQXAC9IVRw', 'jNQXAC9IVRw', 
  '새로운 신앙의 시작을 위한 말씀입니다.', '담임목사', '2026-04-10', 
  'https://img.youtube.com/vi/jNQXAC9IVRw/maxresdefault.jpg'),
 
-('신앙의 기초', 'https://youtube.com/watch?v=Kw_wVQjTr-o', 'Kw_wVQjTr-o', 
+('신앙의 기초', @sermon_category_special, 'https://youtube.com/watch?v=Kw_wVQjTr-o', 'Kw_wVQjTr-o', 
  '신앙의 올바른 기초를 세우기 위한 말씀입니다.', '담임목사', '2026-04-03', 
  'https://img.youtube.com/vi/Kw_wVQjTr-o/maxresdefault.jpg');
 
@@ -159,17 +193,17 @@ INSERT INTO news (title, content, author, category) VALUES
 -- 9. 멤버 관리 테스트 데이터
 -- ===============================================
 
-INSERT INTO members (name, email, title, role, picture, is_active) VALUES 
-('박진범', 'jbpark@milalchurch.com', '담임목사', 'Senior Pastor', '/uploads/members/pastor_jb.jpg', TRUE),
-('김미영', 'mykim@milalchurch.com', '부목사', 'Associate Pastor', '/uploads/members/pastor_my.jpg', TRUE),
-('이순신', 'sslee@milalchurch.com', '목사', 'Pastor', '/uploads/members/pastor_ss.jpg', TRUE),
-('박민준', 'mjpark@milalchurch.com', '전도사', 'Evangelist', '/uploads/members/evangelist_mj.jpg', TRUE),
-('유미희', 'mhyou@milalchurch.com', '전도사', 'Evangelist', '/uploads/members/evangelist_mh.jpg', TRUE),
-('홍길동', 'gdhong@milalchurch.com', '지도자', 'Leader', '/uploads/members/leader_gd.jpg', TRUE),
-('남궁순임', 'silnk@milalchurch.com', '지도자', 'Leader', '/uploads/members/leader_si.jpg', TRUE),
-('이미선', 'mslee@milalchurch.com', '찬양 인도자', 'Worship Leader', '/uploads/members/worship_ms.jpg', TRUE),
-('김주영', 'jykim@milalchurch.com', '피아니스트', 'Pianist', '/uploads/members/pianist_jy.jpg', TRUE),
-('박지우', 'jjwpark@milalchurch.com', '영상 담당', 'Media Director', '/uploads/members/media_jw.jpg', TRUE);
+INSERT INTO members (name, email, title, category, role, picture, is_active) VALUES 
+('박진범', 'jbpark@milalchurch.com', '담임목사', '목회자', 'Senior Pastor', '/uploads/members/pastor_jb.jpg', TRUE),
+('김미영', 'mykim@milalchurch.com', '부목사', '목회자', 'Associate Pastor', '/uploads/members/pastor_my.jpg', TRUE),
+('이순신', 'sslee@milalchurch.com', '목사', '목회자', 'Pastor', '/uploads/members/pastor_ss.jpg', TRUE),
+('박민준', 'mjpark@milalchurch.com', '전도사', '목회자', 'Evangelist', '/uploads/members/evangelist_mj.jpg', TRUE),
+('유미희', 'mhyou@milalchurch.com', '전도사', '목회자', 'Evangelist', '/uploads/members/evangelist_mh.jpg', TRUE),
+('홍길동', 'gdhong@milalchurch.com', '장로', '장로', 'Leader', '/uploads/members/leader_gd.jpg', TRUE),
+('남궁순임', 'silnk@milalchurch.com', '장로', '장로', 'Leader', '/uploads/members/leader_si.jpg', TRUE),
+('이미선', 'mslee@milalchurch.com', '찬양 간사', '간사', 'Worship Leader', '/uploads/members/worship_ms.jpg', TRUE),
+('김주영', 'jykim@milalchurch.com', '음악 간사', '간사', 'Pianist', '/uploads/members/pianist_jy.jpg', TRUE),
+('박지우', 'jjwpark@milalchurch.com', '미디어 간사', '간사', 'Media Director', '/uploads/members/media_jw.jpg', TRUE);
 
 
 -- ===============================================
@@ -179,6 +213,14 @@ INSERT INTO members (name, email, title, role, picture, is_active) VALUES
 -- 각 테이블의 데이터 개수 확인
 SELECT '=== 데이터 삽입 완료 ===' as message;
 SELECT 'heroes' as table_name, COUNT(*) as record_count FROM heroes
+UNION ALL
+SELECT 'quick_links', COUNT(*) FROM quick_links
+UNION ALL
+SELECT 'sections', COUNT(*) FROM sections
+UNION ALL
+SELECT 'vision_statements', COUNT(*) FROM vision_statements
+UNION ALL
+SELECT 'sermon_categories', COUNT(*) FROM sermon_categories
 UNION ALL
 SELECT 'sermons', COUNT(*) FROM sermons
 UNION ALL

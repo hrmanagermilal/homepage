@@ -14,7 +14,7 @@ A simple and elegant React web application to test all GET APIs for the Milal Ho
 ## Tested Endpoints
 
 1. `/api/hero` - Hero section data
-2. `/api/sermons` - Sermon records
+2. `/api/sermons` - Sermon records including `category_id`, `category_title`, and `category_image`
 3. `/api/bulletins` - Bulletin records
 4. `/api/announcements` - Announcement records
 5. `/api/together` - Together items
