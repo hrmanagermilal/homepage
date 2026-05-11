@@ -12,9 +12,31 @@ import FooterTop from "./components/FooterTop";
 import Footer from "./components/Footer";
 import FloatingMenu from "./components/FloatingMenu";
 import IntroductionPage from "./components/IntroductionPage";
+import NextGenPage from "./components/NextGenPage";
+import MinistryPage from "./components/MinistryPage";
+import OnlineGivingPage from "./components/OnlineGivingPage";
+import NoticePage from "./components/NoticePage";
+import ObituaryPage from "./components/ObituaryPage";
+
+const NEXTGEN_PAGE_TITLES = {
+  "/nextgen/young-adults": "청년부",
+  "/nextgen/km-youth": "KM 청소년부",
+  "/nextgen/em-youth": "EM 청소년부",
+  "/nextgen/children": "아동부",
+  "/nextgen/kindergarten": "유치부",
+  "/nextgen/preschool": "유아부",
+  "/nextgen/infants": "영아부",
+};
 
 export default function App() {
+  const currentPath = window.location.pathname;
   const isIntroductionPage = window.location.pathname.startsWith("/introduction");
+  const isMinistryPage = currentPath.startsWith("/ministry");
+  const isOnlineGivingPage = currentPath.startsWith("/online-giving");
+  const isNoticePage = currentPath.startsWith("/news/notice");
+  const isObituaryPage = currentPath.startsWith("/news/obituary");
+  const nextGenPageTitle = NEXTGEN_PAGE_TITLES[currentPath] || null;
+  const isNextGenSubmenuPage = Boolean(nextGenPageTitle);
   const [health, setHealth] = useState(null);
   const [hero, setHero] = useState(null);
   const [heroLinks, setHeroLinks] = useState([]);
@@ -115,7 +137,7 @@ export default function App() {
   return (
     <Box>
       <Header quickLinks={quickLinks} landingTitles={landingTitles} />
-      {isIntroductionPage ? null : <Hero apiStatus={health} hero={hero} heroLinks={heroLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticePage || isObituaryPage || isNextGenSubmenuPage ? null : <Hero apiStatus={health} hero={hero} heroLinks={heroLinks} />}
 
       {loading ? (
         <Stack alignItems="center" py={8}>
@@ -133,6 +155,16 @@ export default function App() {
 
       {isIntroductionPage ? (
         <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} />
+      ) : isMinistryPage ? (
+        <MinistryPage />
+      ) : isOnlineGivingPage ? (
+        <OnlineGivingPage />
+      ) : isNoticePage ? (
+        <NoticePage />
+      ) : isObituaryPage ? (
+        <ObituaryPage />
+      ) : isNextGenSubmenuPage ? (
+        <NextGenPage title={nextGenPageTitle} />
       ) : (
         <>
           <Sermon items={sermons} section={sections.find((s) => s.title === "최신 설교")} />
@@ -144,7 +176,7 @@ export default function App() {
         </>
       )}
       <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
-      {isIntroductionPage ? null : <FloatingMenu quickLinks={quickLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticePage || isObituaryPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }

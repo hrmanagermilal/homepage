@@ -1,18 +1,39 @@
+import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { AppBar, Box, Button, Container, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
 
 const NAV_ITEMS = [
   { label: "Introduction", path: "/introduction" },
-  { label: "다음세대", target: "sermon" },
-  { label: "사역", target: "service-time" },
-  { label: "소식", target: "announcement" },
-  { label: "온라인 헌금", target: "contacts" },
+  { label: "다음세대", hasSubmenu: true },
+  { label: "사역", path: "/ministry" },
+  { label: "소식", hasNewsSubmenu: true },
+  { label: "온라인 헌금", path: "/online-giving" },
+];
+
+const NEXTGEN_SUBMENUS = [
+  { label: "청년부", path: "/nextgen/young-adults" },
+  { label: "KM 청소년부", path: "/nextgen/km-youth" },
+  { label: "EM 청소년부", path: "/nextgen/em-youth" },
+  { label: "아동부", path: "/nextgen/children" },
+  { label: "유치부", path: "/nextgen/kindergarten" },
+  { label: "유아부", path: "/nextgen/preschool" },
+  { label: "영아부", path: "/nextgen/infants" },
+];
+
+const NEWS_SUBMENUS = [
+  { label: "공지", path: "/news/notice" },
+  { label: "부고", path: "/news/obituary" },
 ];
 
 export default function Header({ quickLinks = [], landingTitles = [] }) {
-  const isIntroductionPage = window.location.pathname.startsWith("/introduction");
+  const currentPath = window.location.pathname;
+  const isIntroductionPage = currentPath.startsWith("/introduction");
+  const [nextgenAnchorEl, setNextgenAnchorEl] = useState(null);
+  const [newsAnchorEl, setNewsAnchorEl] = useState(null);
+  const isNextgenMenuOpen = Boolean(nextgenAnchorEl);
+  const isNewsMenuOpen = Boolean(newsAnchorEl);
 
   const moveHome = (hash = "") => {
     window.location.href = hash ? `/#${hash}` : "/";
@@ -27,12 +48,34 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     moveHome(id);
   };
 
-  const navigateIntroduction = () => {
-    if (isIntroductionPage) {
+  const openNextgenMenu = (event) => {
+    setNextgenAnchorEl(event.currentTarget);
+  };
+
+  const closeNextgenMenu = () => {
+    setNextgenAnchorEl(null);
+  };
+
+  const openNewsMenu = (event) => {
+    setNewsAnchorEl(event.currentTarget);
+  };
+
+  const closeNewsMenu = () => {
+    setNewsAnchorEl(null);
+  };
+
+  const navigateToSubmenu = (path) => {
+    closeNextgenMenu();
+    closeNewsMenu();
+    window.location.href = path;
+  };
+
+  const navigateToPath = (path) => {
+    if (currentPath === path) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    window.location.href = "/introduction";
+    window.location.href = path;
   };
 
   const handleLogoClick = () => {
@@ -79,13 +122,55 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
             {NAV_ITEMS.map((item) => (
               <Button
                 key={item.label}
-                onClick={() => (item.path ? navigateIntroduction() : moveTo(item.target))}
+                onClick={(event) => {
+                  if (item.hasSubmenu) {
+                    openNextgenMenu(event);
+                    return;
+                  }
+                  if (item.hasNewsSubmenu) {
+                    openNewsMenu(event);
+                    return;
+                  }
+                  if (item.path) {
+                    navigateToPath(item.path);
+                    return;
+                  }
+                  moveTo(item.target);
+                }}
                 sx={{ color: "white", borderRadius: 0, px: 2, fontSize: "0.9rem", fontWeight: 500, "&:hover": { bgcolor: "rgba(255,255,255,0.08)" } }}
               >
                 {item.label}
               </Button>
             ))}
           </Stack>
+
+          <Menu
+            anchorEl={nextgenAnchorEl}
+            open={isNextgenMenuOpen}
+            onClose={closeNextgenMenu}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
+          >
+            {NEXTGEN_SUBMENUS.map((submenu) => (
+              <MenuItem key={submenu.path} onClick={() => navigateToSubmenu(submenu.path)}>
+                {submenu.label}
+              </MenuItem>
+            ))}
+          </Menu>
+
+          <Menu
+            anchorEl={newsAnchorEl}
+            open={isNewsMenuOpen}
+            onClose={closeNewsMenu}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
+          >
+            {NEWS_SUBMENUS.map((submenu) => (
+              <MenuItem key={submenu.path} onClick={() => navigateToSubmenu(submenu.path)}>
+                {submenu.label}
+              </MenuItem>
+            ))}
+          </Menu>
 
           <Box sx={{ flexGrow: 1, display: { md: "none" } }} />
 
