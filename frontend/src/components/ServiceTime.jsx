@@ -1,15 +1,22 @@
 import { Card, CardContent, Container, Grid2 as Grid, Stack, Typography } from "@mui/material";
 
-export default function ServiceTime({ departments = [] }) {
+export default function ServiceTime({ departments = [], section = null }) {
+  const sectionTitle = section?.title ?? "Service Time";
+  const sectionSubtitle = section?.subtitle ?? null;
   const times = departments
     .filter((d) => d.worship_day || d.worship_time)
     .slice(0, 6);
 
   return (
     <Container id="service-time" maxWidth="lg" sx={{ py: 2 }}>
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: 800 }}>
-        Service Time
+      <Typography variant="h4" sx={{ mb: sectionSubtitle ? 0.5 : 2, fontWeight: 800 }}>
+        {sectionTitle}
       </Typography>
+      {sectionSubtitle ? (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          {sectionSubtitle}
+        </Typography>
+      ) : null}
       <Grid container spacing={2}>
         {times.map((dep) => (
           <Grid key={dep.id} size={{ xs: 12, md: 4 }}>

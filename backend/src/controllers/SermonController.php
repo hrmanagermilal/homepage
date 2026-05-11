@@ -87,7 +87,7 @@ class SermonController {
                 );
             }
             
-            return ResponseFormatter::success($sermon, 'Sermon');
+            return ResponseFormatter::success($sermon, 'Sermon retrieved successfully');
         } catch (\Exception $e) {
             return ResponseFormatter::error(
                 'DATABASE_ERROR',
@@ -115,32 +115,24 @@ class SermonController {
                 );
             }
             
-            $data = json_decode(file_get_contents('php://input'), true);
-            
-            // 필드 검증
-            if (!Validators::validateRequired($data, ['title', 'speaker', 'sermon_date', 'youtube_url'])) {
+            $payload = json_decode(file_get_contents('php://input'), true);
+            if (!is_array($payload)) {
                 return ResponseFormatter::error(
                     'VALIDATION_ERROR',
-                    'Missing required fields: title, speaker, sermon_date, youtube_url',
+                    'Invalid JSON payload',
                     null,
                     400
                 );
             }
+
+            $data = $this->normalizeSermonData($payload);
             
-            if (!Validators::validateUrl($data['youtube_url'])) {
+            $validationErrors = $this->validateSermonData($data);
+            if (!empty($validationErrors)) {
                 return ResponseFormatter::error(
                     'VALIDATION_ERROR',
-                    'Invalid YouTube URL',
-                    null,
-                    400
-                );
-            }
-            
-            if (!YoutubeHelper::isValidUrl($data['youtube_url'])) {
-                return ResponseFormatter::error(
-                    'VALIDATION_ERROR',
-                    'Must be a valid YouTube URL',
-                    null,
+                    'Invalid sermon data',
+                    $validationErrors,
                     400
                 );
             }
@@ -159,22 +151,24 @@ class SermonController {
             $videoId = YoutubeHelper::extractVideoId($data['youtube_url']);
             $thumbnails = YoutubeHelper::getThumbnailUrl($videoId);
             
-            $data['video_id'] = $videoId;
-            $data['thumbnail_url'] = $thumbnails[0] ?? null;
+            $data['youtube_id'] = $videoId;
+            if (empty($data['thumbnail'])) {
+                $data['thumbnail'] = $thumbnails['maxres'] ?? $thumbnails['high'] ?? null;
+            }
             
-            $sermonId = $this->sermonModel->create($data);
+            $result = $this->sermonModel->create($data);
             
-            if (!$sermonId) {
+            if (empty($result['success'])) {
                 return ResponseFormatter::error(
                     'DATABASE_ERROR',
-                    'Failed to create sermon',
+                    $result['error'] ?? 'Failed to create sermon',
                     null,
                     500
                 );
             }
             
             return ResponseFormatter::success(
-                ['sermon_id' => $sermonId],
+                ['sermon_id' => (int)$result['id']],
                 'Sermon created successfully',
                 201
             );
@@ -225,20 +219,30 @@ class SermonController {
                 );
             }
             
-            $data = json_decode(file_get_contents('php://input'), true);
+            $payload = json_decode(file_get_contents('php://input'), true);
+            if (!is_array($payload)) {
+                return ResponseFormatter::error(
+                    'VALIDATION_ERROR',
+                    'Invalid JSON payload',
+                    null,
+                    400
+                );
+            }
+
+            $data = $this->normalizeSermonData($payload, $sermon);
+            $validationErrors = $this->validateSermonData($data);
+            if (!empty($validationErrors)) {
+                return ResponseFormatter::error(
+                    'VALIDATION_ERROR',
+                    'Invalid sermon data',
+                    $validationErrors,
+                    400
+                );
+            }
             
             // YouTube URL 변경 시 검증
             if (isset($data['youtube_url']) && $data['youtube_url'] !== $sermon['youtube_url']) {
-                if (!YoutubeHelper::isValidUrl($data['youtube_url'])) {
-                    return ResponseFormatter::error(
-                        'VALIDATION_ERROR',
-                        'Invalid YouTube URL',
-                        null,
-                        400
-                    );
-                }
-                
-                if ($this->sermonModel->checkUrlExists($data['youtube_url'])) {
+                if ($this->sermonModel->checkUrlExists($data['youtube_url'], $id)) {
                     return ResponseFormatter::error(
                         'DUPLICATE_ERROR',
                         'This YouTube URL is already registered',
@@ -249,16 +253,19 @@ class SermonController {
                 
                 $videoId = YoutubeHelper::extractVideoId($data['youtube_url']);
                 $thumbnails = YoutubeHelper::getThumbnailUrl($videoId);
-                $data['video_id'] = $videoId;
-                $data['thumbnail_url'] = $thumbnails[0] ?? null;
+                $data['youtube_id'] = $videoId;
+
+                if (empty($payload['thumbnail']) && empty($payload['thumbnail_url']) && empty($payload['thumbnailUrl'])) {
+                    $data['thumbnail'] = $thumbnails['maxres'] ?? $thumbnails['high'] ?? null;
+                }
             }
             
             $result = $this->sermonModel->update($id, $data);
             
-            if (!$result) {
+            if (empty($result['success'])) {
                 return ResponseFormatter::error(
                     'DATABASE_ERROR',
-                    'Failed to update sermon',
+                    $result['error'] ?? 'Failed to update sermon',
                     null,
                     500
                 );
@@ -337,6 +344,62 @@ class SermonController {
                 500
             );
         }
+    }
+
+    private function normalizeSermonData(array $payload, array $existing = null) {
+        $data = [];
+
+        $data['title'] = $payload['title'] ?? ($existing['title'] ?? null);
+        $data['category_id'] = $this->resolveCategoryId($payload, $existing);
+        $data['youtube_url'] = $payload['youtube_url'] ?? $payload['youtubeUrl'] ?? ($existing['youtube_url'] ?? null);
+        $data['youtube_id'] = $payload['youtube_id'] ?? $payload['youtubeId'] ?? $payload['video_id'] ?? $payload['videoId'] ?? ($existing['youtube_id'] ?? null);
+        $data['description'] = $payload['description'] ?? ($existing['description'] ?? null);
+        $data['preacher'] = $payload['preacher'] ?? $payload['speaker'] ?? ($existing['preacher'] ?? null);
+        $data['sermon_date'] = $payload['sermon_date'] ?? $payload['sermonDate'] ?? ($existing['sermon_date'] ?? null);
+        $data['thumbnail'] = $payload['thumbnail'] ?? $payload['thumbnail_url'] ?? $payload['thumbnailUrl'] ?? ($existing['thumbnail'] ?? null);
+
+        return $data;
+    }
+
+    private function resolveCategoryId(array $payload, array $existing = null) {
+        if (array_key_exists('category_id', $payload)) {
+            return $payload['category_id'] === '' ? null : $payload['category_id'];
+        }
+
+        if (array_key_exists('categoryId', $payload)) {
+            return $payload['categoryId'] === '' ? null : $payload['categoryId'];
+        }
+
+        return $existing['category_id'] ?? null;
+    }
+
+    private function validateSermonData(array $data) {
+        $errors = Validators::validateRequired($data, ['title', 'youtube_url']);
+
+        if (!empty($data['youtube_url']) && !Validators::validateUrl($data['youtube_url'])) {
+            $errors['youtube_url'] = 'Invalid YouTube URL';
+        }
+
+        if (!empty($data['youtube_url']) && !YoutubeHelper::isValidUrl($data['youtube_url'])) {
+            $errors['youtube_url'] = 'Must be a valid YouTube URL';
+        }
+
+        if ($data['category_id'] !== null && $data['category_id'] !== '' && !Validators::validateNumber($data['category_id'], 1)) {
+            $errors['category_id'] = 'Category ID must be a positive number';
+        }
+
+        if ($data['category_id'] !== null && $data['category_id'] !== '' && !$this->sermonModel->categoryExists((int)$data['category_id'])) {
+            $errors['category_id'] = 'Selected sermon category does not exist';
+        }
+
+        if (!empty($data['sermon_date'])) {
+            $date = \DateTime::createFromFormat('Y-m-d', $data['sermon_date']);
+            if (!$date || $date->format('Y-m-d') !== $data['sermon_date']) {
+                $errors['sermon_date'] = 'Sermon date must use YYYY-MM-DD format';
+            }
+        }
+
+        return $errors;
     }
 }
 ?>

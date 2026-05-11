@@ -11,13 +11,18 @@ import Contacts from "./components/Contacts";
 import FooterTop from "./components/FooterTop";
 import Footer from "./components/Footer";
 import FloatingMenu from "./components/FloatingMenu";
+import IntroductionPage from "./components/IntroductionPage";
 
 export default function App() {
+  const isIntroductionPage = window.location.pathname.startsWith("/introduction");
   const [health, setHealth] = useState(null);
   const [hero, setHero] = useState(null);
   const [heroLinks, setHeroLinks] = useState([]);
+  const [quickLinks, setQuickLinks] = useState([]);
   const [landingTitles, setLandingTitles] = useState([]);
   const [members, setMembers] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [visionStatements, setVisionStatements] = useState([]);
   const [sermons, setSermons] = useState([]);
   const [togetherItems, setTogetherItems] = useState([]);
   const [bulletins, setBulletins] = useState([]);
@@ -32,12 +37,29 @@ export default function App() {
       setLoading(true);
       setError("");
       try {
-        const [h, heroResponse, heroLinkResponse, landingTitleResponse, memberResponse, s, t, b, a, d] = await Promise.all([
+        const [
+          healthResponse,
+          heroResponse,
+          heroLinkResponse,
+          quickLinkResponse,
+          landingTitleResponse,
+          memberResponse,
+          sectionsResponse,
+          visionStatementsResponse,
+          sermonsResponse,
+          togetherResponse,
+          bulletinsResponse,
+          announcementsResponse,
+          departmentsResponse,
+        ] = await Promise.all([
           api.getHealth(),
           api.getHero(),
           api.getHeroLinks(),
+          api.getQuickLinks(),
           api.getLandingTitles(),
           api.getMembers(),
+          api.getSections(),
+          api.getVisionStatements(),
           api.getSermons({ page: 1, limit: 5 }),
           api.getTogether(),
           api.getBulletins({ page: 1, limit: 6 }),
@@ -46,16 +68,19 @@ export default function App() {
         ]);
 
         if (!mounted) return;
-        setHealth(h?.message || "Online");
+        setHealth(healthResponse?.message || "Online");
         setHero(heroResponse?.data ?? null);
         setHeroLinks(heroLinkResponse?.data ?? []);
+        setQuickLinks(quickLinkResponse?.data ?? []);
         setLandingTitles(landingTitleResponse?.data || []);
         setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
-        setSermons(s?.data?.data ?? s?.data ?? []);
-        setTogetherItems(t?.data?.data ?? t?.data ?? []);
-        setBulletins(b?.data?.data ?? b?.data ?? []);
-        setAnnouncements(a?.data?.data ?? a?.data ?? []);
-        setDepartments(d?.data?.data ?? d?.data ?? []);
+        setSections(sectionsResponse?.data ?? []);
+        setVisionStatements(visionStatementsResponse?.data ?? []);
+        setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
+        setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
+        setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
+        setAnnouncements(announcementsResponse?.data?.data ?? announcementsResponse?.data ?? []);
+        setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
       } catch (e) {
         if (!mounted) return;
         setError(e.message || "Failed to connect backend API");
@@ -70,10 +95,27 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    if (sessionStorage.getItem("goToContacts") === "1") {
+      sessionStorage.removeItem("goToContacts");
+      document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    const hashTarget = window.location.hash?.replace("#", "");
+    if (hashTarget) {
+      document.getElementById(hashTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [loading]);
+
   return (
     <Box>
-      <Header menuLinks={heroLinks} landingTitles={landingTitles} />
-      <Hero apiStatus={health} hero={hero} heroLinks={heroLinks}/>
+      <Header quickLinks={quickLinks} landingTitles={landingTitles} />
+      {isIntroductionPage ? null : <Hero apiStatus={health} hero={hero} heroLinks={heroLinks} />}
 
       {loading ? (
         <Stack alignItems="center" py={8}>
@@ -89,14 +131,20 @@ export default function App() {
         </Box>
       ) : null}
 
-      <Sermon items={sermons} />
-      <ServiceTime departments={departments} />
-      <Jubo items={bulletins} />
-      <Announcement items={announcements} />
-      <Contacts members={members} />
-      <FooterTop items={togetherItems} />
+      {isIntroductionPage ? (
+        <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} />
+      ) : (
+        <>
+          <Sermon items={sermons} section={sections.find((s) => s.title === "최신 설교")} />
+          <ServiceTime departments={departments} section={sections.find((s) => s.title === "예배 시간")} />
+          <Jubo items={bulletins} section={sections.find((s) => s.title === "주보")} />
+          <Announcement items={announcements} section={sections.find((s) => s.title === "공지사항")} />
+
+          <FooterTop items={togetherItems} section={sections.find((s) => s.title === "함께하는 교회")} />
+        </>
+      )}
       <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
-      <FloatingMenu quickLinks={heroLinks} />
+      {isIntroductionPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }

@@ -1,7 +1,9 @@
 import { Card, CardContent, Container, Grid2 as Grid, Stack, Typography } from "@mui/material";
 
-export default function Contacts({ members = [] }) {
+export default function Contacts({ members = [], section = null }) {
   console.log("Contacts members:", members);
+  const sectionTitle = section?.title ?? "Contacts";
+  const sectionSubtitle = section?.subtitle ?? null;
   const contacts = members.map((member) => ({
     id: member.id,
     title: member.name || member.title || "Member",
@@ -11,9 +13,14 @@ export default function Contacts({ members = [] }) {
 
   return (
     <Container id="contacts" maxWidth="lg" sx={{ py: 2 }}>
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: 800 }}>
-        Contacts
+      <Typography variant="h4" sx={{ mb: sectionSubtitle ? 0.5 : 2, fontWeight: 800 }}>
+        {sectionTitle}
       </Typography>
+      {sectionSubtitle ? (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          {sectionSubtitle}
+        </Typography>
+      ) : null}
       <Grid container spacing={2}>
         {contacts.map((c) => (
           <Grid key={c.id} item xs={12} md={4}>
