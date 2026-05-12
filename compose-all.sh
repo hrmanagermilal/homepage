@@ -29,5 +29,5 @@ echo "[2/2] Building and starting frontend service..."
 )
 
 echo "[DONE] All services are up."
-echo "- Frontend: http://localhost:5173"
-echo "- Backend (nginx): http://localhost"
+echo "- Frontend: http://localhost"
+echo "- Backend (nginx): http://localhost:8080"
