@@ -4,7 +4,7 @@ import { api } from "./api/client";
 import Header from "./components/Header";
 import LandingPage from "./components/LandingPage";
 import Footer from "./components/Footer";
-import FloatingMenu from "./components/FloatingMenu";
+import FloatingMenu from "./components/landing_components/FloatingMenu";
 import IntroductionPage from "./components/IntroductionPage";
 import NextGenPage from "./components/NextGenPage";
 import MinistryPage from "./components/MinistryPage";
