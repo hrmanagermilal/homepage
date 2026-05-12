@@ -1,0 +1,955 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
+  <title>Introduction — 밀알교회</title>
+  <meta property="og:image" content="../images/og-img.jpg">
+  <link rel="shortcut icon" href="../images/favicon.png"/>
+  <link rel="stylesheet" href="../css/common.css" />
+  <style>
+    /* ══════════════════════════════════════
+     * intro-vision 교회비전
+     * ══════════════════════════════════════ */
+     .sub-visual__bg-img {background-image: url(../images/sub/01-introduction/sub-visual-bg.jpg);}
+    .intro-vision {padding: 0 0 140rem;}
+    .intro-vision__head {margin-bottom: 60rem; text-align: center;}
+    .intro-vision__cards {position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 74rem 60rem;}
+    .vision-card {position: relative; display: flex; flex-direction: column; gap: 20rem; padding: 50rem 60rem 60rem; background: var(--bg-table); border-radius: 20rem;}
+    .vision-card__title {color: var(--b-title); letter-spacing: -0.24rem;}
+    .vision-card [data-list="dot"] > * {margin-bottom: 5rem;}
+    .intro-vision__bg-ellipse {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 0;}
+    .intro-vision__circle {position: absolute; left: 50%; top: 50%; width: 216rem; aspect-ratio: 1/1; transform: translate(-50%, -50%);}
+    .intro-vision__circle i {position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-radius: 100%; border: 1px solid var(--op-b10); opacity: 0; transform: scale(1); animation: introVisionCircle 3s ease-out infinite;}
+    .intro-vision__circle i:nth-child(2) {animation-delay: 1s;}
+    .intro-vision__circle i:nth-child(3) {animation-delay: 2s;}
+    .intro-vision__box {position: absolute; left: 50%; top: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10rem; text-align: center; width: 216rem; aspect-ratio: 1/1; color: var(--w); border-radius: 100%; background: var(--c-primary); box-shadow: 0 10rem 20rem rgba(0, 0, 0, 0.12); transform: translate(-50%, -50%);}
+    .intro-vision__box img {width: 34rem; height: auto;}
+    .intro-vision__box h6 {font-size: var(--font-27); font-weight: 700;}
+    .intro-vision__bg-ellipse img {display: block; width: 680rem; pointer-events: none; opacity: 0.06;}
+
+    @keyframes introVisionCircle {0% {opacity: 0.45; transform: scale(1);} 100% {opacity: 0; transform: scale(3);}}
+
+    @media (max-width: 1200px) {
+    	.vision-card {padding: 40rem 40rem 50rem;}
+      .intro-vision__box {width: 190rem;}
+    }
+    @media (max-width: 1023px) {
+      .intro-vision__box {width: 140rem; gap: 5rem;}
+      .intro-vision__box img {width: 24rem;}
+      .intro-vision__box h6 {font-size: var(--font-24);}
+      .intro-vision__circle {width: 140rem;}
+      .intro-vision__head {margin-bottom: 40rem;}
+
+    	.intro-vision {padding: 0 0 100rem;}
+    	.intro-vision__head {margin-bottom: 40rem;}
+    	.intro-vision__cards {gap: 30rem 30rem;}
+    	.intro-vision__center {width: 160rem; height: 160rem;}
+    }
+
+    @media (max-width: 860px) {
+      .intro-vision__head {margin-bottom: 30rem;}
+      .vision-card {gap: 14rem;}
+    }
+
+    @media (max-width: 540px) {
+    	.intro-vision {padding: 0 0 60rem;}
+    	.intro-vision__head {margin-bottom: 20rem;}
+      .intro-vision__circle,
+      .intro-vision__box {display: none;}
+    	.intro-vision__cards {gap: 10rem; grid-template-columns: 1fr;}
+    	.vision-card {padding: 25rem 20rem; border-radius: 10rem; gap: 10rem;}
+    	.intro-vision__center {width: 110rem; height: 110rem;}
+    }
+
+    /* ══════════════════════════════════════
+     * intro-pastor 담임목사
+     * ══════════════════════════════════════ */
+    .intro-pastor__inr {display: flex; align-items: center; margin: 0 20rem; background: #131416; border-radius: 20rem; overflow: hidden;}
+    .intro-pastor__photo {flex-shrink: 0; width: 50%;}
+    .intro-pastor__photo figure {position: sticky; top: 0;}
+    .intro-pastor__photo img {display: block; width: 100%;}
+    .intro-pastor__cont {width: 50%; padding: 125rem 80rem; padding-right: calc((100vw - 1520rem)/2); display: flex; flex-direction: column; justify-content: center;}
+    .intro-pastor__title {color: #eeca3a; margin-bottom: 40rem;}
+    .intro-pastor__texts {display: flex; flex-direction: column; gap: 22rem; margin-bottom: 90rem;}
+    .intro-pastor__text {color: var(--w);}
+    .intro-pastor__divider {max-width: 100%; width: 680rem; height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 40rem;}
+    .intro-pastor__name {color: var(--w); margin-bottom: 30rem;}
+    .intro-pastor__career {display: flex; flex-direction: column; gap: 12rem; max-width: 100%; width: 680rem; padding: 30rem 30rem 35rem; background: #f6f6f6; border-radius: 10rem; box-shadow: 0 10rem 15rem rgba(0,0,0,0.03), 0 10rem 15rem rgba(66,55,37,0.03);}
+    .intro-pastor__career-head {display: flex; align-items: center; gap: 8rem;}
+    .intro-pastor__career-logo {display: block; flex-shrink: 0; width: 12rem; height: 22rem; object-fit: contain; background:url(../images/common/vision-logo.png) no-repeat center / contain;}
+    .intro-pastor__career-title {font-size: var(--font-19); font-weight: 700; line-height: 1.631; color: var(--b-title); letter-spacing: -0.19rem;}
+    .intro-pastor__career [data-list="dot"] > * {margin-bottom: 5rem;}
+
+    @media (max-width: 1640px) {
+      .intro-pastor__cont {padding-right: 80rem;}
+    }
+
+    @media (max-width: 1200px) {
+      .intro-pastor__inr {margin: 0; align-items: stretch; border-radius: 0; overflow: initial;}
+      .intro-pastor__cont {padding-left: 0;}
+    }
+    @media (max-width: 1023px) {
+    	.intro-pastor__inr {flex-direction: column;}
+    	.intro-pastor__photo {position: absolute; width: 100%;}
+      .intro-pastor__photo figure {width: 55%;}
+      .intro-pastor__divider {width: 100%;}
+    	.intro-pastor__cont {position: relative; width: 100%; padding: 100rem var(--margin); }
+      .intro-pastor__cont > *:not(.intro-pastor__career, .intro-pastor__divider, .intro-pastor__name) {padding-left: 50%;}
+    	.intro-pastor__career {width: 100%; }
+      .intro-pastor__name {margin-bottom: 20rem;}
+    }
+
+    @media (max-width: 860px) {
+      .intro-pastor__photo{position: relative; width: 100%; text-align: center;}
+      .intro-pastor__photo figure {width: 80%; margin: 0 auto; margin-top: 20rem;}
+      .intro-pastor__photo figure::after {position: absolute; left:0; top:0; content:''; width: 100rem; height: 100%; background: linear-gradient(-90deg,rgba(19, 20, 22, 0) 0%, rgba(19, 20, 22, 1) 100%);}
+      .intro-pastor__cont > *:not(.intro-pastor__career) {text-align: center;}
+      .intro-pastor__cont > *:not(.intro-pastor__career, .intro-pastor__divider, .intro-pastor__name) {padding-left: 0;}
+      .intro-pastor__cont {padding-top: 30rem;}
+      .intro-pastor__title {margin-bottom: 30rem;}
+      .intro-pastor__texts {margin-bottom: 80rem;}
+      .intro-ministers__head {align-items: center; gap: 20rem;}
+    }
+
+    @media (max-width: 540px) {
+      .intro-pastor__photo figure {overflow: hidden; width: 100%; margin-top: 0;}
+      .intro-pastor__photo img {width: 109%;}
+      .intro-pastor__texts {gap: 12rem; margin-bottom: 50rem;}
+      .intro-pastor__text br {display: none;}
+      .intro-pastor__title {margin-bottom: 22rem;}
+    	.intro-pastor__cont {padding: 40rem var(--margin) 60rem;}
+    	.intro-pastor__career {padding: 25rem 20rem;}
+      .intro-pastor__divider {margin-bottom: 30rem;}
+    }
+
+    /* ══════════════════════════════════════
+     * intro-ministers 섬기는 분들
+     * ══════════════════════════════════════ */
+    .intro-ministers {padding: 100rem 0; background: var(--bg-light);}
+    .intro-ministers__head {display: flex; align-items: center; justify-content: space-between; margin-bottom: 50rem;}
+    .intro-ministers__tab {height: 65rem; background: rgba(255,255,255,0.2);}
+    .intro-ministers__grid {display: flex; flex-wrap: wrap; gap: 42rem;}
+    .minister-card {flex: 0 0 calc((100% - 4 * 42rem) / 5); min-width: 0;}
+    .minister-card:has(.minister-card__hover) {cursor: pointer;}
+    .minister-card__thumb {position: relative; overflow: hidden; aspect-ratio: 382 / 460; border-radius: 20rem; background: var(--bg-table); border: 1px solid rgba(0, 0, 0, .005);}
+    .minister-card__thumb img {position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
+    .minister-card__hover {backdrop-filter: blur(7rem); display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; inset: 0; opacity: 0; background:var(--op-b50); transition: opacity 0.3s ease;}
+    .minister-card__hover-btn {display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6rem; width: 100rem; height: 100rem; background: var(--c-secondary); border-radius: 50%; box-shadow: 10rem 10rem 10rem rgba(0,0,0,0.25);}
+    .minister-card__hover-btn i {position: relative; display: block; width: 16rem; height: 16rem;}
+    .minister-card__hover-btn i::before, .minister-card__hover-btn i::after {content: ""; position: absolute; left: 50%; top: 50%; width: 10rem; height: 2rem; background: var(--w); transform: translate(-50%, -50%);}
+    .minister-card__hover-btn i::after {transform: translate(-50%, -50%) rotate(90deg);}
+    .minister-card__hover-btn img {display: block; width: 18rem; height: 18rem; object-fit: contain; pointer-events: none;}
+    .minister-card__hover-btn span {font-weight: 700; font-size: var(--font-xsm); line-height: 1.5; color: var(--w); white-space: nowrap;}
+    .minister-card__body {margin-top: 18rem; text-align: center;}
+    .minister-card__role {font-size: var(--font-default); font-weight: 700; line-height: 1.467; color: var(--c-secondary); margin-bottom: 2rem;}
+    .minister-card__name {font-size: var(--font-22); font-weight: 700; line-height: 1.47; color: var(--b-title);}
+    .minister-modal {position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: var(--margin); opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease;}
+    .minister-modal.is-open {opacity: 1; visibility: visible;}
+    .minister-modal__dim {position: absolute; inset: 0; background: rgba(0,0,0,0.5);}
+    .minister-modal__box {position: relative; display: flex; gap: 40rem; width: 760rem; padding: 30rem; background: var(--w); border-radius: 20rem; box-shadow: 40rem 40rem 20rem rgba(0,0,0,0.1);}
+    .minister-modal__close {position: absolute; right: 20rem; top: 20rem; width: 60rem; height: 60rem;}
+    .minister-modal__close::before, .minister-modal__close::after {content: ""; position: absolute; left: 50%; top: 50%; width: 36rem; height: 2rem; background: #000;}
+    .minister-modal__close::before {transform: translate(-50%, -50%) rotate(45deg);}
+    .minister-modal__close::after {transform: translate(-50%, -50%) rotate(-45deg);}
+    .minister-modal__photo {overflow: hidden; flex: 0 0 320rem; height: 385rem; border: 1px solid var(--op-b05); border-radius: 10rem; background: var(--bg-table);}
+    .minister-modal__photo img {width: 100%; height: 100%; object-fit: cover;}
+    .minister-modal__cont {display: flex; flex-direction: column; gap: 22rem; flex: 1; min-width: 0; padding: 20rem 0 0;}
+    .minister-modal__head {display: flex; flex-direction: column; gap: 15rem;}
+    .minister-modal__category {display: block; margin-bottom: 8rem; font-size: var(--font-default); font-weight: 700; line-height: 1.467; color: var(--c-secondary);}
+    .minister-modal__name {font-size: var(--font-27); font-weight: 700; line-height: 1.185; letter-spacing: -0.27rem; color: var(--b-title);}
+    .minister-modal__tags {display: flex; flex-wrap: wrap; gap: 5rem;}
+    .minister-modal__tag {display: inline-flex; align-items: center; min-height: 30rem; padding: 4rem 8rem; border: 1px solid rgba(0,0,0,0.2); border-radius: 4rem; font-size: var(--font-xsm); line-height: 1.467; color: var(--b-default);}
+    .minister-modal__email {display: inline-flex; align-items: center; font-size: var(--font-xsm); line-height: 1.467; color: var(--b-default);}
+    .minister-modal__email::before {content: ""; display: block; flex-shrink: 0; filter: grayscale(1); opacity: .2; width: 18rem; height: 18rem; margin-right: 8rem; background: url(../images/main/ic-location03.svg) no-repeat center / contain;}
+    .minister-modal__divider {height: 1px; background: var(--op-b10);}
+    .minister-modal__position {font-size: var(--font-default); line-height: 1.529; color: var(--b-default);}
+
+    @media (hover: hover) and (pointer: fine) {
+    	.minister-card:hover .minister-card__hover {opacity: 1;}
+    }
+    @media (max-width: 1480px) {
+    	.minister-card {flex: 0 0 calc((100% - 3 * 42rem) / 4);}
+    }
+    @media (max-width: 1023px) {
+    	.intro-ministers {padding: 80rem 0;}
+    	.intro-ministers__head {flex-direction: column; align-items: flex-start; gap: 24rem; margin-bottom: 36rem;}
+    	.intro-ministers__grid {gap: 40rem 24rem;}
+    	.minister-card {flex: 0 0 calc((100% - 2 * 24rem) / 3);}
+    	.minister-card__thumb {border-radius: 14rem;}
+    	.minister-modal__box {width: min(760rem, 100%); gap: 28rem;}
+    	.minister-modal__photo {flex-basis: 280rem; height: 340rem;}
+    }
+
+    @media (max-width: 860px) {
+      .intro-ministers__head {align-items: center;}
+    }
+
+    @media (max-width: 540px) {
+    	.intro-ministers {padding: 60rem 0;}
+    	.intro-ministers__head {gap: 16rem; margin-bottom: 28rem;}
+    	.intro-ministers__grid {gap: 28rem 12rem;}
+      .intro-ministers__tab {height: 52rem;}
+    	.minister-card {flex: 0 0 calc((100% - 12rem) / 2);}
+    	.minister-card__thumb {border-radius: 10rem;}
+    	.minister-card__hover-btn {width: 72rem; height: 72rem;}
+    	.minister-card__hover-btn img {width: 14rem; height: 14rem;}
+    	.minister-card__hover-btn span {font-size: var(--font-xxsm);}
+    	.minister-card__body {margin-top: 12rem;}
+    	.minister-modal {padding: 0;}
+    	.minister-modal__box {flex-direction: column; width: 100%; height: 100%; padding: 20rem; padding-bottom: 80rem; border-radius: 0;}
+    	.minister-modal__close {right: 10rem; top: 10rem;}
+    	.minister-modal__photo {flex: none; width: 100%; height: auto; aspect-ratio: 319.746 / 385;}
+    	.minister-modal__cont {padding: 0;}
+      .minister-modal__close {right: auto; left: 0; top: auto; bottom: 0; display: inline-flex; align-items: center; justify-content: center; width: 100%; height:52rem; background: var(--bg-dark);}
+      .minister-modal__close::before {display: none;}
+      .minister-modal__close::afteR {content:'닫기'; position: relative; left: auto; top: auto; width: auto; height: auto; font-weight: var(--font-default); font-weight: 500; background: transparent; color: var(--w); transform: none !important;}
+    }
+
+    /* ══════════════════════════════════════
+     * intro-partner 함께하는 교회
+     * ══════════════════════════════════════ */
+    .intro-partner {padding: 0 0 20rem;}
+    .intro-partner__inr {position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 20rem; padding: 120rem 0; background: var(--c-primary); border-radius: 20rem;}
+    .intro-partner__bg-ellipse {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;}
+    .intro-partner__bg-ellipse img {display: block; width: 680rem; pointer-events: none; opacity: 0.08;}
+    .intro-partner__cont {position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;}
+    .intro-partner__title {color: var(--w); margin-bottom: 16rem;}
+    .intro-partner__sub {margin-bottom: 50rem; color:var(--w);}
+    .intro-partner__logos {display: flex; gap: 20rem; width: 100%; max-width: 1260rem; padding: 0 var(--margin);}
+    .partner-logo {display: flex; align-items: center; justify-content: center; flex: 1; background: var(--w); border-radius: 20rem; overflow: hidden;}
+    .partner-logo img {width: 100%;}
+    
+    @media (max-width: 1200px) {
+      .intro-partner {padding-bottom: 0;}
+      .intro-partner__inr {margin: 0; border-radius: 0;}
+    }
+
+    @media (max-width: 1023px) {
+    	.intro-partner__inr {padding: 100rem var(--margin);}
+    	.intro-partner__sub {margin-bottom: 40rem;}
+    	.intro-partner__logos {padding: 0; max-width: none;}
+    }
+    @media (max-width: 860px) {
+    	.intro-partner__logos {display: grid; grid-template-columns: repeat(3, 1fr); gap: 24rem;}
+      .partner-logo {border-radius: 15rem;}
+      .intro-partner__inr {padding: 80rem var(--margin);}
+    }
+
+    @media (max-width: 540px) {
+    	.intro-partner__inr {padding: 60rem var(--margin);}
+    	.intro-partner__sub {margin-bottom: 32rem;}
+    	.intro-partner__logos {flex-direction: column; gap: 10rem; grid-template-columns: 1fr;}
+    	.partner-logo {flex: none; width: 100%; height: 130rem; border-radius: 10rem;}
+    }
+  </style>
+</head>
+<body>
+
+<div data-include="../inc/head.html" data-root="../"></div>
+
+<div data-include="../inc/sub-visual.html" data-root="../" data-title="Introduction" data-label="Introduction" data-bg="../images/sub/01-introduction/sub-visual-bg.jpg" data-front="../images/sub/01-introduction/sub-visual-bg-front.png"></div>
+
+  <div class="sub-content" id="content">
+
+    <div data-include="../inc/lnb.html" data-root="../" data-menu="Introduction"></div>
+
+    <!-- ── intro-vision 교회비전 ── -->
+    <section id="introduction01" class="intro-vision">
+      <div class="wrap-narrow">
+
+        <div class="intro-vision__head">
+        <h3 data-heading="5xl">밀알 교회는...</h3>
+      </div>
+
+      <div class="intro-vision__cards">
+        <div class="intro-vision__bg-ellipse" aria-hidden="true">
+          <img src="../images/sub/01-introduction/vision-ellipse-bg.png" alt="" />
+        </div>
+        <div class="intro-vision__circle">
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+        <article class="vision-card">
+          <h4 class="vision-card__title" data-heading="2xl">예배 공동체</h4>
+          <ul data-list="dot">
+            <li>찬양과 설교, 설교후 찬양, 결단의 흐름이 되는 역동적 예배</li>
+            <li>각 예배의 차별화를 통한 영적 필요충족</li>
+            <li>예배팀을 세우는 훈련과 예배 중보기도 활성화</li>
+            <li>가정, 전세대가 같이 드리는 예배</li>
+          </ul>
+        </article>
+        <article class="vision-card">
+          <h4 class="vision-card__title" data-heading="2xl">목양 공동체</h4>
+          <ul data-list="dot">
+            <li>담임목사와 순장들의 깊은관계 속 동역자화</li>
+            <li>'한 사람' 철학을 통한 깊은 성도 목양</li>
+            <li>간증과 기쁨의 스토리가 흐르는 교회</li>
+            <li>공동체 내에서의 치유와 성장 중점</li>
+          </ul>
+        </article>
+        <article class="vision-card">
+          <h4 class="vision-card__title" data-heading="2xl">훈련 공동체</h4>
+          <ul data-list="dot">
+            <li>말씀으로 사람을 세우는 교회</li>
+            <li>다음세대를 위한 체계적 지속적 훈련</li>
+            <li>교회같은 가정을 이루는 가정 제자훈련 (Gospel Project/ Family talk)</li>
+          </ul>
+        </article>
+        <article class="vision-card">
+          <h4 class="vision-card__title" data-heading="2xl">미셔널 공동체</h4>
+          <ul data-list="dot">
+            <li>Glocal (Global +Local)섬김과 지속적 선교</li>
+            <li>전략 선교지역에 대한 지속적 선교</li>
+            <li>가족선교 및 다음세대 선교 를 통한 선교적 교회</li>
+          </ul>
+        </article>
+        
+        <div class="intro-vision__box">
+          <img src="../images/common/vision-logo.png"/>
+          <h6>밀알교회</h6>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── intro-pastor 담임목사 ── -->
+  <section id="introduction02" class="intro-pastor">
+    <div class="intro-pastor__inr">
+
+      <div class="intro-pastor__photo">
+        <figure><img src="../images/sub/01-introduction/pastor-photo.jpg" alt="담임목사 사진" /></figure>
+      </div>
+
+      <div class="intro-pastor__cont">
+        <h3 class="intro-pastor__title" data-heading="5xl">복음으로 하나 되어,<br>세상으로 나아가는 교회</h3>
+        <div class="intro-pastor__texts">
+          <p class="intro-pastor__text">밀알교회에 오신 것을 환영합니다.</p>
+          <p class="intro-pastor__text">밀알교회는 캐나다 토론토에 위치한 해외한인장로회(KPCA) 소속 <br>장로교회입니다. 저희 교회는 교회같은 가정, 가정같은 교회를 꿈꾸며 <br>하늘의 복을 받아 세상의 복을 나누는 교회가 되길 꿈꾸는 교회입니다.</p>
+          <p class="intro-pastor__text">예배, 목양, 훈련, 미셔널 공동체를 이루며 제자의 삶을 통해 <br>복음을 증거하고 세상을 변화시키며 훈련된 증인으로 파송되어 <br>세상과 삶의 현장에 하나님 나라를 확장해가는 미셔널 공동체인 교회입니다.</p>
+          <p class="intro-pastor__text">공동체 안에 있을 때 사람은 성장합니다. <br>성장하는 귀한 공동체로 여러분을 초대합니다.</p>
+        </div>
+        <div class="intro-pastor__divider" aria-hidden="true"></div>
+        <h4 class="intro-pastor__name" data-heading="2xl">담임목사 박형일</h4>
+        <div class="intro-pastor__career">
+          <div class="intro-pastor__career-head">
+            <i class="intro-pastor__career-logo"></i>
+            <p class="intro-pastor__career-title">약력</p>
+          </div>
+          <ul data-list="dot">
+            <li>서강대학교 경영학과 졸업</li>
+            <li>총신대학교 신학대학원 졸업</li>
+            <li>Southern Baptist Theological Seminary 목회학 박사</li>
+            <li>현) Toronto KOSTA 이사</li>
+            <li>현) Love Toronto 이사장</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── intro-ministers 섬기는 분들 ── -->
+  <section id="introduction03" class="intro-ministers">
+    <div class="wrap">
+
+      <div class="intro-ministers__head">
+        <h3 data-heading="5xl">섬기는 분들</h3>
+        <div class="tab-menu intro-ministers__tab" role="tablist" aria-label="섬기는 분들 탭">
+          <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" aria-controls="ministerPanel-0">목회자</button>
+          <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="ministerPanel-1">시무장로</button>
+          <button class="tab-btn tab-btn--sep" type="button" role="tab" aria-selected="false" aria-controls="ministerPanel-2">직원</button>
+        </div>
+      </div>
+
+      <!-- 패널 0: 교역자 -->
+      <div class="intro-panel is-active" id="ministerPanel-0" role="tabpanel">
+        <ul class="intro-ministers__grid">
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-01.jpg" alt="목사 박형일" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">박형일</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-02.jpg" alt="목사 이기쁨" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">이기쁨</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-03.jpg" alt="목사 김준영" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">김준영</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-04.jpg" alt="목사 신효성" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">신효성</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-05.jpg" alt="목사 차승현" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">차승현</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-06.jpg" alt="목사 이용" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">이용</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-07.jpg" alt="목사 오성요" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">오성요</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-08.jpg" alt="목사 배상진" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">배상진</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-09.jpg" alt="목사 Jonathan Kim" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">목사</p>
+              <p class="minister-card__name">Jonathan Kim</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-10.jpg" alt="전도사 최수라" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">전도사</p>
+              <p class="minister-card__name">최수라</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-11.jpg" alt="전도사 최정수" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">전도사</p>
+              <p class="minister-card__name">최정수</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-12.jpg" alt="전도사 김비치" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">전도사</p>
+              <p class="minister-card__name">김비치</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-13.jpg" alt="전도사 김진아" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">전도사</p>
+              <p class="minister-card__name">김진아</p>
+            </div>
+          </li>
+
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/minister-14.jpg" alt="전도사 주은지" />
+              <div class="minister-card__hover">
+                <div class="minister-card__hover-btn">
+                  <i></i>
+                  <span>자세히 보기</span>
+                </div>
+              </div>
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">전도사</p>
+              <p class="minister-card__name">주은지</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- 패널 1: 장로 -->
+      <div class="intro-panel" id="ministerPanel-1" role="tabpanel">
+        <ul class="intro-ministers__grid">
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-01.jpg" alt="장로 목상수" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">목상수</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-02.jpg" alt="장로 김준덕" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">김준덕</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-03.jpg" alt="장로 이강식" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">이강식</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-04.jpg" alt="장로 노명신" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">노명신</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-05.jpg" alt="장로 정진관" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">정진관</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-06.jpg" alt="장로 김형렬" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">김형렬</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-07.jpg" alt="장로 권규찬" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">권규찬</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/elder-08.jpg" alt="장로 김태우" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">장로</p>
+              <p class="minister-card__name">김태우</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 패널 2: 권사 -->
+      <div class="intro-panel" id="ministerPanel-2" role="tabpanel">
+        <ul class="intro-ministers__grid">
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/deacon-01.jpg" alt="사무간사 김선덕" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">사무간사</p>
+              <p class="minister-card__name">김선덕</p>
+            </div>
+          </li>
+          <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/deacon-02.jpg" alt="음향간사 조영범" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">음향간사</p>
+              <p class="minister-card__name">조영범</p>
+            </div>
+          </li>
+           <li class="minister-card">
+            <div class="minister-card__thumb">
+              <img src="../images/sub/01-introduction/deacon-03.jpg" alt="미디어간사 서초희" />
+            </div>
+            <div class="minister-card__body">
+              <p class="minister-card__role">미디어간사</p>
+              <p class="minister-card__name">서초희</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── intro-partner 함께하는 교회 ── -->
+  <section class="intro-partner">
+    <div class="intro-partner__inr">
+      <div class="intro-partner__bg-ellipse" aria-hidden="true">
+        <img src="../images/main/main-visual-ellipse.svg" alt="" />
+      </div>
+      <div class="intro-partner__cont">
+        <h3 class="intro-partner__title" data-heading="5xl">함께하는 교회</h3>
+        <p class="intro-partner__sub">복음 안에서 하나 된 교회들이 함께합니다. <br>서로 다른 자리에서, 같은 방향을 바라보며 세상을 향해 나아가는 믿음의 동역자들을 소개합니다.</p>
+        <ul class="intro-partner__logos">
+          <li class="partner-logo">
+            <a href="https://www.hsctoronto.com/" target="_blank">
+              <img src="../images/sub/01-introduction/partner-logo-01.png" alt="하늘씨앗 교회" />
+            </a>
+          </li>
+          <li class="partner-logo">
+            <a href="https://bridgewaychurch.ca/" target="_blank">
+              <img src="../images/sub/01-introduction/partner-logo-02.png" alt="bridgewaychurch" />
+            </a>
+          </li>
+          <li class="partner-logo">
+            <a href="https://jcchurch.ca/" target="_blank">
+              <img src="../images/sub/01-introduction/partner-logo-03.png" alt="순례길교회" />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /sub-content -->
+
+<div class="minister-modal" id="ministerModal" role="dialog" aria-modal="true" aria-labelledby="ministerModalName" aria-hidden="true">
+  <div class="minister-modal__dim" data-minister-close></div>
+  <div class="minister-modal__box">
+    <button class="minister-modal__close" type="button" aria-label="팝업 닫기" data-minister-close></button>
+    <div class="minister-modal__photo">
+      <img id="ministerModalPhoto" src="" alt="" />
+    </div>
+    <div class="minister-modal__cont">
+      <div class="minister-modal__head">
+        <div>
+          <p class="minister-modal__category" id="ministerModalCategory">목회자</p>
+          <h4 class="minister-modal__name" id="ministerModalName"></h4>
+        </div>
+        <div class="minister-modal__tags" id="ministerModalTags"></div>
+        <a class="minister-modal__email" id="ministerModalEmail" href=""></a>
+      </div>
+      <div class="minister-modal__divider" aria-hidden="true"></div>
+      <ul class="minister-modal__position" id="ministerModalPosition" data-list="dot"></ul>
+    </div>
+  </div>
+</div>
+
+<div data-include="../inc/footer.html" data-root="../"></div>
+
+<script src="../js/common.js"></script>
+<script>
+window.MilalIncludes.ready.then(function () {
+(function () {
+/* 콘텐츠 탭 (role="tablist" — 페이지 내 패널 전환) */
+  document.querySelectorAll('[role="tablist"]').forEach(function (tablist) {
+    var tabs = tablist.querySelectorAll('[role="tab"]');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var targetPanel = document.getElementById(tab.getAttribute('aria-controls'));
+        if (!targetPanel) return;
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+          var p = document.getElementById(t.getAttribute('aria-controls'));
+          if (p) p.classList.remove('is-active');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        targetPanel.classList.add('is-active');
+      });
+    });
+  });
+
+  /* 목회자 상세 팝업 */
+  var ministerModal = document.getElementById('ministerModal');
+  var ministerPhoto = document.getElementById('ministerModalPhoto');
+  var ministerCategory = document.getElementById('ministerModalCategory');
+  var ministerName = document.getElementById('ministerModalName');
+  var ministerTags = document.getElementById('ministerModalTags');
+  var ministerEmail = document.getElementById('ministerModalEmail');
+  var ministerPosition = document.getElementById('ministerModalPosition');
+  var ministerPrevOverflow = '';
+  var ministerDetails = {
+    '박형일': {
+      category: '목회자',
+      email: 'hyungilpark@milalchurch.com',
+      position: ['담임목사 / Senior Pastor']
+    },
+    '이기쁨': {
+      category: '목회자',
+      tags: ['목회행정(선임)', '목회부', '공동체(생명, 충성)', '공간기획'],
+      email: 'kippeumlee@milalchurch.com',
+      position: ['목사']
+    },
+    '김준영': {
+      category: '목회자',
+      tags: ['예배부(1부/2부 찬양인도)', '봉사부(건물관리/주차/경조)', '공동체(기쁨,진리)'],
+      email: 'junyoungkim@milalchurch.com',
+      position: ['목사']
+    },
+    '신효성': {
+      category: '목회자',
+      tags: ['청년부', '선교부', '장학'],
+      email: 'rev.shin@milalchurch.com',
+      position: ['목사']
+    },
+    '차승현': {
+      category: '목회자',
+      tags: ['청소년부(KM 해세드)', '캠퍼스 신입생 심방', '청소년부 선교 및 통합훈련'],
+      email: 'seunghyuncha@milalchurch.com',
+      position: ['목사']
+    },
+    '이용': {
+      category: '목회자',
+      tags: ['교육총괄', '가스펠프로젝트', '목회기획', '공동체(은혜,영광)'],
+      email: 'unglee@milalchurch.com',
+      position: ['목사']
+    },
+    '오성요': {
+      category: '목회자',
+      tags: ['목양(소그룹)', '찬양인도(주일3부, 금요찬양집회)', '친교부 공동체(믿음,온유)'],
+      email: 'osungyo@milalchurch.com',
+      position: ['목사']
+    },
+    '배상진': {
+      category: '목회자',
+      tags: ['훈련사역부', '청장년부', '다니엘한글문화학교', 'Child Care', '공동체(감사)'],
+      email: 'sangjinbae@milalchurch.com',
+      position: ['목사']
+    },
+    '최수라': {
+      category: '목회자',
+      tags: ['새가족', '가정사역부(마더/파더 와이즈)', '공동체(지혜 A,B)'],
+      email: 'soorachoi@milalchurch.com',
+      position: ['전도사']
+    },
+    'Jonathan Kim': {
+      category: '목회자',
+      tags: ['청소년부(EM 오하나)'],
+      email: 'jonathankim@milalchurch.com',
+      position: ['목사']
+    },
+    '최정수': {
+      category: '목회자',
+      tags: ['시니어 사역 (다윗/여호수아/모세회)'],
+      email: 'jeongsuchoi@milalchurch.com',
+      position: ['전도사']
+    },
+    '김비치': {
+      category: '목회자',
+      tags: ['유치부'],
+      email: 'bichi.kim@milalchurch.com',
+      position: ['전도사']
+    },
+    '김진아': {
+      category: '목회자',
+      tags: ['아동부'],
+      email: 'jina.kim@milalchurch.com',
+      position: ['전도사']
+    },
+    '주은지': {
+      category: '목회자',
+      tags: ['영유아부'],
+      email: 'eunji.ju@milalchurch.com',
+      position: ['전도사']
+    }
+  };
+
+  function openMinisterModal(card) {
+    if (!ministerModal || !card) return;
+    var img = card.querySelector('.minister-card__thumb img');
+    var role = card.querySelector('.minister-card__role');
+    var name = card.querySelector('.minister-card__name');
+    if (!img || !role || !name) return;
+
+    var nameText = name.textContent.trim();
+    var roleText = role.textContent.trim();
+    var detail = ministerDetails[nameText] || {};
+    var tags = detail.tags || [];
+
+    ministerPhoto.setAttribute('src', img.getAttribute('src'));
+    ministerPhoto.setAttribute('alt', img.getAttribute('alt') || nameText);
+    ministerCategory.textContent = detail.category || ((roleText === '목사' || roleText === '전도사') ? '목회자' : roleText);
+    ministerName.textContent = nameText + ' ' + roleText;
+    ministerEmail.textContent = detail.email || '';
+    ministerEmail.setAttribute('href', detail.email ? 'mailto:' + detail.email : '');
+    ministerEmail.style.display = detail.email ? '' : 'none';
+    var positions = detail.position || [roleText];
+    ministerPosition.innerHTML = positions.map(function (item) {
+      return '<li>' + item + '</li>';
+    }).join('');
+    ministerTags.innerHTML = tags.map(function (tag) {
+      return '<span class="minister-modal__tag">' + tag + '</span>';
+    }).join('');
+    ministerTags.style.display = tags.length ? '' : 'none';
+
+    ministerPrevOverflow = document.body.style.overflow;
+    ministerModal.classList.add('is-open');
+    ministerModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMinisterModal() {
+    if (!ministerModal || !ministerModal.classList.contains('is-open')) return;
+    ministerModal.classList.remove('is-open');
+    ministerModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = ministerPrevOverflow;
+  }
+
+  document.querySelectorAll('.intro-ministers .minister-card').forEach(function (card) {
+    if (!card.querySelector('.minister-card__hover')) return;
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('click', function () { openMinisterModal(card); });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openMinisterModal(card);
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-minister-close]').forEach(function (btn) {
+    btn.addEventListener('click', closeMinisterModal);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMinisterModal();
+  });
+})();
+});
+</script>
+
+</body>
+</html>
+

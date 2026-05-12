@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS hero_front_images (
 -- ===============================================
 -- 1-1. Section 테이블
 -- ===============================================
-CREATE TABLE IF NOT EXISTS sections (
+CREATE TABLE IF NOT EXISTS section_titles (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255),
   subtitle TEXT,

@@ -20,7 +20,7 @@ class Section {
     public function getAll() {
         try {
             $stmt = $this->db->prepare("
-                SELECT * FROM sections ORDER BY created_at ASC
+                SELECT * FROM section_titles ORDER BY created_at ASC
             ");
             $stmt->execute();
             return $stmt->fetchAll();
@@ -35,7 +35,7 @@ class Section {
      */
     public function getById($id) {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM sections WHERE id = ?");
+            $stmt = $this->db->prepare("SELECT * FROM section_titles WHERE id = ?");
             $stmt->execute([$id]);
             return $stmt->fetch();
         } catch (\PDOException $e) {
@@ -50,7 +50,7 @@ class Section {
     public function create($data) {
         try {
             $stmt = $this->db->prepare("
-                INSERT INTO sections (title, subtitle) VALUES (?, ?)
+                INSERT INTO section_titles (title, subtitle) VALUES (?, ?)
             ");
             $stmt->execute([
                 $data['title'] ?? null,
@@ -69,7 +69,7 @@ class Section {
     public function update($id, $data) {
         try {
             $stmt = $this->db->prepare("
-                UPDATE sections SET title = ?, subtitle = ? WHERE id = ?
+                UPDATE section_titles SET title = ?, subtitle = ? WHERE id = ?
             ");
             $stmt->execute([
                 $data['title'] ?? null,
@@ -88,7 +88,7 @@ class Section {
      */
     public function delete($id) {
         try {
-            $stmt = $this->db->prepare("DELETE FROM sections WHERE id = ?");
+            $stmt = $this->db->prepare("DELETE FROM section_titles WHERE id = ?");
             $stmt->execute([$id]);
             return ['success' => true];
         } catch (\PDOException $e) {

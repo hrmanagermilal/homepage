@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
+  <title>온라인 헌금 — 밀알교회</title>
+  <meta property="og:image" content="../images/og-img.jpg">
+  <link rel="shortcut icon" href="../images/favicon.png"/>
+  <link rel="stylesheet" href="../css/common.css" />
+  <style>
+    /* ══════════════════════════════════════
+     * Donation 온라인 헌금
+     * ══════════════════════════════════════ */
+     .sub-visual__bg-img {background-image: url(../images/sub/05-online-donation/sub-visual-bg.jpg);}
+    .donation {padding: 50rem 0 120rem;}
+
+    /* 헤딩 */
+    .donation-heading {margin-bottom: 40rem; text-align: center;}
+
+    /* 안내 배너 */
+    .donation-notice {align-items: center; background: rgba(58,71,43,0.05); border: 1px solid var(--c-primary); border-radius: 10rem; display: flex; gap: 8rem; margin: 0 auto 50rem; max-width: 100%; padding: 12rem 22rem; width: fit-content;}
+    .donation-notice__icon {align-items: center; border: 1.5px solid var(--c-primary); border-radius: 50%; color: var(--c-primary); display: flex; flex-shrink: 0; font-size: var(--font-11); font-weight: 800; height: 17rem; justify-content: center; line-height: 1; width: 17rem;}
+    .donation-notice__text {color: var(--c-primary); font-size: var(--font-sm); line-height: 27rem; white-space: nowrap;}
+    .donation-notice__text strong {font-weight: 600;}
+
+    /* 카드 그리드 */
+    .donation-cards {display: flex; gap: 31rem; margin-bottom: 60rem;}
+    .donation-card {align-items: center; background: var(--w); border-radius: 20rem; box-shadow: 0 10rem 7.5rem var(--op-b03); display: flex; flex: 1; flex-direction: column; gap: 40rem; min-width: 0; padding: 70rem 20rem;}
+    .donation-card__logo {align-items: center; border-radius: 12rem; display: flex; flex-shrink: 0; height: 100rem; justify-content: center; overflow: hidden;}
+    .donation-card__logo img {display: block; height: 100%;}
+    .donation-card__body {align-items: center; display: flex; flex-direction: column; gap: 10rem; text-align: center;}
+    .donation-card__title {color: var(--b-title); font-size: var(--font-24); font-weight: 700; letter-spacing: -0.24rem; line-height: 36rem; white-space: nowrap;}
+    .donation-card__desc {color: var(--b-default); font-size: var(--font-default); text-align: center;}
+    .donation-card__btns {display: flex; gap: 5rem; flex-wrap: wrap; justify-content: center;}
+    .donation-card__btns .btn-basic {min-width: 135rem;}
+
+    /* 구분선 */
+
+    /* 정보 섹션 */
+    .donation-info {display: flex; padding: 40rem 0; border-top: 2rem solid #000; border-bottom: 1px solid var(--op-b10);}
+    .donation-info__col {display: flex; flex: 1; flex-direction: column; gap: 20rem; min-width: 0; padding: 10rem 0;}
+    .donation-info__col--right {align-items: flex-start; border-left: 1px solid var(--op-b10); padding-left: 50rem;}
+    .donation-info__title {color: var(--b-title); font-size: var(--font-22); font-weight: 700; letter-spacing: -0.22rem; line-height: 32rem;}
+
+    /* 수표 정보 */
+    .donation-info__payable-main {color: var(--b-default); font-size: var(--font-default); font-weight: 600; line-height: 25rem;}
+    .donation-info__payable-addr {color: var(--b-default); font-size: var(--font-sm); font-style: normal; margin-top: 10rem;}
+
+    /* 은행 로고 박스 */
+    .donation-info__bank-box {display: inline-block; background: rgba(255,255,255,0.7); border: 1px solid var(--op-b05); border-radius: 5rem;}
+    .donation-info__bank-box img {width: 178rem;}
+
+    /* 계좌 정보 */
+    .donation-info__account {display: flex; flex-direction: column; gap: 10rem;}
+    .donation-info__account-row {align-items: center; display: flex; gap: 10rem; min-height: 22rem;}
+    .donation-info__account-row dt {align-items: center; color: var(--b-default); display: flex; flex-shrink: 0; font-size: var(--font-xsm); font-weight: 600; gap: 8rem; line-height: 22rem; min-width: 120rem;}
+    .donation-info__account-row dt::before {background: var(--c-secondary); border-radius: 50%; content: ''; display: block; flex-shrink: 0; height: 4rem; width: 4rem;}
+    .donation-info__account-sep {background: var(--op-b10); display: block; flex-shrink: 0; height: 15rem; width: 1px;}
+    .donation-info__account-row dd {color: var(--b-default); font-size: var(--font-xsm);}
+
+    /* 유의사항 모달 */
+    .donation-modal {align-items: center; background: rgba(0,0,0,0.5); bottom: 0; display: flex; justify-content: center; left: 0; opacity: 0; padding: 30rem var(--margin); pointer-events: none; position: fixed; right: 0; top: 0; transition: opacity 0.25s ease; z-index: 1000;}
+    .donation-modal.is-open {opacity: 1; pointer-events: auto;}
+    .donation-modal__box {align-items: center; background: var(--w); border-radius: 20rem; box-shadow: 40rem 40rem 20rem rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 462rem; padding: 80rem 40rem 40rem; position: relative; text-align: center; width: 511rem;}
+    .donation-modal__close {background: none; border: 0; cursor: pointer; height: 60rem; padding: 0; position: absolute; right: 20rem; top: 20rem; width: 60rem;}
+    .donation-modal__close::before, .donation-modal__close::after {background: #000; content: ''; height: 2rem; left: 12rem; position: absolute; top: 29rem; width: 36rem;}
+    .donation-modal__close::before {transform: rotate(45deg);}
+    .donation-modal__close::after {transform: rotate(-45deg);}
+    .donation-modal__icon {align-items: center; background: #becfaa; border-radius: 50%; color: var(--w); display: flex; font-size: var(--font-24); font-style: italic; font-weight: 800; height: 50rem; justify-content: center; line-height: 1; margin-bottom: 30rem; width: 50rem;}
+    .donation-modal__icon::before {content:''; width: 14rem; height: 27rem; background: url(../images/common/ic-notice.svg) no-repeat center / contain;}
+    .donation-modal__title {color: var(--b-title); font-size: var(--font-24); font-weight: 700; letter-spacing: -0.24rem; line-height: 36rem; margin-bottom: 10rem;}
+    .donation-modal__desc {color: var(--b-default); font-size: var(--font-default); line-height: 26rem; margin-bottom: 46rem; white-space: nowrap;}
+    .donation-modal__btn {min-width: 0;}
+
+    @media (max-width: 1023px) {
+    	.donation {padding: 60rem 0 100rem;}
+.donation-cards {gap: 20rem;}
+    	.donation-card {border-radius: 15rem; padding: 50rem 20rem;}
+    	.donation-card__title {font-size: var(--font-22); white-space: normal; text-align: center;}
+    }
+    @media (max-width: 860px) {
+      .donation-heading {margin-bottom: 30rem;}
+    	.donation-notice {width: 100%; margin-bottom: 40rem;}
+    	.donation-notice__text {white-space: normal;}
+      .donation-card {gap: 30rem; margin-bottom: 80rem; border-radius: 10rem;}
+      .donation-card__body {gap: 5rem;}
+      .donation-card__logo {height: 80rem;}
+    	.donation-info {flex-direction: column; padding: 0;}
+      .donation-info__col{padding: 40rem 0;}
+    	.donation-info__col--right {border-left: none; border-top: 1px solid var(--op-b10); padding-left: 0; padding-top: 30rem; margin-top: -10rem;}
+      .donation-info__account-row dt {min-width: 110rem;}
+    }
+    @media (max-width: 540px) {
+    	.donation {padding: 40rem 0 60rem;}
+      .donation-notice {flex-direction: column; justify-content: center; padding: 20rem 20rem; gap: 8rem; margin-bottom: 30rem;}
+      .donation-notice__text {text-align: center; line-height: 1.6;}
+    	.donation-heading {margin-bottom: 20rem;}
+      .donation-cards {display: grid; grid-template-columns: 1fr; gap: 10rem; margin-bottom: 50rem;}
+      .donation-card {margin-bottom: 0; gap: 24rem;}
+      .donation-card .btn-basic {margin-top: 5rem;}
+    	.donation-card__desc {font-size: var(--font-19); line-height: 22rem;}
+      .donation-card__logo {height: 65rem; border-radius: 5rem;}
+      .donation-info__col {gap: 12rem; padding: 25rem 0;}
+      .donation-info__account {gap: 15rem;}
+    	.donation-info__account-row {flex-wrap: wrap; gap: 4rem;}
+    	.donation-info__account-sep {display: none;}
+    	.donation-info__account-row dd {padding-left: 12rem; width: 100%;}
+      .donation-info__payable-addr {margin-top: 6rem;}
+      .donation-modal {padding: 0;}
+    	.donation-modal__box {width: 100%; height: 100%; justify-content: center; padding: 20rem; padding-bottom: 80rem; border-radius: 0;}
+      .donation-modal__title {margin-bottom: 8rem; line-height: 1.6;}
+    	.donation-modal__icon {width: 40rem; height: 40rem; margin-bottom: 25rem;}
+      .donation-modal__icon::before {width: 10rem; height: 24rem;}
+    	.donation-modal__desc {white-space: normal; line-height: 1.6; margin-bottom: 30rem;}
+      .donation-modal__close {right: auto; left: 0; top: auto; bottom: 0; display: inline-flex; align-items: center; justify-content: center; width: 100%; height:52rem; background: var(--bg-dark);}
+      .donation-modal__close::before {display: none;}
+      .donation-modal__close::afteR {content:'닫기'; position: relative; left: auto; top: auto; width: auto; height: auto; font-weight: var(--font-default); font-weight: 500; background: transparent; color: var(--w); transform: none !important;}
+    
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div data-include="../inc/head.html" data-root="../"></div>
+  <div data-include="../inc/sub-visual.html" data-root="../" data-title="온라인 헌금" data-label="온라인 헌금" data-bg="../images/sub/01-introduction/sub-visual-bg.jpg" data-front="../images/sub/01-introduction/sub-visual-bg-front.png"></div>
+
+  <div class="sub-content" id="content">
+
+    <!-- ── Donation 온라인 헌금 ── -->
+    <section class="donation">
+      <div class="wrap-narrow">
+
+        <h3 class="donation-heading" data-heading="5xl">온라인 헌금</h3>
+
+        <div class="donation-notice" role="note">
+          <span class="donation-notice__icon" aria-hidden="true">!</span>
+          <p class="donation-notice__text">CRA 규정상 헌금 영수증은 기부자의 영문 이름과 일치하도록 하시고 <strong>헌금 봉투 번호</strong>를 꼭 기입해주세요.</p>
+        </div>
+
+        <!-- 카드 영역 -->
+        <div class="donation-cards">
+
+          <!-- E-Transfer 카드 -->
+          <div class="donation-card">
+            <div class="donation-card__logo">
+              <img src="../images/sub/05-online-donation/interac-logo.svg" alt="Interac" />
+            </div>
+            <div class="donation-card__body">
+              <h4 class="donation-card__title">E-Transfer로 헌금 드리기</h4>
+              <p class="donation-card__desc">내용 전달 부탁드립니다.<br>2줄로 들어갈 예정입니다.</p>
+            </div>
+            <button class="btn-basic btn-basic--white" type="button" id="copyEmailBtn">이메일 주소 복사하기</button>
+          </div>
+
+          <!-- 신용카드 카드 -->
+          <div class="donation-card">
+            <div class="donation-card__logo donation-card__logo--wide">
+              <img src="../images/sub/05-online-donation/credit-card.svg" alt="" />
+            </div>
+            <div class="donation-card__body">
+              <h4 class="donation-card__title">신용카드로 헌금 드리기</h4>
+              <p class="donation-card__desc">Zeffy Canada 를 통해 수수료 없이<br>신용카드로 헌금 하실수 있습니다.</p>
+            </div>
+            <div class="donation-card__btns">
+              <button class="btn-basic btn-basic--white" type="button" id="donationNoticeBtn">이용시 유의사항</button>
+              <a class="btn-basic btn-basic--white" href="https://www.zeffy.com/en-CA/donation-form/f833c7ac-1b7f-4703-83e1-e25d51579cc5" target="_blank">헌금 드리기</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 정보 영역 -->
+        <div class="donation-info">
+
+          <!-- 수표 (우편 전송) -->
+          <div class="donation-info__col">
+            <h4 class="donation-info__title">수표 (우편 전송)</h4>
+            <div>
+              <p class="donation-info__payable-main">Payable to Milal Church</p>
+              <address class="donation-info__payable-addr">
+                Milal Church – Finance<br>
+                405 Gordon Baker Rd. North York, ON M2H 2S6
+              </address>
+            </div>
+          </div>
+
+          <!-- 계좌로 송금 -->
+          <div class="donation-info__col donation-info__col--right">
+            <h4 class="donation-info__title">계좌로 송금</h4>
+            <div class="donation-info__bank-box">
+              <img src="../images/sub/05-online-donation/shinhan-logo.svg" alt="신한은행" />
+            </div>
+            <dl class="donation-info__account">
+              <div class="donation-info__account-row">
+                <dt>Name</dt>
+                <span class="donation-info__account-sep" aria-hidden="true"></span>
+                <dd>Milal Church</dd>
+              </div>
+              <div class="donation-info__account-row">
+                <dt>Address</dt>
+                <span class="donation-info__account-sep" aria-hidden="true"></span>
+                <dd>405 Gordon Baker Rd. North York, ON CANADA M2H 2S6</dd>
+              </div>
+              <div class="donation-info__account-row">
+                <dt>Transit NO.</dt>
+                <span class="donation-info__account-sep" aria-hidden="true"></span>
+                <dd>08048</dd>
+              </div>
+              <div class="donation-info__account-row">
+                <dt>Institution No.</dt>
+                <span class="donation-info__account-sep" aria-hidden="true"></span>
+                <dd>355</dd>
+              </div>
+              <div class="donation-info__account-row">
+                <dt>Account No.</dt>
+                <span class="donation-info__account-sep" aria-hidden="true"></span>
+                <dd>702-000-167166</dd>
+              </div>
+              <div class="donation-info__account-row">
+                <dt>Swift Code</dt>
+                <span class="donation-info__account-sep" aria-hidden="true"></span>
+                <dd>SHBKCATTXXX</dd>
+              </div>
+            </dl>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <div class="donation-modal" id="donationNoticeModal" role="dialog" aria-modal="true" aria-labelledby="donationNoticeTitle" aria-hidden="true">
+    <div class="donation-modal__box">
+      <button class="donation-modal__close" type="button" aria-label="유의사항 닫기" data-donation-modal-close></button>
+      <span class="donation-modal__icon" aria-hidden="true"></span>
+      <h4 class="donation-modal__title" id="donationNoticeTitle">신용카드로 헌금, 유의사항 안내</h4>
+      <p class="donation-modal__desc">참고로 헌금시 Zeffy Canada에 후원 도네이션이 있습니다.<br>[Other] 를 선택하시고 $0 Contribution을 입력하시면<br>수수료 없이 밀알교회에 헌금 됩니다.</p>
+      <a class="btn-basic btn-basic--white donation-modal__btn" href="https://www.zeffy.com/en-CA/donation-form/f833c7ac-1b7f-4703-83e1-e25d51579cc5" target="_blank">신용카드로 헌금 드리기</a>
+    </div>
+  </div>
+
+  <div data-include="../inc/footer.html" data-root="../"></div>
+  <script src="../js/common.js"></script>
+  <script>
+  (function () {
+    var offeringEmail = 'offering.milalchurch@gmail.com';
+
+    function fallbackCopy(text) {
+      var textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      textarea.style.top = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      textarea.setSelectionRange(0, textarea.value.length);
+      document.execCommand('copy');
+      textarea.remove();
+    }
+
+    function copyEmail() {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(offeringEmail).then(function () {
+          alert('주소가 클립보드에 복사되었습니다');
+        }).catch(function () {
+          fallbackCopy(offeringEmail);
+          alert('주소가 클립보드에 복사되었습니다');
+        });
+        return;
+      }
+
+      fallbackCopy(offeringEmail);
+      alert('주소가 클립보드에 복사되었습니다');
+    }
+
+    var copyEmailBtn = document.getElementById('copyEmailBtn');
+    if (copyEmailBtn) {
+      copyEmailBtn.addEventListener('click', copyEmail);
+    }
+
+    var donationNoticeBtn = document.getElementById('donationNoticeBtn');
+    var donationNoticeModal = document.getElementById('donationNoticeModal');
+    var prevOverflow = '';
+
+    function openDonationNotice() {
+      if (!donationNoticeModal) return;
+      prevOverflow = document.body.style.overflow;
+      donationNoticeModal.classList.add('is-open');
+      donationNoticeModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDonationNotice() {
+      if (!donationNoticeModal) return;
+      donationNoticeModal.classList.remove('is-open');
+      donationNoticeModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = prevOverflow;
+    }
+
+    if (donationNoticeBtn) {
+      donationNoticeBtn.addEventListener('click', openDonationNotice);
+    }
+
+    if (donationNoticeModal) {
+      donationNoticeModal.addEventListener('click', function (e) {
+        if (e.target === donationNoticeModal || e.target.closest('[data-donation-modal-close]')) {
+          closeDonationNotice();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && donationNoticeModal && donationNoticeModal.classList.contains('is-open')) {
+        closeDonationNotice();
+      }
+    });
+  })();
+  </script>
+
+</body>
+</html>

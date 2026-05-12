@@ -63,7 +63,7 @@ INSERT INTO quick_links (title, link, image) VALUES
 -- 1-1. 섹션 테스트 데이터
 -- ===============================================
 
-INSERT INTO sections (title, subtitle) VALUES
+INSERT INTO section_titles (title, subtitle) VALUES
 ('최신 설교', '밀알교회는 찬양과 설교, 기도와 결단으로 이어지는 역동적인 예배공동체를 추구합니다.\n현장예배의 유튜브 영상을 확인하세요.'),
 ('주보', '매주 발행되는 주보를 통해 교회 소식과 예배 순서를 확인하세요.'),
 ('예배 시간', '각 부서별 예배 시간과 장소를 안내해 드립니다.'),
@@ -216,7 +216,7 @@ SELECT 'heroes' as table_name, COUNT(*) as record_count FROM heroes
 UNION ALL
 SELECT 'quick_links', COUNT(*) FROM quick_links
 UNION ALL
-SELECT 'sections', COUNT(*) FROM sections
+SELECT 'section_titles', COUNT(*) FROM section_titles
 UNION ALL
 SELECT 'vision_statements', COUNT(*) FROM vision_statements
 UNION ALL
