@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import "./css/Hero.css";
+import "../css/Hero.css";
 
 const SLIDES = [
   { src: "/images/main/main-visual-slide-01.jpg", alt: "" },

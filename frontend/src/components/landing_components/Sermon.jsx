@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import "./css/Sermon.css";
+import "../css/Sermon.css";
 
 const DEFAULT_THUMBS = [
   "/images/main/youtube-thumb-01.jpg",

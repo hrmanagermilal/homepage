@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
-import "./css/Announcement.css";
+import "../css/Announcement.css";
 
 const FALLBACK_NEWS = [
   { title: "제3회 가스펠오락관 - 암송축제편", image: "/images/main/news-thumb-01.jpg", link: "#", btnText: "신청하러 가기" },
