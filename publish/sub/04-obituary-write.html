@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
+  <title>부고 — 밀알교회</title>
+  <meta property="og:image" content="../images/og-img.jpg">
+  <link rel="shortcut icon" href="../images/favicon.png"/>
+  <link rel="stylesheet" href="../css/common.css" />
+  <style>
+    /* ══════════════════════════════════════
+     * Obituary 부고
+     * ══════════════════════════════════════ */
+    .sub-visual__bg-img {background-image: url(../images/sub/04-obituary/sub-visual-bg.jpg);}
+
+    /* 게시판 목록 공통 */
+    /* board check */
+    .selec_chk {position:absolute;top:0;left:0;width:0;height:0;opacity:0;outline:0;z-index:-1;overflow:hidden}
+    .chk_box {position:relative; margin-bottom:21rem;}
+    .chk_box input[type="checkbox"] + label{position:relative;padding-top: 4rem;padding-left:33rem !important;font-weight:500;font-size: var(--font-default);vertical-align:baseline;font-weight: 400;color: var(--b-default);}
+    .chk_box input[type="checkbox"] + label span{position:absolute;left: 0;width: 23rem !important;height: 23rem !important;top: 1rem;}
+    .chk_box input[type="checkbox"] + label span,
+    .chk_box input[type="checkbox"] + label span {position:absolute;top:2px;left:0;width:15px;height:15px;display:block;margin:0;background:#fff;border:1px solid #d0d4df;border-radius:3px}
+    .chk_box input[type="checkbox"]:checked + label span {background:url(../images/board/chk.png) no-repeat 50% 50% #3a8afd;/* border-color:#1471f6; */background-color:#515151; border-color:#2d2d2d; border-radius:3px;}
+    .chk_box input[type="checkbox"] + label:hover{color:#8f8f8f;}
+
+    .board-write {padding-bottom: 120rem;}
+    .board-write .chk_box:has(.selec_chk) input[type="checkbox"] + label {font-weight: 600; color: var(--b-title);}
+    .write-btn-wrap {display: flex; align-items: center; justify-content: center; gap: 5rem; margin-top: 50rem;}
+    .btn-cancel {min-width: 120rem; color: var(--w); background: #ccc; transition: background .3s ease;} 
+    .btn-submit {min-width: 120rem; color: var(--w); background: var(--c-primary); transition: background .3s ease;} 
+
+    .form-item label {display: flex; margin-bottom: 8rem; font-weight: 600; color: var(--b-title);}
+    .form-item label strong {margin-left: 3rem; font-size: 0; text-indent: -9999;}
+    .form-item label strong::before {content:'*'; font-size: 14rem; font-weight: 400; color: var(--c-secondary);}
+
+    .frm_input {width: 100%; height: 52rem; padding-left: 15rem; font-family: var(--lang-ko); font-size: var(--font-xsm); border-radius: 5rem; border: 1px solid #ddd;}
+    .frm_textarea {width: 100%; height: 200rem; padding: 15rem; font-family: var(--lang-ko); font-size: var(--font-xsm); border-radius: 5rem; border: 1px solid #ddd;}
+    .form-item {margin-bottom: 25rem;}
+    .frm_link {position: relative;}
+    .frm_link::before {opacity: .2; position: absolute; left: 12rem; top: 50%; content:''; width: 22rem; height: 22rem; background: url(../images/board/ic-link.svg) no-repeat center / contain; transform: translateY(-50%);}
+    .frm_link .frm_input {padding-left: 45rem;}
+    .frm_file{position: relative; width: 100%; padding: 12rem; border-radius: 5rem; border: 1px solid #ddd; background: var(--w);}
+
+     @media (max-width: 540px) {
+      .write-btn-wrap {margin-top: 40rem;}
+      .board-write {padding-bottom: 60rem;}
+
+      .chk_box input[type="checkbox"] + label {padding-left: 30rem;}
+      .chk_box input[type="checkbox"] + label span {top: 5rem; idth: 20rem !important; height: 20rem !important;}
+
+      .form-item {margin-bottom: 20rem;}
+      .form-item label {margin-bottom: 6rem;}
+      .frm_input {padding-left: 12rem;}
+     }
+
+  </style>
+</head>
+
+<body>
+
+<div data-include="../inc/head.html" data-root="../"></div>
+
+<div data-include="../inc/sub-visual.html" data-root="../" data-title="부고" data-label="부고" data-bg="../images/sub/01-introduction/sub-visual-bg.jpg" data-front="../images/sub/01-introduction/sub-visual-bg-front.png"></div>
+
+  <div class="sub-content" id="content">
+
+    <div data-include="../inc/lnb.html" data-root="../" data-menu="소식" data-active="부고알림"></div>
+
+    <!-- ── Obituary 부고 ── -->
+    <section class="obituary board-write">
+      <div class="wrap-narrow">
+        <form id="fwrite">
+          <div class="form-item chk_box">
+            <input type="checkbox" id="notice" name="notice" class="selec_chk" value="1">
+            <label for="notice"><span></span>공지사항으로 등록</label>
+          </div>
+
+          <div class="form-item">
+            <label for="wr_subject">제목<strong>필수</strong></label>
+            <input type="text" name="wr_subject" value="" id="wr_subject" required="" class="frm_input" placeholder="제목">
+          </div>
+
+          <div class="form-item">
+            <label for="wr_text">내용<strong>필수</strong></label>
+            <textarea type="text" name="wr_text" value="" id="wr_text" required="" class="frm_textarea" placeholder="에디터가 들어갑니다"></textarea>
+          </div>
+
+        </form>
+        <div class="write-btn-wrap">
+          <a href="#" class="btn-basic-big btn-cancel">취소</a>
+          <a href="#" class="btn-basic-big btn-submit">작성완료</a>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+<div data-include="../inc/footer.html" data-root="../"></div>
+
+<script src="../js/common.js"></script>
+<script>
+window.MilalIncludes.ready.then(function () {
+(function () {
+/* 콘텐츠 탭 (role="tablist" — 페이지 내 패널 전환) */
+  document.querySelectorAll('[role="tablist"]').forEach(function (tablist) {
+    var tabs = tablist.querySelectorAll('[role="tab"]');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var targetPanel = document.getElementById(tab.getAttribute('aria-controls'));
+        if (!targetPanel) return;
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+          var p = document.getElementById(t.getAttribute('aria-controls'));
+          if (p) p.classList.remove('is-active');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        targetPanel.classList.add('is-active');
+      });
+    });
+  });
+
+  if (window.location.hash === '#content') {
+    var el = document.getElementById('content');
+    if (el) {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, el.offsetTop);
+      document.documentElement.style.scrollBehavior = '';
+    }
+  }
+})();
+});
+</script>
+
+</body>
+</html>
+

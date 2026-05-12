@@ -1,0 +1,224 @@
+<header class="site-header" role="banner">
+  <h1 id="site-title" class="sound-only">밀알교회</h1>
+  <div class="site-header__inner">
+
+    <!-- 로고 -->
+    <a class="site-header__logo" href="{{root}}main.html">
+      <img src="{{root}}images/common/logo.png" alt="밀알교회" />
+    </a>
+
+    <!-- 볼륨 -->
+    <button class="site-header__volume" type="button" aria-label="볼륨">
+      <img src="{{root}}images/common/icon-volume.svg" alt="" />
+    </button>
+
+    <!-- GNB -->
+    <nav class="site-header__gnb" aria-label="주 메뉴">
+      <ul class="site-header__gnb-list">
+        <li class="site-header__gnb-item-wrap">
+          <a class="site-header__gnb-item" href="{{subRoot}}01-introduction.html#introduction01">Introduction</a>
+          <ul class="site-header__gnb-sub">
+            <li><a class="site-header__gnb-sub-item" href="{{subRoot}}01-introduction.html#introduction01">교회비전</a></li>
+            <li><a class="site-header__gnb-sub-item" href="{{subRoot}}01-introduction.html#introduction02">섬기는 분들</a></li>
+            <li><a class="site-header__gnb-sub-item" href="{{subRoot}}01-introduction.html#introduction03">함께하는 교회</a></li>
+          </ul>
+        </li>
+        <li class="site-header__gnb-item-wrap">
+          <a class="site-header__gnb-item" href="{{subRoot}}02-next-generation.html">다음세대</a>
+          <ul class="site-header__gnb-sub">
+            <li><a class="site-header__gnb-sub-item" href="{{subRoot}}02-next-generation.html">청년부</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">KM 청년부</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">EM 청년부</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">아동부</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">유치부</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">유아부</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">영아부</a></li>
+          </ul>
+        </li>
+        <li class="site-header__gnb-item-wrap">
+          <a class="site-header__gnb-item" href="{{subRoot}}03-ministry.html">사역</a>
+          <ul class="site-header__gnb-sub">
+            <li><a class="site-header__gnb-sub-item" href="#">양육</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">소그룹</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">가정</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">선교</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">장학</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">가스펠프로젝트</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">다니엘한글문화학교</a></li>
+            <li><a class="site-header__gnb-sub-item" href="#">러브토론토</a></li>
+          </ul>
+        </li>
+        <li class="site-header__gnb-item-wrap">
+          <a class="site-header__gnb-item" href="{{subRoot}}04-notice.html">소식</a>
+          <ul class="site-header__gnb-sub">
+            <li><a class="site-header__gnb-sub-item" href="#">공지</a></li>
+            <li><a class="site-header__gnb-sub-item" href="{{subRoot}}04-obituary.html">부고</a></li>
+          </ul>
+        </li>
+        <li class="site-header__gnb-item-wrap">
+          <a class="site-header__gnb-item" href="{{subRoot}}05-online-donation.html">온라인 헌금</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- 우측 유틸 -->
+    <div class="site-header__util">
+      <a class="site-header__news-btn" href="#">
+        <img src="{{root}}images/common/icon-header-news.svg" alt="" />
+        <span>밀알 소식 바로가기</span>
+      </a>
+      <button class="site-header__hamburger" type="button" aria-label="전체 메뉴 열기">
+        <span class="site-header__hamburger-line"></span>
+        <span class="site-header__hamburger-line"></span>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<!-- 풀페이지 메뉴 -->
+<div class="full-menu" id="fullMenu" role="dialog" aria-modal="true" aria-label="전체 메뉴">
+
+  <div class="full-menu__bg" aria-hidden="true"></div>
+  <div class="full-menu__texture" aria-hidden="true"></div>
+  <div class="full-menu__right-bg" aria-hidden="true"></div>
+
+  <!-- 헤더 (.wrap 으로 감쌈 → 로고 좌, CLOSE 우) -->
+  <div class="full-menu__header">
+    <div class="wrap full-menu__header-inner">
+      <a class="full-menu__logo" href="{{root}}main.html">
+        <img src="{{root}}images/common/logo.png" alt="밀알교회" />
+      </a>
+      <button class="full-menu__close-btn" id="fullMenuClose" type="button" aria-label="메뉴 닫기">
+        <i></i>
+        CLOSE
+      </button>
+    </div>
+  </div>
+
+  <!-- 본문 (.wrap 으로 감쌈) -->
+  <div class="full-menu__body">
+    <div class="wrap full-menu__body-inner">
+      <div class="full-menu__list">
+        <!-- GNB: 866rem 고정, position:relative (2차 메뉴 기준점) -->
+        <nav class="full-menu__gnb" aria-label="전체 메뉴 내비게이션">
+          <ul class="full-menu__gnb-list">
+            <li class="full-menu__gnb-item">
+              <div class="full-menu__gnb-label">
+                <span class="full-menu__gnb-num">01</span>
+                <a class="full-menu__gnb-title" href="#">Introduction</a>
+              </div>
+            </li>
+            <li class="full-menu__gnb-item">
+              <div class="full-menu__gnb-label">
+                <span class="full-menu__gnb-num">02</span>
+                <a class="full-menu__gnb-title" href="#">다음세대</a>
+              </div>
+            </li>
+            <li class="full-menu__gnb-item">
+              <div class="full-menu__gnb-label">
+                <span class="full-menu__gnb-num">03</span>
+                <a class="full-menu__gnb-title" href="#">사역</a>
+              </div>
+            </li>
+            <li class="full-menu__gnb-item">
+              <div class="full-menu__gnb-label">
+                <span class="full-menu__gnb-num">04</span>
+                <a class="full-menu__gnb-title" href="#">소식</a>
+              </div>
+            </li>
+            <li class="full-menu__gnb-item">
+              <div class="full-menu__gnb-label">
+                <span class="full-menu__gnb-num">05</span>
+                <a class="full-menu__gnb-title" href="{{subRoot}}05-online-donation.html">온라인 헌금</a>
+              </div>
+            </li>
+          </ul>
+
+          <!-- 2차 메뉴: GNB 내부 absolute, top:23rem, right:50rem -->
+          <ul class="full-menu__gnb-sub">
+            <li><a class="full-menu__gnb-sub-link" href="{{subRoot}}01-introduction.html#introduction01">교회비전</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="{{subRoot}}01-introduction.html#introduction02">섬기는 분들</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="{{subRoot}}01-introduction.html#introduction03">함께하는 교회</a></li>
+          </ul>
+          <ul class="full-menu__gnb-sub">
+            <li><a class="full-menu__gnb-sub-link" href="{{subRoot}}02-next-generation.html">청년부</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">KM 청년부</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">EM 청년부</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">아동부</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">유치부</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">유아부</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">영아부</a></li>
+          </ul>
+          <ul class="full-menu__gnb-sub">
+            <li><a class="full-menu__gnb-sub-link" href="{{subRoot}}03-ministry.html">양육</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">소그룹</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">가정</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">선교</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">장학</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">가스펠프로젝트</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="#">다니엘한글문화학교</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="https://lovetoronto.org/" target="_blank">러브토론토</a></li>
+          </ul>
+          <ul class="full-menu__gnb-sub">
+            <li><a class="full-menu__gnb-sub-link" href="#">공지</a></li>
+            <li><a class="full-menu__gnb-sub-link" href="{{subRoot}}04-obituary.html">부고</a></li>
+          </ul>
+          <!-- 05 온라인 헌금: 2차 메뉴 없음 -->
+        </nav>
+        <p class="full-menu__copy">ⓒ MILAL CHURCH .All Right Reserved.</p>
+        <!-- 정보 패널: 481rem, margin-left:auto (wrap 우측 끝 정렬) -->
+      </div>
+      <div class="full-menu__info">
+
+        <!-- 공지사항 -->
+        <div class="full-menu__info-section">
+          <h2 class="full-menu__info-title">공지사항</h3>
+          <a class="full-menu__info-card" href="#">
+            <span class="full-menu__info-card-text">밀알교회 홈페이지가 새롭게 리뉴얼 되었습니다.</span>
+            <span class="full-menu__info-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
+
+        <!-- 최근 부고 소식 -->
+        <div class="full-menu__info-section">
+          <h2 class="full-menu__info-title">최근 부고 소식</h3>
+          <a class="full-menu__info-card" href="#">
+            <span class="full-menu__obituary-icon"><img src="{{root}}images/common/icon-obituary-cross.svg" alt="" /></span>
+            <span class="full-menu__info-card-text">박주희 집사(김주환 집사) 모친 소천(영광 2순)</span>
+            <span class="full-menu__info-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+          <a class="full-menu__info-card" href="#">
+            <span class="full-menu__obituary-icon"><img src="{{root}}images/common/icon-obituary-cross.svg" alt="" /></span>
+            <span class="full-menu__info-card-text">이효숙 성도 부친 소천 (청장년 1순)</span>
+            <span class="full-menu__info-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
+
+        <!-- 바로가기 -->
+        <div class="full-menu__info-section">
+          <h2 class="full-menu__info-title">바로가기</h3>
+          <ul class="full-menu__shortcuts">
+            <li><a class="full-menu__shortcut" href="https://youtube.com/@milalchurch?si=xbmgxeIMCL6XbyAv" target="_blank">
+              <span class="full-menu__shortcut-icon"><img src="{{root}}images/common/ic-fullmenu01.svg" alt="" aria-hidden="true" /></span>
+              <span class="full-menu__shortcut-label">실시간 예배 보러가기</span>
+            </a></li>
+            <li><a class="full-menu__shortcut" href="#" target="_blank">
+              <span class="full-menu__shortcut-icon"><img src="{{root}}images/common/ic-fullmenu02.svg" alt="" aria-hidden="true" /></span>
+              <span class="full-menu__shortcut-label">다니엘한글문화학교 바로가기</span>
+            </a></li>
+            <li><a class="full-menu__shortcut" href="https://lovetoronto.org/" target="_blank">
+              <span class="full-menu__shortcut-icon"><img src="{{root}}images/common/ic-fullmenu03.png" alt="" aria-hidden="true" /></span>
+              <span class="full-menu__shortcut-label">러브 토론토 바로가기</span>
+            </a></li>
+          </ul>
+        </div>
+
+      </div><!-- /full-menu__info -->
+
+    </div><!-- /wrap full-menu__body-inner -->
+  </div><!-- /full-menu__body -->
+
+  
+
+</div><!-- /full-menu -->

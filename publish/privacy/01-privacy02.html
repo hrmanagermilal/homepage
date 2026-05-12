@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
+  <title>이메일무단수집거부 — 밀알교회</title>
+  <meta property="og:image" content="../images/og-img.jpg">
+  <link rel="shortcut icon" href="../images/favicon.png"/>
+  <link rel="stylesheet" href="../css/common.css" />
+  <style>
+    /* ══════════════════════════════════════
+     * intro-vision 교회비전
+     * ══════════════════════════════════════ */
+     .sub-visual__bg-img {background-image: url(../images/sub/01-introduction/sub-visual-bg.jpg);}
+
+     .policy-page {padding: 50rem 0 120rem;}
+     .sub-content .policy-page h3{font-weight:700;font-size: 19rem;color:#222;}
+    .sub-content .policy-page h3 + *{margin-top: 20rem !important;}
+    .sub-content .policy-page--email h3{font-size: 29rem;}
+
+    .policy-page ul li,
+    .policy-page p{line-height:1.6;font-weight:400;font-size:16rem;color:#666;font-family: var(--lang-ko);}
+    .policy-page p{line-height:1.6; margin-top:0 !important;}
+    .policy-page ul li{margin-bottom:8rem;}
+    .policy-page ul li:last-child{margin:0;}
+    .policy-page ul li ul{margin-top:5rem; margin-bottom:20rem;}
+    .policy-page ul li ul li{margin-bottom:2rem; font-size:15rem;}
+    .policy-page ul li strong{display:block; margin-top:25rem; color:var(--b-title);}
+    .policy-page .policy-box{padding:40rem 0; border-bottom:1rem solid #ddd;}
+    .policy-page .policy-intro{padding:30rem; border:1px solid var(--op-b10); border-radius: 10rem;}
+    .policy-page .policy-box:last-child{padding-bottom:0; border:none;}
+    .policy-page--email i{display:block; margin-top:40rem; font-family:var(--lang-ko); font-weight:600; font-size:16rem; color:var(--c-primary); letter-spacing:-0.2rem;}
+    .policy-page--email .policy-box{padding: 0 !important;}
+    .policy-title{margin-bottom:60rem; font-size:var(--font-42); font-weight: 700; text-align: center; color:var(--b-title);}
+    .policy .sub-content{padding-top: 120rem;}
+    .policy #lnb{display:none;}
+
+    @media (max-width: 1023px){
+      .policy-title{margin-bottom:30rem;}
+      .policy-page ul li{margin-bottom:4rem;}
+
+      .sub-content .policy-page h3{line-height:1.4; font-size:17rem;}	
+    }
+
+    @media (max-width: 540px){
+      .policy-title {margin-bottom:20rem;}
+      .policy-page ul li,
+      .policy-page p{font-size:15rem;}
+      
+      .policy-page ul li{margin-bottom:3rem;}
+      .policy-page .policy-box{padding:25rem 0;}	
+      .policy-page .policy-intro{padding:20rem;}
+      .policy-page--email i{font-size:15rem;}
+
+      .sub-content .policy-page h3{font-size:15rem;}
+      .sub-content .policy-page h3 + *{margin-top:5rem !important;}	
+    }
+    </style>
+</head>
+<body>
+
+<div data-include="../inc/head.html" data-root="../"></div>
+
+<div data-include="../inc/sub-visual.html" data-root="../" data-title="이메일무단수집거부" data-label="이메일무단수집거부" data-bg="../images/sub/01-introduction/sub-visual-bg.jpg" data-front="../images/sub/01-introduction/sub-visual-bg-front.png"></div>
+
+  <div class="sub-content">
+
+    <div class="policy-page">	
+      <div class="wrap-narrow"> 
+          <h1 class="policy-title">이메일무단수집거부</h1>
+					<p>본 웹사이트에 게시된 이메일 주소가 전자우편 수집 프로그램이나 그 밖의 기술적 장치를 이용하여 무단으로 수집되는 것을 거부하며, <br>이를 위반 시 정보통신망 법에 의해 형사처벌 됨을 유념하시길 바랍니다.</p>		
+					<i>게시일 : 2025년 01월 01일</i>
+      </div>
+    </div>
+
+  </div><!-- /sub-content -->
+
+<div data-include="../inc/footer.html" data-root="../"></div>
+
+<script src="../js/common.js"></script>
+<script>
+window.MilalIncludes.ready.then(function () {
+(function () {
+/* 콘텐츠 탭 (role="tablist" — 페이지 내 패널 전환) */
+  document.querySelectorAll('[role="tablist"]').forEach(function (tablist) {
+    var tabs = tablist.querySelectorAll('[role="tab"]');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var targetPanel = document.getElementById(tab.getAttribute('aria-controls'));
+        if (!targetPanel) return;
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+          var p = document.getElementById(t.getAttribute('aria-controls'));
+          if (p) p.classList.remove('is-active');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        targetPanel.classList.add('is-active');
+      });
+    });
+  });
+
+  /* 목회자 상세 팝업 */
+  var ministerModal = document.getElementById('ministerModal');
+  var ministerPhoto = document.getElementById('ministerModalPhoto');
+  var ministerCategory = document.getElementById('ministerModalCategory');
+  var ministerName = document.getElementById('ministerModalName');
+  var ministerTags = document.getElementById('ministerModalTags');
+  var ministerEmail = document.getElementById('ministerModalEmail');
+  var ministerPosition = document.getElementById('ministerModalPosition');
+  var ministerPrevOverflow = '';
+  var ministerDetails = {
+    '박형일': {
+      category: '목회자',
+      email: 'hyungilpark@milalchurch.com',
+      position: ['담임목사 / Senior Pastor']
+    },
+    '이기쁨': {
+      category: '목회자',
+      tags: ['목회행정(선임)', '목회부', '공동체(생명, 충성)', '공간기획'],
+      email: 'kippeumlee@milalchurch.com',
+      position: ['목사']
+    },
+    '김준영': {
+      category: '목회자',
+      tags: ['예배부(1부/2부 찬양인도)', '봉사부(건물관리/주차/경조)', '공동체(기쁨,진리)'],
+      email: 'junyoungkim@milalchurch.com',
+      position: ['목사']
+    },
+    '신효성': {
+      category: '목회자',
+      tags: ['청년부', '선교부', '장학'],
+      email: 'rev.shin@milalchurch.com',
+      position: ['목사']
+    },
+    '차승현': {
+      category: '목회자',
+      tags: ['청소년부(KM 해세드)', '캠퍼스 신입생 심방', '청소년부 선교 및 통합훈련'],
+      email: 'seunghyuncha@milalchurch.com',
+      position: ['목사']
+    },
+    '이용': {
+      category: '목회자',
+      tags: ['교육총괄', '가스펠프로젝트', '목회기획', '공동체(은혜,영광)'],
+      email: 'unglee@milalchurch.com',
+      position: ['목사']
+    },
+    '오성요': {
+      category: '목회자',
+      tags: ['목양(소그룹)', '찬양인도(주일3부, 금요찬양집회)', '친교부 공동체(믿음,온유)'],
+      email: 'osungyo@milalchurch.com',
+      position: ['목사']
+    },
+    '배상진': {
+      category: '목회자',
+      tags: ['훈련사역부', '청장년부', '다니엘한글문화학교', 'Child Care', '공동체(감사)'],
+      email: 'sangjinbae@milalchurch.com',
+      position: ['목사']
+    },
+    '최수라': {
+      category: '목회자',
+      tags: ['새가족', '가정사역부(마더/파더 와이즈)', '공동체(지혜 A,B)'],
+      email: 'soorachoi@milalchurch.com',
+      position: ['전도사']
+    },
+    'Jonathan Kim': {
+      category: '목회자',
+      tags: ['청소년부(EM 오하나)'],
+      email: 'jonathankim@milalchurch.com',
+      position: ['목사']
+    },
+    '최정수': {
+      category: '목회자',
+      tags: ['시니어 사역 (다윗/여호수아/모세회)'],
+      email: 'jeongsuchoi@milalchurch.com',
+      position: ['전도사']
+    },
+    '김비치': {
+      category: '목회자',
+      tags: ['유치부'],
+      email: 'bichi.kim@milalchurch.com',
+      position: ['전도사']
+    },
+    '김진아': {
+      category: '목회자',
+      tags: ['아동부'],
+      email: 'jina.kim@milalchurch.com',
+      position: ['전도사']
+    },
+    '주은지': {
+      category: '목회자',
+      tags: ['영유아부'],
+      email: 'eunji.ju@milalchurch.com',
+      position: ['전도사']
+    }
+  };
+
+  function openMinisterModal(card) {
+    if (!ministerModal || !card) return;
+    var img = card.querySelector('.minister-card__thumb img');
+    var role = card.querySelector('.minister-card__role');
+    var name = card.querySelector('.minister-card__name');
+    if (!img || !role || !name) return;
+
+    var nameText = name.textContent.trim();
+    var roleText = role.textContent.trim();
+    var detail = ministerDetails[nameText] || {};
+    var tags = detail.tags || [];
+
+    ministerPhoto.setAttribute('src', img.getAttribute('src'));
+    ministerPhoto.setAttribute('alt', img.getAttribute('alt') || nameText);
+    ministerCategory.textContent = detail.category || ((roleText === '목사' || roleText === '전도사') ? '목회자' : roleText);
+    ministerName.textContent = nameText + ' ' + roleText;
+    ministerEmail.textContent = detail.email || '';
+    ministerEmail.setAttribute('href', detail.email ? 'mailto:' + detail.email : '');
+    ministerEmail.style.display = detail.email ? '' : 'none';
+    var positions = detail.position || [roleText];
+    ministerPosition.innerHTML = positions.map(function (item) {
+      return '<li>' + item + '</li>';
+    }).join('');
+    ministerTags.innerHTML = tags.map(function (tag) {
+      return '<span class="minister-modal__tag">' + tag + '</span>';
+    }).join('');
+    ministerTags.style.display = tags.length ? '' : 'none';
+
+    ministerPrevOverflow = document.body.style.overflow;
+    ministerModal.classList.add('is-open');
+    ministerModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMinisterModal() {
+    if (!ministerModal || !ministerModal.classList.contains('is-open')) return;
+    ministerModal.classList.remove('is-open');
+    ministerModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = ministerPrevOverflow;
+  }
+
+  document.querySelectorAll('.intro-ministers .minister-card').forEach(function (card) {
+    if (!card.querySelector('.minister-card__hover')) return;
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('click', function () { openMinisterModal(card); });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openMinisterModal(card);
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-minister-close]').forEach(function (btn) {
+    btn.addEventListener('click', closeMinisterModal);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMinisterModal();
+  });
+})();
+});
+</script>
+
+</body>
+</html>
