@@ -1,0 +1,121 @@
+/* ══════════════════════════════════════
+ * Main YouTube Section
+ * ══════════════════════════════════════ */
+.main-youtube {padding: 120rem 0 80rem;}
+
+/* 헤더 */
+.main-youtube__head {display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 45rem;}
+
+/* 공통 타이틀 */
+.main-title__heading {margin-bottom: 10rem;}
+.main-title__sub {font-size: var(--font-default); line-height: 1.6; color: var(--b-default); word-break: keep-all; text-wrap: balance;}
+
+/* 탭 메뉴 */
+.main-youtube__tab {display: flex; align-items: center; flex-shrink: 0; height: 65rem; margin-top: 29rem; background: rgba(255,255,255,0.2); border: 1px solid var(--op-b05); border-radius: 5rem;}
+
+.main-youtube__tab-btn {display: flex; justify-content: center; align-items: center; min-width: 80rem; height: 100%; padding: 0 20rem; background: none; border: none; border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: var(--font-xsm); line-height: 1.5; color: var(--op-b30); white-space: nowrap; cursor: pointer;}
+.main-youtube__tab-btn.is-active {background: var(--c-primary); border-radius: 4rem; box-shadow: 3rem 3rem 2.5rem var(--op-b05); font-weight: 700; color: var(--w);}
+.main-youtube__tab-divider {flex-shrink: 0; width: 1px; height: 22rem; background: var(--op-b10);}
+
+/* 영상 카드 목록 */
+.main-youtube__list {--yt-gap: 42rem; display: flex; gap: var(--yt-gap);}
+.youtube-card {display: block; position: relative; overflow: hidden; flex: 1 1 0; min-width: 0; height: 330rem; border-radius: 10rem; box-shadow: 0 10rem 7.5rem var(--op-b03);}
+.youtube-card__thumb {position: absolute; top: 0; left: 0; width: 100%; height: 79%;}
+.youtube-card__thumb img {display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
+.youtube-card__gradient {position: absolute; bottom: 0; left: 0; width: 100%; height: 53%; background: linear-gradient(180.95deg, rgba(11,18,28,0) 2.38%, rgb(11,18,28) 44.94%); mix-blend-mode: darken;}
+.youtube-card__label {position: absolute; bottom: 26%; right: 20rem; left: 30rem; transform: translateY(100%);}
+.youtube-card__label h3 {overflow: hidden; font-weight: 600; font-size: var(--font-20); line-height: 1.45; color: var(--w); white-space: nowrap; text-overflow: ellipsis;}
+.youtube-card--live {border: 6rem solid #ed3023;}
+.youtube-card__live-badge {position: absolute; display: flex; align-items: center; gap: 6rem; top: 14rem; right: 14rem; padding: 5rem 8rem; background: #ed3023; border-radius: 3rem; filter: drop-shadow(3rem 3rem 2.5rem rgba(0,0,0,0.1));}
+.youtube-card__live-dot {position: relative; flex-shrink: 0; width: 5rem; height: 5rem; border-radius: 50%; background: var(--w);}
+.youtube-card__live-dot::before {content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--w); animation: livePulse 1.6s ease-out infinite;}
+.youtube-card__live-text {font-weight: 700; font-size: 14rem; line-height: 1; color: var(--w); white-space: nowrap;}
+@keyframes livePulse {
+  0%   {transform: scale(1); opacity: 0.8;}
+  100% {transform: scale(4); opacity: 0;}
+}
+
+/* 더보기 버튼 */
+.main-youtube__more {display: flex; justify-content: center; margin-top: 50rem;}
+.main-youtube__more-btn {display: inline-flex; align-items: center; gap: 12rem; padding: 18rem 20rem; background: var(--bg-light); border: 1px solid var(--op-b10); border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: var(--font-xsm); line-height: 1.5; color: var(--op-b50); white-space: nowrap; cursor: pointer;}
+
+/* 카드 확장 */
+.youtube-card--extra {display: none;}
+.main-youtube__list.is-expanded {flex-wrap: wrap;}
+.main-youtube__list.is-expanded .youtube-card {flex: 0 0 calc((100% - 2 * var(--yt-gap)) / 3);}
+.main-youtube__list.is-expanded .youtube-card--extra {display: block;}
+.main-youtube__more-link {display: none; align-items: center; gap: 12rem; padding: 18rem 20rem; background: var(--bg-light); border: 1px solid var(--op-b10); border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: var(--font-xsm); line-height: 1.5; color: var(--op-b50); white-space: nowrap; text-decoration: none;}
+.main-youtube__more.is-expanded .main-youtube__more-btn {display: none;}
+.main-youtube__more.is-expanded .main-youtube__more-link {display: inline-flex;}
+
+/* 반응형 */
+@media (max-width: 1480px) { .main-youtube__list {--yt-gap: 30rem;} }
+@media (max-width: 1023px) {
+  .main-youtube {padding: 80rem 0 60rem;}
+  .main-youtube__more-btn {display: none;}
+  .main-youtube__more-link {display: inline-flex;}
+  .main-youtube__head {flex-direction: column; gap: 24rem; margin-bottom: 32rem;}
+  .main-youtube__tab {margin-top: 0;}
+  .main-youtube__scroll {overflow-x: auto; margin-left: calc(-1 * var(--margin)); margin-right: calc(-1 * var(--margin)); -webkit-overflow-scrolling: touch; scrollbar-width: none;}
+  .main-youtube__scroll::-webkit-scrollbar {display: none;}
+  .main-youtube__list {width: max-content; padding: 0 40rem; gap: 20rem;}
+  .main-youtube__list.is-expanded {flex-wrap: nowrap;}
+  .main-youtube__list.is-expanded .youtube-card {flex: none; width: 380rem;}
+  .youtube-card {flex: none; width: 380rem; height: 280rem;}
+  .youtube-card__label {right: 16rem; left: 24rem;}
+  .youtube-card__label h3 {font-size: var(--font-default);}
+  .series-list {grid-template-columns: repeat(3, 1fr); gap: 16rem;}
+}
+@media (max-width: 860px) {
+  .main-youtube__list {padding: 0 32rem;}
+  .main-youtube__list.is-expanded .youtube-card {width: 300rem;}
+  .youtube-card {width: 300rem; height: 230rem;}
+  .youtube-card__label {right: 14rem; left: 20rem;}
+  .youtube-card__label h3 {font-size: var(--font-xsm);}
+  .series-list {grid-template-columns: repeat(2, 1fr); gap: 12rem;}
+}
+@media (max-width: 540px) {
+  .main-youtube {padding: 60rem 0;}
+  .main-youtube__more-link {padding: 12rem 15rem;}
+  .main-title__sub {line-height: 1.4;}
+  .main-youtube__head {gap: 16rem;}
+  .main-youtube__more {margin-top: 30rem;}
+  .main-youtube__list {padding: 0 20rem; gap: 12rem;}
+  .main-youtube__list.is-expanded .youtube-card {width: 240rem;}
+  .youtube-card {width: 240rem; height: 200rem; border-radius: 8rem;}
+  .youtube-card__label {right: 12rem; left: 16rem;}
+  .youtube-card__label h3 {font-size: 12rem;}
+  .main-youtube__tab {height: 48rem;}
+  .main-youtube__tab-btn {min-width: 60rem; padding: 0 12rem; font-size: var(--font-xxsm);}
+  .series-list {gap: 10rem;}
+  .series-card__label {padding: 12rem 14rem;}
+  .series-card__label h3 {font-size: var(--font-xsm);}
+}
+
+/* 패널 시스템 */
+@keyframes panelFadeIn {
+  from {opacity: 0; transform: translateY(12rem);}
+  to   {opacity: 1; transform: translateY(0);}
+}
+.main-youtube__panel {display: none;}
+.main-youtube__panel.is-active {display: block; animation: panelFadeIn 0.65s ease-out forwards;}
+
+/* 시리즈 그리드 (4열) */
+.series-list {display: grid; grid-template-columns: repeat(4, 1fr); gap: 20rem;}
+.series-card {display: block; position: relative; overflow: hidden; aspect-ratio: 1/1; border-radius: 10rem; box-shadow: 0 10rem 7.5rem var(--op-b03);}
+.series-card__thumb {position: absolute; inset: 0;}
+.series-card__thumb img {display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
+.series-card__gradient {position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(180deg, rgba(11,18,28,0) 0%, rgb(11,18,28) 100%); mix-blend-mode: darken;}
+.series-card__label {position: absolute; bottom: 0; left: 0; right: 0; padding: 16rem 18rem;}
+.series-card__label h3 {font-weight: 600; font-size: var(--font-default); line-height: 1.45; color: var(--w);}
+.series-card--extra {display: none;}
+.series-list.is-expanded .series-card--extra {display: block;}
+
+@media (hover: hover) and (pointer: fine) {
+  .youtube-card {transition: transform 0.3s ease, box-shadow 0.3s ease;}
+  .youtube-card:hover {transform: translateY(-4rem); box-shadow: 0 20rem 30rem rgba(0,0,0,0.08);}
+  .main-youtube__more-btn {transition: background 0.2s ease;}
+  .main-youtube__more-btn:hover {background: var(--bg-table);}
+  .series-card {transition: transform 0.3s ease, box-shadow 0.3s ease;}
+  .series-card:hover {transform: translateY(-4rem); box-shadow: 0 20rem 30rem rgba(0,0,0,0.08);}
+}

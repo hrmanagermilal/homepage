@@ -1,0 +1,54 @@
+/* ══════════════════════════════════════
+ * Main Worship Section
+ * ══════════════════════════════════════ */
+.main-worship {padding: 80rem 0 160rem; background: var(--bg-light);}
+.main-worship .main-title {text-align: center;}
+
+/* 카드 목록 */
+.worship-list {margin-top: 45rem; gap: 42rem;}
+.worship-card {--th-w: 150rem; display: flex; flex-direction: column; gap: 18rem; min-width: 0; padding: 22rem 20rem 20rem; background: rgba(255,255,255,0.9); border-radius: 10rem; box-shadow: 0 10rem 7.5rem rgba(66,55,37,0.03);}
+
+/* 카드 헤더 */
+.worship-card__head {display: flex; align-items: center; gap: 8rem; position: relative;}
+.worship-card__logo {flex-shrink: 0; position: relative; overflow: hidden; width: 14rem; height: 24rem;}
+.worship-card__logo img {position: absolute; top: -3.68%; left: -4.95%; width: 415.38%; height: 107.35%; pointer-events: none;}
+.worship-card__head h3 {flex-shrink: 0; white-space: nowrap;}
+.worship-card__en {position: absolute; opacity: 0.3; top: 50%; right: 0; font-family: 'Noto Serif KR', serif; font-weight: 700; font-size: 13rem; line-height: 1; color: var(--c-secondary); letter-spacing: -0.13rem; white-space: nowrap; transform: translateY(-50%);}
+
+/* 테이블 */
+.worship-card__table {overflow: hidden; width: 100%; background: #fff; border-top: 1px solid var(--op-b10); border-collapse: collapse;}
+.worship-card__table thead {background: var(--bg-default);}
+.worship-card__table th,
+.worship-card__table td {border-bottom: 1px solid var(--op-b10); border-right: 1px solid var(--op-b10); text-align: center; vertical-align: middle;}
+.worship-card__table th:last-child,
+.worship-card__table td:last-child {border-right: none;}
+.worship-card__table thead th {padding: 12rem 15rem; font-weight: 600; font-size: var(--font-xsm); color: var(--op-b40); white-space: nowrap;}
+.worship-card__table tbody th {width: var(--th-w); padding: 15rem; font-weight: 600; font-size: var(--font-sm); line-height: 1.5; color: var(--b-title); white-space: nowrap;}
+.worship-card__table tbody td {display: flex; justify-content: center; align-items: center; padding: 15rem; font-size: var(--font-sm); line-height: 1.5; color: var(--b-default);}
+
+/* 시간 배지 */
+.worship-card__times {display: flex; flex-direction: column; align-items: center; gap: 8rem;}
+.worship-card__time-row {display: flex; align-items: center; gap: 10rem;}
+.worship-badge {display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; min-width: 45rem; padding: 3rem 5rem; background: var(--bg-light); border: 1px solid var(--op-b10); border-radius: 2rem; font-weight: 500; font-size: var(--font-xxsm); color: var(--c-secondary); white-space: nowrap;}
+
+/* 카드 변형 */
+.worship-card--weekly,
+.worship-card--edu {--th-w: 180rem;}
+
+@media (max-width: 1200px) {
+  .worship-list {grid-template-columns: 1fr 1fr; gap: 24rem;}
+}
+@media (max-width: 1023px) {
+  .main-worship {padding: 60rem 0 100rem;}
+  .worship-list {grid-template-columns: 1fr; gap: 24rem; margin-top: 32rem;}
+}
+@media (max-width: 540px) {
+  .main-worship {padding: 60rem 0;}
+  .worship-list {margin-top: 24rem;}
+  .worship-card {gap: 12rem; border-radius: 8rem;}
+  .worship-card__en {display: none;}
+  .worship-card__table thead th,
+  .worship-card__table tbody th,
+  .worship-card__table tbody td {padding: 10rem 12rem;}
+  .worship-card__logo {width: 10rem; height: 18rem;}
+}

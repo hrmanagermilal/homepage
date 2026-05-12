@@ -1,206 +1,335 @@
-import { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
+﻿import { useState, useRef, useEffect, useCallback } from "react";
 
 const NAV_ITEMS = [
-  { label: "Introduction", path: "/introduction" },
-  { label: "다음세대", hasSubmenu: true },
-  { label: "사역", path: "/ministry" },
-  { label: "소식", hasNewsSubmenu: true },
-  { label: "온라인 헌금", path: "/online-giving" },
-];
-
-const NEXTGEN_SUBMENUS = [
-  { label: "청년부", path: "/nextgen/young-adults" },
-  { label: "KM 청소년부", path: "/nextgen/km-youth" },
-  { label: "EM 청소년부", path: "/nextgen/em-youth" },
-  { label: "아동부", path: "/nextgen/children" },
-  { label: "유치부", path: "/nextgen/kindergarten" },
-  { label: "유아부", path: "/nextgen/preschool" },
-  { label: "영아부", path: "/nextgen/infants" },
-];
-
-const NEWS_SUBMENUS = [
-  { label: "공지", path: "/news/notice" },
-  { label: "부고", path: "/news/obituary" },
+  {
+    num: "01", label: "Introduction", path: "/introduction",
+    subs: [
+      { label: "교회비전", path: "/introduction#introduction01" },
+      { label: "섬기는 분들", path: "/introduction#introduction02" },
+      { label: "함께하는 교회", path: "/introduction#introduction03" },
+    ],
+  },
+  {
+    num: "02", label: "다음세대", path: "/nextgen/young-adults",
+    subs: [
+      { label: "청년부", path: "/nextgen/young-adults" },
+      { label: "KM 청소년부", path: "/nextgen/km-youth" },
+      { label: "EM 청소년부", path: "/nextgen/em-youth" },
+      { label: "아동부", path: "/nextgen/children" },
+      { label: "유치부", path: "/nextgen/kindergarten" },
+      { label: "유아부", path: "/nextgen/preschool" },
+      { label: "영아부", path: "/nextgen/infants" },
+    ],
+  },
+  {
+    num: "03", label: "사역", path: "/ministry",
+    subs: [
+      { label: "양육", path: "/ministry" },
+      { label: "소그룹", path: "/ministry" },
+      { label: "가정", path: "/ministry" },
+      { label: "선교", path: "/ministry" },
+      { label: "장학", path: "/ministry" },
+      { label: "가스펠프로젝트", path: "/ministry" },
+      { label: "다니엘한글문화학교", path: "#" },
+      { label: "러브토론토", path: "https://lovetoronto.org/", external: true },
+    ],
+  },
+  {
+    num: "04", label: "소식", path: "/news/notice",
+    subs: [
+      { label: "공지", path: "/news/notice" },
+      { label: "부고", path: "/news/obituary" },
+    ],
+  },
+  {
+    num: "05", label: "온라인 헌금", path: "/online-giving",
+    subs: [],
+  },
 ];
 
 export default function Header({ quickLinks = [], landingTitles = [] }) {
-  const currentPath = window.location.pathname;
-  const isIntroductionPage = currentPath.startsWith("/introduction");
-  const [nextgenAnchorEl, setNextgenAnchorEl] = useState(null);
-  const [newsAnchorEl, setNewsAnchorEl] = useState(null);
-  const isNextgenMenuOpen = Boolean(nextgenAnchorEl);
-  const isNewsMenuOpen = Boolean(newsAnchorEl);
+  const [fullMenuOpen, setFullMenuOpen] = useState(false);
+  const [bgmPlaying, setBgmPlaying] = useState(false);
+  const [fullMenuHoveredIdx, setFullMenuHoveredIdx] = useState(-1);
+  const [subTopPx, setSubTopPx] = useState(0);
 
-  const moveHome = (hash = "") => {
-    window.location.href = hash ? `/#${hash}` : "/";
+  const audioRef = useRef(null);
+  const gnbRef = useRef(null);
+  const itemRefs = useRef([]);
+
+  useEffect(() => {
+    const audio = new Audio("/milal-bgm.wav");
+    audio.loop = true;
+    audio.preload = "auto";
+    audioRef.current = audio;
+
+    const playOnGesture = (e) => {
+      if (e.target?.closest?.(".site-header__volume")) return;
+      if (!audio.paused) return;
+      audio.play().then(() => setBgmPlaying(true)).catch(() => {});
+      document.removeEventListener("pointerdown", playOnGesture);
+      document.removeEventListener("keydown", playOnGesture);
+    };
+
+    audio.play().then(() => setBgmPlaying(true)).catch(() => {
+      document.addEventListener("pointerdown", playOnGesture);
+      document.addEventListener("keydown", playOnGesture);
+    });
+
+    return () => {
+      audio.pause();
+      document.removeEventListener("pointerdown", playOnGesture);
+      document.removeEventListener("keydown", playOnGesture);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = fullMenuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [fullMenuOpen]);
+
+  const toggleBgm = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      audio.play().then(() => setBgmPlaying(true)).catch(() => {});
+    } else {
+      audio.pause();
+      setBgmPlaying(false);
+    }
   };
 
-  const moveTo = (id) => {
-    const target = document.getElementById(id);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+  const handleFullMenuItemEnter = useCallback((idx) => {
+    setFullMenuHoveredIdx(idx);
+    if (!gnbRef.current || !itemRefs.current[idx]) return;
+    const gnbRect = gnbRef.current.getBoundingClientRect();
+    const itemRect = itemRefs.current[idx].getBoundingClientRect();
+    const relativeTop = itemRect.top - gnbRect.top + itemRect.height / 2;
+    setSubTopPx(relativeTop);
+  }, []);
+
+  useEffect(() => {
+    if (!fullMenuOpen) {
+      setFullMenuHoveredIdx(-1);
       return;
     }
-    moveHome(id);
-  };
 
-  const openNextgenMenu = (event) => {
-    setNextgenAnchorEl(event.currentTarget);
-  };
+    const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches;
+    if (!isDesktop) return;
 
-  const closeNextgenMenu = () => {
-    setNextgenAnchorEl(null);
-  };
+    const timer = window.setTimeout(() => {
+      handleFullMenuItemEnter(0);
+    }, 150);
 
-  const openNewsMenu = (event) => {
-    setNewsAnchorEl(event.currentTarget);
-  };
-
-  const closeNewsMenu = () => {
-    setNewsAnchorEl(null);
-  };
-
-  const navigateToSubmenu = (path) => {
-    closeNextgenMenu();
-    closeNewsMenu();
-    window.location.href = path;
-  };
-
-  const navigateToPath = (path) => {
-    if (currentPath === path) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    window.location.href = path;
-  };
-
-  const handleLogoClick = () => {
-    if (isIntroductionPage) {
-      moveHome();
-      return;
-    }
-    moveTo("hero");
-  };
-
-  const quickLinkUrl = quickLinks[0]?.link || "#";
-  const quickLinkLabel = quickLinks[0]?.title || "밀알 소식 바로가기";
+    return () => window.clearTimeout(timer);
+  }, [fullMenuOpen, handleFullMenuItemEnter]);
 
   return (
-    <AppBar position="sticky" elevation={0} sx={{ bgcolor: "rgba(5, 26, 32, 0.85)", backdropFilter: "blur(8px)" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ minHeight: 72, gap: 2 }}>
-          {/* Logo */}
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mr: 2, cursor: "pointer" }} onClick={handleLogoClick}>
-            <Box
-              component="img"
-              src="/logo.png"
-              alt="밀알교회"
-              sx={{ height: 40, objectFit: "contain" }}
-              onError={(e) => { e.currentTarget.style.display = "none"; }}
+    <>
+      <header className="site-header" role="banner">
+        <h1 id="site-title" className="sound-only">밀알교회</h1>
+        <div className="site-header__inner">
+
+          <a className="site-header__logo" href="/">
+            <img src="/images/common/logo.png" alt="밀알교회" />
+          </a>
+
+          <button
+            className="site-header__volume"
+            type="button"
+            aria-label={bgmPlaying ? "배경음악 일시 정지" : "배경음악 재생"}
+            aria-pressed={bgmPlaying}
+            onClick={toggleBgm}
+          >
+            <img
+              src={bgmPlaying ? "/images/common/icon-volume.svg" : "/images/common/icon-volume--mute.svg"}
+              alt=""
             />
-            <Stack spacing={0}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, lineHeight: 1.1, color: "white" }}>
-                밀알교회
-              </Typography>
-              <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.6)", lineHeight: 1, letterSpacing: 1 }}>
-                MILAL CHURCH
-              </Typography>
-            </Stack>
-          </Stack>
+          </button>
 
-          {/* Volume icon */}
-          <IconButton sx={{ color: "rgba(255,255,255,0.7)" }} size="small">
-            <VolumeUpIcon fontSize="small" />
-          </IconButton>
+          <nav className="site-header__gnb" aria-label="주 메뉴">
+            <ul className="site-header__gnb-list">
+              {NAV_ITEMS.map((item, idx) => (
+                <li key={idx} className="site-header__gnb-item-wrap">
+                  <a className="site-header__gnb-item" href={item.path}>
+                    {item.label}
+                  </a>
+                  {item.subs.length > 0 && (
+                    <ul className="site-header__gnb-sub">
+                      {item.subs.map((sub, si) => (
+                        <li key={si}>
+                          <a
+                            className="site-header__gnb-sub-item"
+                            href={sub.path}
+                            {...(sub.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                          >
+                            {sub.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-          {/* Nav */}
-          <Stack direction="row" spacing={0} sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
-            {NAV_ITEMS.map((item) => (
-              <Button
-                key={item.label}
-                onClick={(event) => {
-                  if (item.hasSubmenu) {
-                    openNextgenMenu(event);
-                    return;
-                  }
-                  if (item.hasNewsSubmenu) {
-                    openNewsMenu(event);
-                    return;
-                  }
-                  if (item.path) {
-                    navigateToPath(item.path);
-                    return;
-                  }
-                  moveTo(item.target);
-                }}
-                sx={{ color: "white", borderRadius: 0, px: 2, fontSize: "0.9rem", fontWeight: 500, "&:hover": { bgcolor: "rgba(255,255,255,0.08)" } }}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Stack>
+          <div className="site-header__util">
+            <a className="site-header__news-btn" href="/news/notice">
+              <img src="/images/common/icon-header-news.svg" alt="" />
+              <span>밀알 소식 바로가기</span>
+            </a>
+            <button
+              className="site-header__hamburger"
+              type="button"
+              aria-label="전체 메뉴 열기"
+              onClick={() => setFullMenuOpen(true)}
+            >
+              <span className="site-header__hamburger-line"></span>
+              <span className="site-header__hamburger-line"></span>
+            </button>
+          </div>
 
-          <Menu
-            anchorEl={nextgenAnchorEl}
-            open={isNextgenMenuOpen}
-            onClose={closeNextgenMenu}
-            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-            transformOrigin={{ vertical: "top", horizontal: "left" }}
-          >
-            {NEXTGEN_SUBMENUS.map((submenu) => (
-              <MenuItem key={submenu.path} onClick={() => navigateToSubmenu(submenu.path)}>
-                {submenu.label}
-              </MenuItem>
-            ))}
-          </Menu>
+        </div>
+      </header>
 
-          <Menu
-            anchorEl={newsAnchorEl}
-            open={isNewsMenuOpen}
-            onClose={closeNewsMenu}
-            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-            transformOrigin={{ vertical: "top", horizontal: "left" }}
-          >
-            {NEWS_SUBMENUS.map((submenu) => (
-              <MenuItem key={submenu.path} onClick={() => navigateToSubmenu(submenu.path)}>
-                {submenu.label}
-              </MenuItem>
-            ))}
-          </Menu>
+      <div
+        className={`full-menu${fullMenuOpen ? " is-open" : ""}`}
+        id="fullMenu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="전체 메뉴"
+      >
+        <div className="full-menu__bg" aria-hidden="true"></div>
+        <div className="full-menu__texture" aria-hidden="true"></div>
+        <div className="full-menu__right-bg" aria-hidden="true"></div>
 
-          <Box sx={{ flexGrow: 1, display: { md: "none" } }} />
+        <div className="full-menu__header">
+          <div className="wrap full-menu__header-inner">
+            <a className="full-menu__logo" href="/">
+              <img src="/images/common/logo.png" alt="밀알교회" />
+            </a>
+            <button
+              className="full-menu__close-btn"
+              type="button"
+              aria-label="메뉴 닫기"
+              onClick={() => setFullMenuOpen(false)}
+            >
+              <i></i>
+              CLOSE
+            </button>
+          </div>
+        </div>
 
-          {/* Quick link button */}
-          <Button
-            href={quickLinkUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            startIcon={<BookmarkIcon />}
-            variant="contained"
-            sx={{
-              display: { xs: "none", md: "flex" },
-              bgcolor: "#2e7d6b",
-              color: "white",
-              borderRadius: 1,
-              px: 2,
-              fontWeight: 600,
-              whiteSpace: "nowrap",
-              "&:hover": { bgcolor: "#236055" },
-            }}
-          >
-            {quickLinkLabel}
-          </Button>
+        <div className="full-menu__body">
+          <div className="wrap full-menu__body-inner">
+            <div className="full-menu__list">
+              <nav className="full-menu__gnb" ref={gnbRef} aria-label="전체 메뉴 내비게이션">
+                <ul className="full-menu__gnb-list">
+                  {NAV_ITEMS.map((item, idx) => (
+                    <li
+                      key={idx}
+                      ref={(el) => (itemRefs.current[idx] = el)}
+                      className={`full-menu__gnb-item${fullMenuHoveredIdx === idx ? " is-active" : ""}`}
+                      onMouseEnter={() => handleFullMenuItemEnter(idx)}
+                    >
+                      <div className="full-menu__gnb-label">
+                        <span className="full-menu__gnb-num">{item.num}</span>
+                        <a className="full-menu__gnb-title" href={item.path}>
+                          {item.label}
+                        </a>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
 
-          {/* Hamburger */}
-          <IconButton sx={{ color: "white", ml: 0.5 }}>
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </Container>
-    </AppBar>
+                {NAV_ITEMS.map((item, idx) =>
+                  item.subs.length > 0 ? (
+                    <ul
+                      key={idx}
+                      className={`full-menu__gnb-sub${fullMenuHoveredIdx === idx ? " is-active" : ""}`}
+                      style={{ top: fullMenuHoveredIdx === idx ? subTopPx : undefined }}
+                    >
+                      {item.subs.map((sub, si) => (
+                        <li key={si}>
+                          <a
+                            className="full-menu__gnb-sub-link"
+                            href={sub.path}
+                            {...(sub.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                          >
+                            {sub.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null
+                )}
+
+                <p className="full-menu__copy">ⓒ MILAL CHURCH .All Right Reserved.</p>
+              </nav>
+            </div>
+
+            <div className="full-menu__info">
+              <div className="full-menu__info-section">
+                <h2 className="full-menu__info-title">공지사항</h2>
+                <a className="full-menu__info-card" href="/news/notice">
+                  <span className="full-menu__info-card-text">밀알교회 홈페이지가 새롭게 리뉴얼 되었습니다.</span>
+                  <span className="full-menu__info-arrow">
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                      <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </a>
+              </div>
+
+              <div className="full-menu__info-section">
+                <h2 className="full-menu__info-title">최근 부고 소식</h2>
+                <a className="full-menu__info-card" href="/news/obituary">
+                  <span className="full-menu__obituary-icon">
+                    <img src="/images/common/icon-obituary-cross.svg" alt="" />
+                  </span>
+                  <span className="full-menu__info-card-text">부고 소식은 교회 사무실을 통해 알려주세요.</span>
+                  <span className="full-menu__info-arrow">
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                      <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </a>
+              </div>
+
+              <div className="full-menu__info-section">
+                <h2 className="full-menu__info-title">바로가기</h2>
+                <ul className="full-menu__shortcuts">
+                  <li>
+                    <a className="full-menu__shortcut" href="https://youtube.com/@milalchurch" target="_blank" rel="noopener noreferrer">
+                      <span className="full-menu__shortcut-icon">
+                        <img src="/images/common/ic-fullmenu01.svg" alt="" aria-hidden="true" />
+                      </span>
+                      <span className="full-menu__shortcut-label">실시간 예배 보러가기</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a className="full-menu__shortcut" href="#" target="_blank" rel="noopener noreferrer">
+                      <span className="full-menu__shortcut-icon">
+                        <img src="/images/common/ic-fullmenu02.svg" alt="" aria-hidden="true" />
+                      </span>
+                      <span className="full-menu__shortcut-label">다니엘한글문화학교 바로가기</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a className="full-menu__shortcut" href="https://lovetoronto.org/" target="_blank" rel="noopener noreferrer">
+                      <span className="full-menu__shortcut-icon">
+                        <img src="/images/common/ic-fullmenu03.png" alt="" aria-hidden="true" />
+                      </span>
+                      <span className="full-menu__shortcut-label">러브 토론토 바로가기</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
