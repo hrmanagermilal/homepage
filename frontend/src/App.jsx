@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
-import { Alert, Box, CircularProgress, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { api } from "./api/client";
 import Header from "./components/Header";
-import Hero from "./components/Hero";
-import Sermon from "./components/Sermon";
-import ServiceTime from "./components/ServiceTime";
-import Jubo from "./components/Jubo";
-import Announcement from "./components/Announcement";
-import Contacts from "./components/Contacts";
-import FooterTop from "./components/FooterTop";
+import LandingPage from "./components/LandingPage";
 import Footer from "./components/Footer";
 import FloatingMenu from "./components/FloatingMenu";
 import IntroductionPage from "./components/IntroductionPage";
@@ -137,20 +131,11 @@ export default function App() {
   return (
     <Box>
       <Header quickLinks={quickLinks} landingTitles={landingTitles} />
-      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticePage || isObituaryPage || isNextGenSubmenuPage ? null : <Hero apiStatus={health} hero={hero} heroLinks={heroLinks} />}
 
       {loading ? (
         <Stack alignItems="center" py={8}>
           <CircularProgress />
         </Stack>
-      ) : null}
-
-      {error ? (
-        <Box sx={{ px: { xs: 2, md: 6 }, mb: 2 }}>
-          <Alert severity="error">
-            {error}. Check VITE_API_BASE_URL and backend server status.
-          </Alert>
-        </Box>
       ) : null}
 
       {isIntroductionPage ? (
@@ -166,14 +151,16 @@ export default function App() {
       ) : isNextGenSubmenuPage ? (
         <NextGenPage title={nextGenPageTitle} />
       ) : (
-        <>
-          <Sermon items={sermons} section={sections.find((s) => s.title === "최신 설교")} />
-          <ServiceTime departments={departments} section={sections.find((s) => s.title === "예배 시간")} />
-          <Jubo items={bulletins} section={sections.find((s) => s.title === "주보")} />
-          <Announcement items={announcements} section={sections.find((s) => s.title === "공지사항")} />
-
-          <FooterTop items={togetherItems} section={sections.find((s) => s.title === "함께하는 교회")} />
-        </>
+        <LandingPage
+          hero={hero}
+          quickLinks={quickLinks}
+          sermons={sermons}
+          departments={departments}
+          bulletins={bulletins}
+          announcements={announcements}
+          sections={sections}
+          togetherItems={togetherItems}
+        />
       )}
       <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
       {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticePage || isObituaryPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
