@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import "./css/SubPage.css";
-import "./css/NoticePage.css";
-import NoticeSubVisual from "./notice_components/NoticeSubVisual";
-import NoticeTable from "./notice_components/NoticeTable";
-import NoticeSearch from "./notice_components/NoticeSearch";
+import "./css/NoticeViewPage.css";
+import NoticeViewSubVisual from "./notice_components/NoticeViewSubVisual";
+import NoticeViewContent from "./notice_components/NoticeViewContent";
+import NoticeViewNavigation from "./notice_components/NoticeViewNavigation";
 
 const NOTICE_DATA = [
   {
@@ -88,64 +88,74 @@ const NOTICE_DATA = [
   },
 ];
 
-export default function NoticePage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState("newest"); // newest, oldest, views
+export default function NoticeViewPage() {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const filteredData = useMemo(() => {
-    return NOTICE_DATA.filter((item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.author.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
+  // Extract ID from URL path
+  const idFromPath = useMemo(() => {
+    const match = window.location.pathname.match(/\/news\/notice\/(\d+)/);
+    return match ? Number(match[1]) : 1;
+  }, []);
 
-  const sortedData = useMemo(() => {
-    const data = [...filteredData];
-    if (sortOrder === "newest") {
-      return data.reverse();
-    } else if (sortOrder === "oldest") {
-      return data;
-    } else if (sortOrder === "views") {
-      return data.sort((a, b) => b.views - a.views);
+  // Initialize current index based on URL ID
+  useEffect(() => {
+    const index = NOTICE_DATA.findIndex((item) => item.id === idFromPath);
+    if (index !== -1) {
+      setCurrentIndex(index);
     }
-    return data;
-  }, [filteredData, sortOrder]);
+  }, [idFromPath]);
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
+  useEffect(() => {
+    const el = document.getElementById("content");
+    if (el) {
+      const header = document.querySelector(".site-header");
+      const headerHeight = header ? header.offsetHeight + header.offsetTop : 0;
+      window.scrollTo({ top: el.offsetTop - headerHeight - 16, behavior: "smooth" });
+    }
+  }, [currentIndex]);
+
+  const currentNotice = NOTICE_DATA[currentIndex];
+  const hasPrev = currentIndex > 0;
+  const hasNext = currentIndex < NOTICE_DATA.length - 1;
+
+  const handlePrevClick = () => {
+    if (hasPrev) {
+      const prevId = NOTICE_DATA[currentIndex - 1].id;
+      window.location.pathname = `/news/notice/${prevId}`;
+    }
   };
 
-  const handleRowClick = (id) => {
-    window.location.href = `/news/notice/${id}`;
+  const handleNextClick = () => {
+    if (hasNext) {
+      const nextId = NOTICE_DATA[currentIndex + 1].id;
+      window.location.pathname = `/news/notice/${nextId}`;
+    }
+  };
+
+  const handleListClick = () => {
+    window.location.href = "/news/notice";
   };
 
   return (
     <>
-      <NoticeSubVisual />
+      <NoticeViewSubVisual />
       <div className="sub-content" id="content">
-        <section className="notice">
+        <section className="notice board-view">
           <div className="wrap-narrow">
-            <div className="notice-top">
-              <div className="notice-count">
-                총 <strong>{filteredData.length}</strong>개
-              </div>
-              <div className="notice-sort">
-                <select
-                  className="notice-sort__select"
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value)}
-                  aria-label="정렬 순서"
-                >
-                  <option value="newest">최신순</option>
-                  <option value="oldest">오래된순</option>
-                  <option value="views">조회순</option>
-                </select>
-              </div>
-            </div>
-
-            <NoticeSearch onSearch={handleSearch} />
-
-            <NoticeTable notices={sortedData} onRowClick={handleRowClick} />
+            <NoticeViewContent
+              title={currentNotice.title}
+              author={currentNotice.author}
+              date={currentNotice.date}
+              views={currentNotice.views}
+              content={currentNotice.content}
+            />
+            <NoticeViewNavigation
+              onPrevClick={handlePrevClick}
+              onNextClick={handleNextClick}
+              onListClick={handleListClick}
+              hasPrev={hasPrev}
+              hasNext={hasNext}
+            />
           </div>
         </section>
       </div>

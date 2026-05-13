@@ -1,0 +1,229 @@
+/* ══════════════════════════════════════
+ * Notice View Page
+ * ══════════════════════════════════════ */
+
+.notice.board-view {
+  padding-bottom: 120rem;
+}
+
+.board-view__inr h3 {
+  padding-bottom: 20rem;
+  text-align: center;
+  border-bottom: 1px solid var(--op-b10);
+  margin-bottom: 0;
+  color: var(--b-title);
+  font-size: var(--font-xxxl);
+}
+
+.notice-view__meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30rem;
+  padding: 20rem 0 30rem;
+  text-align: center;
+  font-size: var(--font-xsm);
+  color: var(--op-b30);
+  border-bottom: 1px solid var(--op-b05);
+}
+
+.notice-view__meta-item {
+  white-space: nowrap;
+}
+
+.board-view__con {
+  min-height: 400rem;
+  padding: 60rem 0;
+  color: var(--b-default);
+  font-size: var(--font-default);
+  line-height: 1.8;
+}
+
+.board-view__con p {
+  margin: 0;
+}
+
+/* 뷰 버튼 래퍼 */
+.view-btn-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 60rem;
+  gap: 20rem;
+}
+
+/* 네비게이션 버튼 */
+.btn-navigation {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--b-title);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  text-decoration: none;
+  padding: 0;
+}
+
+.btn-navigation::before {
+  content: "";
+  width: 17rem;
+  height: 17rem;
+  background: url(/images/board/btn-navigation.svg) no-repeat center / contain;
+  flex-shrink: 0;
+}
+
+.btn-navigation.btn-prev::before {
+  margin-right: 8rem;
+  transform: scaleX(-1);
+}
+
+.btn-navigation.btn-next {
+  flex-direction: row-reverse;
+}
+
+.btn-navigation.btn-next::before {
+  margin-left: 8rem;
+}
+
+.btn-navigation:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-navigation:not(:disabled):hover {
+  color: var(--c-primary);
+}
+
+/* 목록 버튼 */
+.btn-list {
+  display: inline-flex;
+  padding: 15rem 30rem;
+  font-size: 18rem;
+  font-weight: 600;
+  color: var(--b-title);
+  border-radius: 100rem;
+  border: 1px solid var(--b-title);
+  background: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  align-items: center;
+  align-self: center;
+}
+
+.btn-list::before {
+  content: "";
+  width: 18rem;
+  height: 18rem;
+  margin-right: 15rem;
+  background: url(/images/board/ic-list.svg) no-repeat center / contain;
+  flex-shrink: 0;
+}
+
+.btn-list:hover {
+  background: var(--c-primary);
+  color: var(--w);
+  border-color: var(--c-primary);
+}
+
+.btn-list:hover::before {
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 860px) {
+  .board-view__inr h3 {
+    font-size: 32rem;
+    padding-bottom: 15rem;
+  }
+
+  .notice-view__meta {
+    gap: 20rem;
+    padding: 15rem 0 20rem;
+    font-size: 12rem;
+  }
+
+  .board-view__con {
+    padding: 40rem 0;
+  }
+
+  .btn-list {
+    height: auto;
+    padding: 15rem 25rem;
+    font-size: var(--font-default);
+  }
+
+  .btn-list::before {
+    width: 16rem;
+    height: 16rem;
+    margin-right: 12rem;
+  }
+
+  .view-btn-wrap {
+    margin-top: 40rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .notice.board-view {
+    padding-bottom: 60rem;
+  }
+
+  .board-view__inr h3 {
+    padding-bottom: 15rem;
+    font-size: var(--font-27);
+  }
+
+  .notice-view__meta {
+    flex-direction: column;
+    gap: 10rem;
+    padding: 15rem 0 20rem;
+    font-size: 11rem;
+  }
+
+  .board-view__con {
+    padding: 20rem 0;
+  }
+
+  .btn-list {
+    padding: 12rem 20rem;
+    font-size: var(--font-default);
+  }
+
+  .btn-list::before {
+    width: 12rem;
+    height: 12rem;
+    margin-right: 10rem;
+  }
+
+  .btn-navigation::before {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .view-btn-wrap {
+    flex-direction: column;
+    margin-top: 0;
+    gap: 15rem;
+  }
+
+  .btn-list {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-navigation {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-navigation.btn-prev::before {
+    margin-right: 6rem;
+  }
+
+  .btn-navigation.btn-next::before {
+    margin-left: 6rem;
+  }
+}

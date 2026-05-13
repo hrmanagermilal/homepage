@@ -1,0 +1,432 @@
+/* ══════════════════════════════════════
+ * Ministry
+ * ══════════════════════════════════════ */
+.ministry {
+  padding: 0 0 120rem;
+}
+
+/* Banner */
+.ministry-banner {
+  position: relative;
+  overflow: hidden;
+  height: 400rem;
+  border-radius: 20rem;
+  margin-bottom: 60rem;
+}
+
+.ministry-banner__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ministry-banner__bg img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.ministry-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 38, 9, 0.5);
+  mix-blend-mode: multiply;
+  border-radius: 20rem;
+  pointer-events: none;
+}
+
+.ministry-banner__cont {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ministry-banner__label {
+  font-size: 20rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--w);
+}
+
+.ministry-banner__title {
+  font-size: var(--font-42);
+  font-weight: 700;
+  letter-spacing: -0.84rem;
+  line-height: 1.4;
+  color: var(--w);
+}
+
+/* FAQ */
+.ministry-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 20rem;
+  margin-bottom: 60rem;
+}
+
+.ministry-faq__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30rem 70rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 20rem;
+  cursor: pointer;
+}
+
+.ministry-faq__q {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-24);
+  letter-spacing: -0.24rem;
+  white-space: nowrap;
+}
+
+.ministry-faq__q-prefix {
+  grid-column: 1;
+  grid-row: 1;
+  font-family: "Noto Serif KR", serif;
+  margin-top: -6rem;
+  font-weight: 900;
+  line-height: normal;
+  color: var(--c-secondary);
+  text-align: center;
+}
+
+.ministry-faq__q-text {
+  grid-column: 1;
+  grid-row: 1;
+  margin-left: 10rem;
+  margin-top: 1px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--b-title);
+}
+
+.ministry-faq__arrow {
+  position: absolute;
+  right: 39rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14rem;
+  height: 14rem;
+}
+
+.ministry-faq__arrow img {
+  display: block;
+  width: 14rem;
+  height: 14rem;
+}
+
+.ministry-faq__item.is-open .ministry-faq__arrow img {
+  transform: scaleY(-1);
+}
+
+.ministry-faq__body {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 50rem;
+  padding: 50rem 0 90rem;
+  text-align: center;
+}
+
+.ministry-faq__item.is-open .ministry-faq__body {
+  display: flex;
+}
+
+.ministry-faq__answer {
+  font-size: 17rem;
+  line-height: 1.529;
+  color: var(--b-title);
+}
+
+.ministry-faq__answer p {
+  margin: 0;
+}
+
+.ministry-faq__answer strong {
+  font-weight: 700;
+}
+
+.ministry-faq__answer-text {
+  font-size: var(--font-default);
+  line-height: 1.6;
+  color: var(--b-title);
+}
+
+/* 3 Circles */
+.ministry-circles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ministry-circle {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12rem;
+  width: 370rem;
+  height: 370rem;
+  border-radius: 50%;
+  border: 1px dashed var(--c-secondary);
+  text-align: center;
+  padding: 50rem;
+}
+
+.ministry-circle:not(:last-child) {
+  margin-right: -15rem;
+}
+
+.ministry-circle:last-child {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ministry-circle__title {
+  font-size: 22rem;
+  font-weight: 700;
+  letter-spacing: -0.22rem;
+  line-height: 1.454;
+  color: var(--c-primary);
+}
+
+.ministry-circle__body {
+  font-size: 17rem;
+  line-height: 1.529;
+  color: var(--b-default);
+}
+
+/* Download CTA */
+.ministry-download {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30rem;
+  border-radius: 20rem;
+  padding: 42rem 50rem 44rem;
+  background: var(--c-primary);
+}
+
+.ministry-download__title {
+  font-size: var(--font-20);
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--w);
+  white-space: nowrap;
+  margin-bottom: 8rem;
+}
+
+.ministry-download__desc {
+  font-size: 17rem;
+  line-height: 1.529;
+  color: var(--w);
+}
+
+.ministry-download__btn {
+  gap: 8rem;
+  flex-shrink: 0;
+}
+
+.ministry-download__btn i {
+  width: 22rem;
+  height: 22rem;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50% 50%;
+  background-image: url(/images/sub/03-ministry/ic-download_w.svg);
+  transition: 0.2s ease;
+}
+
+.ministry-download__btn:hover i {
+  background-image: url(/images/sub/03-ministry/ic-download.svg);
+}
+
+@media (max-width: 1023px) {
+  .ministry {
+    padding: 0 0 100rem;
+  }
+
+  .ministry-banner {
+    height: 320rem;
+  }
+
+  .ministry-banner__label {
+    font-size: 18rem;
+  }
+
+  .ministry-faq {
+    gap: 40rem;
+  }
+
+  .ministry-faq__header {
+    padding: 28rem 60rem;
+  }
+
+  .ministry-circles {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .ministry-circle {
+    width: 33.33%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin: -5rem;
+    padding: 24rem;
+  }
+
+  .ministry-download {
+    padding: 36rem 40rem;
+  }
+}
+
+@media (max-width: 860px) {
+  .ministry-circle {
+    width: 50%;
+  }
+
+  .ministry-circle:last-child {
+    margin-top: -60rem;
+  }
+
+  .ministry-faq {
+    gap: 20rem;
+  }
+
+  .ministry-faq__body {
+    padding: 40rem 0 60rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .ministry {
+    padding: 0 0 60rem;
+  }
+
+  .ministry-banner {
+    height: 180rem;
+    margin-bottom: 30rem;
+    border-radius: 10rem;
+  }
+
+  .ministry-banner__label {
+    font-size: 14rem;
+  }
+
+  .ministry-banner__cont {
+    gap: 10rem;
+  }
+
+  .ministry-faq {
+    gap: 10rem;
+    margin-bottom: 30rem;
+  }
+
+  .ministry-faq__header {
+    padding: 20rem;
+    padding-right: 40rem;
+    border-radius: 10rem;
+    text-align: left;
+  }
+
+  .ministry-faq__q {
+    align-items: flex-start;
+    white-space: normal;
+  }
+
+  .ministry-faq__q-prefix {
+    margin-top: -2rem;
+  }
+
+  .ministry-faq__q-text {
+    margin-left: 8rem;
+    text-align: left;
+  }
+
+  .ministry-faq__arrow {
+    right: 15rem;
+  }
+
+  .ministry-faq__arrow img {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .ministry-faq__body {
+    gap: 20rem;
+    padding: 20rem;
+  }
+
+  .ministry-faq__answer p {
+    text-align: left;
+  }
+
+  .ministry-faq__answer br {
+    display: none;
+  }
+
+  .ministry-faq__answer-text {
+    text-align: left;
+  }
+
+  .ministry-circles {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30rem;
+  }
+
+  .ministry-circle {
+    width: 100%;
+    margin: -5rem 0;
+    margin-right: 0 !important;
+  }
+
+  .ministry-circle:last-child {
+    margin-top: -5rem;
+  }
+
+  .ministry-download {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28rem 24rem 30rem;
+    border-radius: 14rem;
+    gap: 20rem;
+  }
+
+  .ministry-download__btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ministry-download__btn i {
+    width: 18rem;
+    height: 18rem;
+  }
+
+  .ministry-download__title {
+    font-size: 17rem;
+  }
+}
