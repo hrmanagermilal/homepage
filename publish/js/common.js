@@ -23,7 +23,7 @@
     "          <ul class=\"site-header__gnb-sub\">",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"{{subRoot}}01-introduction.html#introduction01\">교회비전</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"{{subRoot}}01-introduction.html#introduction02\">섬기는 분들</a></li>",
-    "            <li><a class=\"site-header__gnb-sub-item\" href=\"{{subRoot}}01-introduction.html#introduction03\">함께하는 교회</a></li>",
+    "            <li><a class=\"site-header__gnb-sub-item\" href=\"{{subRoot}}01-introduction.html#introduction04\">함께하는 교회</a></li>",
     "          </ul>",
     "        </li>",
     "        <li class=\"site-header__gnb-item-wrap\">",
@@ -31,7 +31,7 @@
     "          <ul class=\"site-header__gnb-sub\">",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"{{subRoot}}02-next-generation.html\">청년부</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">KM 청소년부</a></li>",
-    "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">EM 청년부</a></li>",
+    "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">EM 청소년부</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">아동부</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">유치부</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">유아부</a></li>",
@@ -41,7 +41,7 @@
     "        <li class=\"site-header__gnb-item-wrap\">",
     "          <a class=\"site-header__gnb-item\" href=\"{{subRoot}}03-ministry.html\">사역</a>",
     "          <ul class=\"site-header__gnb-sub\">",
-    "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">양육</a></li>",
+    "            <li><a class=\"site-header__gnb-sub-item\" href=\"{{subRoot}}03-ministry.html\">양육</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">소그룹</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">가정</a></li>",
     "            <li><a class=\"site-header__gnb-sub-item\" href=\"#\">선교</a></li>",
@@ -142,11 +142,11 @@
     "          <ul class=\"full-menu__gnb-sub\">",
     "            <li><a class=\"full-menu__gnb-sub-link\" href=\"{{subRoot}}01-introduction.html#introduction01\">교회비전</a></li>",
     "            <li><a class=\"full-menu__gnb-sub-link\" href=\"{{subRoot}}01-introduction.html#introduction02\">섬기는 분들</a></li>",
-    "            <li><a class=\"full-menu__gnb-sub-link\" href=\"{{subRoot}}01-introduction.html#introduction03\">함께하는 교회</a></li>",
+    "            <li><a class=\"full-menu__gnb-sub-link\" href=\"{{subRoot}}01-introduction.html#introduction04\">함께하는 교회</a></li>",
     "          </ul>",
     "          <ul class=\"full-menu__gnb-sub\">",
     "            <li><a class=\"full-menu__gnb-sub-link\" href=\"{{subRoot}}02-next-generation.html\">청년부</a></li>",
-    "            <li><a class=\"full-menu__gnb-sub-link\" href=\"#\">KM 청소년부</a></li>",
+    "            <li><a class=\"full-menu__gnb-sub-link\" href=\"#\">KM 청년부</a></li>",
     "            <li><a class=\"full-menu__gnb-sub-link\" href=\"#\">EM 청년부</a></li>",
     "            <li><a class=\"full-menu__gnb-sub-link\" href=\"#\">아동부</a></li>",
     "            <li><a class=\"full-menu__gnb-sub-link\" href=\"#\">유치부</a></li>",
@@ -213,6 +213,10 @@
     "            <li><a class=\"full-menu__shortcut\" href=\"https://lovetoronto.org/\" target=\"_blank\">",
     "              <span class=\"full-menu__shortcut-icon\"><img src=\"{{root}}images/common/ic-fullmenu03.png\" alt=\"\" aria-hidden=\"true\" /></span>",
     "              <span class=\"full-menu__shortcut-label\">러브 토론토 바로가기</span>",
+    "            </a></li>",
+    "            <li><a class=\"full-menu__shortcut\" href=\"https://milalbookcafe.com/\" target=\"_blank\">",
+    "              <span class=\"full-menu__shortcut-icon\"><img src=\"{{root}}images/common/ic-fullmenu04.svg\" alt=\"\" aria-hidden=\"true\" /></span>",
+    "              <span class=\"full-menu__shortcut-label\">밀알 도서관 바로가기</span>",
     "            </a></li>",
     "          </ul>",
     "        </div>",
@@ -342,13 +346,15 @@
     "        </span>",
     "        <span class=\"sub-visual__lnb-text\">{{title}}</span>",
     "      </nav>",
-    "      <h1 class=\"sub-visual__title\">{{title}}</h1>",
+    "      <h2 class=\"sub-visual__title\">{{title}}</h2>",
     "    </div>",
     "",
-    "    <div class=\"sub-visual__scroll-down\" aria-hidden=\"true\">",
+    "    <!-- <div class=\"sub-visual__scroll-down\" aria-hidden=\"true\">",
     "       <i></i>",
     "      <span>SCROLL DOWN</span>",
-    "    </div>",
+    "    </div> -->",
+    "",
+    "    <div data-include=\"../inc/lnb.html\" data-root=\"../\" data-menu=\"{{menu}}\" data-active=\"{{active}}\"></div>",
     "",
     "  </section>",
     ""
@@ -430,6 +436,104 @@
     }
   }
 
+  function getCurrentMenuState() {
+    var currentUrl = new URL(location.href);
+    var currentPath = currentUrl.pathname.replace(/\/$/, '');
+    var currentHash = currentUrl.hash || '';
+    var state = {
+      menu: null,
+      active: null,
+      subItems: []
+    };
+
+    var gnbWraps = Array.prototype.slice.call(document.querySelectorAll('.site-header__gnb-item-wrap'));
+    gnbWraps.some(function (item) {
+      var title = item.querySelector('.site-header__gnb-item');
+      var titleText = title ? title.textContent.trim() : '';
+      var titleUrl = title ? resolveUrl(title.getAttribute('href')) : null;
+      var subItems = Array.prototype.slice.call(item.querySelectorAll('.site-header__gnb-sub-item'));
+      var titleMatches = titleUrl && titleUrl.pathname.replace(/\/$/, '') === currentPath;
+      var matchedSub = null;
+
+      subItems.some(function (subItem) {
+        var itemUrl = resolveUrl(subItem.getAttribute('href'));
+        if (!itemUrl) return false;
+        var itemPath = itemUrl.pathname.replace(/\/$/, '');
+        var itemHash = itemUrl.hash || '';
+        if (itemPath === currentPath && itemHash === currentHash) {
+          matchedSub = subItem;
+          return true;
+        }
+        if (itemPath === currentPath && !currentHash && !itemHash) {
+          matchedSub = subItem;
+          return true;
+        }
+        if (!matchedSub && itemPath === currentPath) {
+          matchedSub = subItem;
+        }
+        return false;
+      });
+
+      if (!titleMatches && !matchedSub) return false;
+
+      state.menu = titleText;
+      state.active = matchedSub ? matchedSub.textContent.trim() : null;
+      state.subItems = subItems;
+      return true;
+    });
+
+    return state;
+  }
+
+  function initSubVisualTitle() {
+    var visual = document.querySelector('.sub-visual');
+    if (!visual || visual.dataset.titleReady === 'true') return;
+
+    var title = visual.querySelector('.sub-visual__title');
+    var breadcrumb = visual.querySelector('.sub-visual__lnb');
+    if (!title) return;
+
+    var state = getCurrentMenuState();
+    if (!state.menu) return;
+
+    var displayTitle = state.menu;
+    if (state.menu !== 'Introduction' && state.subItems.length && state.active) {
+      displayTitle = state.active;
+    }
+
+    title.textContent = displayTitle;
+    if (breadcrumb) {
+      var home = breadcrumb.querySelector('.sub-visual__lnb-home');
+      var homeNode = home ? home.cloneNode(true) : null;
+      var crumbTexts = [state.menu];
+
+      if (state.active) {
+        crumbTexts.push(state.active);
+      }
+
+      breadcrumb.innerHTML = '';
+      if (homeNode) {
+        breadcrumb.appendChild(homeNode);
+      }
+
+      crumbTexts.forEach(function (text) {
+        var sep = document.createElement('span');
+        sep.className = 'sub-visual__lnb-sep';
+        sep.setAttribute('aria-hidden', 'true');
+        sep.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3.46447 1.46447L7 5L3.46447 8.53553" stroke="white" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"/></svg>';
+
+        var crumb = document.createElement('span');
+        crumb.className = 'sub-visual__lnb-text';
+        crumb.textContent = text;
+
+        breadcrumb.appendChild(sep);
+        breadcrumb.appendChild(crumb);
+      });
+    }
+    visual.setAttribute('aria-label', displayTitle + ' 서브 비주얼');
+    visual.dataset.titleReady = 'true';
+  }
+
   function initLnb() {
     document.querySelectorAll('[data-lnb]').forEach(function (wrap) {
       var menu = wrap.getAttribute('data-lnb');
@@ -443,19 +547,7 @@
 
       var gnbWraps = Array.prototype.slice.call(document.querySelectorAll('.site-header__gnb-item-wrap'));
       if (!menu) {
-        gnbWraps.some(function (item) {
-          var title = item.querySelector('.site-header__gnb-item');
-          var subItems = Array.prototype.slice.call(item.querySelectorAll('.site-header__gnb-sub-item'));
-          return subItems.some(function (subItem) {
-            var itemUrl = resolveUrl(subItem.getAttribute('href'));
-            if (!itemUrl) return false;
-            if (itemUrl.pathname.replace(/\/$/, '') === currentPath) {
-              menu = title ? title.textContent.trim() : null;
-              return true;
-            }
-            return false;
-          });
-        });
+        menu = getCurrentMenuState().menu;
       }
 
       var current = null;
@@ -670,11 +762,14 @@
   window.MilalIncludes = window.MilalIncludes || {};
   window.MilalIncludes.ready = new Promise(function (resolve) {
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function () { loadIncludes().then(function () { initCommonUi(); initLnb(); initSiteBgm(); resolve(); }); });
+      document.addEventListener('DOMContentLoaded', function () { loadIncludes().then(function () { initCommonUi(); initSubVisualTitle(); initLnb(); initSiteBgm(); resolve(); }); });
     } else {
-      loadIncludes().then(function () { initCommonUi(); initLnb(); initSiteBgm(); resolve(); });
+      loadIncludes().then(function () { initCommonUi(); initSubVisualTitle(); initLnb(); initSiteBgm(); resolve(); });
     }
   });
 })();
+
+
+
 
 
