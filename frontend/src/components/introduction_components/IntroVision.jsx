@@ -37,8 +37,56 @@ const FALLBACK_VISION = [
   },
 ];
 
-export default function IntroVision({ visionStatements = [] }) {
-  const cards = visionStatements.length
+const FALLBACK_VISION_EN = [
+  {
+    title: "Worship Community",
+    points: [
+      "A dynamic worship flow from praise to sermon, response praise, and commitment",
+      "Meeting spiritual needs through distinct worship services",
+      "Training worship teams and strengthening intercessory prayer during worship",
+      "Family and all generations worshiping together",
+    ],
+  },
+  {
+    title: "Shepherding Community",
+    points: [
+      "Co-laboring through deep relationships between the senior pastor and cell leaders",
+      "Deep pastoral care through the 'one person' philosophy",
+      "A church where testimonies and stories of joy are shared",
+      "A community focused on healing and growth",
+    ],
+  },
+  {
+    title: "Training Community",
+    points: [
+      "A church that builds people through the Word",
+      "Systematic and continuous training for the next generation",
+      "Family discipleship that builds church-like homes (Gospel Project / Family Talk)",
+    ],
+  },
+  {
+    title: "Missional Community",
+    points: [
+      "Glocal (Global + Local) service and ongoing mission",
+      "Sustained mission work in strategic mission regions",
+      "A missional church through family mission and next-generation mission",
+    ],
+  },
+];
+
+const INTRO_VISION_COPY = {
+  kr: {
+    heading: "밀알 교회는...",
+    centerTitle: "밀알교회",
+  },
+  en: {
+    heading: "Milal Church Is...",
+    centerTitle: "MILAL",
+  },
+};
+
+export default function IntroVision({ visionStatements = [], language = "kr" }) {
+  const cardsKr = visionStatements.length
     ? visionStatements
         .slice()
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -50,12 +98,14 @@ export default function IntroVision({ visionStatements = [] }) {
             .filter(Boolean),
         }))
     : FALLBACK_VISION;
+  const copy = INTRO_VISION_COPY[language] || INTRO_VISION_COPY.kr;
+  const cards = language === "en" ? FALLBACK_VISION_EN : cardsKr;
 
   return (
     <section id="introduction01" className="intro-vision">
       <div className="wrap-narrow">
         <div className="intro-vision__head">
-          <h3 data-heading="5xl">밀알 교회는...</h3>
+          <h3 data-heading="5xl">{copy.heading}</h3>
         </div>
 
         <div className="intro-vision__cards">
@@ -79,7 +129,7 @@ export default function IntroVision({ visionStatements = [] }) {
 
           <div className="intro-vision__box">
             <img src="/images/common/vision-logo.png" alt="" aria-hidden="true" />
-            <h6>밀알교회</h6>
+            <h6>{copy.centerTitle}</h6>
           </div>
         </div>
       </div>

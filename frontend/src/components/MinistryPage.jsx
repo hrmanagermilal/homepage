@@ -34,13 +34,13 @@ const COMPONENT_BY_KEY = {
 
 const SUBTITLE_BY_KEY = {
   ministry01: "우리는 밀알 공동체입니다.",
-  ministry02: "함께 말씀으로 자라는 공동체",
+  ministry02: "함께 말씀으로 자라는 공동체입니다.",
   ministry03: "당신의 첫 제자는 당신의 자녀입니다.",
-  ministry04: "복음을 들고 세상으로",
-  ministry05: "다음세대를 세우는 믿음의 투자",
-  ministry08: "체계적인 성경적 가치관 확립",
-  ministry06: "하나님의 자녀가 하나님의 자녀에게",
-  ministry07: "도시를 사랑으로 섬기는 손길",
+  ministry04: "세상을 향한 은혜의 통로입니다.",
+  ministry05: "다음세대를 세워가는 믿음의 투자입니다.",
+  ministry08: "체계적인 성경적 가치관 확립입니다.",
+  ministry06: "하나님의 자녀가 하나님의 자녀에게입니다.",
+  ministry07: "토론토를 향한 주님의 사랑과 긍휼입니다.",
 };
 
 function getKeyFromHash(hash) {

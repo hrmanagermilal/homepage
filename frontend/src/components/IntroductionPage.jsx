@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import IntroVision from "./introduction_components/IntroVision";
 import IntroPastor from "./introduction_components/IntroPastor";
 import IntroMinisters from "./introduction_components/IntroMinisters";
@@ -13,9 +13,20 @@ const LNB_ITEMS = [
   { label: "함께하는 교회", href: "#introduction04" },
 ];
 
-function SubVisual() {
+const HERO_COPY = {
+  kr: {
+    breadcrumb: "교회 소개",
+  },
+  en: {
+    breadcrumb: "Introduction",
+  },
+};
+
+function SubVisual({ heroLanguage, setHeroLanguage }) {
+  const heroCopy = HERO_COPY[heroLanguage];
+
   return (
-    <section className="sub-visual" aria-label="Introduction 서브 비주얼" data-snap-section="true">
+    <section className="sub-visual sub-visual--intro" aria-label="Introduction 서브 비주얼" data-snap-section="true">
       <div className="sub-visual__bg" aria-hidden="true">
         <figure className="sub-visual__bg-img intro-bg" />
       </div>
@@ -34,7 +45,26 @@ function SubVisual() {
           </span>
           <span className="sub-visual__lnb-text">Introduction</span>
         </nav>
-        <h2 className="sub-visual__title">Introduction</h2>
+        <h2 className="sub-visual__title">{heroCopy.breadcrumb}</h2>
+        <div className="sub-visual__lang-switch" role="group" aria-label="언어 선택">
+          <button
+            type="button"
+            className={`sub-visual__lang-btn${heroLanguage === "kr" ? " is-active" : ""}`}
+            aria-pressed={heroLanguage === "kr"}
+            onClick={() => setHeroLanguage("kr")}
+          >
+            KR
+          </button>
+          <span className="sub-visual__lang-divider" aria-hidden="true" />
+          <button
+            type="button"
+            className={`sub-visual__lang-btn${heroLanguage === "en" ? " is-active" : ""}`}
+            aria-pressed={heroLanguage === "en"}
+            onClick={() => setHeroLanguage("en")}
+          >
+            EN
+          </button>
+        </div>
       </div>
       <div className="sub-visual__scroll-down" aria-hidden="true">
         <i /><span>SCROLL DOWN</span>
@@ -60,6 +90,7 @@ function SubLnb() {
 
 export default function IntroductionPage({ togetherItems = [], members = [], visionStatements = [] }) {
   const containerRef = useRef(null);
+  const [heroLanguage, setHeroLanguage] = useState("kr");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -146,20 +177,20 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
 
   return (
     <div ref={containerRef}>
-      <SubVisual />
+      <SubVisual heroLanguage={heroLanguage} setHeroLanguage={setHeroLanguage} />
       <div className="sub-content" id="content">
         <SubLnb />
         <div data-snap-section="true">
-          <IntroVision visionStatements={visionStatements} />
+          <IntroVision visionStatements={visionStatements} language={heroLanguage} />
         </div>
         <div data-snap-section="true">
-          <IntroPastor />
+          <IntroPastor language={heroLanguage} />
         </div>
         <div data-snap-section="true">
-          <IntroMinisters members={members} />
+          <IntroMinisters members={members} language={heroLanguage} />
         </div>
         <section id="introduction04" data-snap-section="true">
-          <IntroPartner togetherItems={togetherItems} />
+          <IntroPartner togetherItems={togetherItems} language={heroLanguage} />
         </section>
       </div>
     </div>
