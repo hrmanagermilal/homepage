@@ -567,8 +567,8 @@
     var waitingForGesture = false;
 
     btn.dataset.bgmReady = 'true';
-    audio.loop = true;
-    audio.preload = 'auto';
+    audio.loop = false;
+    //audio.preload = 'auto';
 
     function setPlayingState(isPlaying) {
       icon.setAttribute('src', isPlaying ? defaultIcon : muteIcon);

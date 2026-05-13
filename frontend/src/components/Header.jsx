@@ -59,9 +59,10 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
 
   useEffect(() => {
     const audio = new Audio("/milal-bgm.wav");
-    audio.loop = true;
-    audio.preload = "auto";
+    //audio.loop = false;
+    //audio.preload = "auto";
     audioRef.current = audio;
+    audio.pause();
 
     const playOnGesture = (e) => {
       if (e.target?.closest?.(".site-header__volume")) return;
