@@ -396,6 +396,10 @@
 
   function loadIncludes() {
     var targets = Array.prototype.slice.call(document.querySelectorAll('[data-include]'));
+    if (!targets.length) {
+      return Promise.resolve();
+    }
+
     return Promise.all(targets.map(function (target) {
       var data = prepareIncludeData(Object.assign({}, target.dataset));
       var src = target.getAttribute('data-include');
@@ -406,7 +410,9 @@
         removeOptional(wrap, data);
         target.replaceWith.apply(target, Array.prototype.slice.call(wrap.childNodes));
       });
-    }));
+    })).then(function () {
+      return loadIncludes();
+    });
   }
 
   function getLnbHref(href) {
@@ -415,18 +421,47 @@
     return href;
   }
 
+  function resolveUrl(href) {
+    if (!href || href === '#') return null;
+    try {
+      return new URL(href, location.href);
+    } catch (e) {
+      return null;
+    }
+  }
+
   function initLnb() {
     document.querySelectorAll('[data-lnb]').forEach(function (wrap) {
       var menu = wrap.getAttribute('data-lnb');
       var active = wrap.getAttribute('data-active');
       var nav = wrap.querySelector('.lnb');
-      if (!menu || !nav || nav.dataset.lnbReady === 'true') return;
+      if (!nav || nav.dataset.lnbReady === 'true') return;
+
+      var currentUrl = new URL(location.href);
+      var currentPath = currentUrl.pathname.replace(/\/$/, '');
+      var currentHash = currentUrl.hash || '';
 
       var gnbWraps = Array.prototype.slice.call(document.querySelectorAll('.site-header__gnb-item-wrap'));
+      if (!menu) {
+        gnbWraps.some(function (item) {
+          var title = item.querySelector('.site-header__gnb-item');
+          var subItems = Array.prototype.slice.call(item.querySelectorAll('.site-header__gnb-sub-item'));
+          return subItems.some(function (subItem) {
+            var itemUrl = resolveUrl(subItem.getAttribute('href'));
+            if (!itemUrl) return false;
+            if (itemUrl.pathname.replace(/\/$/, '') === currentPath) {
+              menu = title ? title.textContent.trim() : null;
+              return true;
+            }
+            return false;
+          });
+        });
+      }
+
       var current = null;
       gnbWraps.some(function (item) {
         var title = item.querySelector('.site-header__gnb-item');
-        if (title && title.textContent.trim() === menu) {
+        if (title && menu && title.textContent.trim() === menu) {
           current = item;
           return true;
         }
@@ -439,7 +474,25 @@
         return;
       }
 
-      nav.setAttribute('aria-label', menu + ' 메뉴');
+      if (!active) {
+        subItems.some(function (item) {
+          var itemUrl = resolveUrl(item.getAttribute('href'));
+          if (!itemUrl) return false;
+          var itemPath = itemUrl.pathname.replace(/\/$/, '');
+          var itemHash = itemUrl.hash || '';
+          if (itemPath === currentPath && itemHash === currentHash) {
+            active = item.textContent.trim();
+            return true;
+          }
+          if (itemPath === currentPath && !currentHash && !itemHash) {
+            active = item.textContent.trim();
+            return true;
+          }
+          return false;
+        });
+      }
+
+      nav.setAttribute('aria-label', (menu || '서브') + ' 메뉴');
       nav.innerHTML = '';
 
       subItems.forEach(function (item, index) {
