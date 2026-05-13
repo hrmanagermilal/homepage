@@ -401,7 +401,7 @@ Authorization: Bearer {your-jwt-token}
 curl -X POST http://localhost:8000/api/sermons \
   -H "Authorization: Bearer eyJ0eXAiOiJKV1Q..." \
   -H "Content-Type: application/json" \
-  -d '{"title":"설교","speaker":"목사님", ...}'
+  -d '{"title":"설교","speaker":"행정부", ...}'
 ```
 
 ---

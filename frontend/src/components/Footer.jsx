@@ -3,8 +3,9 @@ const FOOTER_NAV = [
     title: "Introduction",
     links: [
       { label: "교회비전", path: "/introduction#introduction01" },
-      { label: "섬기는 분들", path: "/introduction#introduction02" },
-      { label: "함께하는 교회", path: "/introduction#introduction03" },
+      { label: "담임목사", path: "/introduction#introduction02" },
+      { label: "섬기는 분들", path: "/introduction#introduction03" },
+      { label: "함께하는 교회", path: "/introduction#introduction04" },
     ],
   },
   {
@@ -14,15 +15,20 @@ const FOOTER_NAV = [
       { label: "KM 청소년부", path: "/nextgen/km-youth" },
       { label: "EM 청소년부", path: "/nextgen/em-youth" },
       { label: "아동부", path: "/nextgen/children" },
+      { label: "유치부", path: "/nextgen/kindergarten" },
+      { label: "영유아부", path: "/nextgen/infants" },
     ],
   },
   {
     title: "사역",
     links: [
-      { label: "양육", path: "/ministry" },
-      { label: "선교", path: "/ministry" },
-      { label: "다니엘한글문화학교", path: "#" },
-      { label: "러브토론토", path: "https://lovetoronto.org/", external: true },
+      { label: "양육", path: "/ministry#ministry01" },
+      { label: "소그룹", path: "/ministry#ministry02" },
+      { label: "가정", path: "/ministry#ministry03" },
+      { label: "선교", path: "/ministry#ministry04" },
+      { label: "장학", path: "/ministry#ministry05" },
+      { label: "다니엘한글문화학교", path: "/ministry#ministry06" },
+      { label: "러브토론토", path: "/ministry#ministry07" },
     ],
   },
   {
@@ -35,6 +41,12 @@ const FOOTER_NAV = [
   {
     title: "온라인 헌금",
     links: [{ label: "온라인 헌금", path: "/online-giving" }],
+  },
+  {
+    title: "바로가기",
+    links: [
+      { label: "밀알도서관", path: "https://milalbookcafe.com/", external: true }
+    ],
   },
 ];
 
