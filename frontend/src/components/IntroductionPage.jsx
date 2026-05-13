@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import IntroVision from "./introduction_components/IntroVision";
 import IntroPastor from "./introduction_components/IntroPastor";
 import IntroMinisters from "./introduction_components/IntroMinisters";
@@ -14,7 +15,7 @@ const LNB_ITEMS = [
 
 function SubVisual() {
   return (
-    <section className="sub-visual" aria-label="Introduction 서브 비주얼">
+    <section className="sub-visual" aria-label="Introduction 서브 비주얼" data-snap-section="true">
       <div className="sub-visual__bg" aria-hidden="true">
         <figure className="sub-visual__bg-img intro-bg" />
       </div>
@@ -58,18 +59,109 @@ function SubLnb() {
 }
 
 export default function IntroductionPage({ togetherItems = [], members = [], visionStatements = [] }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const isDesktopScrollSnap =
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1024px)").matches &&
+      window.matchMedia("(pointer: fine)").matches;
+
+    if (!isDesktopScrollSnap) {
+      return;
+    }
+
+    const sections = Array.from(container.querySelectorAll("[data-snap-section='true']"));
+    if (!sections.length) {
+      return;
+    }
+
+    let isAnimating = false;
+    let wheelLockUntil = 0;
+
+    const getClosestSectionIndex = () => {
+      const viewportMid = window.innerHeight / 2;
+      let bestIndex = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const sectionMid = rect.top + rect.height / 2;
+        const distance = Math.abs(sectionMid - viewportMid);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+
+      return bestIndex;
+    };
+
+    const moveToSection = (index) => {
+      if (index < 0 || index >= sections.length) {
+        return;
+      }
+
+      isAnimating = true;
+      sections[index].scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => {
+        isAnimating = false;
+      }, 700);
+    };
+
+    const onWheel = (event) => {
+      const now = Date.now();
+      if (isAnimating || now < wheelLockUntil) {
+        event.preventDefault();
+        return;
+      }
+
+      if (Math.abs(event.deltaY) < 8) {
+        return;
+      }
+
+      const currentIndex = getClosestSectionIndex();
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+
+      if (nextIndex === currentIndex) {
+        return;
+      }
+
+      event.preventDefault();
+      wheelLockUntil = now + 500;
+      moveToSection(nextIndex);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+    };
+  }, []);
+
   return (
-    <>
+    <div ref={containerRef}>
       <SubVisual />
       <div className="sub-content" id="content">
         <SubLnb />
-        <IntroVision visionStatements={visionStatements} />
-        <IntroPastor />
-        <IntroMinisters members={members} />
-        <section id="introduction04">
+        <div data-snap-section="true">
+          <IntroVision visionStatements={visionStatements} />
+        </div>
+        <div data-snap-section="true">
+          <IntroPastor />
+        </div>
+        <div data-snap-section="true">
+          <IntroMinisters members={members} />
+        </div>
+        <section id="introduction04" data-snap-section="true">
           <IntroPartner togetherItems={togetherItems} />
         </section>
       </div>
-    </>
+    </div>
   );
 }

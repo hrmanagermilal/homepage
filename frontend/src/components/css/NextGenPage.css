@@ -22,3 +22,29 @@
 .nextgen-bg-young {
   background-image: url(/images/sub/visual/sub-visual0204.jpg);
 }
+
+.sub-visual__subtitle {
+  margin: 0;
+  font-size: var(--font-42);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.84rem;
+  color: var(--w);
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 1023px) {
+  .sub-visual__subtitle {
+    font-size: 32rem;
+    letter-spacing: -0.64rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .sub-visual__subtitle {
+    font-size: 22rem;
+    letter-spacing: -0.44rem;
+    white-space: normal;
+  }
+}

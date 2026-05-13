@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { api } from "./api/client";
 import Header from "./components/Header";
@@ -24,6 +24,7 @@ const NEXTGEN_PAGE_TITLES = {
 };
 
 export default function App() {
+  const hasPathInitializedRef = useRef(false);
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
   const isIntroductionPage = currentPath.startsWith("/introduction");
   const isMinistryPage = currentPath.startsWith("/ministry");
@@ -159,6 +160,26 @@ export default function App() {
     if (loading) return;
     scrollToHash();
   }, [currentPath]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (loading) return;
+
+    // Skip initial mount to avoid unnecessary animation on first render.
+    if (!hasPathInitializedRef.current) {
+      hasPathInitializedRef.current = true;
+      return;
+    }
+
+    const hasHash = Boolean(window.location.hash);
+    const isDetailPath = /^\/news\/(notice|obituary)\/\d+$/.test(currentPath);
+
+    // Hash-based pages and detail views already control their own scroll position.
+    if (hasHash || isTabHashPage(currentPath) || isDetailPath) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPath, loading, isTabHashPage]);
 
   return (
     <Box>

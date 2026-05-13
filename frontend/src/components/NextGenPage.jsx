@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import NextGenDepartment from "./nextgen_components/NextGenDepartment";
 import "./css/SubPage.css";
 import "./css/NextGenPage.css";
@@ -8,7 +9,7 @@ const NEXTGEN_LNB_ITEMS = [
   { label: "EM 청소년부", href: "/nextgen/em-youth" },
   { label: "아동부", href: "/nextgen/children" },
   { label: "유치부", href: "/nextgen/kindergarten" },
-  { label: "영유아부", href: "/nextgen/infants-toddlers" },
+  { label: "영유아부", href: "/nextgen/infants" },
 ];
 
 const DEPARTMENT_CONTENT = {
@@ -115,11 +116,20 @@ const DEPARTMENT_CONTENT = {
     noticeDescription: "월간 프로그램과 부모 양육 안내자료를 다운로드하세요.",
     noticeButtonLabel: "자료 다운로드",
     noticeButtonHref: "#",
-    pastorPhoto: "/images/sub/01-introduction/minister-13.jpg",
+    pastorPhoto: "/images/sub/01-introduction/minister-14.jpg",
     kakaoLink: "https://pf.kakao.com/_xdqzRK",
     kakaoLabel: "영유아부 카카오톡 채널 추가하기",
     photoAlt: "영유아부 담당 교역자",
   },
+};
+
+const SUBTITLE_BY_TITLE = {
+  "청년부": "Milight, Time to Shine.",
+  "KM 청소년부": "믿음 안에서 함께 성장합니다.",
+  "EM 청소년부": "Grounded in the Word.",
+  "아동부": "예수님을 닮아가는 어린이들",
+  "유치부": "믿음의 씨앗을 심는 시간",
+  "영유아부": "사랑 안에서 첫 걸음을",
 };
 
 
@@ -129,6 +139,7 @@ function SubVisual({ title }) {
   const isChildren = title === "아동부";
   const isKindergarten = title === "유치부";
   const isInfantToddler = title === "영유아부";
+  const subtitle = SUBTITLE_BY_TITLE[title] || "";
   const bgClass = isYoungAdults ? "nextgen-bg-young" : isKmOrEm ? "nextgen-bg-youth" : isChildren ? "nextgen-bg-children" : isKindergarten ? "nextgen-bg-kindergarten" : isInfantToddler ? "nextgen-bg-infant" : "nextgen-bg";
   return (
     <section className="sub-visual" aria-label="다음세대 서브 비주얼">
@@ -151,6 +162,7 @@ function SubVisual({ title }) {
           <span className="sub-visual__lnb-text">다음세대</span>
         </nav>
         <h2 className="sub-visual__title">{title}</h2>
+        {subtitle ? <p className="sub-visual__subtitle">{subtitle}</p> : null}
       </div>
       <div className="sub-visual__scroll-down" aria-hidden="true">
         <i />
@@ -179,16 +191,102 @@ function SubLnb({ currentTitle }) {
 }
 
 export default function NextGenPage({ title }) {
+  const containerRef = useRef(null);
   const safeTitle = DEPARTMENT_CONTENT[title] ? title : "청년부";
   const content = DEPARTMENT_CONTENT[safeTitle];
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const isDesktopScrollSnap =
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1024px)").matches &&
+      window.matchMedia("(pointer: fine)").matches;
+
+    if (!isDesktopScrollSnap) {
+      return;
+    }
+
+    const sections = Array.from(container.querySelectorAll("[data-snap-section='true']"));
+    if (!sections.length) {
+      return;
+    }
+
+    let isAnimating = false;
+    let wheelLockUntil = 0;
+
+    const getClosestSectionIndex = () => {
+      const viewportMid = window.innerHeight / 2;
+      let bestIndex = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const sectionMid = rect.top + rect.height / 2;
+        const distance = Math.abs(sectionMid - viewportMid);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+
+      return bestIndex;
+    };
+
+    const moveToSection = (index) => {
+      if (index < 0 || index >= sections.length) {
+        return;
+      }
+
+      isAnimating = true;
+      sections[index].scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => {
+        isAnimating = false;
+      }, 700);
+    };
+
+    const onWheel = (event) => {
+      const now = Date.now();
+      if (isAnimating || now < wheelLockUntil) {
+        event.preventDefault();
+        return;
+      }
+
+      if (Math.abs(event.deltaY) < 8) {
+        return;
+      }
+
+      const currentIndex = getClosestSectionIndex();
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+
+      if (nextIndex === currentIndex) {
+        return;
+      }
+
+      event.preventDefault();
+      wheelLockUntil = now + 500;
+      moveToSection(nextIndex);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+    };
+  }, []);
+
   return (
-    <>
-      <SubVisual title={safeTitle} />
-      <div className="sub-content" id="content">
+    <div ref={containerRef}>
+      <div data-snap-section="true">
+        <SubVisual title={safeTitle} />
+      </div>
+      <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb currentTitle={safeTitle} />
         <NextGenDepartment {...content} />
       </div>
-    </>
+    </div>
   );
 }
