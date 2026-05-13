@@ -20,8 +20,7 @@ const NEXTGEN_PAGE_TITLES = {
   "/nextgen/em-youth": "EM 청소년부",
   "/nextgen/children": "아동부",
   "/nextgen/kindergarten": "유치부",
-  "/nextgen/preschool": "유아부",
-  "/nextgen/infants": "영아부",
+  "/nextgen/infants": "영유아부",
 };
 
 export default function App() {
