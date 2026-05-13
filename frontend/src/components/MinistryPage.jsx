@@ -34,7 +34,7 @@ function getKeyFromHash(hash) {
   return COMPONENT_BY_KEY[key] ? key : "ministry01";
 }
 
-function SubVisual() {
+function SubVisual({ title }) {
   return (
     <section className="sub-visual" aria-label="사역 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
@@ -55,7 +55,7 @@ function SubVisual() {
           </span>
           <span className="sub-visual__lnb-text">사역</span>
         </nav>
-        <h2 className="sub-visual__title">사역</h2>
+        <h2 className="sub-visual__title">{title}</h2>
       </div>
       <div className="sub-visual__scroll-down" aria-hidden="true">
         <i />
@@ -99,10 +99,11 @@ export default function MinistryPage() {
   }, []);
 
   const ActiveComponent = useMemo(() => COMPONENT_BY_KEY[activeKey] || MinistryYangyuk, [activeKey]);
+  const activeLabel = useMemo(() => LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역", [activeKey]);
 
   return (
     <>
-      <SubVisual />
+      <SubVisual title={activeLabel} />
       <div className="sub-content" id="content">
         <SubLnb activeKey={activeKey} />
         <ActiveComponent />

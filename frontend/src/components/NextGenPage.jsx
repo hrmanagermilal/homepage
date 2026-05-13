@@ -140,7 +140,7 @@ const DEPARTMENT_CONTENT = {
 };
 
 
-function SubVisual() {
+function SubVisual({ title }) {
   return (
     <section className="sub-visual" aria-label="다음세대 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
@@ -161,7 +161,7 @@ function SubVisual() {
           </span>
           <span className="sub-visual__lnb-text">다음세대</span>
         </nav>
-        <h2 className="sub-visual__title">다음세대</h2>
+        <h2 className="sub-visual__title">{title}</h2>
       </div>
       <div className="sub-visual__scroll-down" aria-hidden="true">
         <i />
@@ -195,7 +195,7 @@ export default function NextGenPage({ title }) {
 
   return (
     <>
-      <SubVisual />
+      <SubVisual title={safeTitle} />
       <div className="sub-content" id="content">
         <SubLnb currentTitle={safeTitle} />
         <NextGenDepartment {...content} />
