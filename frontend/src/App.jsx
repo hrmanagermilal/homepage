@@ -10,7 +10,9 @@ import NextGenPage from "./components/NextGenPage";
 import MinistryPage from "./components/MinistryPage";
 import OnlineGivingPage from "./components/OnlineGivingPage";
 import NoticePage from "./components/NoticePage";
+import NoticeViewPage from "./components/NoticeViewPage";
 import ObituaryPage from "./components/ObituaryPage";
+import ObituaryViewPage from "./components/ObituaryViewPage";
 
 const NEXTGEN_PAGE_TITLES = {
   "/nextgen/young-adults": "청년부",
@@ -27,8 +29,10 @@ export default function App() {
   const isIntroductionPage = window.location.pathname.startsWith("/introduction");
   const isMinistryPage = currentPath.startsWith("/ministry");
   const isOnlineGivingPage = currentPath.startsWith("/online-giving");
-  const isNoticePage = currentPath.startsWith("/news/notice");
-  const isObituaryPage = currentPath.startsWith("/news/obituary");
+  const isNoticeViewPage = /^\/news\/notice\/\d+$/.test(currentPath);
+  const isNoticePage = currentPath.startsWith("/news/notice") && !isNoticeViewPage;
+  const isObituaryViewPage = /^\/news\/obituary\/\d+$/.test(currentPath);
+  const isObituaryPage = currentPath.startsWith("/news/obituary") && !isObituaryViewPage;
   const nextGenPageTitle = NEXTGEN_PAGE_TITLES[currentPath] || null;
   const isNextGenSubmenuPage = Boolean(nextGenPageTitle);
   const [health, setHealth] = useState(null);
@@ -144,8 +148,12 @@ export default function App() {
         <MinistryPage />
       ) : isOnlineGivingPage ? (
         <OnlineGivingPage />
+      ) : isNoticeViewPage ? (
+        <NoticeViewPage />
       ) : isNoticePage ? (
         <NoticePage />
+      ) : isObituaryViewPage ? (
+        <ObituaryViewPage />
       ) : isObituaryPage ? (
         <ObituaryPage />
       ) : isNextGenSubmenuPage ? (
@@ -163,7 +171,7 @@ export default function App() {
         />
       )}
       <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
-      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticePage || isObituaryPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isNoticePage || isObituaryViewPage || isObituaryPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }
