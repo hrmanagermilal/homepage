@@ -4,3 +4,21 @@
 .intro-bg {
   background-image: url(/images/sub/01-introduction/sub-visual-bg.jpg);
 }
+
+.sub-visual--intro .sub-visual__cont {
+  gap: 22rem;
+}
+
+.sub-visual--intro .sub-visual__lang-switch {
+  margin-top: 2rem;
+}
+
+@media (max-width: 540px) {
+  .sub-visual--intro .sub-visual__cont {
+    gap: 16rem;
+  }
+
+  .sub-visual--intro .sub-visual__lang-switch {
+    margin-top: 0;
+  }
+}
