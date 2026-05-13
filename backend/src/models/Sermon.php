@@ -20,7 +20,12 @@ class Sermon {
     public function getAll($limit = 10, $offset = 0) {
         try {
             $stmt = $this->db->prepare("
-                SELECT * FROM sermons 
+                SELECT 
+                    sermons.*,
+                    sermon_categories.title AS category_title,
+                    sermon_categories.image AS category_image
+                FROM sermons
+                LEFT JOIN sermon_categories ON sermon_categories.id = sermons.category_id
                 ORDER BY sermon_date DESC, created_at DESC 
                 LIMIT ? OFFSET ?
             ");
@@ -52,7 +57,15 @@ class Sermon {
      */
     public function getById($id) {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM sermons WHERE id = ?");
+            $stmt = $this->db->prepare("
+                SELECT 
+                    sermons.*,
+                    sermon_categories.title AS category_title,
+                    sermon_categories.image AS category_image
+                FROM sermons
+                LEFT JOIN sermon_categories ON sermon_categories.id = sermons.category_id
+                WHERE sermons.id = ?
+            ");
             $stmt->execute([$id]);
             
             return $stmt->fetch();
@@ -69,18 +82,19 @@ class Sermon {
         try {
             $stmt = $this->db->prepare("
                 INSERT INTO sermons (
-                    title, youtube_url, youtube_id, description, 
+                    title, category_id, youtube_url, youtube_id, description, 
                     preacher, sermon_date, thumbnail
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ");
             
             $stmt->execute([
                 $data['title'],
-                $data['youtubeUrl'],
-                $data['youtubeId'] ?? null,
+                $data['category_id'] ?? null,
+                $data['youtube_url'],
+                $data['youtube_id'] ?? null,
                 $data['description'] ?? null,
                 $data['preacher'] ?? null,
-                $data['sermonDate'] ?? null,
+                $data['sermon_date'] ?? null,
                 $data['thumbnail'] ?? null
             ]);
             
@@ -99,6 +113,7 @@ class Sermon {
             $stmt = $this->db->prepare("
                 UPDATE sermons SET 
                     title = ?, 
+                    category_id = ?,
                     youtube_url = ?, 
                     youtube_id = ?, 
                     description = ?, 
@@ -110,11 +125,12 @@ class Sermon {
             
             $stmt->execute([
                 $data['title'],
-                $data['youtubeUrl'],
-                $data['youtubeId'] ?? null,
+                $data['category_id'] ?? null,
+                $data['youtube_url'],
+                $data['youtube_id'] ?? null,
                 $data['description'] ?? null,
                 $data['preacher'] ?? null,
-                $data['sermonDate'] ?? null,
+                $data['sermon_date'] ?? null,
                 $data['thumbnail'] ?? null,
                 $id
             ]);
@@ -160,6 +176,21 @@ class Sermon {
                 $stmt->execute([$url]);
             }
             
+            $result = $stmt->fetch();
+            return $result['count'] > 0;
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * 카테고리 존재 여부 확인
+     */
+    public function categoryExists($categoryId) {
+        try {
+            $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM sermon_categories WHERE id = ?");
+            $stmt->execute([$categoryId]);
+
             $result = $stmt->fetch();
             return $result['count'] > 0;
         } catch (\PDOException $e) {

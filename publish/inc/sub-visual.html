@@ -1,0 +1,33 @@
+<section class="sub-visual" aria-label="{{label}} 서브 비주얼">
+
+    <div class="sub-visual__bg" aria-hidden="true">
+      <figure class="sub-visual__bg-img"></figure>
+    </div>
+
+    <div class="sub-visual__ellipse" aria-hidden="true">
+      <img src="{{root}}images/main/main-visual-ellipse.svg" alt="" />
+    </div>
+
+    <div class="sub-visual__cont">
+      <nav class="sub-visual__lnb" aria-label="현재 위치">
+        <a class="sub-visual__lnb-home" href="{{root}}main.html" aria-label="홈">
+          <img src="{{root}}images/common/ic-nav-w.svg" alt="" />
+        </a>
+        <span class="sub-visual__lnb-sep" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M3.46447 1.46447L7 5L3.46447 8.53553" stroke="white" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="sub-visual__lnb-text">{{title}}</span>
+      </nav>
+      <h2 class="sub-visual__title">{{title}}</h2>
+    </div>
+
+    <!-- <div class="sub-visual__scroll-down" aria-hidden="true">
+       <i></i>
+      <span>SCROLL DOWN</span>
+    </div> -->
+
+    <div data-include="../inc/lnb.html" data-root="../" data-menu="Introduction"></div>
+
+  </section>

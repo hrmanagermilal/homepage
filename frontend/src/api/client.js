@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost/";
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 function toQueryString(params = {}) {
   const search = new URLSearchParams();
@@ -55,6 +55,14 @@ export const api = {
   // Hero
   getHero: () => request("/api/hero"),
 
+  // Sections
+  getSections: () => request("/api/sections"),
+  getSectionById: (id) => request(`/api/sections/${id}`),
+
+  // Vision statements
+  getVisionStatements: () => request("/api/vision-statements"),
+  getVisionStatementById: (id) => request(`/api/vision-statements/${id}`),
+
   // Sermons
   getSermons: (params = {}) => request(`/api/sermons${toQueryString(params)}`),
   getSermonById: (id) => request(`/api/sermons/${id}`),
@@ -104,6 +112,10 @@ export const api = {
   // Hero links
   getHeroLinks: () => request("/api/hero-links"),
   getHeroLinkById: (id) => request(`/api/hero-links/${id}`),
+
+  // Quick links
+  getQuickLinks: () => request("/api/quick-links"),
+  getQuickLinkById: (id) => request(`/api/quick-links/${id}`),
 
   // Landing titles
   getLandingTitles: () => request("/api/landing-titles"),

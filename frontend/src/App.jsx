@@ -1,23 +1,44 @@
 import { useEffect, useState } from "react";
-import { Alert, Box, CircularProgress, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { api } from "./api/client";
 import Header from "./components/Header";
-import Hero from "./components/Hero";
-import Sermon from "./components/Sermon";
-import ServiceTime from "./components/ServiceTime";
-import Jubo from "./components/Jubo";
-import Announcement from "./components/Announcement";
-import Contacts from "./components/Contacts";
-import FooterTop from "./components/FooterTop";
+import LandingPage from "./components/LandingPage";
 import Footer from "./components/Footer";
-import FloatingMenu from "./components/FloatingMenu";
+import FloatingMenu from "./components/landing_components/FloatingMenu";
+import IntroductionPage from "./components/IntroductionPage";
+import NextGenPage from "./components/NextGenPage";
+import MinistryPage from "./components/MinistryPage";
+import OnlineGivingPage from "./components/OnlineGivingPage";
+import NoticePage from "./components/NoticePage";
+import ObituaryPage from "./components/ObituaryPage";
+
+const NEXTGEN_PAGE_TITLES = {
+  "/nextgen/young-adults": "청년부",
+  "/nextgen/km-youth": "KM 청소년부",
+  "/nextgen/em-youth": "EM 청소년부",
+  "/nextgen/children": "아동부",
+  "/nextgen/kindergarten": "유치부",
+  "/nextgen/preschool": "유아부",
+  "/nextgen/infants": "영아부",
+};
 
 export default function App() {
+  const currentPath = window.location.pathname;
+  const isIntroductionPage = window.location.pathname.startsWith("/introduction");
+  const isMinistryPage = currentPath.startsWith("/ministry");
+  const isOnlineGivingPage = currentPath.startsWith("/online-giving");
+  const isNoticePage = currentPath.startsWith("/news/notice");
+  const isObituaryPage = currentPath.startsWith("/news/obituary");
+  const nextGenPageTitle = NEXTGEN_PAGE_TITLES[currentPath] || null;
+  const isNextGenSubmenuPage = Boolean(nextGenPageTitle);
   const [health, setHealth] = useState(null);
   const [hero, setHero] = useState(null);
   const [heroLinks, setHeroLinks] = useState([]);
+  const [quickLinks, setQuickLinks] = useState([]);
   const [landingTitles, setLandingTitles] = useState([]);
   const [members, setMembers] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [visionStatements, setVisionStatements] = useState([]);
   const [sermons, setSermons] = useState([]);
   const [togetherItems, setTogetherItems] = useState([]);
   const [bulletins, setBulletins] = useState([]);
@@ -32,12 +53,29 @@ export default function App() {
       setLoading(true);
       setError("");
       try {
-        const [h, heroResponse, heroLinkResponse, landingTitleResponse, memberResponse, s, t, b, a, d] = await Promise.all([
+        const [
+          healthResponse,
+          heroResponse,
+          heroLinkResponse,
+          quickLinkResponse,
+          landingTitleResponse,
+          memberResponse,
+          sectionsResponse,
+          visionStatementsResponse,
+          sermonsResponse,
+          togetherResponse,
+          bulletinsResponse,
+          announcementsResponse,
+          departmentsResponse,
+        ] = await Promise.all([
           api.getHealth(),
           api.getHero(),
           api.getHeroLinks(),
+          api.getQuickLinks(),
           api.getLandingTitles(),
           api.getMembers(),
+          api.getSections(),
+          api.getVisionStatements(),
           api.getSermons({ page: 1, limit: 5 }),
           api.getTogether(),
           api.getBulletins({ page: 1, limit: 6 }),
@@ -46,16 +84,19 @@ export default function App() {
         ]);
 
         if (!mounted) return;
-        setHealth(h?.message || "Online");
+        setHealth(healthResponse?.message || "Online");
         setHero(heroResponse?.data ?? null);
         setHeroLinks(heroLinkResponse?.data ?? []);
+        setQuickLinks(quickLinkResponse?.data ?? []);
         setLandingTitles(landingTitleResponse?.data || []);
         setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
-        setSermons(s?.data?.data ?? s?.data ?? []);
-        setTogetherItems(t?.data?.data ?? t?.data ?? []);
-        setBulletins(b?.data?.data ?? b?.data ?? []);
-        setAnnouncements(a?.data?.data ?? a?.data ?? []);
-        setDepartments(d?.data?.data ?? d?.data ?? []);
+        setSections(sectionsResponse?.data ?? []);
+        setVisionStatements(visionStatementsResponse?.data ?? []);
+        setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
+        setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
+        setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
+        setAnnouncements(announcementsResponse?.data?.data ?? announcementsResponse?.data ?? []);
+        setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
       } catch (e) {
         if (!mounted) return;
         setError(e.message || "Failed to connect backend API");
@@ -70,10 +111,26 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    if (sessionStorage.getItem("goToContacts") === "1") {
+      sessionStorage.removeItem("goToContacts");
+      document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    const hashTarget = window.location.hash?.replace("#", "");
+    if (hashTarget) {
+      document.getElementById(hashTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [loading]);
+
   return (
     <Box>
-      <Header menuLinks={heroLinks} landingTitles={landingTitles} />
-      <Hero apiStatus={health} hero={hero} heroLinks={heroLinks}/>
+      <Header quickLinks={quickLinks} landingTitles={landingTitles} />
 
       {loading ? (
         <Stack alignItems="center" py={8}>
@@ -81,22 +138,32 @@ export default function App() {
         </Stack>
       ) : null}
 
-      {error ? (
-        <Box sx={{ px: { xs: 2, md: 6 }, mb: 2 }}>
-          <Alert severity="error">
-            {error}. Check VITE_API_BASE_URL and backend server status.
-          </Alert>
-        </Box>
-      ) : null}
-
-      <Sermon items={sermons} />
-      <ServiceTime departments={departments} />
-      <Jubo items={bulletins} />
-      <Announcement items={announcements} />
-      <Contacts members={members} />
-      <FooterTop items={togetherItems} />
+      {isIntroductionPage ? (
+        <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} />
+      ) : isMinistryPage ? (
+        <MinistryPage />
+      ) : isOnlineGivingPage ? (
+        <OnlineGivingPage />
+      ) : isNoticePage ? (
+        <NoticePage />
+      ) : isObituaryPage ? (
+        <ObituaryPage />
+      ) : isNextGenSubmenuPage ? (
+        <NextGenPage title={nextGenPageTitle} />
+      ) : (
+        <LandingPage
+          hero={hero}
+          quickLinks={quickLinks}
+          sermons={sermons}
+          departments={departments}
+          bulletins={bulletins}
+          announcements={announcements}
+          sections={sections}
+          togetherItems={togetherItems}
+        />
+      )}
       <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
-      <FloatingMenu quickLinks={heroLinks} />
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticePage || isObituaryPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }

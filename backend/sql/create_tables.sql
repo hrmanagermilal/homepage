@@ -40,6 +40,17 @@ CREATE TABLE IF NOT EXISTS hero_link (
   INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS quick_links (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255),
+  link VARCHAR(500),
+  image VARCHAR(500),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_title (title),
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS hero_background_images (
   id INT PRIMARY KEY AUTO_INCREMENT,
   hero_id INT NOT NULL,
@@ -62,12 +73,48 @@ CREATE TABLE IF NOT EXISTS hero_front_images (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===============================================
+-- 1-1. Section 테이블
+-- ===============================================
+CREATE TABLE IF NOT EXISTS section_titles (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255),
+  subtitle TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS vision_statements (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  points TEXT,
+  `order` INT DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_order (`order`),
+  INDEX idx_active (is_active),
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
 -- 2. SERMON 테이블
 -- ===============================================
+
+CREATE TABLE IF NOT EXISTS sermon_categories (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  image VARCHAR(500),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_title (title),
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS sermons (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
+  category_id INT,
   youtube_url VARCHAR(500) NOT NULL,
   youtube_id VARCHAR(50),
   description TEXT,
@@ -76,6 +123,8 @@ CREATE TABLE IF NOT EXISTS sermons (
   thumbnail VARCHAR(500),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (category_id) REFERENCES sermon_categories(id) ON DELETE SET NULL,
+  INDEX idx_category (category_id),
   UNIQUE INDEX idx_youtube_url (youtube_url),
   INDEX idx_sermon_date (sermon_date),
   INDEX idx_created (created_at)
@@ -243,6 +292,7 @@ CREATE TABLE IF NOT EXISTS members (
   name VARCHAR(100) NOT NULL,
   email VARCHAR(150),
   title VARCHAR(100),
+  category ENUM('목회자', '장로', '간사') DEFAULT '간사',
   role VARCHAR(100),
   picture VARCHAR(500),
   position VARCHAR(200) NULL,
@@ -252,6 +302,7 @@ CREATE TABLE IF NOT EXISTS members (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_name (name),
+  INDEX idx_category (category),
   INDEX idx_email (email),
   INDEX idx_role (role),
   INDEX idx_active_sort (is_active, sort_order),

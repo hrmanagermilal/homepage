@@ -10,6 +10,7 @@ use MillalHomepage\Utils\ResponseFormatter;
 use MillalHomepage\Routes\Handlers\AuthHandler;
 use MillalHomepage\Routes\Handlers\HeroHandler;
 use MillalHomepage\Routes\Handlers\HeroLinkHandler;
+use MillalHomepage\Routes\Handlers\QuickLinkHandler;
 use MillalHomepage\Routes\Handlers\SermonHandler;
 use MillalHomepage\Routes\Handlers\BulletinHandler;
 use MillalHomepage\Routes\Handlers\AnnouncementHandler;
@@ -23,6 +24,8 @@ use MillalHomepage\Routes\Handlers\UserHandler;
 use MillalHomepage\Routes\Handlers\TrackingHandler;
 use MillalHomepage\Routes\Handlers\AnalyticsHandler;
 use MillalHomepage\Routes\Handlers\LandingTitleHandler;
+use MillalHomepage\Routes\Handlers\SectionHandler;
+use MillalHomepage\Routes\Handlers\VisionStatementHandler;
 use MillalHomepage\Routes\Handlers\DocsHandler;
 
 class ApiRouter {
@@ -68,6 +71,10 @@ class ApiRouter {
 
             case 'hero-links':
                 (new HeroLinkHandler($method))->handle($id, $action);
+                break;
+
+            case 'quick-links':
+                (new QuickLinkHandler($method))->handle($id, $action);
                 break;
 
             case 'sermons':
@@ -120,6 +127,14 @@ class ApiRouter {
 
             case 'landing-titles':
                 (new LandingTitleHandler($method))->handle($id, $action);
+                break;
+
+            case 'sections':
+                (new SectionHandler($method))->handle($id, $action);
+                break;
+
+            case 'vision-statements':
+                (new VisionStatementHandler($method))->handle($id, $action);
                 break;
 
             case 'docs':
