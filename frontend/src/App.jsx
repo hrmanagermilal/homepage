@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, CircularProgress, Stack } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { api } from "./api/client";
 import Header from "./components/Header";
 import LandingPage from "./components/LandingPage";
@@ -24,8 +24,8 @@ const NEXTGEN_PAGE_TITLES = {
 };
 
 export default function App() {
-  const currentPath = window.location.pathname;
-  const isIntroductionPage = window.location.pathname.startsWith("/introduction");
+  const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
+  const isIntroductionPage = currentPath.startsWith("/introduction");
   const isMinistryPage = currentPath.startsWith("/ministry");
   const isOnlineGivingPage = currentPath.startsWith("/online-giving");
   const isNoticeViewPage = /^\/news\/notice\/\d+$/.test(currentPath);
@@ -49,6 +49,17 @@ export default function App() {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const syncPath = () => setCurrentPath(window.location.pathname);
+    window.addEventListener("popstate", syncPath);
+    window.addEventListener("locationchange", syncPath);
+
+    return () => {
+      window.removeEventListener("popstate", syncPath);
+      window.removeEventListener("locationchange", syncPath);
+    };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -136,9 +147,9 @@ export default function App() {
       <Header quickLinks={quickLinks} landingTitles={landingTitles} />
 
       {loading ? (
-        <Stack alignItems="center" py={8}>
+        <div className="app-loading-overlay" aria-live="polite" aria-busy="true">
           <CircularProgress />
-        </Stack>
+        </div>
       ) : null}
 
       {isIntroductionPage ? (

@@ -4,6 +4,7 @@ import "./css/NoticePage.css";
 import NoticeSubVisual from "./notice_components/NoticeSubVisual";
 import NoticeTable from "./notice_components/NoticeTable";
 import NoticeSearch from "./notice_components/NoticeSearch";
+import NoticePagination from "./notice_components/NoticePagination";
 
 const NOTICE_DATA = [
   {
@@ -88,9 +89,12 @@ const NOTICE_DATA = [
   },
 ];
 
+const ITEMS_PER_PAGE = 8;
+
 export default function NoticePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("newest"); // newest, oldest, views
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredData = useMemo(() => {
     return NOTICE_DATA.filter((item) =>
@@ -113,6 +117,23 @@ export default function NoticePage() {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (value) => {
+    setSortOrder(value);
+    setCurrentPage(1);
+  };
+
+  const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
+  const paginatedData = useMemo(() => {
+    const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+    return sortedData.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  }, [sortedData, currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    document.getElementById("content")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleRowClick = (id) => {
@@ -129,23 +150,25 @@ export default function NoticePage() {
               <div className="notice-count">
                 총 <strong>{filteredData.length}</strong>개
               </div>
-              <div className="notice-sort">
-                <select
-                  className="notice-sort__select"
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value)}
-                  aria-label="정렬 순서"
-                >
-                  <option value="newest">최신순</option>
-                  <option value="oldest">오래된순</option>
-                  <option value="views">조회순</option>
-                </select>
+              <div className="notice-controls">
+                <div className="notice-sort">
+                  <select
+                    className="notice-sort__select"
+                    value={sortOrder}
+                    onChange={(e) => handleSortChange(e.target.value)}
+                    aria-label="정렬 순서"
+                  >
+                    <option value="newest">최신순</option>
+                    <option value="oldest">오래된순</option>
+                    <option value="views">조회순</option>
+                  </select>
+                </div>
+                <NoticeSearch onSearch={handleSearch} />
               </div>
             </div>
 
-            <NoticeSearch onSearch={handleSearch} />
-
-            <NoticeTable notices={sortedData} onRowClick={handleRowClick} />
+            <NoticeTable notices={paginatedData} onRowClick={handleRowClick} />
+            <NoticePagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </div>
         </section>
       </div>

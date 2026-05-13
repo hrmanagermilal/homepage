@@ -99,6 +99,39 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     }
   };
 
+  const handleInternalLinkClick = useCallback((e) => {
+    const link = e.target?.closest?.("a[href]");
+    if (!link) return;
+
+    const href = link.getAttribute("href") || "";
+    if (!href.startsWith("/")) return;
+    if (link.target && link.target !== "_self") return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+    const nextUrl = new URL(href, window.location.origin);
+    if (nextUrl.origin !== window.location.origin) return;
+
+    e.preventDefault();
+
+    const nextPath = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (nextPath === currentPath) {
+      if (nextUrl.hash) {
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      }
+      setFullMenuOpen(false);
+      return;
+    }
+
+    window.history.pushState({}, "", nextPath);
+    window.dispatchEvent(new Event("locationchange"));
+    if (nextUrl.hash) {
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    }
+    setFullMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
   const handleFullMenuItemEnter = useCallback((idx) => {
     setFullMenuHoveredIdx(idx);
     if (!gnbRef.current || !itemRefs.current[idx]) return;
@@ -125,7 +158,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
   }, [fullMenuOpen, handleFullMenuItemEnter]);
 
   return (
-    <>
+    <div onClickCapture={handleInternalLinkClick}>
       <header className="site-header" role="banner">
         <h1 id="site-title" className="sound-only">밀알교회</h1>
         <div className="site-header__inner">
@@ -330,6 +363,6 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
