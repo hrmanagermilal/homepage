@@ -56,19 +56,6 @@ export default function MinistryYangyuk() {
 
   return (
     <section className="ministry">
-      <div className="wrap">
-        <div className="ministry-banner">
-          <div className="ministry-banner__bg" aria-hidden="true">
-            <img src="/images/sub/03-ministry/ministry-yanguk-bg.jpg" alt="" />
-            <div className="ministry-banner__overlay" />
-          </div>
-          <div className="ministry-banner__cont">
-            <p className="ministry-banner__label">양육</p>
-            <h3 className="ministry-banner__title">우리는 밀알 공동체입니다.</h3>
-          </div>
-        </div>
-      </div>
-
       <div className="wrap-narrow">
         <div className="ministry-faq">
           {FAQ_ITEMS.map((item, idx) => {
