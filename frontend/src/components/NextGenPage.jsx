@@ -8,8 +8,7 @@ const NEXTGEN_LNB_ITEMS = [
   { label: "EM 청소년부", href: "/nextgen/em-youth" },
   { label: "아동부", href: "/nextgen/children" },
   { label: "유치부", href: "/nextgen/kindergarten" },
-  { label: "유아부", href: "/nextgen/preschool" },
-  { label: "영아부", href: "/nextgen/infants" },
+  { label: "영유아부", href: "/nextgen/infants-toddlers" },
 ];
 
 const DEPARTMENT_CONTENT = {
@@ -105,46 +104,36 @@ const DEPARTMENT_CONTENT = {
     kakaoLabel: "유치부 카카오톡 채널 추가하기",
     photoAlt: "유치부 담당 교역자",
   },
-  "유아부": {
-    headingTitle: "유아부, 사랑 안에서 첫 걸음을",
+  "영유아부": {
+    headingTitle: "영유아부, 사랑 안에서 첫 걸음을",
     headingSub: "부모와 교사가 함께 아이들의 신앙 첫 걸음을 따뜻하게 동행합니다.",
     worshipTime: "주일 오전 11시",
-    worshipLocation: "밀알교회 유아부실",
+    worshipLocation: "밀알교회 영유아부실",
     pastorName: "주은지 전도사",
     pastorEmail: "nextgen@milalchurch.com",
-    noticeTitle: "유아부 프로그램",
-    noticeDescription: "월간 프로그램과 양육 안내자료를 다운로드하세요.",
-    noticeButtonLabel: "자료 다운로드",
-    noticeButtonHref: "#",
-    pastorPhoto: "/images/sub/01-introduction/minister-13.jpg",
-    kakaoLink: "https://pf.kakao.com/_xdqzRK",
-    kakaoLabel: "유아부 카카오톡 채널 추가하기",
-    photoAlt: "유아부 담당 교역자",
-  },
-  "영아부": {
-    headingTitle: "영아부, 가정과 함께 드리는 예배",
-    headingSub: "가장 어린 다음세대가 예배의 기쁨을 경험하도록 부모와 교회가 함께 섬깁니다.",
-    worshipTime: "주일 오전 11시",
-    worshipLocation: "밀알교회 영아부실",
-    pastorName: "주은지 전도사",
-    pastorEmail: "nextgen@milalchurch.com",
-    pastorPhoto: "/images/sub/01-introduction/minister-13.jpg",
-    kakaoLink: "https://pf.kakao.com/_xdqzRK",
-    kakaoLabel: "영아부 카카오톡 채널 추가하기",
-    photoAlt: "영아부 담당 교역자",
-    noticeTitle: "영아부 프로그램",
+    noticeTitle: "영유아부 프로그램",
     noticeDescription: "월간 프로그램과 부모 양육 안내자료를 다운로드하세요.",
     noticeButtonLabel: "자료 다운로드",
     noticeButtonHref: "#",
+    pastorPhoto: "/images/sub/01-introduction/minister-13.jpg",
+    kakaoLink: "https://pf.kakao.com/_xdqzRK",
+    kakaoLabel: "영유아부 카카오톡 채널 추가하기",
+    photoAlt: "영유아부 담당 교역자",
   },
 };
 
 
 function SubVisual({ title }) {
+  const isYoungAdults = title === "청년부";
+  const isKmOrEm = title === "KM 청소년부" || title === "EM 청소년부";
+  const isChildren = title === "아동부";
+  const isKindergarten = title === "유치부";
+  const isInfantToddler = title === "영유아부";
+  const bgClass = isYoungAdults ? "nextgen-bg-young" : isKmOrEm ? "nextgen-bg-youth" : isChildren ? "nextgen-bg-children" : isKindergarten ? "nextgen-bg-kindergarten" : isInfantToddler ? "nextgen-bg-infant" : "nextgen-bg";
   return (
     <section className="sub-visual" aria-label="다음세대 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        <figure className="sub-visual__bg-img nextgen-bg" />
+        <figure className={`sub-visual__bg-img ${bgClass}`} />
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />

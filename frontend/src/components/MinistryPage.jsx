@@ -35,10 +35,17 @@ function getKeyFromHash(hash) {
 }
 
 function SubVisual({ title }) {
+  const isDaniel = title === "다니엘한글문화학교";
+  const isGajeong = title === "가정";
+  const isYangyuk = title === "양육";
+  const isSeonkyo = title === "선교";
+  const isJanghak = title === "장학";
+  const isSogroup = title === "소그룹";
+  const bgClass = isDaniel ? "ministry-bg-daniel" : isGajeong ? "ministry-bg-gajeong" : isYangyuk ? "ministry-bg-yangyuk" : isSeonkyo ? "ministry-bg-seonkyo" : isJanghak ? "ministry-bg-janghak" : isSogroup ? "ministry-bg-sogroup" : "ministry-bg";
   return (
     <section className="sub-visual" aria-label="사역 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        <figure className="sub-visual__bg-img ministry-bg" />
+        <figure className={`sub-visual__bg-img ${bgClass}`} />
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />

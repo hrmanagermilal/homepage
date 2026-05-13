@@ -18,8 +18,7 @@ const NAV_ITEMS = [
       { label: "EM 청소년부", path: "/nextgen/em-youth" },
       { label: "아동부", path: "/nextgen/children" },
       { label: "유치부", path: "/nextgen/kindergarten" },
-      { label: "유아부", path: "/nextgen/preschool" },
-      { label: "영아부", path: "/nextgen/infants" },
+      { label: "영유아부", path: "/nextgen/infants" },
     ],
   },
   {
