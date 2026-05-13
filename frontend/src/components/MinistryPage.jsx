@@ -91,8 +91,25 @@ function SubLnb({ activeKey }) {
   );
 }
 
+const BG_IMAGES = [
+  "/images/sub/03-ministry/sub-visual-bg.jpg",
+  "/images/sub/visual/sub-visual0307.jpg",
+  "/images/sub/visual/sub-visual0303.jpg",
+  "/images/sub/visual/sub-visual0306.jpg",
+  "/images/sub/visual/sub-visual0207.jpg",
+  "/images/sub/visual/sub-visual0305.jpg",
+  "/images/sub/visual/sub-visual0302.jpg",
+];
+
 export default function MinistryPage() {
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
+
+  useEffect(() => {
+    BG_IMAGES.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   useEffect(() => {
     const onHashChange = () => {
