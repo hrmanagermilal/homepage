@@ -6,12 +6,20 @@ import IntroPartner from "./introduction_components/IntroPartner";
 import "./css/IntroductionPage.css";
 import "./css/SubPage.css";
 
-const LNB_ITEMS = [
-  { label: "교회비전", href: "#introduction01" },
-  { label: "담임목사", href: "#introduction02" },
-  { label: "섬기는 분들", href: "#introduction03" },
-  { label: "함께하는 교회", href: "#introduction04" },
-];
+const LNB_ITEMS = {
+  kr: [
+    { label: "교회비전", href: "#introduction01" },
+    { label: "담임목사", href: "#introduction02" },
+    { label: "섬기는 분들", href: "#introduction03" },
+    { label: "함께하는 교회", href: "#introduction04" },
+  ],
+  en: [
+    { label: "Church Vision", href: "#introduction01" },
+    { label: "Senior Pastor", href: "#introduction02" },
+    { label: "Serving Team", href: "#introduction03" },
+    { label: "Partner Churches", href: "#introduction04" },
+  ],
+};
 
 const HERO_COPY = {
   kr: {
@@ -73,11 +81,13 @@ function SubVisual({ heroLanguage, setHeroLanguage }) {
   );
 }
 
-function SubLnb() {
+function SubLnb({ heroLanguage }) {
+  const items = LNB_ITEMS[heroLanguage] || LNB_ITEMS.kr;
+
   return (
     <div className="lnb-wrap">
-      <nav className="lnb" aria-label="Introduction 메뉴">
-        {LNB_ITEMS.map((item, idx) => (
+      <nav className="lnb" aria-label={heroLanguage === "en" ? "Introduction section tabs" : "Introduction 메뉴"}>
+        {items.map((item, idx) => (
           <a key={idx} className={`lnb__btn${idx === 0 ? " is-active" : ""}${idx > 0 ? " lnb__btn--sep" : ""}`}
              href={item.href}>
             {item.label}
@@ -179,7 +189,7 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
     <div ref={containerRef}>
       <SubVisual heroLanguage={heroLanguage} setHeroLanguage={setHeroLanguage} />
       <div className="sub-content" id="content">
-        <SubLnb />
+        <SubLnb heroLanguage={heroLanguage} />
         <div data-snap-section="true">
           <IntroVision visionStatements={visionStatements} language={heroLanguage} />
         </div>
