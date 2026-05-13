@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 import Hero from "./landing_components/Hero";
 import Sermon from "./landing_components/Sermon";
-import ServiceTime from "./ServiceTime";
+import ServiceTime from "./landing_components/ServiceTime";
 import Jubo from "./landing_components/Jubo";
 import Announcement from "./landing_components/Announcement";
 import Contacts from "./Contacts";

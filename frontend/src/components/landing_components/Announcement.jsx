@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback } from "react";
-import "../css/Announcement.css";
+import { useEffect, useRef, useCallback, useState } from "react";
+import "./css/Announcement.css";
 
 const FALLBACK_NEWS = [
   { title: "제3회 가스펠오락관 - 암송축제편", image: "/images/main/news-thumb-01.jpg", link: "#", btnText: "신청하러 가기" },
@@ -32,6 +32,11 @@ export default function Announcement({ items = [], section = null }) {
   const trackRef = useRef(null);
   const sectionRef = useRef(null);
   const stateRef = useRef({ current: 0, total: cards.length, animating: false, timer: null, dragging: false, hasDragged: false, startX: 0, startSX: 0 });
+  const [selectedCard, setSelectedCard] = useState(null);
+  // Keep a stable ref so the DOM event listener can access current values
+  const cardsRef = useRef(cards);
+  const setSelectedCardRef = useRef(setSelectedCard);
+  useEffect(() => { cardsRef.current = cards; }, [cards]);
 
   const getStep = useCallback(() => {
     const track = trackRef.current;
@@ -146,7 +151,14 @@ export default function Announcement({ items = [], section = null }) {
     const onTouchStart = (e) => swipeStart(e.touches[0].clientX);
     const onTouchMove  = (e) => swipeMove(e.touches[0].clientX);
     const onTouchEnd   = (e) => swipeEnd(e.changedTouches[0].clientX);
-    const onClickCapture = (e) => { if (s.hasDragged) { e.preventDefault(); s.hasDragged = false; } };
+    const onClickCapture = (e) => {
+      if (s.hasDragged) { e.preventDefault(); e.stopPropagation(); s.hasDragged = false; return; }
+      // Event delegation: open popup for whichever card (original or clone) was clicked
+      const cardEl = e.target.closest(".news-card");
+      if (!cardEl) return;
+      const idx = parseInt(cardEl.dataset.cardIdx, 10);
+      if (!isNaN(idx)) setSelectedCardRef.current(cardsRef.current[idx]);
+    };
     const onDragStart = (e) => e.preventDefault();
 
     track.addEventListener("mousedown",   onMouseDown);
@@ -177,7 +189,20 @@ export default function Announcement({ items = [], section = null }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Lock body scroll and handle Escape key when modal is open
+  useEffect(() => {
+    if (!selectedCard) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => { if (e.key === "Escape") setSelectedCard(null); };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [selectedCard]);
+
   return (
+    <>
     <div className="main-bottom-bg">
       <div className="main-bottom-bg__texture" aria-hidden="true">
         <img src="/images/main/news-bg-texture.jpg" alt="" />
@@ -220,7 +245,7 @@ export default function Announcement({ items = [], section = null }) {
           <div className="main-news__slider">
             <div className="main-news__track" id="newsTrack" ref={trackRef}>
               {cards.map((card, idx) => (
-                <article className="news-card" key={`${card.title}-${idx}`}>
+                <article className="news-card" key={`${card.title}-${idx}`} data-card-idx={idx} style={{ cursor: "pointer" }}>
                   <div className="news-card__thumb"><img src={card.image} alt={card.title} /></div>
                   <div className="news-card__body">
                     <h3 data-heading="xl">{card.title}</h3>
@@ -233,6 +258,29 @@ export default function Announcement({ items = [], section = null }) {
         </div>
       </section>
     </div>
+
+    {/* 뉴스카드 팝업 */}
+    {selectedCard && (
+      <div className="news-card-modal is-open" role="dialog" aria-modal="true" aria-label="뉴스카드 크게 보기">
+        <div className="news-card-modal__overlay" onClick={() => setSelectedCard(null)} />
+        <div className="news-card-modal__content">
+          <button className="news-card-modal__close" type="button" aria-label="닫기" onClick={() => setSelectedCard(null)}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L15 15M15 1L1 15" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </button>
+          <div className="news-card__inr">
+            <img className="news-card-modal__image" src={selectedCard.image} alt={selectedCard.title} />
+            <div className="news-card-modal__body">
+              <h3 className="news-card-modal__title">{selectedCard.title}</h3>
+              {selectedCard.btnText && (
+                <a className="news-card-modal__button" href={selectedCard.link}>{selectedCard.btnText}</a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
   );
 }
-

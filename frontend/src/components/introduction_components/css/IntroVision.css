@@ -1,0 +1,49 @@
+/* ══════════════════════════════════════
+ * intro-vision 교회비전
+ * ══════════════════════════════════════ */
+.intro-vision {padding: 0 0 140rem;}
+.intro-vision__head {margin-bottom: 60rem; text-align: center;}
+.intro-vision__cards {position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 74rem 60rem;}
+.vision-card {position: relative; display: flex; flex-direction: column; gap: 20rem; padding: 50rem 60rem 60rem; background: var(--bg-table); border-radius: 20rem;}
+.vision-card__title {color: var(--b-title); letter-spacing: -0.24rem;}
+.vision-card [data-list="dot"] > * {margin-bottom: 5rem;}
+.intro-vision__bg-ellipse {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 0;}
+.intro-vision__bg-ellipse img {display: block; width: 680rem; pointer-events: none; opacity: 0.06;}
+.intro-vision__circle {position: absolute; left: 50%; top: 50%; width: 216rem; aspect-ratio: 1/1; transform: translate(-50%, -50%);}
+.intro-vision__circle i {position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-radius: 100%; border: 1px solid var(--op-b10); opacity: 0; transform: scale(1); animation: introVisionCircle 3s ease-out infinite;}
+.intro-vision__circle i:nth-child(2) {animation-delay: 1s;}
+.intro-vision__circle i:nth-child(3) {animation-delay: 2s;}
+.intro-vision__box {position: absolute; left: 50%; top: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10rem; text-align: center; width: 216rem; aspect-ratio: 1/1; color: var(--w); border-radius: 100%; background: var(--c-primary); box-shadow: 0 10rem 20rem rgba(0,0,0,0.12); transform: translate(-50%, -50%);}
+.intro-vision__box img {width: 34rem; height: auto;}
+.intro-vision__box h6 {font-size: var(--font-27); font-weight: 700;}
+
+@keyframes introVisionCircle {
+  0%   {opacity: 0.45; transform: scale(1);}
+  100% {opacity: 0; transform: scale(3);}
+}
+
+@media (max-width: 1200px) {
+  .vision-card {padding: 40rem 40rem 50rem;}
+  .intro-vision__box {width: 190rem;}
+}
+@media (max-width: 1023px) {
+  .intro-vision__box {width: 140rem; gap: 5rem;}
+  .intro-vision__box img {width: 24rem;}
+  .intro-vision__box h6 {font-size: var(--font-24);}
+  .intro-vision__circle {width: 140rem;}
+  .intro-vision__head {margin-bottom: 40rem;}
+  .intro-vision {padding: 0 0 100rem;}
+  .intro-vision__cards {gap: 30rem 30rem;}
+}
+@media (max-width: 860px) {
+  .intro-vision__head {margin-bottom: 30rem;}
+  .vision-card {gap: 14rem;}
+}
+@media (max-width: 540px) {
+  .intro-vision {padding: 0 0 60rem;}
+  .intro-vision__head {margin-bottom: 20rem;}
+  .intro-vision__circle,
+  .intro-vision__box {display: none;}
+  .intro-vision__cards {gap: 10rem; grid-template-columns: 1fr;}
+  .vision-card {padding: 25rem 20rem; border-radius: 10rem; gap: 10rem;}
+}

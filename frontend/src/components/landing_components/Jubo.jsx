@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import "../css/Jubo.css";
+import "./css/Jubo.css";
 
 const FALLBACK_IMAGES = [
   "/images/main/weekly-bulletin-01.png",

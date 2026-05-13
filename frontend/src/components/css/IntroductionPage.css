@@ -1,0 +1,6 @@
+/* ══════════════════════════════════════
+ * Introduction page overrides
+ * ══════════════════════════════════════ */
+.intro-bg {
+  background-image: url(/images/sub/01-introduction/sub-visual-bg.jpg);
+}

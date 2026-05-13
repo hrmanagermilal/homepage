@@ -5,8 +5,9 @@ const NAV_ITEMS = [
     num: "01", label: "Introduction", path: "/introduction",
     subs: [
       { label: "교회비전", path: "/introduction#introduction01" },
-      { label: "섬기는 분들", path: "/introduction#introduction02" },
-      { label: "함께하는 교회", path: "/introduction#introduction03" },
+      { label: "담임목사", path: "/introduction#introduction02" },
+      { label: "섬기는 분들", path: "/introduction#introduction03" },
+      { label: "함께하는 교회", path: "/introduction#introduction04" },
     ],
   },
   {

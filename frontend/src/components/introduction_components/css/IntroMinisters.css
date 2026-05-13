@@ -1,0 +1,85 @@
+/* ══════════════════════════════════════
+ * intro-ministers 섬기는 분들
+ * ══════════════════════════════════════ */
+.intro-ministers {padding: 100rem 0; background: var(--bg-light);}
+.intro-ministers__head {display: flex; align-items: center; justify-content: space-between; margin-bottom: 50rem;}
+.intro-ministers__tab {height: 65rem; background: rgba(255,255,255,0.2);}
+.intro-ministers__grid {display: flex; flex-wrap: wrap; gap: 42rem;}
+.minister-card {flex: 0 0 calc((100% - 4 * 42rem) / 5); min-width: 0;}
+.minister-card:has(.minister-card__hover) {cursor: pointer;}
+.minister-card__thumb {position: relative; overflow: hidden; aspect-ratio: 382 / 460; border-radius: 20rem; background: var(--bg-table); border: 1px solid rgba(0,0,0,.005);}
+.minister-card__thumb img {position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
+.minister-card__hover {backdrop-filter: blur(7rem); display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; inset: 0; opacity: 0; background: var(--op-b50); transition: opacity 0.3s ease;}
+.minister-card__hover-btn {display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6rem; width: 100rem; height: 100rem; background: var(--c-secondary); border-radius: 50%; box-shadow: 10rem 10rem 10rem rgba(0,0,0,0.25);}
+.minister-card__hover-btn i {position: relative; display: block; width: 16rem; height: 16rem;}
+.minister-card__hover-btn i::before,
+.minister-card__hover-btn i::after {content: ""; position: absolute; left: 50%; top: 50%; width: 10rem; height: 2rem; background: var(--w); transform: translate(-50%, -50%);}
+.minister-card__hover-btn i::after {transform: translate(-50%, -50%) rotate(90deg);}
+.minister-card__hover-btn span {font-weight: 700; font-size: var(--font-xsm); line-height: 1.5; color: var(--w); white-space: nowrap;}
+.minister-card__body {margin-top: 18rem; text-align: center;}
+.minister-card__role {font-size: var(--font-default); font-weight: 700; line-height: 1.467; color: var(--c-secondary); margin-bottom: 2rem;}
+.minister-card__name {font-size: var(--font-22); font-weight: 700; line-height: 1.47; color: var(--b-title);}
+
+/* intro-panel tab panels */
+.intro-panel {display: none;}
+.intro-panel.is-active {display: block;}
+
+/* minister-modal */
+.minister-modal {position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: var(--margin); opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease;}
+.minister-modal.is-open {opacity: 1; visibility: visible;}
+.minister-modal__dim {position: absolute; inset: 0; background: rgba(0,0,0,0.5);}
+.minister-modal__box {position: relative; display: flex; gap: 40rem; width: 760rem; padding: 30rem; background: var(--w); border-radius: 20rem; box-shadow: 40rem 40rem 20rem rgba(0,0,0,0.1);}
+.minister-modal__close {position: absolute; right: 20rem; top: 20rem; width: 60rem; height: 60rem; background: none; border: none; cursor: pointer;}
+.minister-modal__close::before,
+.minister-modal__close::after {content: ""; position: absolute; left: 50%; top: 50%; width: 36rem; height: 2rem; background: #000;}
+.minister-modal__close::before {transform: translate(-50%, -50%) rotate(45deg);}
+.minister-modal__close::after {transform: translate(-50%, -50%) rotate(-45deg);}
+.minister-modal__photo {overflow: hidden; flex: 0 0 320rem; height: 385rem; border: 1px solid var(--op-b05); border-radius: 10rem; background: var(--bg-table);}
+.minister-modal__photo img {width: 100%; height: 100%; object-fit: cover;}
+.minister-modal__cont {display: flex; flex-direction: column; gap: 22rem; flex: 1; min-width: 0; padding: 20rem 0 0;}
+.minister-modal__head {display: flex; flex-direction: column; gap: 15rem;}
+.minister-modal__category {display: block; margin-bottom: 8rem; font-size: var(--font-default); font-weight: 700; line-height: 1.467; color: var(--c-secondary);}
+.minister-modal__name {font-size: var(--font-27); font-weight: 700; line-height: 1.185; letter-spacing: -0.27rem; color: var(--b-title);}
+.minister-modal__tags {display: flex; flex-wrap: wrap; gap: 5rem;}
+.minister-modal__tag {display: inline-flex; align-items: center; min-height: 30rem; padding: 4rem 8rem; border: 1px solid rgba(0,0,0,0.2); border-radius: 4rem; font-size: var(--font-xsm); line-height: 1.467; color: var(--b-default);}
+.minister-modal__email {display: inline-flex; align-items: center; font-size: var(--font-xsm); line-height: 1.467; color: var(--b-default); text-decoration: none;}
+.minister-modal__email::before {content: ""; display: block; flex-shrink: 0; filter: grayscale(1); opacity: .2; width: 18rem; height: 18rem; margin-right: 8rem; background: url(/images/main/icon-email.svg) no-repeat center / contain;}
+.minister-modal__divider {height: 1px; background: var(--op-b10);}
+.minister-modal__position {font-size: var(--font-default); line-height: 1.529; color: var(--b-default);}
+
+@media (hover: hover) and (pointer: fine) {
+  .minister-card:hover .minister-card__hover {opacity: 1;}
+}
+@media (max-width: 1480px) {
+  .minister-card {flex: 0 0 calc((100% - 3 * 42rem) / 4);}
+}
+@media (max-width: 1023px) {
+  .intro-ministers {padding: 80rem 0;}
+  .intro-ministers__head {flex-direction: column; align-items: flex-start; gap: 24rem; margin-bottom: 36rem;}
+  .intro-ministers__grid {gap: 40rem 24rem;}
+  .minister-card {flex: 0 0 calc((100% - 2 * 24rem) / 3);}
+  .minister-card__thumb {border-radius: 14rem;}
+  .minister-modal__box {width: min(760rem, 100%); gap: 28rem;}
+  .minister-modal__photo {flex-basis: 280rem; height: 340rem;}
+}
+@media (max-width: 860px) {
+  .intro-ministers__head {align-items: center;}
+}
+@media (max-width: 540px) {
+  .intro-ministers {padding: 60rem 0;}
+  .intro-ministers__head {gap: 16rem; margin-bottom: 28rem;}
+  .intro-ministers__grid {gap: 28rem 12rem;}
+  .intro-ministers__tab {height: 52rem;}
+  .minister-card {flex: 0 0 calc((100% - 12rem) / 2);}
+  .minister-card__thumb {border-radius: 10rem;}
+  .minister-card__hover-btn {width: 72rem; height: 72rem;}
+  .minister-card__hover-btn span {font-size: var(--font-xxsm);}
+  .minister-card__body {margin-top: 12rem;}
+  .minister-modal {padding: 0;}
+  .minister-modal__box {flex-direction: column; width: 100%; height: 100%; padding: 20rem; padding-bottom: 80rem; border-radius: 0;}
+  .minister-modal__close {right: auto; left: 0; top: auto; bottom: 0; display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 52rem; background: var(--bg-dark);}
+  .minister-modal__close::before {display: none;}
+  .minister-modal__close::after {content: '닫기'; position: relative; left: auto; top: auto; width: auto; height: auto; font-weight: 500; background: transparent; color: var(--w); transform: none !important;}
+  .minister-modal__photo {flex: none; width: 100%; height: auto; aspect-ratio: 319.746 / 385;}
+  .minister-modal__cont {padding: 0;}
+}
