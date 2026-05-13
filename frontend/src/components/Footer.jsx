@@ -11,8 +11,8 @@ const FOOTER_NAV = [
     title: "다음세대",
     links: [
       { label: "청년부", path: "/nextgen/young-adults" },
-      { label: "KM 청년부", path: "/nextgen/km-youth" },
-      { label: "EM 청년부", path: "/nextgen/em-youth" },
+      { label: "KM 청소년부", path: "/nextgen/km-youth" },
+      { label: "EM 청소년부", path: "/nextgen/em-youth" },
       { label: "아동부", path: "/nextgen/children" },
     ],
   },
