@@ -38,8 +38,8 @@ const SUBTITLE_BY_KEY = {
   ministry03: "당신의 첫 제자는 당신의 자녀입니다.",
   ministry04: "복음을 들고 세상으로",
   ministry05: "다음세대를 세우는 믿음의 투자",
-  ministry08: "교회같은 가정을 세우는 복음교육",
-  ministry06: "언어와 문화를 잇는 배움의 자리",
+  ministry08: "체계적인 성경적 가치관 확립",
+  ministry06: "하나님의 자녀가 하나님의 자녀에게",
   ministry07: "도시를 사랑으로 섬기는 손길",
 };
 
