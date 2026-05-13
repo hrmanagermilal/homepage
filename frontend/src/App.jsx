@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { api } from "./api/client";
 import Header from "./components/Header";
@@ -50,16 +50,41 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Hashes on these paths are tab selectors, not scroll anchors
+  const isTabHashPage = useCallback((path) => {
+    return path.startsWith("/ministry") || path.startsWith("/nextgen");
+  }, []);
+
+  const scrollToHash = useCallback(() => {
+    if (isTabHashPage(window.location.pathname)) return;
+    if (sessionStorage.getItem("goToContacts") === "1") {
+      sessionStorage.removeItem("goToContacts");
+      document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    const hashTarget = window.location.hash?.replace("#", "");
+    if (hashTarget) {
+      // Defer to allow new page component to mount first
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.getElementById(hashTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const syncPath = () => setCurrentPath(window.location.pathname);
     window.addEventListener("popstate", syncPath);
     window.addEventListener("locationchange", syncPath);
+    window.addEventListener("hashchange", scrollToHash);
 
     return () => {
       window.removeEventListener("popstate", syncPath);
       window.removeEventListener("locationchange", syncPath);
+      window.removeEventListener("hashchange", scrollToHash);
     };
-  }, []);
+  }, [scrollToHash]);
 
   useEffect(() => {
     let mounted = true;
@@ -126,21 +151,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (loading) {
-      return;
-    }
+    if (loading) return;
+    scrollToHash();
+  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (sessionStorage.getItem("goToContacts") === "1") {
-      sessionStorage.removeItem("goToContacts");
-      document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-
-    const hashTarget = window.location.hash?.replace("#", "");
-    if (hashTarget) {
-      document.getElementById(hashTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [loading]);
+  useEffect(() => {
+    if (loading) return;
+    scrollToHash();
+  }, [currentPath]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>

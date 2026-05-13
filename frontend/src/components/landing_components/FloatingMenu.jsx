@@ -15,7 +15,7 @@ export default function FloatingMenu() {
           </a>
         </li>
         <li>
-          <a className="quick-menu__btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="다니엘한글문화학교 바로가기">
+          <a className="quick-menu__btn" href="/ministry#ministry06" aria-label="다니엘한글문화학교 바로가기">
             <i><img src="/images/common/ic-quick03.png" alt="" /></i>
             <span>다니엘한글문화학교</span>
           </a>

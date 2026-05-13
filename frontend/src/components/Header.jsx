@@ -66,7 +66,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     const playOnGesture = (e) => {
       if (e.target?.closest?.(".site-header__volume")) return;
       if (!audio.paused) return;
-      audio.play().then(() => setBgmPlaying(true)).catch(() => {});
+      audio.play().then(() => setBgmPlaying(true)).catch(() => { });
       document.removeEventListener("pointerdown", playOnGesture);
       document.removeEventListener("keydown", playOnGesture);
     };
@@ -92,7 +92,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     const audio = audioRef.current;
     if (!audio) return;
     if (audio.paused) {
-      audio.play().then(() => setBgmPlaying(true)).catch(() => {});
+      audio.play().then(() => setBgmPlaying(true)).catch(() => { });
     } else {
       audio.pause();
       setBgmPlaying(false);
@@ -342,7 +342,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                     </a>
                   </li>
                   <li>
-                    <a className="full-menu__shortcut" href="#" target="_blank" rel="noopener noreferrer">
+                    <a className="full-menu__shortcut" href="/ministry#ministry06" target="_blank" rel="noopener noreferrer">
                       <span className="full-menu__shortcut-icon">
                         <img src="/images/common/ic-fullmenu02.svg" alt="" aria-hidden="true" />
                       </span>
@@ -355,6 +355,14 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                         <img src="/images/common/ic-fullmenu03.png" alt="" aria-hidden="true" />
                       </span>
                       <span className="full-menu__shortcut-label">러브 토론토 바로가기</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a className="full-menu__shortcut" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer">
+                      <span className="full-menu__shortcut-icon">
+                        <img src="/images/common/ic-quick01.svg" alt="" aria-hidden="true" />
+                      </span>
+                      <span className="full-menu__shortcut-label">밀알도서관 바로가기</span>
                     </a>
                   </li>
                 </ul>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import "./css/SubPage.css";
 import "./css/ObituaryViewPage.css";
 import ObituaryViewSubVisual from "./obituary_components/ObituaryViewSubVisual";
@@ -50,22 +50,32 @@ const OBITUARY_DATA = [
   },
 ];
 
+function getObituaryIdFromPath() {
+  const match = window.location.pathname.match(/\/news\/obituary\/(\d+)/);
+  return match ? Number(match[1]) : 1;
+}
+
+function getObituaryIndexById(id) {
+  const index = OBITUARY_DATA.findIndex((item) => item.id === id);
+  return index !== -1 ? index : 0;
+}
+
 export default function ObituaryViewPage() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(() => getObituaryIndexById(getObituaryIdFromPath()));
 
-  // Extract ID from URL path
-  const idFromPath = useMemo(() => {
-    const match = window.location.pathname.match(/\/news\/obituary\/(\d+)/);
-    return match ? Number(match[1]) : 1;
-  }, []);
-
-  // Initialize current index based on URL ID
   useEffect(() => {
-    const index = OBITUARY_DATA.findIndex((item) => item.id === idFromPath);
-    if (index !== -1) {
-      setCurrentIndex(index);
-    }
-  }, [idFromPath]);
+    const syncIndexFromPath = () => {
+      setCurrentIndex(getObituaryIndexById(getObituaryIdFromPath()));
+    };
+
+    window.addEventListener("popstate", syncIndexFromPath);
+    window.addEventListener("locationchange", syncIndexFromPath);
+
+    return () => {
+      window.removeEventListener("popstate", syncIndexFromPath);
+      window.removeEventListener("locationchange", syncIndexFromPath);
+    };
+  }, []);
 
   useEffect(() => {
     const el = document.getElementById("content");
@@ -80,22 +90,28 @@ export default function ObituaryViewPage() {
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < OBITUARY_DATA.length - 1;
 
+  const navigateToObituary = (id) => {
+    window.history.pushState({}, "", `/news/obituary/${id}`);
+    window.dispatchEvent(new Event("locationchange"));
+  };
+
   const handlePrevClick = () => {
     if (hasPrev) {
       const prevId = OBITUARY_DATA[currentIndex - 1].id;
-      window.location.pathname = `/news/obituary/${prevId}`;
+      navigateToObituary(prevId);
     }
   };
 
   const handleNextClick = () => {
     if (hasNext) {
       const nextId = OBITUARY_DATA[currentIndex + 1].id;
-      window.location.pathname = `/news/obituary/${nextId}`;
+      navigateToObituary(nextId);
     }
   };
 
   const handleListClick = () => {
-    window.location.href = "/news/obituary";
+    window.history.pushState({}, "", "/news/obituary");
+    window.dispatchEvent(new Event("locationchange"));
   };
 
   return (
