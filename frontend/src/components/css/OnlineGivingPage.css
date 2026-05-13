@@ -1,0 +1,558 @@
+/* ══════════════════════════════════════
+ * Online Giving Page - Donation
+ * ══════════════════════════════════════ */
+
+.sub-visual__bg-img.donation-bg {
+  background-image: url(/images/sub/05-online-donation/sub-visual-bg.jpg);
+}
+
+.donation {
+  padding: 50rem 0 120rem;
+}
+
+/* 헤딩 */
+.donation-heading {
+  margin-bottom: 40rem;
+  text-align: center;
+}
+
+/* 안내 배너 */
+.donation-notice {
+  align-items: center;
+  background: rgba(58, 71, 43, 0.05);
+  border: 1px solid var(--c-primary);
+  border-radius: 10rem;
+  display: flex;
+  gap: 8rem;
+  margin: 0 auto 50rem;
+  max-width: 100%;
+  padding: 12rem 22rem;
+  width: fit-content;
+}
+
+.donation-notice__icon {
+  align-items: center;
+  border: 1.5px solid var(--c-primary);
+  border-radius: 50%;
+  color: var(--c-primary);
+  display: flex;
+  flex-shrink: 0;
+  font-size: var(--font-11);
+  font-weight: 800;
+  height: 17rem;
+  justify-content: center;
+  line-height: 1;
+  width: 17rem;
+}
+
+.donation-notice__text {
+  color: var(--c-primary);
+  font-size: var(--font-sm);
+  line-height: 27rem;
+  white-space: nowrap;
+}
+
+.donation-notice__text strong {
+  font-weight: 600;
+}
+
+/* 카드 그리드 */
+.donation-cards {
+  display: flex;
+  gap: 31rem;
+  margin-bottom: 60rem;
+}
+
+.donation-card {
+  align-items: center;
+  background: var(--w);
+  border-radius: 20rem;
+  box-shadow: 0 10rem 7.5rem var(--op-b03);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 40rem;
+  min-width: 0;
+  padding: 70rem 20rem;
+}
+
+.donation-card__logo {
+  align-items: center;
+  border-radius: 12rem;
+  display: flex;
+  flex-shrink: 0;
+  height: 100rem;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.donation-card__logo img {
+  display: block;
+  height: 100%;
+}
+
+.donation-card__body {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10rem;
+  text-align: center;
+}
+
+.donation-card__title {
+  color: var(--b-title);
+  font-size: var(--font-24);
+  font-weight: 700;
+  letter-spacing: -0.24rem;
+  line-height: 36rem;
+  white-space: nowrap;
+}
+
+.donation-card__desc {
+  color: var(--b-default);
+  font-size: var(--font-default);
+  text-align: center;
+}
+
+.donation-card__btns {
+  display: flex;
+  gap: 5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.donation-card__btns .btn-basic {
+  min-width: 135rem;
+}
+
+/* 정보 섹션 */
+.donation-info {
+  display: flex;
+  padding: 40rem 0;
+  border-top: 2rem solid #000;
+  border-bottom: 1px solid var(--op-b10);
+}
+
+.donation-info__col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 20rem;
+  min-width: 0;
+  padding: 10rem 0;
+}
+
+.donation-info__col--right {
+  align-items: flex-start;
+  border-left: 1px solid var(--op-b10);
+  padding-left: 50rem;
+}
+
+.donation-info__title {
+  color: var(--b-title);
+  font-size: var(--font-22);
+  font-weight: 700;
+  letter-spacing: -0.22rem;
+  line-height: 32rem;
+}
+
+/* 수표 정보 */
+.donation-info__payable-main {
+  color: var(--b-default);
+  font-size: var(--font-default);
+  font-weight: 600;
+  line-height: 25rem;
+}
+
+.donation-info__payable-addr {
+  color: var(--b-default);
+  font-size: var(--font-sm);
+  font-style: normal;
+  margin-top: 10rem;
+}
+
+/* 은행 로고 박스 */
+.donation-info__bank-box {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--op-b05);
+  border-radius: 5rem;
+}
+
+.donation-info__bank-box img {
+  width: 178rem;
+}
+
+/* 계좌 정보 */
+.donation-info__account {
+  display: flex;
+  flex-direction: column;
+  gap: 10rem;
+}
+
+.donation-info__account-row {
+  align-items: center;
+  display: flex;
+  gap: 10rem;
+  min-height: 22rem;
+}
+
+.donation-info__account-row dt {
+  align-items: center;
+  color: var(--b-default);
+  display: flex;
+  flex-shrink: 0;
+  font-size: var(--font-xsm);
+  font-weight: 600;
+  gap: 8rem;
+  line-height: 22rem;
+  min-width: 120rem;
+}
+
+.donation-info__account-row dt::before {
+  background: var(--c-secondary);
+  border-radius: 50%;
+  content: "";
+  display: block;
+  flex-shrink: 0;
+  height: 4rem;
+  width: 4rem;
+}
+
+.donation-info__account-sep {
+  background: var(--op-b10);
+  display: block;
+  flex-shrink: 0;
+  height: 15rem;
+  width: 1px;
+}
+
+.donation-info__account-row dd {
+  color: var(--b-default);
+  font-size: var(--font-xsm);
+}
+
+/* 유의사항 모달 */
+.donation-modal {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  opacity: 0;
+  padding: 30rem var(--margin);
+  pointer-events: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: opacity 0.25s ease;
+  z-index: 1000;
+}
+
+.donation-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.donation-modal__box {
+  align-items: center;
+  background: var(--w);
+  border-radius: 20rem;
+  box-shadow: 40rem 40rem 20rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  min-height: 462rem;
+  padding: 80rem 40rem 40rem;
+  position: relative;
+  text-align: center;
+  width: 511rem;
+}
+
+.donation-modal__close {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  height: 60rem;
+  padding: 0;
+  position: absolute;
+  right: 20rem;
+  top: 20rem;
+  width: 60rem;
+}
+
+.donation-modal__close::before,
+.donation-modal__close::after {
+  background: #000;
+  content: "";
+  height: 2rem;
+  left: 12rem;
+  position: absolute;
+  top: 29rem;
+  width: 36rem;
+}
+
+.donation-modal__close::before {
+  transform: rotate(45deg);
+}
+
+.donation-modal__close::after {
+  transform: rotate(-45deg);
+}
+
+.donation-modal__icon {
+  align-items: center;
+  background: #becfaa;
+  border-radius: 50%;
+  color: var(--w);
+  display: flex;
+  font-size: var(--font-24);
+  font-style: italic;
+  font-weight: 800;
+  height: 50rem;
+  justify-content: center;
+  line-height: 1;
+  margin-bottom: 30rem;
+  width: 50rem;
+}
+
+.donation-modal__icon::before {
+  content: "";
+  width: 14rem;
+  height: 27rem;
+  background: url(/images/common/ic-notice.svg) no-repeat center / contain;
+}
+
+.donation-modal__title {
+  color: var(--b-title);
+  font-size: var(--font-24);
+  font-weight: 700;
+  letter-spacing: -0.24rem;
+  line-height: 36rem;
+  margin-bottom: 10rem;
+}
+
+.donation-modal__desc {
+  color: var(--b-default);
+  font-size: var(--font-default);
+  line-height: 26rem;
+  margin-bottom: 46rem;
+  white-space: nowrap;
+}
+
+.donation-modal__btn {
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .donation {
+    padding: 60rem 0 100rem;
+  }
+
+  .donation-cards {
+    gap: 20rem;
+  }
+
+  .donation-card {
+    border-radius: 15rem;
+    padding: 50rem 20rem;
+  }
+
+  .donation-card__title {
+    font-size: var(--font-22);
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+@media (max-width: 860px) {
+  .donation-heading {
+    margin-bottom: 30rem;
+  }
+
+  .donation-notice {
+    width: 100%;
+    margin-bottom: 40rem;
+  }
+
+  .donation-notice__text {
+    white-space: normal;
+  }
+
+  .donation-card {
+    gap: 30rem;
+    margin-bottom: 80rem;
+    border-radius: 10rem;
+  }
+
+  .donation-card__body {
+    gap: 5rem;
+  }
+
+  .donation-card__logo {
+    height: 80rem;
+  }
+
+  .donation-info {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .donation-info__col {
+    padding: 40rem 0;
+  }
+
+  .donation-info__col--right {
+    border-left: none;
+    border-top: 1px solid var(--op-b10);
+    padding-left: 0;
+    padding-top: 30rem;
+    margin-top: -10rem;
+  }
+
+  .donation-info__account-row dt {
+    min-width: 110rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .donation {
+    padding: 40rem 0 60rem;
+  }
+
+  .donation-notice {
+    flex-direction: column;
+    justify-content: center;
+    padding: 20rem 20rem;
+    gap: 8rem;
+    margin-bottom: 30rem;
+  }
+
+  .donation-notice__text {
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .donation-heading {
+    margin-bottom: 20rem;
+  }
+
+  .donation-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10rem;
+    margin-bottom: 50rem;
+  }
+
+  .donation-card {
+    margin-bottom: 0;
+    gap: 24rem;
+  }
+
+  .donation-card .btn-basic {
+    margin-top: 5rem;
+  }
+
+  .donation-card__desc {
+    font-size: var(--font-19);
+    line-height: 22rem;
+  }
+
+  .donation-card__logo {
+    height: 65rem;
+    border-radius: 5rem;
+  }
+
+  .donation-info__col {
+    gap: 12rem;
+    padding: 25rem 0;
+  }
+
+  .donation-info__account {
+    gap: 15rem;
+  }
+
+  .donation-info__account-row {
+    flex-wrap: wrap;
+    gap: 4rem;
+  }
+
+  .donation-info__account-sep {
+    display: none;
+  }
+
+  .donation-info__account-row dd {
+    padding-left: 12rem;
+    width: 100%;
+  }
+
+  .donation-info__payable-addr {
+    margin-top: 6rem;
+  }
+
+  .donation-modal {
+    padding: 0;
+  }
+
+  .donation-modal__box {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    padding: 20rem;
+    padding-bottom: 80rem;
+    border-radius: 0;
+  }
+
+  .donation-modal__title {
+    margin-bottom: 8rem;
+    line-height: 1.6;
+  }
+
+  .donation-modal__icon {
+    width: 40rem;
+    height: 40rem;
+    margin-bottom: 25rem;
+  }
+
+  .donation-modal__icon::before {
+    width: 10rem;
+    height: 24rem;
+  }
+
+  .donation-modal__desc {
+    white-space: normal;
+    line-height: 1.6;
+    margin-bottom: 30rem;
+  }
+
+  .donation-modal__close {
+    right: auto;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 52rem;
+    background: var(--bg-dark);
+  }
+
+  .donation-modal__close::before {
+    display: none;
+  }
+
+  .donation-modal__close::after {
+    content: "닫기";
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    font-weight: var(--font-default);
+    font-weight: 500;
+    background: transparent;
+    color: var(--w);
+    transform: none !important;
+  }
+}

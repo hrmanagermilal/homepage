@@ -1,0 +1,220 @@
+.ministry-subsection {
+  padding: 0 0 120rem;
+}
+
+.ministry-subsection__hero {
+  position: relative;
+  overflow: hidden;
+  height: 360rem;
+  border-radius: 20rem;
+  margin-bottom: 55rem;
+}
+
+.ministry-subsection__hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.ministry-subsection__hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.ministry-subsection__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 38, 9, 0.46);
+  mix-blend-mode: multiply;
+}
+
+.ministry-subsection__hero-cont {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-align: center;
+}
+
+.ministry-subsection__subtitle {
+  margin: 0 0 12rem;
+  font-size: 18rem;
+  font-weight: 700;
+  color: var(--w);
+}
+
+.ministry-subsection__title {
+  margin: 0;
+  font-size: var(--font-42);
+  line-height: 1.35;
+  letter-spacing: -0.84rem;
+  font-weight: 700;
+  color: var(--w);
+  white-space: nowrap;
+}
+
+.ministry-subsection__content {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--op-b10);
+  border-radius: 20rem;
+  padding: 40rem;
+}
+
+.ministry-subsection__desc {
+  margin: 0;
+  font-size: 17rem;
+  line-height: 1.7;
+  color: var(--b-title);
+}
+
+.ministry-subsection__list {
+  margin: 20rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10rem;
+}
+
+.ministry-subsection__list-item {
+  padding-left: 14rem;
+  position: relative;
+  font-size: var(--font-default);
+  line-height: 1.6;
+  color: var(--b-default);
+}
+
+.ministry-subsection__list-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 999rem;
+  background: var(--c-secondary);
+}
+
+.ministry-subsection__cta {
+  margin-top: 24rem;
+}
+
+.ministry-subsection__notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30rem;
+  margin-top: 24rem;
+  border-radius: 20rem;
+  padding: 42rem 50rem 44rem;
+  background: var(--c-primary);
+}
+
+.ministry-subsection__notice-title {
+  margin: 0 0 8rem;
+  font-size: var(--font-20);
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--w);
+  white-space: nowrap;
+}
+
+.ministry-subsection__notice-desc {
+  margin: 0;
+  font-size: 17rem;
+  line-height: 1.529;
+  color: var(--w);
+}
+
+.ministry-subsection__notice-btn {
+  gap: 8rem;
+  flex-shrink: 0;
+}
+
+.ministry-subsection__notice-btn i {
+  width: 22rem;
+  height: 22rem;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50% 50%;
+  background-image: url(/images/sub/03-ministry/ic-download_w.svg);
+  transition: 0.2s ease;
+}
+
+.ministry-subsection__notice-btn:hover i {
+  background-image: url(/images/sub/03-ministry/ic-download.svg);
+}
+
+@media (max-width: 1023px) {
+  .ministry-subsection {
+    padding-bottom: 100rem;
+  }
+
+  .ministry-subsection__hero {
+    height: 300rem;
+  }
+
+  .ministry-subsection__notice {
+    padding: 36rem 40rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .ministry-subsection {
+    padding-bottom: 60rem;
+  }
+
+  .ministry-subsection__hero {
+    height: 180rem;
+    border-radius: 10rem;
+    margin-bottom: 30rem;
+  }
+
+  .ministry-subsection__subtitle {
+    font-size: 14rem;
+    margin-bottom: 8rem;
+  }
+
+  .ministry-subsection__title {
+    font-size: 26rem;
+    letter-spacing: -0.52rem;
+  }
+
+  .ministry-subsection__content {
+    border-radius: 10rem;
+    padding: 24rem 20rem;
+  }
+
+  .ministry-subsection__desc {
+    font-size: var(--font-default);
+    line-height: 1.6;
+  }
+
+  .ministry-subsection__list {
+    margin-top: 16rem;
+    gap: 8rem;
+  }
+
+  .ministry-subsection__notice {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28rem 24rem 30rem;
+    border-radius: 14rem;
+    gap: 20rem;
+  }
+
+  .ministry-subsection__notice-title {
+    font-size: 17rem;
+  }
+
+  .ministry-subsection__notice-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ministry-subsection__notice-btn i {
+    width: 18rem;
+    height: 18rem;
+  }
+}

@@ -25,14 +25,13 @@ const NAV_ITEMS = [
   {
     num: "03", label: "사역", path: "/ministry",
     subs: [
-      { label: "양육", path: "/ministry" },
-      { label: "소그룹", path: "/ministry" },
-      { label: "가정", path: "/ministry" },
-      { label: "선교", path: "/ministry" },
-      { label: "장학", path: "/ministry" },
-      { label: "가스펠프로젝트", path: "/ministry" },
-      { label: "다니엘한글문화학교", path: "#" },
-      { label: "러브토론토", path: "https://lovetoronto.org/", external: true },
+      { label: "양육", path: "/ministry#ministry01" },
+      { label: "소그룹", path: "/ministry#ministry02" },
+      { label: "가정", path: "/ministry#ministry03" },
+      { label: "선교", path: "/ministry#ministry04" },
+      { label: "장학", path: "/ministry#ministry05" },
+      { label: "다니엘한글문화학교", path: "/ministry#ministry06" },
+      { label: "러브토론토", path: "/ministry#ministry07" },
     ],
   },
   {
