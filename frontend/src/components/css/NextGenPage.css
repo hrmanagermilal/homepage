@@ -34,6 +34,11 @@
   white-space: nowrap;
 }
 
+.sub-visual__title,
+.sub-visual__subtitle {
+  text-shadow: 0 3rem 12rem rgba(0, 0, 0, 0.45);
+}
+
 @media (max-width: 1023px) {
   .sub-visual__subtitle {
     font-size: 32rem;

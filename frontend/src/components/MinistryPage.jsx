@@ -4,6 +4,7 @@ import MinistrySmallGroup from "./ministry_components/MinistrySmallGroup";
 import MinistryFamily from "./ministry_components/MinistryFamily";
 import MinistryMission from "./ministry_components/MinistryMission";
 import MinistryScholarship from "./ministry_components/MinistryScholarship";
+import MinistryGospelProject from "./ministry_components/MinistryGospelProject";
 import MinistryDanielSchool from "./ministry_components/MinistryDanielSchool";
 import MinistryLoveToronto from "./ministry_components/MinistryLoveToronto";
 import "./css/SubPage.css";
@@ -15,6 +16,7 @@ const LNB_ITEMS = [
   { label: "가정", key: "ministry03", href: "/ministry#ministry03" },
   { label: "선교", key: "ministry04", href: "/ministry#ministry04" },
   { label: "장학", key: "ministry05", href: "/ministry#ministry05" },
+  { label: "가스펠프로젝트", key: "ministry08", href: "/ministry#ministry08" },
   { label: "다니엘한글문화학교", key: "ministry06", href: "/ministry#ministry06" },
   { label: "러브토론토", key: "ministry07", href: "/ministry#ministry07" },
 ];
@@ -25,6 +27,7 @@ const COMPONENT_BY_KEY = {
   ministry03: MinistryFamily,
   ministry04: MinistryMission,
   ministry05: MinistryScholarship,
+  ministry08: MinistryGospelProject,
   ministry06: MinistryDanielSchool,
   ministry07: MinistryLoveToronto,
 };
@@ -35,6 +38,7 @@ const SUBTITLE_BY_KEY = {
   ministry03: "당신의 첫 제자는 당신의 자녀입니다.",
   ministry04: "복음을 들고 세상으로",
   ministry05: "다음세대를 세우는 믿음의 투자",
+  ministry08: "교회같은 가정을 세우는 복음교육",
   ministry06: "언어와 문화를 잇는 배움의 자리",
   ministry07: "도시를 사랑으로 섬기는 손길",
 };
@@ -51,8 +55,9 @@ function SubVisual({ title, activeKey }) {
   const isSeonkyo = title === "선교";
   const isJanghak = title === "장학";
   const isSogroup = title === "소그룹";
+  const isGospel = activeKey === "ministry08";
   const subtitle = SUBTITLE_BY_KEY[activeKey] || "";
-  const bgClass = isDaniel ? "ministry-bg-daniel" : isGajeong ? "ministry-bg-gajeong" : isYangyuk ? "ministry-bg-yangyuk" : isSeonkyo ? "ministry-bg-seonkyo" : isJanghak ? "ministry-bg-janghak" : isSogroup ? "ministry-bg-sogroup" : "ministry-bg";
+  const bgClass = isGospel ? "ministry-bg-gospel" : isDaniel ? "ministry-bg-daniel" : isGajeong ? "ministry-bg-gajeong" : isYangyuk ? "ministry-bg-yangyuk" : isSeonkyo ? "ministry-bg-seonkyo" : isJanghak ? "ministry-bg-janghak" : isSogroup ? "ministry-bg-sogroup" : "ministry-bg";
   return (
     <section className="sub-visual" aria-label="사역 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
@@ -105,6 +110,7 @@ function SubLnb({ activeKey }) {
 
 const BG_IMAGES = [
   "/images/sub/03-ministry/sub-visual-bg.jpg",
+  "/images/sub/visual/gospel-intro.jpg",
   "/images/sub/visual/sub-visual0307.jpg",
   "/images/sub/visual/sub-visual0303.jpg",
   "/images/sub/visual/sub-visual0306.jpg",
