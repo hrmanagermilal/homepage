@@ -5,7 +5,7 @@ export default function MinistryDanielSchool() {
     <section id="ministry06">
       <MinistrySubSection
         subtitle="다니엘한글문화학교"
-        title="언어와 문화를 잇는 배움의 자리"
+        title="하나님의 자녀가 하나님의 자녀에게"
         image="/images/sub/03-ministry/sub-visual-bg.jpg"
         description="다니엘한글문화학교는 다음세대가 한글과 한국 문화를 배우며 신앙 안에서 정체성을 세워가도록 돕습니다."
         points={[

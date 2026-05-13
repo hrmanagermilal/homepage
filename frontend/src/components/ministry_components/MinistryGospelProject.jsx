@@ -5,7 +5,7 @@ export default function MinistryGospelProject() {
     <section id="ministry08">
       <MinistrySubSection
         subtitle="가스펠프로젝트"
-        title="교회같은 가정을 세우는 복음교육"
+        title="체계적인 성경적 가치관 확립"
         image="/images/sub/visual/gospel-intro.jpg"
         description="가스펠프로젝트는 성경의 큰 흐름 안에서 복음을 배우고, 가정과 교회가 같은 방향으로 다음세대를 세워가도록 돕는 통합 양육 과정입니다."
         points={[
