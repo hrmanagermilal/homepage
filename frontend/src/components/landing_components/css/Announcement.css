@@ -58,3 +58,29 @@
   .news-card {flex: 0 0 100%; gap: 16rem;}
   .news-card__thumb {border-radius: 12rem;}
 }
+
+/* ══════════════════════════════════════
+ * news-card-modal 팝업
+ * ══════════════════════════════════════ */
+.news-card-modal {display: flex; justify-content: center; align-items: center; position: fixed; opacity: 0; inset: 0; z-index: 999; padding: 30rem; background: rgba(0,0,0,0.85); transition: opacity 0.3s ease; pointer-events: none;}
+.news-card-modal.is-open {opacity: 1; pointer-events: auto;}
+.news-card-modal__overlay {position: absolute; inset: 0;}
+.news-card-modal__content {position: relative; z-index: 1; width: min(720rem, 100%); max-height: 90vh; overflow: auto; border-radius: 20rem; box-shadow: 0 20rem 60rem rgba(0,0,0,0.5);}
+.news-card-modal__close {display: flex; justify-content: center; align-items: center; position: absolute; top: 20rem; right: 20rem; z-index: 2; width: 50rem; height: 50rem; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.25); border-radius: 50%; cursor: pointer;}
+.news-card-modal__close svg {display: block;}
+.news-card-modal__image {display: block; width: 100%; aspect-ratio: 478 / 270; object-fit: cover;}
+.news-card-modal__title {display: none; text-align: center;}
+.news-card-modal__button {display: flex; align-items: center; justify-content: center; width: 100%; padding: 18rem; font-size: var(--font-sm); font-weight: 600; color: var(--w); background: #010101; text-decoration: none; transition: background .3s;}
+
+@media (hover: hover) and (pointer: fine) {
+  .news-card-modal__close {transition: background 0.2s ease;}
+  .news-card-modal__close:hover {background: rgba(0,0,0,0.6);}
+  .news-card-modal__button:hover {background: var(--c-primary);}
+}
+@media (max-width: 500px) {
+  .news-card-modal {padding: 0 20rem;}
+  .news-card-modal__content {width: 100%; max-height: none; border-radius: 0; overflow: initial; box-shadow: none;}
+  .news-card__inr {border-radius: 10rem; overflow: hidden; box-shadow: 0 10rem 20rem rgba(0,0,0,0.25);}
+  .news-card-modal__close {right: auto; left: 50%; top: auto; bottom: -20rem; transform: translate(-50%, 100%);}
+  .news-card-modal__button {padding: 15rem;}
+}
