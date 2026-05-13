@@ -25,6 +25,10 @@
   background-image: url(/images/sub/visual/sub-visual0305.jpg);
 }
 
+.ministry-bg-gospel {
+  background-image: url(/images/sub/visual/gospel-intro.jpg);
+}
+
 .ministry-bg-sogroup {
   background-image: url(/images/sub/visual/sub-visual0302.jpg);
 }
@@ -104,6 +108,11 @@
   color: var(--w);
   text-align: center;
   white-space: nowrap;
+}
+
+.sub-visual__title,
+.sub-visual__subtitle {
+  text-shadow: 0 3rem 12rem rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 1023px) {
