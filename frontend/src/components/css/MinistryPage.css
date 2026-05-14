@@ -4,3 +4,158 @@
 .ministry-bg {
   background-image: url(/images/sub/03-ministry/sub-visual-bg.jpg);
 }
+
+.ministry-bg-daniel {
+  background-image: url(/images/sub/visual/sub-visual0307.jpg);
+}
+
+.ministry-bg-gajeong {
+  background-image: url(/images/sub/visual/sub-visual0303.jpg);
+}
+
+.ministry-bg-yangyuk {
+  background-image: url(/images/sub/visual/sub-visual0306.jpg);
+}
+
+.ministry-bg-seonkyo {
+  background-image: url(/images/sub/visual/sub-visual0207.jpg);
+}
+
+.ministry-bg-janghak {
+  background-image: url(/images/sub/visual/sub-visual0305.jpg);
+}
+
+.ministry-bg-gospel {
+  background-image: url(/images/sub/visual/gospel-intro.jpg);
+}
+
+.ministry-bg-sogroup {
+  background-image: url(/images/sub/visual/sub-visual0302.jpg);
+}
+
+.sub-visual__menu-wrap {
+  z-index: 5;
+  position: absolute;
+  left: 0;
+  bottom: 30rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 var(--margin);
+}
+
+.sub-visual__menu {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 65rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--op-w20);
+  border-radius: 5rem;
+}
+
+.sub-visual__menu-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-width: 80rem;
+  padding: 0 20rem;
+  background: none;
+  border: none;
+  border-radius: 5rem;
+  font-family: "Pretendard", sans-serif;
+  font-weight: 500;
+  font-size: var(--font-xsm);
+  line-height: 1.467;
+  color: rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sub-visual__menu-btn.is-active {
+  background: var(--c-primary);
+  border-radius: 4rem;
+  box-shadow: 3rem 3rem 2.5rem var(--op-b05);
+  font-weight: 700;
+  color: var(--w);
+}
+
+.sub-visual__menu-btn--sep {
+  position: relative;
+}
+
+.sub-visual__menu-btn--sep::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 22rem;
+  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.sub-visual__subtitle {
+  margin: 0;
+  font-size: var(--font-42);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.84rem;
+  color: var(--w);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sub-visual__title,
+.sub-visual__subtitle {
+  text-shadow: 0 3rem 12rem rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 1023px) {
+  .sub-visual__menu-wrap {
+    bottom: 24rem;
+  }
+
+  .sub-visual__menu {
+    height: 55rem;
+  }
+
+  .sub-visual__subtitle {
+    font-size: 32rem;
+    letter-spacing: -0.64rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .sub-visual__menu-wrap {
+    bottom: 16rem;
+    padding: 0 10rem;
+  }
+
+  .sub-visual__menu {
+    height: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .sub-visual__menu-btn {
+    min-width: 60rem;
+    height: 47rem;
+    padding: 0 12rem;
+    font-size: 12rem;
+  }
+
+  .sub-visual__subtitle {
+    font-size: 22rem;
+    letter-spacing: -0.44rem;
+    white-space: normal;
+  }
+
+  .sub-visual__menu-btn--sep::before {
+    height: 14rem;
+  }
+}

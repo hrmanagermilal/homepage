@@ -11,15 +11,14 @@ const NAV_ITEMS = [
     ],
   },
   {
-    num: "02", label: "다음세대", path: "/nextgen/young-adults",
+    num: "02", label: "다음세대", path: "/nextgen#young-adults",
     subs: [
-      { label: "청년부", path: "/nextgen/young-adults" },
-      { label: "KM 청소년부", path: "/nextgen/km-youth" },
-      { label: "EM 청소년부", path: "/nextgen/em-youth" },
-      { label: "아동부", path: "/nextgen/children" },
-      { label: "유치부", path: "/nextgen/kindergarten" },
-      { label: "유아부", path: "/nextgen/preschool" },
-      { label: "영아부", path: "/nextgen/infants" },
+      { label: "청년부", path: "/nextgen#young-adults" },
+      { label: "KM 청소년부", path: "/nextgen#km-youth" },
+      { label: "EM 청소년부", path: "/nextgen#em-youth" },
+      { label: "아동부", path: "/nextgen#children" },
+      { label: "유치부", path: "/nextgen#kindergarten" },
+      { label: "영유아부", path: "/nextgen#infants" },
     ],
   },
   {
@@ -30,15 +29,16 @@ const NAV_ITEMS = [
       { label: "가정", path: "/ministry#ministry03" },
       { label: "선교", path: "/ministry#ministry04" },
       { label: "장학", path: "/ministry#ministry05" },
+      { label: "가스펠프로젝트", path: "/ministry#ministry08" },
       { label: "다니엘한글문화학교", path: "/ministry#ministry06" },
       { label: "러브토론토", path: "/ministry#ministry07" },
     ],
   },
   {
-    num: "04", label: "소식", path: "/news/notice",
+    num: "04", label: "소식", path: "/news#notice",
     subs: [
-      { label: "공지", path: "/news/notice" },
-      { label: "부고", path: "/news/obituary" },
+      { label: "공지", path: "/news#notice" },
+      { label: "부고", path: "/news#obituary" },
     ],
   },
   {
@@ -67,7 +67,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     const playOnGesture = (e) => {
       if (e.target?.closest?.(".site-header__volume")) return;
       if (!audio.paused) return;
-      audio.play().then(() => setBgmPlaying(true)).catch(() => {});
+      audio.play().then(() => setBgmPlaying(true)).catch(() => { });
       document.removeEventListener("pointerdown", playOnGesture);
       document.removeEventListener("keydown", playOnGesture);
     };
@@ -93,12 +93,45 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     const audio = audioRef.current;
     if (!audio) return;
     if (audio.paused) {
-      audio.play().then(() => setBgmPlaying(true)).catch(() => {});
+      audio.play().then(() => setBgmPlaying(true)).catch(() => { });
     } else {
       audio.pause();
       setBgmPlaying(false);
     }
   };
+
+  const handleInternalLinkClick = useCallback((e) => {
+    const link = e.target?.closest?.("a[href]");
+    if (!link) return;
+
+    const href = link.getAttribute("href") || "";
+    if (!href.startsWith("/")) return;
+    if (link.target && link.target !== "_self") return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+    const nextUrl = new URL(href, window.location.origin);
+    if (nextUrl.origin !== window.location.origin) return;
+
+    e.preventDefault();
+
+    const nextPath = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (nextPath === currentPath) {
+      if (nextUrl.hash) {
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      }
+      setFullMenuOpen(false);
+      return;
+    }
+
+    window.history.pushState({}, "", nextPath);
+    window.dispatchEvent(new Event("locationchange"));
+    if (nextUrl.hash) {
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    }
+    setFullMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   const handleFullMenuItemEnter = useCallback((idx) => {
     setFullMenuHoveredIdx(idx);
@@ -126,7 +159,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
   }, [fullMenuOpen, handleFullMenuItemEnter]);
 
   return (
-    <>
+    <div onClickCapture={handleInternalLinkClick}>
       <header className="site-header" role="banner">
         <h1 id="site-title" className="sound-only">밀알교회</h1>
         <div className="site-header__inner">
@@ -176,7 +209,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
           </nav>
 
           <div className="site-header__util">
-            <a className="site-header__news-btn" href="/news/notice">
+            <a className="site-header__news-btn" href="/news#notice">
               <img src="/images/common/icon-header-news.svg" alt="" />
               <span>밀알 소식 바로가기</span>
             </a>
@@ -273,7 +306,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
             <div className="full-menu__info">
               <div className="full-menu__info-section">
                 <h2 className="full-menu__info-title">공지사항</h2>
-                <a className="full-menu__info-card" href="/news/notice">
+                <a className="full-menu__info-card" href="/news#notice">
                   <span className="full-menu__info-card-text">밀알교회 홈페이지가 새롭게 리뉴얼 되었습니다.</span>
                   <span className="full-menu__info-arrow">
                     <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
@@ -285,7 +318,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
 
               <div className="full-menu__info-section">
                 <h2 className="full-menu__info-title">최근 부고 소식</h2>
-                <a className="full-menu__info-card" href="/news/obituary">
+                <a className="full-menu__info-card" href="/news#obituary">
                   <span className="full-menu__obituary-icon">
                     <img src="/images/common/icon-obituary-cross.svg" alt="" />
                   </span>
@@ -310,7 +343,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                     </a>
                   </li>
                   <li>
-                    <a className="full-menu__shortcut" href="#" target="_blank" rel="noopener noreferrer">
+                    <a className="full-menu__shortcut" href="/ministry#ministry06" target="_blank" rel="noopener noreferrer">
                       <span className="full-menu__shortcut-icon">
                         <img src="/images/common/ic-fullmenu02.svg" alt="" aria-hidden="true" />
                       </span>
@@ -325,12 +358,20 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                       <span className="full-menu__shortcut-label">러브 토론토 바로가기</span>
                     </a>
                   </li>
+                  <li>
+                    <a className="full-menu__shortcut" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer">
+                      <span className="full-menu__shortcut-icon">
+                        <img src="/images/common/ic-quick01.svg" alt="" aria-hidden="true" />
+                      </span>
+                      <span className="full-menu__shortcut-label">밀알도서관 바로가기</span>
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

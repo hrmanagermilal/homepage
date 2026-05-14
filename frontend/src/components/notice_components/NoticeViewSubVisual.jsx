@@ -17,7 +17,7 @@ export default function NoticeViewSubVisual() {
               <path d="M3.46447 1.46447L7 5L3.46447 8.53553" stroke="white" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </span>
-          <span className="sub-visual__lnb-text">공지</span>
+          <span className="sub-visual__lnb-text">소식</span>
         </nav>
         <h2 className="sub-visual__title">공지</h2>
       </div>

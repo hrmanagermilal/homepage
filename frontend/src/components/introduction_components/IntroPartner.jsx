@@ -6,7 +6,21 @@ const FALLBACK_PARTNERS = [
   { name: "순례길교회", href: "https://jcchurch.ca/", img: "/images/sub/01-introduction/partner-logo-03.png" },
 ];
 
-export default function IntroPartner({ togetherItems = [] }) {
+const INTRO_PARTNER_COPY = {
+  kr: {
+    title: "함께하는 교회",
+    subLine1: "복음 안에서 하나 된 교회들이 함께합니다.",
+    subLine2: "서로 다른 자리에서, 같은 방향을 바라보며 세상을 향해 나아가는 믿음의 동역자들을 소개합니다.",
+  },
+  en: {
+    title: "Partner Churches",
+    subLine1: "Churches united in the Gospel walk together.",
+    subLine2: "From different places, we move in one direction as partners in faith for the world.",
+  },
+};
+
+export default function IntroPartner({ togetherItems = [], language = "kr" }) {
+  const copy = INTRO_PARTNER_COPY[language] || INTRO_PARTNER_COPY.kr;
   const partners = togetherItems.length
     ? togetherItems.map((item) => ({
         name: item.title,
@@ -22,10 +36,10 @@ export default function IntroPartner({ togetherItems = [] }) {
           <img src="/images/main/main-visual-ellipse.svg" alt="" />
         </div>
         <div className="intro-partner__cont">
-          <h3 className="intro-partner__title" data-heading="5xl">함께하는 교회</h3>
+          <h3 className="intro-partner__title" data-heading="5xl">{copy.title}</h3>
           <p className="intro-partner__sub">
-            복음 안에서 하나 된 교회들이 함께합니다. <br />
-            서로 다른 자리에서, 같은 방향을 바라보며 세상을 향해 나아가는 믿음의 동역자들을 소개합니다.
+            {copy.subLine1} <br />
+            {copy.subLine2}
           </p>
           <ul className="intro-partner__logos">
             {partners.map((partner, idx) => (

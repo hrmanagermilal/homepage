@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./css/SubPage.css";
 import "./css/ObituaryPage.css";
 import ObituarySubVisual from "./obituary_components/ObituarySubVisual";
@@ -48,8 +48,92 @@ const OBITUARY_DATA = [
 const ITEMS_PER_PAGE = 8;
 
 export default function ObituaryPage() {
+  const containerRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const isDesktopScrollSnap =
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1024px)").matches &&
+      window.matchMedia("(pointer: fine)").matches;
+
+    if (!isDesktopScrollSnap) {
+      return;
+    }
+
+    const sections = Array.from(container.querySelectorAll("[data-snap-section='true']"));
+    if (!sections.length) {
+      return;
+    }
+
+    let isAnimating = false;
+    let wheelLockUntil = 0;
+
+    const getClosestSectionIndex = () => {
+      const viewportMid = window.innerHeight / 2;
+      let bestIndex = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const sectionMid = rect.top + rect.height / 2;
+        const distance = Math.abs(sectionMid - viewportMid);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+
+      return bestIndex;
+    };
+
+    const moveToSection = (index) => {
+      if (index < 0 || index >= sections.length) {
+        return;
+      }
+
+      isAnimating = true;
+      sections[index].scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => {
+        isAnimating = false;
+      }, 700);
+    };
+
+    const onWheel = (event) => {
+      const now = Date.now();
+      if (isAnimating || now < wheelLockUntil) {
+        event.preventDefault();
+        return;
+      }
+
+      if (Math.abs(event.deltaY) < 8) {
+        return;
+      }
+
+      const currentIndex = getClosestSectionIndex();
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+
+      if (nextIndex === currentIndex) {
+        return;
+      }
+
+      event.preventDefault();
+      wheelLockUntil = now + 500;
+      moveToSection(nextIndex);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+    };
+  }, []);
 
   const filteredData = useMemo(() => {
     if (!searchQuery) {
@@ -78,9 +162,17 @@ export default function ObituaryPage() {
   };
 
   return (
-    <>
-      <ObituarySubVisual />
-      <div className="sub-content" id="content">
+    <div ref={containerRef}>
+      <div data-snap-section="true">
+        <ObituarySubVisual />
+      </div>
+      <div className="sub-content" id="content" data-snap-section="true">
+        <div className="lnb-wrap">
+          <nav className="lnb" aria-label="소식 메뉴">
+            <button className="lnb__btn" onClick={() => { window.history.pushState({}, "", "/news/notice"); window.dispatchEvent(new Event("locationchange")); }}>공지</button>
+            <button className="lnb__btn lnb__btn--sep is-active" onClick={() => { window.history.pushState({}, "", "/news/obituary"); window.dispatchEvent(new Event("locationchange")); }}>부고</button>
+          </nav>
+        </div>
         <section className="obituary">
           <div className="wrap">
             <h3 className="obituary-heading" data-heading="5xl">
@@ -114,6 +206,6 @@ export default function ObituaryPage() {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 }

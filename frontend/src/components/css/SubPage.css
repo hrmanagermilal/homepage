@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════
  * Sub Content / LNB
  * ══════════════════════════════════════ */
-.sub-content {padding-top: 70rem;}
+.sub-content {padding-top: 90rem;}
 .lnb-wrap {display: flex; justify-content: center; margin-bottom: 80rem;}
 .lnb {display: flex; align-items: center; overflow: hidden; height: 65rem; background: rgba(255,255,255,0.2); border: 1px solid var(--op-b05); border-radius: 5rem;}
 .lnb__btn {display: flex; justify-content: center; align-items: center; height: 100%; min-width: 80rem; padding: 0 20rem; background: none; border: none; border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: var(--font-xsm); line-height: 1.467; color: var(--op-b30); white-space: nowrap; cursor: pointer; text-decoration: none; transition: background 0.2s ease, color 0.2s ease;}
@@ -10,14 +10,14 @@
 .lnb__btn--sep::before {content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 22rem; background: var(--op-b10); pointer-events: none;}
 
 @media (max-width: 1023px) {
-  .sub-content {padding-top: 50rem;}
+  .sub-content {padding-top: 65rem;}
   .lnb-wrap {margin-bottom: 50rem;}
 }
 @media (max-width: 860px) {
   .lnb {height: 55rem;}
 }
 @media (max-width: 540px) {
-  .sub-content {padding-top: 20rem;}
+  .sub-content {padding-top: 32rem;}
   .lnb-wrap {margin: 0 var(--margin); margin-bottom: 45rem;}
   .lnb {height: auto; justify-content: center; flex-wrap: wrap;}
   .lnb__btn {min-width: 60rem; height: 47rem; padding: 0 12rem;}
@@ -36,6 +36,10 @@
 .sub-visual__ellipse {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; width: 600rem; height: 500rem; pointer-events: none;}
 .sub-visual__ellipse img {display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none;}
 .sub-visual__cont {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 60rem; white-space: nowrap;}
+.sub-visual__lang-switch {display: flex; align-items: center; margin-top: 12rem; padding: 4rem; background: rgba(11,18,28,0.25); border: 1px solid rgba(255,255,255,0.18); border-radius: 999rem; backdrop-filter: blur(10rem);}
+.sub-visual__lang-btn {display: inline-flex; justify-content: center; align-items: center; min-width: 40rem; height: 30rem; padding: 0 10rem; background: transparent; border: 0; border-radius: 999rem; font-family: 'Pretendard', sans-serif; font-weight: 700; font-size: 12rem; line-height: 1; color: rgba(255,255,255,0.58); white-space: nowrap; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;}
+.sub-visual__lang-btn.is-active {background: var(--w); color: var(--c-primary); box-shadow: 0 4rem 14rem rgba(0,0,0,0.15);}
+.sub-visual__lang-divider {flex-shrink: 0; width: 1px; height: 16rem; margin: 0 2rem; background: rgba(255,255,255,0.18);}
 .sub-visual__lnb {display: flex; align-items: center; gap: 13rem;}
 .sub-visual__lnb-home {display: flex; align-items: center; justify-content: center; width: 15rem; height: 15rem; flex-shrink: 0;}
 .sub-visual__lnb-home img {display: block; width: 100%; height: 100%; pointer-events: none;}
@@ -61,10 +65,14 @@
 
 @media (max-width: 1023px) {
   .sub-visual {height: 600rem;}
+  .sub-visual__lang-switch {margin-top: 10rem;}
   .sub-visual__title {font-size: 48rem; letter-spacing: -0.96rem;}
 }
 @media (max-width: 540px) {
   .sub-visual {height: 380rem;}
+  .sub-visual__lang-switch {margin-top: 8rem; padding: 3rem;}
+  .sub-visual__lang-btn {min-width: 34rem; height: 26rem; padding: 0 8rem; font-size: 11rem;}
+  .sub-visual__lang-divider {height: 12rem;}
   .sub-visual__lnb {gap: 10rem;}
   .sub-visual__lnb-home {width: 12rem; height: 12rem;}
   .sub-visual__lnb-text {font-size: 12rem;}

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Box, CircularProgress, Stack } from "@mui/material";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
 import { api } from "./api/client";
 import Header from "./components/Header";
 import LandingPage from "./components/LandingPage";
@@ -9,32 +9,21 @@ import IntroductionPage from "./components/IntroductionPage";
 import NextGenPage from "./components/NextGenPage";
 import MinistryPage from "./components/MinistryPage";
 import OnlineGivingPage from "./components/OnlineGivingPage";
-import NoticePage from "./components/NoticePage";
+import NewsPage from "./components/NewsPage";
 import NoticeViewPage from "./components/NoticeViewPage";
-import ObituaryPage from "./components/ObituaryPage";
 import ObituaryViewPage from "./components/ObituaryViewPage";
 
-const NEXTGEN_PAGE_TITLES = {
-  "/nextgen/young-adults": "청년부",
-  "/nextgen/km-youth": "KM 청소년부",
-  "/nextgen/em-youth": "EM 청소년부",
-  "/nextgen/children": "아동부",
-  "/nextgen/kindergarten": "유치부",
-  "/nextgen/preschool": "유아부",
-  "/nextgen/infants": "영아부",
-};
 
 export default function App() {
-  const currentPath = window.location.pathname;
-  const isIntroductionPage = window.location.pathname.startsWith("/introduction");
+  const hasPathInitializedRef = useRef(false);
+  const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
+  const isIntroductionPage = currentPath.startsWith("/introduction");
   const isMinistryPage = currentPath.startsWith("/ministry");
   const isOnlineGivingPage = currentPath.startsWith("/online-giving");
   const isNoticeViewPage = /^\/news\/notice\/\d+$/.test(currentPath);
-  const isNoticePage = currentPath.startsWith("/news/notice") && !isNoticeViewPage;
   const isObituaryViewPage = /^\/news\/obituary\/\d+$/.test(currentPath);
-  const isObituaryPage = currentPath.startsWith("/news/obituary") && !isObituaryViewPage;
-  const nextGenPageTitle = NEXTGEN_PAGE_TITLES[currentPath] || null;
-  const isNextGenSubmenuPage = Boolean(nextGenPageTitle);
+  const isNewsPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage;
+  const isNextGenSubmenuPage = currentPath.startsWith("/nextgen");
   const [health, setHealth] = useState(null);
   const [hero, setHero] = useState(null);
   const [heroLinks, setHeroLinks] = useState([]);
@@ -50,6 +39,42 @@ export default function App() {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Hashes on these paths are tab selectors, not scroll anchors
+  const isTabHashPage = useCallback((path) => {
+    return path.startsWith("/ministry") || path.startsWith("/nextgen") || path.startsWith("/news");
+  }, []);
+
+  const scrollToHash = useCallback(() => {
+    if (isTabHashPage(window.location.pathname)) return;
+    if (sessionStorage.getItem("goToContacts") === "1") {
+      sessionStorage.removeItem("goToContacts");
+      document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    const hashTarget = window.location.hash?.replace("#", "");
+    if (hashTarget) {
+      // Defer to allow new page component to mount first
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.getElementById(hashTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const syncPath = () => setCurrentPath(window.location.pathname);
+    window.addEventListener("popstate", syncPath);
+    window.addEventListener("locationchange", syncPath);
+    window.addEventListener("hashchange", scrollToHash);
+
+    return () => {
+      window.removeEventListener("popstate", syncPath);
+      window.removeEventListener("locationchange", syncPath);
+      window.removeEventListener("hashchange", scrollToHash);
+    };
+  }, [scrollToHash]);
 
   useEffect(() => {
     let mounted = true;
@@ -116,30 +141,43 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (loading) {
+    if (loading) return;
+    scrollToHash();
+  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (loading) return;
+    scrollToHash();
+  }, [currentPath]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (loading) return;
+
+    // Skip initial mount to avoid unnecessary animation on first render.
+    if (!hasPathInitializedRef.current) {
+      hasPathInitializedRef.current = true;
       return;
     }
 
-    if (sessionStorage.getItem("goToContacts") === "1") {
-      sessionStorage.removeItem("goToContacts");
-      document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const hasHash = Boolean(window.location.hash);
+    const isDetailPath = /^\/news\/(notice|obituary)\/\d+$/.test(currentPath);
+
+    // Hash-based pages and detail views already control their own scroll position.
+    if (hasHash || isTabHashPage(currentPath) || isDetailPath) {
       return;
     }
 
-    const hashTarget = window.location.hash?.replace("#", "");
-    if (hashTarget) {
-      document.getElementById(hashTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [loading]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPath, loading, isTabHashPage]);
 
   return (
     <Box>
       <Header quickLinks={quickLinks} landingTitles={landingTitles} />
 
       {loading ? (
-        <Stack alignItems="center" py={8}>
+        <div className="app-loading-overlay" aria-live="polite" aria-busy="true">
           <CircularProgress />
-        </Stack>
+        </div>
       ) : null}
 
       {isIntroductionPage ? (
@@ -150,14 +188,12 @@ export default function App() {
         <OnlineGivingPage />
       ) : isNoticeViewPage ? (
         <NoticeViewPage />
-      ) : isNoticePage ? (
-        <NoticePage />
       ) : isObituaryViewPage ? (
         <ObituaryViewPage />
-      ) : isObituaryPage ? (
-        <ObituaryPage />
+      ) : isNewsPage ? (
+        <NewsPage />
       ) : isNextGenSubmenuPage ? (
-        <NextGenPage title={nextGenPageTitle} />
+        <NextGenPage />
       ) : (
         <LandingPage
           hero={hero}
@@ -171,7 +207,7 @@ export default function App() {
         />
       )}
       <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
-      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isNoticePage || isObituaryViewPage || isObituaryPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isNewsPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }

@@ -17,7 +17,7 @@ export default function ObituaryViewSubVisual() {
               <path d="M3.46447 1.46447L7 5L3.46447 8.53553" stroke="white" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </span>
-          <span className="sub-visual__lnb-text">부고</span>
+          <span className="sub-visual__lnb-text">소식</span>
         </nav>
         <h2 className="sub-visual__title">부고</h2>
       </div>

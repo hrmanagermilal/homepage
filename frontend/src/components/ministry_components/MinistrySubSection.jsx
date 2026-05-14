@@ -1,9 +1,6 @@
 import "./css/MinistrySubSection.css";
 
 export default function MinistrySubSection({
-  title,
-  subtitle,
-  image,
   description,
   points = [],
   noticeTitle = "4월 순모임 교재 공유드립니다.",
@@ -17,19 +14,6 @@ export default function MinistrySubSection({
 }) {
   return (
     <section className="ministry-subsection">
-      <div className="wrap">
-        <div className="ministry-subsection__hero">
-          <div className="ministry-subsection__hero-bg" aria-hidden="true">
-            <img src={image} alt="" />
-            <div className="ministry-subsection__hero-overlay" />
-          </div>
-          <div className="ministry-subsection__hero-cont">
-            <p className="ministry-subsection__subtitle">{subtitle}</p>
-            <h3 className="ministry-subsection__title">{title}</h3>
-          </div>
-        </div>
-      </div>
-
       <div className="wrap-narrow">
         <div className="ministry-subsection__content">
           <p className="ministry-subsection__desc">{description}</p>

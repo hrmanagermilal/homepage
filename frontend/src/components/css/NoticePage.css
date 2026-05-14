@@ -3,7 +3,7 @@
  * ══════════════════════════════════════ */
 
 .sub-visual__bg-img.notice-bg {
-  background-image: url(/images/sub/04-obituary/sub-visual-bg.jpg);
+  background-image: url(/images/sub/visual/sub-visual0304.jpg);
 }
 
 .notice {
@@ -34,6 +34,13 @@
   position: relative;
 }
 
+.notice-controls {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  margin-left: auto;
+}
+
 .notice-sort__select {
   appearance: none;
   -webkit-appearance: none;
@@ -62,13 +69,12 @@
 
 /* Search */
 .notice-search {
-  margin-bottom: 60rem;
+  margin: 0;
 }
 
 .notice-search__field-wrap {
   position: relative;
-  width: 100%;
-  max-width: 600rem;
+  width: 445rem;
   height: 68rem;
 }
 
@@ -129,6 +135,67 @@
   width: 100%;
   overflow-x: auto;
   margin-bottom: 60rem;
+}
+
+/* Pagination */
+.notice-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15rem;
+  margin-top: 60rem;
+}
+
+.notice-pagination__nums {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.notice-pagination__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36rem;
+  height: 36rem;
+  border-radius: 60rem;
+  background: transparent;
+  border: none;
+  font-family: "Pretendard", sans-serif;
+  font-size: var(--font-default);
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.notice-pagination__btn.is-active {
+  background: var(--c-primary);
+  color: var(--w);
+}
+
+.notice-pagination__next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .notice-pagination__btn:not(.is-active):hover {
+    background: var(--bg-table);
+    color: var(--b-title);
+  }
+
+  .notice-pagination__next:hover {
+    opacity: 0.5;
+  }
 }
 
 .notice-table {
@@ -268,11 +335,25 @@
     align-items: flex-start;
   }
 
-  .notice-sort {
+  .notice-controls {
     width: 100%;
+    margin-left: 0;
+  }
+
+  .notice-sort {
+    width: 130rem;
+    flex-shrink: 0;
   }
 
   .notice-sort__select {
+    width: 100%;
+  }
+
+  .notice-search {
+    width: 100%;
+  }
+
+  .notice-search__field-wrap {
     width: 100%;
   }
 
@@ -317,6 +398,15 @@
 @media (max-width: 540px) {
   .notice {
     padding-bottom: 60rem;
+  }
+
+  .notice-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .notice-sort {
+    width: 100%;
   }
 
   .notice-top {

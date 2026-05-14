@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import MinistryYangyuk from "./ministry_components/MinistryYangyuk";
 import MinistrySmallGroup from "./ministry_components/MinistrySmallGroup";
 import MinistryFamily from "./ministry_components/MinistryFamily";
 import MinistryMission from "./ministry_components/MinistryMission";
 import MinistryScholarship from "./ministry_components/MinistryScholarship";
+import MinistryGospelProject from "./ministry_components/MinistryGospelProject";
 import MinistryDanielSchool from "./ministry_components/MinistryDanielSchool";
 import MinistryLoveToronto from "./ministry_components/MinistryLoveToronto";
 import "./css/SubPage.css";
@@ -15,6 +16,7 @@ const LNB_ITEMS = [
   { label: "가정", key: "ministry03", href: "/ministry#ministry03" },
   { label: "선교", key: "ministry04", href: "/ministry#ministry04" },
   { label: "장학", key: "ministry05", href: "/ministry#ministry05" },
+  { label: "가스펠프로젝트", key: "ministry08", href: "/ministry#ministry08" },
   { label: "다니엘한글문화학교", key: "ministry06", href: "/ministry#ministry06" },
   { label: "러브토론토", key: "ministry07", href: "/ministry#ministry07" },
 ];
@@ -25,8 +27,20 @@ const COMPONENT_BY_KEY = {
   ministry03: MinistryFamily,
   ministry04: MinistryMission,
   ministry05: MinistryScholarship,
+  ministry08: MinistryGospelProject,
   ministry06: MinistryDanielSchool,
   ministry07: MinistryLoveToronto,
+};
+
+const SUBTITLE_BY_KEY = {
+  ministry01: "우리는 밀알 공동체입니다.",
+  ministry02: "함께 말씀으로 자라는 공동체입니다.",
+  ministry03: "당신의 첫 제자는 당신의 자녀입니다.",
+  ministry04: "세상을 향한 은혜의 통로입니다.",
+  ministry05: "다음세대를 세워가는 믿음의 투자입니다.",
+  ministry08: "체계적인 성경적 가치관 확립입니다.",
+  ministry06: "하나님의 자녀가 하나님의 자녀에게 한글과 문화를 가르치는 학교입니다.",
+  ministry07: "토론토를 향한 주님의 사랑과 긍휼입니다.",
 };
 
 function getKeyFromHash(hash) {
@@ -34,11 +48,20 @@ function getKeyFromHash(hash) {
   return COMPONENT_BY_KEY[key] ? key : "ministry01";
 }
 
-function SubVisual({ title }) {
+function SubVisual({ title, activeKey }) {
+  const isDaniel = title === "다니엘한글문화학교";
+  const isGajeong = title === "가정";
+  const isYangyuk = title === "양육";
+  const isSeonkyo = title === "선교";
+  const isJanghak = title === "장학";
+  const isSogroup = title === "소그룹";
+  const isGospel = activeKey === "ministry08";
+  const subtitle = SUBTITLE_BY_KEY[activeKey] || "";
+  const bgClass = isGospel ? "ministry-bg-gospel" : isDaniel ? "ministry-bg-daniel" : isGajeong ? "ministry-bg-gajeong" : isYangyuk ? "ministry-bg-yangyuk" : isSeonkyo ? "ministry-bg-seonkyo" : isJanghak ? "ministry-bg-janghak" : isSogroup ? "ministry-bg-sogroup" : "ministry-bg";
   return (
     <section className="sub-visual" aria-label="사역 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        <figure className="sub-visual__bg-img ministry-bg" />
+        <figure className={`sub-visual__bg-img ${bgClass}`} />
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />
@@ -56,6 +79,7 @@ function SubVisual({ title }) {
           <span className="sub-visual__lnb-text">사역</span>
         </nav>
         <h2 className="sub-visual__title">{title}</h2>
+        {subtitle ? <p className="sub-visual__subtitle">{subtitle}</p> : null}
       </div>
       <div className="sub-visual__scroll-down" aria-hidden="true">
         <i />
@@ -84,8 +108,27 @@ function SubLnb({ activeKey }) {
   );
 }
 
+const BG_IMAGES = [
+  "/images/sub/03-ministry/sub-visual-bg.jpg",
+  "/images/sub/visual/gospel-intro.jpg",
+  "/images/sub/visual/sub-visual0307.jpg",
+  "/images/sub/visual/sub-visual0303.jpg",
+  "/images/sub/visual/sub-visual0306.jpg",
+  "/images/sub/visual/sub-visual0207.jpg",
+  "/images/sub/visual/sub-visual0305.jpg",
+  "/images/sub/visual/sub-visual0302.jpg",
+];
+
 export default function MinistryPage() {
+  const containerRef = useRef(null);
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
+
+  useEffect(() => {
+    BG_IMAGES.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -98,16 +141,101 @@ export default function MinistryPage() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const isDesktopScrollSnap =
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1024px)").matches &&
+      window.matchMedia("(pointer: fine)").matches;
+
+    if (!isDesktopScrollSnap) {
+      return;
+    }
+
+    const sections = Array.from(container.querySelectorAll("[data-snap-section='true']"));
+    if (!sections.length) {
+      return;
+    }
+
+    let isAnimating = false;
+    let wheelLockUntil = 0;
+
+    const getClosestSectionIndex = () => {
+      const viewportMid = window.innerHeight / 2;
+      let bestIndex = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const sectionMid = rect.top + rect.height / 2;
+        const distance = Math.abs(sectionMid - viewportMid);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+
+      return bestIndex;
+    };
+
+    const moveToSection = (index) => {
+      if (index < 0 || index >= sections.length) {
+        return;
+      }
+
+      isAnimating = true;
+      sections[index].scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => {
+        isAnimating = false;
+      }, 700);
+    };
+
+    const onWheel = (event) => {
+      const now = Date.now();
+      if (isAnimating || now < wheelLockUntil) {
+        event.preventDefault();
+        return;
+      }
+
+      if (Math.abs(event.deltaY) < 8) {
+        return;
+      }
+
+      const currentIndex = getClosestSectionIndex();
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+
+      if (nextIndex === currentIndex) {
+        return;
+      }
+
+      event.preventDefault();
+      wheelLockUntil = now + 500;
+      moveToSection(nextIndex);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+    };
+  }, []);
+
   const ActiveComponent = useMemo(() => COMPONENT_BY_KEY[activeKey] || MinistryYangyuk, [activeKey]);
   const activeLabel = useMemo(() => LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역", [activeKey]);
 
   return (
-    <>
-      <SubVisual title={activeLabel} />
-      <div className="sub-content" id="content">
+    <div ref={containerRef}>
+      <div data-snap-section="true">
+        <SubVisual title={activeLabel} activeKey={activeKey} />
+      </div>
+      <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
         <ActiveComponent />
       </div>
-    </>
+    </div>
   );
 }
