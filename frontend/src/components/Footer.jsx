@@ -44,7 +44,7 @@ const FOOTER_NAV = [
     links: [{ label: "온라인 헌금", path: "/online-giving" }],
   },
   {
-    title: "바로가기",
+    title: "밀알도서관",
     links: [
       { label: "밀알도서관", path: "https://milalbookcafe.com/", external: true }
     ],
