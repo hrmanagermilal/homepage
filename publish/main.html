@@ -8,6 +8,7 @@
   <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
   <title>밀알교회</title>
   <link rel="stylesheet" href="css/common.css" />
+  <script src="js/motion.js"></script>
   <style>
     /* ══════════════════════════════════════
      * Main YouTube Section
@@ -632,10 +633,10 @@
 
   <!-- 중앙 콘텐츠 -->
   <div class="main-visual__cont">
-    <h1 class="main-visual__text-img">
+    <h1 class="main-visual__text-img" data-ani>
       <img src="images/main/main-visual-text.png" alt="사람을 세우다" />
     </h1>
-    <p class="main-visual__sub">
+    <p class="main-visual__sub" data-ani>
       밀알교회는 하나님의 사람을 세웁니다.<br>
       모퉁이돌 되신 예수 안에 함께 지어져 가는 공동체입니다.
     </p>
@@ -729,7 +730,7 @@
 <section class="main-youtube">
   <div class="wrap">
 
-    <div class="main-youtube__head">
+    <div class="main-youtube__head" data-ani="top">
 
       <div class="main-title">
         <h2 data-heading="5xl" class="main-title__heading">최신 설교</h2>
@@ -750,7 +751,7 @@
     </div>
 
     <!-- ── 패널 0: 탭 아이템 (최신 설교) ── -->
-    <div class="main-youtube__panel is-active">
+    <div class="main-youtube__panel is-active" data-ani="top">
       <div class="main-youtube__scroll">
         <div class="main-youtube__list">
 
@@ -862,7 +863,7 @@
   </div>
 </section>
 
-<section id="weekly" class="main-weekly">
+<section id="weekly" class="main-weekly" data-ani="top">
   <div class="main-weekly__inr">
 
     <div class="main-weekly__bg">
@@ -936,14 +937,14 @@
 <section id="worship" class="main-worship">
   <div class="wrap">
 
-    <div class="main-title">
+    <div class="main-title" data-ani="top">
       <h2 data-heading="5xl" class="main-title__heading">예배 시간 안내</h2>
       <p class="main-title__sub">주일 1~3부 예배, 청년부/교육부 예배, 그리고 주중예배가 있습니다.<br>함께 예배하는 축복의 자리로 당신을 초대합니다.</p>
     </div>
 
     <div class="worship-list" data-grid="3">
 
-      <div class="worship-card">
+      <div class="worship-card" data-ani="top">
         <div class="worship-card__head">
           <div class="worship-card__logo">
             <img src="images/main/worship-card-logo.png" alt="" />
@@ -980,7 +981,7 @@
         </table>
       </div>
 
-      <div class="worship-card worship-card--weekly">
+      <div class="worship-card worship-card--weekly" data-ani="top">
         <div class="worship-card__head">
           <div class="worship-card__logo">
             <img src="images/main/worship-card-logo.png" alt="" />
@@ -1030,7 +1031,7 @@
         </table>
       </div>
 
-      <div class="worship-card worship-card--edu">
+      <div class="worship-card worship-card--edu" data-ani="top">
         <div class="worship-card__head">
           <div class="worship-card__logo">
             <img src="images/main/worship-card-logo.png" alt="" />
@@ -1084,7 +1085,7 @@
 <section class="main-news">
   <div class="wrap">
 
-    <div class="main-news__head">
+    <div class="main-news__head" data-ani="top">
       <div class="main-title">
         <h2 data-heading="5xl" class="main-title__heading">새로운 소식</h2>
         <p class="main-title__sub">다양한 행사들과 소식을 놓치지 마세요.</p>
@@ -1109,15 +1110,15 @@
       </div>
     </div>
 
-    <div class="main-news__notice tablet-block">
-          <div class="main-news__notice-label">
-            <img src="images/main/icon-notice.svg" alt="" aria-hidden="true" />
-            <span data-text="sm-sb">공지사항</span>
-          </div>
-          <a data-text="sm" class="main-news__notice-text" href="#">게시판에 고정된 공지사항이 들어갑니다.</a>
-        </div>
+    <div class="main-news__notice tablet-block" data-ani="top">
+      <div class="main-news__notice-label">
+        <img src="images/main/icon-notice.svg" alt="" aria-hidden="true" />
+        <span data-text="sm-sb">공지사항</span>
+      </div>
+      <a data-text="sm" class="main-news__notice-text" href="#">게시판에 고정된 공지사항이 들어갑니다.</a>
+    </div>
 
-    <div class="main-news__slider">
+    <div class="main-news__slider" data-ani="top">
       <div class="main-news__track" id="newsTrack">
 
         <article class="news-card">
@@ -1197,7 +1198,7 @@
 <section class="main-direction">
   <div class="wrap">
 
-    <div class="main-title">
+    <div class="main-title" data-ani="top">
       <h2 data-heading="5xl" class="main-title__heading">오시는 길</h2>
       <p class="main-title__sub">밀알교회는 열린 공동체입니다. 주님의 이름으로 언제나 당신을 환영합니다.</p>
     </div>
@@ -1205,7 +1206,7 @@
     <div class="main-direction__layout" data-grid="2">
 
       <!-- 정보 카드 -->
-      <div class="main-direction__info">
+      <div class="main-direction__info" data-ani="top">
         <div class="main-direction__tab-row">
           <div class="main-direction__tabs" role="tablist">
             <button class="main-direction__tab is-active" role="tab" aria-selected="true" aria-controls="direction-panel-0" type="button">오시는 길 안내</button>
@@ -1303,7 +1304,7 @@
       </div>
 
       <!-- 지도 -->
-      <div class="main-direction__map">
+      <div class="main-direction__map" data-ani="top">
         <div class="main-direction__map-panel is-active" id="dir-map-0">
           <iframe
             src="https://maps.google.com/maps?q=405+Gordon+Baker+Rd,+Toronto+ON+M2H+2S6,+Canada&output=embed&hl=ko"
@@ -1340,7 +1341,7 @@
     <div class="main-banner__bg-blur"></div>
     <div class="main-banner__bg-overlay"></div>
   </div>
-  <div class="wrap main-banner__cont">
+  <div class="wrap main-banner__cont" data-ani="top">
     <h2 data-heading="5xl" class="main-banner__heading">교회같은 가정, 가정같은 교회</h2>
     <p class="main-banner__sub">
       교회같은 가정, 가정같은 교회를 꿈꾸며 하늘의 복을 받아<br>
