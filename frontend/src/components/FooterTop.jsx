@@ -8,7 +8,7 @@ export default function FooterTop() {
         <div className="main-banner__bg-blur"></div>
         <div className="main-banner__bg-overlay"></div>
       </div>
-      <div className="wrap main-banner__cont">
+      <div className="wrap main-banner__cont" data-ani="top">
         <h2 data-heading="5xl" className="main-banner__heading">교회같은 가정, 가정같은 교회</h2>
         <p className="main-banner__sub">
           교회같은 가정, 가정같은 교회를 꿈꾸며 하늘의 복을 받아<br />

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FEATURES } from "../config/features";
 import MinistryYangyuk from "./ministry_components/MinistryYangyuk";
 import MinistrySmallGroup from "./ministry_components/MinistrySmallGroup";
 import MinistryFamily from "./ministry_components/MinistryFamily";
@@ -91,7 +92,7 @@ function SubVisual({ title, activeKey }) {
 
 function SubLnb({ activeKey }) {
   return (
-    <div className="lnb-wrap">
+    <div className="lnb-wrap" data-ani="top">
       <nav className="lnb" aria-label="사역 메뉴">
         {LNB_ITEMS.map((item, idx) => (
           <a
@@ -218,10 +219,13 @@ export default function MinistryPage() {
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
 
   const ActiveComponent = useMemo(() => COMPONENT_BY_KEY[activeKey] || MinistryYangyuk, [activeKey]);

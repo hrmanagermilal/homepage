@@ -1,18 +1,6 @@
 import { useMemo, useState } from "react";
+import { VideoCard } from "./Video";
 import "./css/Sermon.css";
-
-const DEFAULT_THUMBS = [
-  "/images/main/youtube-thumb-01.jpg",
-  "/images/main/youtube-thumb-03.jpg",
-  "/images/main/youtube-thumb-02.jpg",
-];
-
-function getYoutubeThumb(url, index) {
-  if (!url) return DEFAULT_THUMBS[index % DEFAULT_THUMBS.length];
-  const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{6,})/);
-  if (!match?.[1]) return DEFAULT_THUMBS[index % DEFAULT_THUMBS.length];
-  return `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`;
-}
 
 const TAB_LABELS = ["최신 설교", "주일예배 시리즈", "토요새벽기도회 강해"];
 
@@ -23,12 +11,12 @@ export default function Sermon({ items = [], section = null }) {
   const latestCards = useMemo(() => {
     if (!items.length) {
       return [
-        { id: "fallback-1", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "" },
-        { id: "fallback-2", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "" },
-        { id: "fallback-3", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "" },
-        { id: "fallback-4", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "" },
-        { id: "fallback-5", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "" },
-        { id: "fallback-6", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "" },
+        { id: "fallback-1", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "", live:true },
+        { id: "fallback-2", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "", live:false },
+        { id: "fallback-3", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "", live:false },
+        { id: "fallback-4", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "", live:false },
+        { id: "fallback-5", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "", live:false },
+        { id: "fallback-6", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "", live:false },
       ];
     }
     return items.slice(0, 6);
@@ -37,7 +25,7 @@ export default function Sermon({ items = [], section = null }) {
   return (
     <section className="main-youtube" id="sermon">
       <div className="wrap">
-        <div className="main-youtube__head">
+        <div className="main-youtube__head" data-ani="top">
           <div className="main-title">
             <h2 data-heading="5xl" className="main-title__heading">{TAB_LABELS[activeTab]}</h2>
             <p className="main-title__sub">
@@ -58,27 +46,15 @@ export default function Sermon({ items = [], section = null }) {
           <div className="main-youtube__scroll">
             <div className={`main-youtube__list${isExpanded ? " is-expanded" : ""}`}>
               {latestCards.map((item, idx) => (
-                <a
+                <VideoCard
                   key={item.id || idx}
-                  className={`youtube-card${idx === 0 ? " youtube-card--live" : ""}${idx > 2 ? " youtube-card--extra" : ""}`}
-                  href={item.youtube_url || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="youtube-card__thumb">
-                    <img src={getYoutubeThumb(item.youtube_url, idx)} alt={item.title || "설교 썸네일"} />
-                  </div>
-                  <div className="youtube-card__gradient"></div>
-                  {idx === 0 ? (
-                    <div className="youtube-card__live-badge" aria-label="라이브 방송 중">
-                      <span className="youtube-card__live-dot" aria-hidden="true"></span>
-                      <span className="youtube-card__live-text">LIVE</span>
-                    </div>
-                  ) : null}
-                  <div className="youtube-card__label">
-                    <h3>{item.title || "제목 없음"}{item.preacher ? <><br />{item.preacher}</> : null}</h3>
-                  </div>
-                </a>
+                  url={item.youtube_url}
+                  title={item.title}
+                  preacher={item.preacher}
+                  live={item.live}
+                  index={idx}
+                  className={idx > 2 ? " youtube-card--extra" : ""}
+                />
               ))}
             </div>
           </div>

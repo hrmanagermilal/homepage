@@ -5,6 +5,7 @@ import NoticeSubVisual from "./notice_components/NoticeSubVisual";
 import NoticeTable from "./notice_components/NoticeTable";
 import NoticeSearch from "./notice_components/NoticeSearch";
 import NoticePagination from "./notice_components/NoticePagination";
+import { FEATURES } from "../config/features";
 
 const NOTICE_DATA = [
   {
@@ -174,10 +175,13 @@ export default function NoticePage() {
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
 
   const filteredData = useMemo(() => {
@@ -231,7 +235,7 @@ export default function NoticePage() {
         <NoticeSubVisual />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
-        <div className="lnb-wrap">
+        <div className="lnb-wrap" data-ani="top">
           <nav className="lnb" aria-label="소식 메뉴">
             <button className="lnb__btn is-active" onClick={() => { window.history.pushState({}, "", "/news/notice"); window.dispatchEvent(new Event("locationchange")); }}>공지</button>
             <button className="lnb__btn lnb__btn--sep" onClick={() => { window.history.pushState({}, "", "/news/obituary"); window.dispatchEvent(new Event("locationchange")); }}>부고</button>

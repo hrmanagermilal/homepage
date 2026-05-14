@@ -242,6 +242,44 @@
     }
 
     /* ══════════════════════════════════════
+     * Scroll Fade Animation (data-ani)
+     * Mirrors publish/js/motion.js + publish/css/common.css
+     * ══════════════════════════════════════ */
+    [data-ani] {opacity: 0; transition: transform 1.6s ease, opacity 1.3s ease; transform-style: preserve-3d; will-change: transform; display: block;}
+    [data-ani].is_moved {opacity: 1; transform: none;}
+    [data-ani="img"] {transform: translate(0%, 40%) matrix3d(1, 0, 0, 0, 0, 0.997564, 0.0697565, -0.00028, 0, -0.0697565, 0.997564, -0.00249391, 0, 0, 40, 0.9);}
+    [data-ani="bottom"] {transform: translateY(-60rem);}
+    [data-ani="top"] {transform: translateY(60rem);}
+    [data-ani="right"] {transform: translateX(60rem);}
+    [data-ani="left"] {transform: translateX(-60rem);}
+    [data-ani="rotate"] {transform: rotate(5deg);}
+    [data-ani="scale"].is_moved {animation: scrollFadeScale 10s forwards cubic-bezier(0.12, 0.4, 0.41, 0.86);}
+    [data-ani="preserveTop"] {transform: translateY(100%) rotateX(-80deg); transform-style: preserve-3d; transform-origin: center bottom;}
+    [data-ani="hidden"] {transform: translateY(60rem);}
+    [data-ani="skew"] {transform: translateY(60rem) skew(0deg, 7deg) rotate(.001deg);}
+    [data-ani-wrap] {overflow: hidden; display: block;}
+
+    @keyframes scrollFadeScale {
+      0%   {transform: scale(1.1);}
+      100% {transform: scale(1);}
+    }
+
+    @media (max-width: 860px) {
+      [data-ani="right"] {transform: translateY(60rem);}
+      [data-ani="left"]  {transform: translateY(60rem);}
+    }
+    @media (max-width: 540px) {
+      [data-ani] {transition: transform 0.9s ease, opacity 1s ease;}
+      [data-ani="top"]    {transform: translateY(30rem);}
+      [data-ani="bottom"] {transform: translateY(-30rem);}
+      [data-ani="right"]  {transform: translateY(30rem);}
+      [data-ani="left"]   {transform: translateY(30rem);}
+      [data-ani="hidden"] {transform: translateY(30rem);}
+      [data-ani="skew"]   {transform: translateY(30rem) skew(0deg, 7deg) rotate(.001deg);}
+      [data-ani].table-scroll {opacity: 1 !important; transform: none !important;}
+    }
+
+    /* ══════════════════════════════════════
      * 공통 버튼 컴포넌트
      * ══════════════════════════════════════ */
     .btn-basic,

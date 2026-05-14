@@ -104,10 +104,10 @@ export default function IntroVision({ visionStatements = [], language = "kr" }) 
   return (
     <section id="introduction01" className="intro-vision">
       <div className="wrap-narrow">
-                <div className="intro-vision__head">
+                <div className="intro-vision__head" data-ani="top">
           <h3 data-heading="5xl">{copy.heading}</h3>
         </div>
-        
+
         <div className="intro-vision__cards">
           <div className="intro-vision__bg-ellipse" aria-hidden="true">
             <img src="/images/sub/01-introduction/vision-ellipse-bg.png" alt="" />
@@ -117,7 +117,7 @@ export default function IntroVision({ visionStatements = [], language = "kr" }) 
           </div>
 
           {cards.map((card, idx) => (
-            <article className="vision-card" key={idx}>
+            <article className="vision-card" data-ani="top" key={idx}>
               <h4 className="vision-card__title" data-heading="2xl">{card.title}</h4>
               <ul data-list="dot">
                 {card.points.map((point, pidx) => (

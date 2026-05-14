@@ -51,7 +51,7 @@ export default function OnlineGivingPage() {
       <div className="sub-content" id="content">
         <section className="donation">
           <div className="wrap-narrow">
-            <h3 className="donation-heading" data-heading="5xl">
+            <h3 className="donation-heading" data-heading="5xl" data-ani="top">
               온라인 헌금
             </h3>
 

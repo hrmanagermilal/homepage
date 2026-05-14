@@ -10,13 +10,13 @@ export default function Contacts({ section = null }) {
   return (
     <section className="main-direction" id="contacts">
       <div className="wrap">
-        <div className="main-title">
+        <div className="main-title" data-ani="top">
           <h2 data-heading="5xl" className="main-title__heading">오시는 길</h2>
           <p className="main-title__sub">밀알교회는 열린 공동체입니다. 주님의 이름으로 언제나 당신을 환영합니다.</p>
         </div>
 
         <div className="main-direction__layout" data-grid="2">
-          <div className="main-direction__info">
+          <div className="main-direction__info" data-ani="top">
             <div className="main-direction__tab-row">
               <div className="main-direction__tabs" role="tablist">
                 {TABS.map((tab, idx) => (
@@ -126,7 +126,7 @@ export default function Contacts({ section = null }) {
           </div>
 
           {/* 지도 */}
-          <div className="main-direction__map">
+          <div className="main-direction__map" data-ani="top">
             <div className={`main-direction__map-panel${activeTab === 0 ? " is-active" : ""}`} id="dir-map-0">
               <iframe
                 title="밀알교회 오시는 길 지도"

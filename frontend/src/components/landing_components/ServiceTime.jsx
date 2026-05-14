@@ -14,7 +14,7 @@ export default function ServiceTime({ departments = [], section = null }) {
   return (
     <section id="worship" className="main-worship">
       <div className="wrap">
-        <div className="main-title">
+        <div className="main-title" data-ani="top">
           <h2 data-heading="5xl" className="main-title__heading">예배 시간 안내</h2>
           <p className="main-title__sub">
             주일 1~3부 예배, 청년부/교육부 예배, 그리고 주중예배가 있습니다.<br />
@@ -24,7 +24,7 @@ export default function ServiceTime({ departments = [], section = null }) {
 
         <div className="worship-list" data-grid="3">
           {/* 주일 예배 */}
-          <div className="worship-card">
+          <div className="worship-card" data-ani="top">
             <div className="worship-card__head">
               <div className="worship-card__logo"><img src="/images/main/worship-card-logo.png" alt="" /></div>
               <h3 data-heading="lg">주일 예배</h3>
@@ -43,7 +43,7 @@ export default function ServiceTime({ departments = [], section = null }) {
           </div>
 
           {/* 주중 예배 */}
-          <div className="worship-card worship-card--weekly">
+          <div className="worship-card worship-card--weekly" data-ani="top">
             <div className="worship-card__head">
               <div className="worship-card__logo"><img src="/images/main/worship-card-logo.png" alt="" /></div>
               <h3 data-heading="lg">주중 예배</h3>
@@ -87,7 +87,7 @@ export default function ServiceTime({ departments = [], section = null }) {
           </div>
 
           {/* 교육부 예배 */}
-          <div className="worship-card worship-card--edu">
+          <div className="worship-card worship-card--edu" data-ani="top">
             <div className="worship-card__head">
               <div className="worship-card__logo"><img src="/images/main/worship-card-logo.png" alt="" /></div>
               <h3 data-heading="lg">교육부 예배</h3>

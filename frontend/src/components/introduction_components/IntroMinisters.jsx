@@ -238,7 +238,7 @@ export default function IntroMinisters({ members = [], language = "kr" }) {
     <>
       <section id="introduction03" className="intro-ministers">
         <div className="wrap">
-          <div className="intro-ministers__head">
+          <div className="intro-ministers__head" data-ani="top">
             <h3 data-heading="5xl">{copy.heading}</h3>
             <div className="tab-menu intro-ministers__tab" role="tablist" aria-label={copy.tabAriaLabel}>
               {tabs.map((tab, idx) => (
@@ -260,7 +260,7 @@ export default function IntroMinisters({ members = [], language = "kr" }) {
           {panels.map((panel, idx) => (
             <div key={idx} className={`intro-panel${activeTab === idx ? " is-active" : ""}`}
                  id={tabs[idx].panel} role="tabpanel">
-              <ul className="intro-ministers__grid">
+              <ul className="intro-ministers__grid" data-ani="top">
                 {panel.map((person, pidx) => (
                   <MinisterCard key={`${person.name}-${pidx}`} person={person} onOpen={setSelectedPerson} language={language} copy={copy} />
                 ))}

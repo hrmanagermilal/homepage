@@ -35,7 +35,7 @@ export default function Jubo({ items = [], section = null }) {
 
   return (
     <>
-      <section id="weekly" className="main-weekly">
+      <section id="weekly" className="main-weekly" data-ani="top">
         <div className="main-weekly__inr">
           <div className="main-weekly__bg">
             <img src="/images/main/weekly-bg.jpg" alt="" />

@@ -36,12 +36,12 @@ export default function IntroPartner({ togetherItems = [], language = "kr" }) {
           <img src="/images/main/main-visual-ellipse.svg" alt="" />
         </div>
         <div className="intro-partner__cont">
-          <h3 className="intro-partner__title" data-heading="5xl">{copy.title}</h3>
-          <p className="intro-partner__sub">
+          <h3 className="intro-partner__title" data-heading="5xl" data-ani="top">{copy.title}</h3>
+          <p className="intro-partner__sub" data-ani="top">
             {copy.subLine1} <br />
             {copy.subLine2}
           </p>
-          <ul className="intro-partner__logos">
+          <ul className="intro-partner__logos" data-ani="top">
             {partners.map((partner, idx) => (
               <li key={idx} className="partner-logo">
                 <a href={partner.href} target="_blank" rel="noopener noreferrer">

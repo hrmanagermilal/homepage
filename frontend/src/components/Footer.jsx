@@ -66,12 +66,12 @@ export default function Footer() {
 
       <div className="wrap">
         <div className="footer__top">
-          <div className="footer__brand">
+          <div className="footer__brand" data-ani="top">
             <img className="footer__logo" src="/images/common/footer-logo.png" alt="밀알교회" />
             <p className="footer__copy">ⓒ MILAL CHURCH .All Right Reserved. {currentYear}</p>
           </div>
 
-          <nav className="footer__nav" aria-label="사이트 메뉴">
+          <nav className="footer__nav" data-ani="top" aria-label="사이트 메뉴">
             {FOOTER_NAV.map((group) => (
               <div key={group.title} className="footer-nav__col">
                 <a className="footer-nav__title" href={group.links[0]?.path || "#"}>
@@ -98,7 +98,7 @@ export default function Footer() {
         <div className="footer__divider" role="separator"></div>
 
         <div className="footer__bottom">
-          <address className="footer__info">
+          <address className="footer__info" data-ani="top">
             <dl className="footer__info-item">
               <dt className="footer__info-label">ADDRESS</dt>
               <dd className="footer__info-value">405 Gordon Baker Rd. Toronto Ontario Canada M2H 2S6</dd>

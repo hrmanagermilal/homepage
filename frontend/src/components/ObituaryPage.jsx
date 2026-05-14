@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FEATURES } from "../config/features";
 import "./css/SubPage.css";
 import "./css/ObituaryPage.css";
 import ObituarySubVisual from "./obituary_components/ObituarySubVisual";
@@ -129,10 +130,13 @@ export default function ObituaryPage() {
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
 
   const filteredData = useMemo(() => {
@@ -167,7 +171,7 @@ export default function ObituaryPage() {
         <ObituarySubVisual />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
-        <div className="lnb-wrap">
+        <div className="lnb-wrap" data-ani="top">
           <nav className="lnb" aria-label="소식 메뉴">
             <button className="lnb__btn" onClick={() => { window.history.pushState({}, "", "/news/notice"); window.dispatchEvent(new Event("locationchange")); }}>공지</button>
             <button className="lnb__btn lnb__btn--sep is-active" onClick={() => { window.history.pushState({}, "", "/news/obituary"); window.dispatchEvent(new Event("locationchange")); }}>부고</button>

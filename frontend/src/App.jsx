@@ -3,6 +3,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { api } from "./api/client";
 import Header from "./components/Header";
 import { useTheme } from "./components/ThemeSwitcher";
+import { useScrollFade } from "./hooks/useScrollFade";
 import LandingPage from "./components/LandingPage";
 import Footer from "./components/Footer";
 import FloatingMenu from "./components/landing_components/FloatingMenu";
@@ -17,6 +18,7 @@ import ObituaryViewPage from "./components/ObituaryViewPage";
 
 export default function App() {
   const [theme, setTheme] = useTheme();
+  useScrollFade();
   const hasPathInitializedRef = useRef(false);
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
   const isIntroductionPage = currentPath.startsWith("/introduction");
