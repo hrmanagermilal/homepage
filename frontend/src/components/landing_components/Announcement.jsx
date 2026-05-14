@@ -210,7 +210,7 @@ export default function Announcement({ items = [], section = null }) {
 
       <section className="main-news" ref={sectionRef}>
         <div className="wrap">
-          <div className="main-news__head">
+          <div className="main-news__head" data-ani="top">
             <div className="main-title">
               <h2 data-heading="5xl" className="main-title__heading">새로운 소식</h2>
               <p className="main-title__sub">다양한 행사들과 소식을 놓치지 마세요.</p>
@@ -234,7 +234,7 @@ export default function Announcement({ items = [], section = null }) {
             </div>
           </div>
 
-          <div className="main-news__notice tablet-block">
+          <div className="main-news__notice tablet-block" data-ani="top">
             <div className="main-news__notice-label">
               <img src="/images/main/icon-notice.svg" alt="" aria-hidden="true" />
               <span data-text="sm-sb">공지사항</span>
@@ -242,7 +242,7 @@ export default function Announcement({ items = [], section = null }) {
             <a data-text="sm" className="main-news__notice-text" href="/news/notice">{noticeText}</a>
           </div>
 
-          <div className="main-news__slider">
+          <div className="main-news__slider" data-ani="top">
             <div className="main-news__track" id="newsTrack" ref={trackRef}>
               {cards.map((card, idx) => (
                 <article className="news-card" key={`${card.title}-${idx}`} data-card-idx={idx} style={{ cursor: "pointer" }}>

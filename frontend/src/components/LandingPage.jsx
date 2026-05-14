@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { FEATURES } from "../config/features";
 
 import Hero from "./landing_components/Hero";
 import Sermon from "./landing_components/Sermon";
@@ -115,10 +116,13 @@ export default function LandingPage({
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
 
   return (

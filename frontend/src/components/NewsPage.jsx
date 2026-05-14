@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FEATURES } from "../config/features";
 import "./css/SubPage.css";
 import "./css/NoticePage.css";
 import "./css/ObituaryPage.css";
@@ -147,7 +148,7 @@ const ITEMS_PER_PAGE = 8;
 
 function SubLnb({ activeKey }) {
   return (
-    <div className="lnb-wrap">
+    <div className="lnb-wrap" data-ani="top">
       <nav className="lnb" aria-label="소식 메뉴">
         {NEWS_LNB_ITEMS.map((item, idx) => (
           <a
@@ -242,8 +243,13 @@ export default function NewsPage() {
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {}
   }, []);
 
   // Notice computed

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { FEATURES } from "../config/features";
 import NextGenDepartment from "./nextgen_components/NextGenDepartment";
 import "./css/SubPage.css";
 import "./css/NextGenPage.css";
@@ -188,7 +189,7 @@ function SubVisual({ title }) {
 
 function SubLnb({ activeKey }) {
   return (
-    <div className="lnb-wrap">
+    <div className="lnb-wrap" data-ani="top">
       <nav className="lnb" aria-label="다음세대 메뉴">
         {NEXTGEN_LNB_ITEMS.map((item, idx) => (
           <a
@@ -294,10 +295,13 @@ export default function NextGenPage() {
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
 
   return (

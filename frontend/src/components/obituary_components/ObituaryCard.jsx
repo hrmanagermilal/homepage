@@ -1,6 +1,6 @@
 export default function ObituaryCard({ id, title, description, date, href = "#" }) {
   return (
-    <li>
+    <li data-ani="top">
       <a className="obituary-card" href={`/news/obituary/${id}`}>
         <div className="obituary-card__top">
           <div className="obituary-card__head">
