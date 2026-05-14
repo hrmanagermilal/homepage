@@ -371,7 +371,7 @@
 
     @media (max-width: 540px) {
     	#footer {padding-top: 40rem;}
-    	.btn-top {width: 64rem; height: 64rem; top: -88rem;}
+    	.btn-top {z-index: 21; width: 52rem; height: 52rem; top: -70rem; background: rgba(0, 0, 0, .2); backdrop-filter: blur(3rem);}
     	.footer__logo {width: auto; height: 46rem; object-position: left;}
     	.footer__top {padding-bottom: 44rem;}
     	.footer__info {gap: 16rem 24rem;}
