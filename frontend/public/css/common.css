@@ -641,10 +641,10 @@
     .quick-menu a {display: inline-flex; align-items: center; gap: 10rem;}
     .quick-menu a span {flex-shrink: 0; font-size: var(--font-xxsm); font-weight: 600; color: var(--b-title); opacity: 0; white-space: nowrap; transition: .1s ease .2s;}
     .quick-menu__btn img {display: block; flex-shrink: 0; max-width: 41rem; max-height: 37rem; object-fit: contain; pointer-events: none;}
-    .quick-menu > ul > li:nth-child(1) .quick-menu__btn img {max-width: 20rem; max-height: 29rem;}
-    .quick-menu > ul > li:nth-child(2) .quick-menu__btn img {max-width: 25rem; max-height: 25rem;}
-    .quick-menu > ul > li:nth-child(3) .quick-menu__btn img {max-width: 41rem; max-height: 37rem;}
-    .quick-menu > ul > li:nth-child(4) .quick-menu__btn img {max-width: 25rem; max-height: 25rem;}
+    .quick-menu .quick-menu__btn.quick-menu__btn--book img {max-width: 20rem; max-height: 29rem;}
+    .quick-menu .quick-menu__btn.quick-menu__btn--love img {max-width: 25rem; max-height: 25rem;}
+    .quick-menu .quick-menu__btn.quick-menu__btn--school img {max-width: 41rem; max-height: 37rem;}
+    .quick-menu .quick-menu__btn.quick-menu__btn--live img {max-width: 25rem; max-height: 25rem;}
     .quick-menu__btn--dark {width: auto; max-width: none; padding: 15rem 20rem; background: var(--bg-dark);}
     .quick-menu__btn--dark span {opacity: 1 !important; color: var(--w) !important; opacity: 1; transform: none;}
     .quick-menu__btn--dark img {width: 24rem; height: 17rem; filter: none;}
