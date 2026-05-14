@@ -136,9 +136,8 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
   const handleFullMenuItemEnter = useCallback((idx) => {
     setFullMenuHoveredIdx(idx);
     if (!gnbRef.current || !itemRefs.current[idx]) return;
-    const gnbRect = gnbRef.current.getBoundingClientRect();
-    const itemRect = itemRefs.current[idx].getBoundingClientRect();
-    const relativeTop = itemRect.top - gnbRect.top + itemRect.height / 2;
+    const item = itemRefs.current[idx];
+    const relativeTop = item.offsetTop + Math.round(item.offsetHeight / 2);
     setSubTopPx(relativeTop);
   }, []);
 
@@ -282,7 +281,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                     <ul
                       key={idx}
                       className={`full-menu__gnb-sub${fullMenuHoveredIdx === idx ? " is-active" : ""}`}
-                      style={{ top: fullMenuHoveredIdx === idx ? subTopPx : undefined }}
+                      style={subTopPx > 0 ? { top: subTopPx } : undefined}
                     >
                       {item.subs.map((sub, si) => (
                         <li key={si}>
