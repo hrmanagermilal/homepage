@@ -104,6 +104,18 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     const link = e.target?.closest?.("a[href]");
     if (!link) return;
 
+    const fullMenuIdxAttr = link.getAttribute("data-fullmenu-index");
+    const hasFullMenuSubs = link.getAttribute("data-has-subs") === "true";
+    if (fullMenuIdxAttr && hasFullMenuSubs) {
+      const isMobileMenu = typeof window !== "undefined" && window.matchMedia("(max-width: 540px)").matches;
+      if (isMobileMenu) {
+        const idx = Number(fullMenuIdxAttr);
+        e.preventDefault();
+        setFullMenuHoveredIdx((prev) => (prev === idx ? -1 : idx));
+        return;
+      }
+    }
+
     const href = link.getAttribute("href") || "";
     if (!href.startsWith("/")) return;
     if (link.target && link.target !== "_self") return;
@@ -134,6 +146,9 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
   }, []);
 
   const handleFullMenuItemEnter = useCallback((idx) => {
+    const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches;
+    if (!isDesktop) return;
+
     setFullMenuHoveredIdx(idx);
     if (!gnbRef.current || !itemRefs.current[idx]) return;
     const item = itemRefs.current[idx];
@@ -268,7 +283,12 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                     >
                       <div className="full-menu__gnb-label">
                         <span className="full-menu__gnb-num">{item.num}</span>
-                        <a className="full-menu__gnb-title" href={item.path}>
+                        <a
+                          className="full-menu__gnb-title"
+                          href={item.path}
+                          data-fullmenu-index={idx}
+                          data-has-subs={item.subs.length > 0}
+                        >
                           {item.label}
                         </a>
                       </div>
@@ -360,7 +380,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                   <li>
                     <a className="full-menu__shortcut" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer">
                       <span className="full-menu__shortcut-icon">
-                        <img src="/images/common/ic-quick01.svg" alt="" aria-hidden="true" />
+                        <img src="/images/common/ic-fullmenu04.svg" alt="" aria-hidden="true" />
                       </span>
                       <span className="full-menu__shortcut-label">밀알도서관 바로가기</span>
                     </a>
