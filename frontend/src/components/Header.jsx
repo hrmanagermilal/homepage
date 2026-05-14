@@ -382,7 +382,9 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
                   <li>
                     <a className="full-menu__shortcut" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer">
                       <span className="full-menu__shortcut-icon">
-                        <img src="/images/common/ic-fullmenu04.svg" alt="" aria-hidden="true" />
+                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M10.2697 2.2016C8.87249 1.4662 6.11888 2.88718 5.32785 4.13815C4.97545 4.69794 5.00038 5.10135 5.00038 5.33022V17.5746L15.3266 24L17.2684 22.9397V11.0152L6.66613 4.92793C7.23507 4.21189 8.51463 3.33875 9.47407 3.68943L18.9176 8.74022L18.9177 22.0242L20.8644 20.962V7.67834L10.2697 2.2016Z" fill="currentColor"/>
+                        </svg>
                       </span>
                       <span className="full-menu__shortcut-label">밀알도서관 바로가기</span>
                     </a>

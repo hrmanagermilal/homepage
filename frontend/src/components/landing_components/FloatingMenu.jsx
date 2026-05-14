@@ -10,7 +10,11 @@ export default function FloatingMenu() {
         </li>        
         <li>
           <a className="quick-menu__btn quick-menu__btn--book" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer" aria-label="밀알 도서관 바로가기">
-            <i><img src="/images/common/ic-quick01.svg" alt="" /></i>
+            <i>
+              <svg width="21" height="29" viewBox="0 0 21 29" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{display:'block',flexShrink:0,pointerEvents:'none'}}>
+                <path d="M6.94637 0.265747C5.10465 -0.703651 1.47489 1.16946 0.43217 2.81847C-0.0323616 3.55638 0.000505058 4.08814 0.000505058 4.38984V20.5301L13.6123 29L16.1719 27.6024V11.8837L2.19626 3.85955C2.94623 2.91567 4.63292 1.76471 5.89763 2.22697L18.346 8.88484L18.346 26.3955L20.9121 24.9954V7.48508L6.94637 0.265747Z" fill="currentColor"/>
+              </svg>
+            </i>
             <span>밀알 도서관</span>
           </a>
         </li>

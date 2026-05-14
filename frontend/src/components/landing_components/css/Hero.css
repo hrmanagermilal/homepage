@@ -48,6 +48,7 @@
 .main-visual__quick-item { position: relative; display: flex; align-items: center; flex: 1; gap: 22rem; padding: 0 25rem; text-decoration: none; color: inherit; transition: background 0.2s ease; }
 .main-visual__quick-icon { display: flex; justify-content: center; align-items: center; flex-shrink: 0; width: 90rem; height: 90rem; background: #f6f6f6; border-radius: 5rem; transition: background 0.2s ease; }
 .main-visual__quick-icon img { display: block; width: 50rem; height: 50rem; object-fit: contain; pointer-events: none; }
+.main-visual__quick-icon svg { display: block; width: 50rem; height: 50rem; pointer-events: none; }
 .main-visual__quick-body { flex: 1; min-width: 0; }
 .main-visual__quick-body strong { display: block; font-size: var(--font-19); font-weight: 700; line-height: 1.4; color: var(--b-title); margin-bottom: 4rem; }
 .main-visual__quick-body span { display: block; font-size: var(--font-default); line-height: 1.467; color: var(--b-default); }
@@ -77,6 +78,7 @@
   .main-visual__quick-item { padding: 0 30rem; gap: 20rem; }
   .main-visual__quick-icon { width: 70rem; height: 70rem; }
   .main-visual__quick-icon img { width: 38rem; height: 38rem; }
+  .main-visual__quick-icon svg { width: 38rem; height: 38rem; }
   .main-visual__quick-body strong { font-size: var(--font-default); margin-bottom: 3rem; }
   .main-visual__quick-inner > li + li::before { height: 70rem; }
   .main-visual__quick-arrow { right: 20rem; }
@@ -92,6 +94,7 @@
   .main-visual__quick-item { padding: 0 20rem; gap: 12rem; }
   .main-visual__quick-icon { width: 58rem; height: 58rem; }
   .main-visual__quick-icon img { width: 32rem; height: 32rem; }
+  .main-visual__quick-icon svg { width: 32rem; height: 32rem; }
   .main-visual__quick-body span { display: none; }
   .main-visual__quick-inner > li + li::before { height: 58rem; }
   .main-visual__scroll-down { display: none; }
@@ -109,6 +112,7 @@
   .main-visual__quick-body strong { font-size: var(--font-xsm); margin-bottom: 0; }
   .main-visual__quick-icon { width: 40rem; height: 40rem; border-radius: 3rem; }
   .main-visual__quick-icon img { width: 22rem; height: 22rem; }
+  .main-visual__quick-icon svg { width: 22rem; height: 22rem; }
   .main-visual__quick-item { padding: 0 16rem; gap: 10rem; }
   .main-visual__quick-inner > li + li::before { height: 46rem; }
   .main-visual__quick-arrow { right: 12rem; }

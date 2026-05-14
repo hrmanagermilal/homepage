@@ -1,4 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from "react";
+import { IconQuickWorship, IconQuickBulletin } from "./HeroIcons";
 import "./css/Hero.css";
 
 const SLIDES = [
@@ -6,6 +7,15 @@ const SLIDES = [
   { src: "/images/main/main-visual-slide-02.jpg", alt: "" },
   { src: "/images/main/main-visual-slide-03.png", alt: "" },
 ];
+
+const DEFAULT_ICON_WORSHIP  = "/images/main/icon-quick-worship.svg";
+const DEFAULT_ICON_BULLETIN = "/images/main/icon-quick-bulletin.svg";
+
+function QuickIcon({ src }) {
+  if (src === DEFAULT_ICON_WORSHIP)  return <IconQuickWorship />;
+  if (src === DEFAULT_ICON_BULLETIN) return <IconQuickBulletin />;
+  return <img src={src} alt="" aria-hidden="true" />;
+}
 
 const DEFAULT_QUICK_LINKS = [
   {
@@ -188,7 +198,7 @@ export default function Hero({ hero = null, quickLinks = [] }) {
             <li key={idx}>
               <a className="main-visual__quick-item" href={link.href}>
                 <div className="main-visual__quick-icon">
-                  <img src={link.icon} alt="" aria-hidden="true" />
+                  <QuickIcon src={link.icon} />
                 </div>
                 <div className="main-visual__quick-body">
                   <strong>{link.title}</strong>
