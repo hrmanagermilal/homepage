@@ -36,7 +36,7 @@
     .youtube-card__thumb {position: absolute; top: 0; left: 0; width: 100%; height: 79%;}
     .youtube-card__thumb img {display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
     .youtube-card__gradient {position: absolute; bottom: 0; left: 0; width: 100%; height: 53%; background: linear-gradient(180.95deg, rgba(11,18,28,0) 2.38%, rgb(11,18,28) 44.94%); mix-blend-mode: darken;}
-    .youtube-card__label {position: absolute; bottom: 26%; right: 20rem; left: 30rem; transform: translateY(100%);}
+    .youtube-card__label {position: absolute; left: 0; bottom: 0; width: 100%; padding: 30rem;}
     .youtube-card__label h3 {overflow: hidden; font-weight: 600; font-size: var(--font-20); line-height: 1.45; color: var(--w); white-space: nowrap; text-overflow: ellipsis;}
     .youtube-card--live {border: 6rem solid #ed3023;}
     .youtube-card__live-badge {position: absolute; display: flex; align-items: center; gap: 6rem; top: 14rem; right: 14rem; padding: 5rem 8rem; background: #ed3023; border-radius: 3rem; filter: drop-shadow(3rem 3rem 2.5rem rgba(0,0,0,0.1));}
@@ -61,30 +61,27 @@
     .main-youtube__more.is-expanded .main-youtube__more-btn {display: none;}
     .main-youtube__more.is-expanded .main-youtube__more-link {display: inline-flex;}
 
-    /* 반응형 */
     @media (max-width: 1480px) { .main-youtube__list {--yt-gap: 30rem;} }
     @media (max-width: 1023px) {
     	.main-youtube {padding: 80rem 0 100rem;}
-    	.main-youtube__more-btn {display: none;}
-    	.main-youtube__more-link {display: inline-flex;}
     	.main-youtube__head {flex-direction: column; gap: 24rem; margin-bottom: 32rem;}
     	.main-youtube__tab {margin-top: 0;}
-    	.main-youtube__scroll {overflow-x: auto; margin-left: calc(-1 * var(--margin)); margin-right: calc(-1 * var(--margin)); -webkit-overflow-scrolling: touch; scrollbar-width: none;}
-    	.main-youtube__scroll::-webkit-scrollbar {display: none;}
-    	.main-youtube__list {width: max-content; padding: 0 40rem; gap: 20rem;}
-    	.main-youtube__list.is-expanded {flex-wrap: nowrap;}
-    	.main-youtube__list.is-expanded .youtube-card {flex: none; width: 380rem;}
-    	.youtube-card {flex: none; width: 380rem; height: 280rem;}
-    	.youtube-card__label {right: 16rem; left: 24rem;}
-    	.youtube-card__label h3 {font-size: var(--font-default);}
+    	.main-youtube__list {--yt-gap: 20rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--yt-gap); width: 100%; padding: 0;}
+    	.main-youtube__list.is-expanded {grid-template-columns: repeat(3, 1fr);}
+    	.youtube-card {flex: 1 1 0; width: 100%; height: 210rem;}
+    	.youtube-card__label {padding: 20rem;}
+      .youtube-card__gradient {height: 40%;}
     	.series-list {grid-template-columns: repeat(3, 1fr); gap: 16rem;}
     }
     @media (max-width: 860px) {
-    	.main-youtube__list {padding: 0 32rem;}
-    	.main-youtube__list.is-expanded .youtube-card {width: 300rem;}
-    	.youtube-card {width: 300rem; height: 230rem;}
-    	.youtube-card__label {right: 14rem; left: 20rem;}
-    	.youtube-card__label h3 {font-size: var(--font-xsm);}
+      .main-youtube__list {grid-template-columns: repeat(2, 1fr);}
+      .main-youtube__list.is-expanded {grid-template-columns: repeat(2, 1fr);}
+      .youtube-card:nth-child(3) { display: none; }
+      .youtube-card--extra { display: none; }
+      .main-youtube__list.is-expanded .youtube-card:nth-child(3) { display: block; }
+      .main-youtube__list.is-expanded .youtube-card--extra:nth-child(4),
+      .main-youtube__list.is-expanded .youtube-card--extra:nth-child(5) { display: block; }
+      .youtube-card { height: 260rem; }
     	.series-list {grid-template-columns: repeat(2, 1fr); gap: 12rem;}
     }
     @media (max-width: 540px) {
@@ -93,14 +90,12 @@
     	.main-title__sub {line-height: 1.4;}
     	.main-youtube__head {gap: 16rem;}
     	.main-youtube__more {margin-top: 30rem;}
-    	.main-youtube__list {padding: 0 20rem; gap: 12rem;}
-    	.main-youtube__list.is-expanded .youtube-card {width: 240rem;}
-    	.youtube-card {width: 240rem; height: 200rem; border-radius: 8rem;}
-    	.youtube-card__label {right: 12rem; left: 16rem;}
-    	.youtube-card__label h3 {font-size: 12rem;}
+    	.main-youtube__list {grid-template-columns: 1fr; gap: 12rem;}
     	.main-youtube__tab {height: 48rem;}
     	.main-youtube__tab-btn {min-width: 60rem; padding: 0 12rem; font-size: var(--font-xxsm);}
+      .main-youtube__list.is-expanded {grid-template-columns: 1fr;}
     	.series-list {gap: 10rem;}
+      
     	.series-card__label {padding: 12rem 14rem;}
     	.series-card__label h3 {font-size: var(--font-xsm);}
     }
@@ -132,6 +127,14 @@
     	.series-card {transition: transform 0.3s ease, box-shadow 0.3s ease;}
     	.series-card:hover {transform: translateY(-4rem); box-shadow: 0 20rem 30rem rgba(0,0,0,0.08);}
     }
+
+     @media (max-width: 860px) {
+        .series-list {grid-template-columns: repeat(3, 1fr);}
+     }
+
+     @media (max-width: 540px) {
+        .series-list {grid-template-columns: repeat(2, 1fr); gap: 12rem;}
+     }
 
 
     /* ══════════════════════════════════════
@@ -664,7 +667,19 @@
     <ul class="main-visual__quick-inner">
       <li><a class="main-visual__quick-item" href="#worship">
         <div class="main-visual__quick-icon">
-          <img src="images/main/icon-quick-worship.svg" alt="" aria-hidden="true" />
+          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
+            <path d="M42.9347 27.5371V15.9785H4V43.5572H25.6462" fill="white"/>
+            <path d="M42.9347 27.5371V15.9785H4V43.5572H25.6462" stroke="var(--c-primary)" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M15.3549 19.2227H8.05469V26.5229H15.3549V19.2227Z" stroke="var(--c-primary)" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M27.5229 26.5229H20.2227V19.2227H27.5229V23.2784" stroke="var(--c-primary)" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M15.3549 31.3896H8.05469V38.6898H15.3549V31.3896Z" stroke="var(--c-primary)" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M43 8H4V16H43V8Z" fill="white" stroke="var(--c-primary)" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M34.4179 47.6129C40.9136 47.6129 46.1793 42.347 46.1793 35.8513C46.1793 29.3556 40.9136 24.0898 34.4179 24.0898C27.9222 24.0898 22.6562 29.3556 22.6562 35.8513C22.6562 42.347 27.9222 47.6129 34.4179 47.6129Z" fill="var(--c-icon)" stroke="var(--c-primary)" stroke-width="1.4" stroke-miterlimit="10"/>
+            <path d="M34.4184 37.8789C35.5384 37.8789 36.4463 36.971 36.4463 35.851C36.4463 34.7311 35.5384 33.8232 34.4184 33.8232C33.2985 33.8232 32.3906 34.7311 32.3906 35.851C32.3906 36.971 33.2985 37.8789 34.4184 37.8789Z" fill="var(--c-primary)"/>
+            <path d="M34.0117 28.1455V35.8026L40.4359 40.0854" stroke="var(--c-primary)" stroke-width="1.4" stroke-miterlimit="10" stroke-linecap="round"/>
+            <path d="M12.5161 11.1114C13.6355 11.1114 14.544 10.2029 14.544 9.08354V5.02785C14.544 3.90847 13.6355 3 12.5161 3C11.3968 3 10.4883 3.90847 10.4883 5.02785V9.08354C10.4883 10.2029 11.3968 11.1114 12.5161 11.1114Z" fill="white" stroke="var(--c-primary)" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M33.6098 11.1114C34.7292 11.1114 35.6377 10.2029 35.6377 9.08354V5.02785C35.6377 3.90847 34.7292 3 33.6098 3C32.4905 3 31.582 3.90847 31.582 5.02785V9.08354C31.582 10.2029 32.4905 11.1114 33.6098 11.1114Z" fill="white" stroke="var(--c-primary)" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div class="main-visual__quick-body">
           <strong>예배 시간 안내</strong>
@@ -676,7 +691,27 @@
       </a></li>
       <li><a class="main-visual__quick-item" href="#weekly">
         <div class="main-visual__quick-icon">
-          <img src="images/main/icon-quick-bulletin.svg" alt="" aria-hidden="true" />
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <g clip-path="url(#clip0_471_1100)">
+              <path d="M14.3998 19.3499C14.1988 16.1341 15.1436 12.8087 16.8174 9.80751L17.0185 9.44824C20.1159 14.0004 24.7177 17.8141 29.2798 20.64C29.2798 21.12 28.7382 21.9466 28.7998 22.08" fill="var(--c-icon)"/>
+              <path d="M14.3998 19.3499C14.1988 16.1341 15.1436 12.8087 16.8174 9.80751L17.0185 9.44824C20.1159 14.0004 24.7177 17.8141 29.2798 20.64C29.2798 21.12 28.7382 21.9466 28.7998 22.08" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14.7088 32.0411L12.9447 33.7313C12.2965 34.3549 11.4924 34.7939 10.6226 35.0072L0.90365 37.3662C-0.0440427 42.3713 7.33237 47.7785 10.7744 46.798L15.2011 41.6903C16.0544 40.7057 17.3385 40.2011 18.6349 40.3446C30.3806 41.6698 35.3078 40.4267 39.037 36.3241C43.1395 31.8113 42.2452 25.7436 41.8267 23.9918C41.4821 22.5477 41.7078 21.0257 42.4503 19.7375L42.479 19.6882C43.0739 18.6626 43.3406 17.4318 43.2011 16.1313L44.8913 13.5918L42.0811 13.2923C41.0637 11.9262 39.4719 11.0072 37.6954 10.9005C34.2616 10.6954 31.9108 13.4482 31.4349 16.7918C31.1354 18.8964 30.0975 20.4513 28.5508 21.678" fill="white"/>
+              <path d="M14.7088 32.0411L12.9447 33.7313C12.2965 34.3549 11.4924 34.7939 10.6226 35.0072L0.90365 37.3662C-0.0440427 42.3713 7.33237 47.7785 10.7744 46.798L15.2011 41.6903C16.0544 40.7057 17.3385 40.2011 18.6349 40.3446C30.3806 41.6698 35.3078 40.4267 39.037 36.3241C43.1395 31.8113 42.2452 25.7436 41.8267 23.9918C41.4821 22.5477 41.7078 21.0257 42.4503 19.7375L42.479 19.6882C43.0739 18.6626 43.3406 17.4318 43.2011 16.1313L44.8913 13.5918L42.0811 13.2923C41.0637 11.9262 39.4719 11.0072 37.6954 10.9005C34.2616 10.6954 31.9108 13.4482 31.4349 16.7918C31.1354 18.8964 30.0975 20.4513 28.5508 21.678" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M38.213 15.1959C38.5529 15.1959 38.8284 14.9203 38.8284 14.5805C38.8284 14.2406 38.5529 13.9651 38.213 13.9651C37.8732 13.9651 37.5977 14.2406 37.5977 14.5805C37.5977 14.9203 37.8732 15.1959 38.213 15.1959Z" fill="var(--c-primary)"/>
+              <path d="M47.2346 18.2442L44.0879 10.5067" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M39.9606 6.91699C38.9432 4.29955 40.5637 1.23083 40.5637 1.23083C40.5637 1.23083 43.8293 2.40417 44.8426 5.0216C45.8601 7.63904 44.2396 10.7078 44.2396 10.7078C44.2396 10.7078 40.9739 9.53442 39.9606 6.91699Z" fill="var(--c-icon)" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.72461 41.8625L8.05794 39.401" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.41797 45.1446L9.28976 42.2728" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21.5555 34.1005C12.9811 32.603 7.5042 24.7712 8.90318 16.3815L8.96882 15.9958C13.4037 18.8389 18.2283 20.6564 23.4386 21.4646C26.4088 21.9241 29.5022 22.0594 32.7186 21.8707C36.255 21.6615 38.0847 24.5497 36.3945 28.4923C34.8765 32.0328 29.4652 35.4748 21.5596 34.0964L21.5555 34.1005Z" fill="white" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10.1094 24.2216L17.494 25.0421" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.9824 29.1447H18.726" stroke="var(--c-primary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_471_1100">
+                <rect width="48" height="48" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
         </div>
         <div class="main-visual__quick-body">
           <strong>주보</strong>
