@@ -1,4 +1,5 @@
 ﻿import { useState, useRef, useEffect, useCallback } from "react";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const NAV_ITEMS = [
   {
@@ -47,7 +48,7 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function Header({ quickLinks = [], landingTitles = [] }) {
+export default function Header({ quickLinks = [], landingTitles = [], theme, setTheme }) {
   const [fullMenuOpen, setFullMenuOpen] = useState(false);
   const [bgmPlaying, setBgmPlaying] = useState(false);
   const [fullMenuHoveredIdx, setFullMenuHoveredIdx] = useState(-1);
@@ -104,6 +105,18 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
     const link = e.target?.closest?.("a[href]");
     if (!link) return;
 
+    const fullMenuIdxAttr = link.getAttribute("data-fullmenu-index");
+    const hasFullMenuSubs = link.getAttribute("data-has-subs") === "true";
+    if (fullMenuIdxAttr && hasFullMenuSubs) {
+      const isMobileMenu = typeof window !== "undefined" && window.matchMedia("(max-width: 540px)").matches;
+      if (isMobileMenu) {
+        const idx = Number(fullMenuIdxAttr);
+        e.preventDefault();
+        setFullMenuHoveredIdx((prev) => (prev === idx ? -1 : idx));
+        return;
+      }
+    }
+
     const href = link.getAttribute("href") || "";
     if (!href.startsWith("/")) return;
     if (link.target && link.target !== "_self") return;
@@ -134,11 +147,13 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
   }, []);
 
   const handleFullMenuItemEnter = useCallback((idx) => {
+    const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches;
+    if (!isDesktop) return;
+
     setFullMenuHoveredIdx(idx);
     if (!gnbRef.current || !itemRefs.current[idx]) return;
-    const gnbRect = gnbRef.current.getBoundingClientRect();
-    const itemRect = itemRefs.current[idx].getBoundingClientRect();
-    const relativeTop = itemRect.top - gnbRect.top + itemRect.height / 2;
+    const item = itemRefs.current[idx];
+    const relativeTop = item.offsetTop + Math.round(item.offsetHeight / 2);
     setSubTopPx(relativeTop);
   }, []);
 
@@ -209,6 +224,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
           </nav>
 
           <div className="site-header__util">
+            {<ThemeSwitcher theme={theme} setTheme={setTheme} />}
             <a className="site-header__news-btn" href="/news#notice">
               <img src="/images/common/icon-header-news.svg" alt="" />
               <span>밀알 소식 바로가기</span>
@@ -269,7 +285,12 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                     >
                       <div className="full-menu__gnb-label">
                         <span className="full-menu__gnb-num">{item.num}</span>
-                        <a className="full-menu__gnb-title" href={item.path}>
+                        <a
+                          className="full-menu__gnb-title"
+                          href={item.path}
+                          data-fullmenu-index={idx}
+                          data-has-subs={item.subs.length > 0}
+                        >
                           {item.label}
                         </a>
                       </div>
@@ -282,7 +303,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                     <ul
                       key={idx}
                       className={`full-menu__gnb-sub${fullMenuHoveredIdx === idx ? " is-active" : ""}`}
-                      style={{ top: fullMenuHoveredIdx === idx ? subTopPx : undefined }}
+                      style={subTopPx > 0 ? { top: subTopPx } : undefined}
                     >
                       {item.subs.map((sub, si) => (
                         <li key={si}>
@@ -361,7 +382,9 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
                   <li>
                     <a className="full-menu__shortcut" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer">
                       <span className="full-menu__shortcut-icon">
-                        <img src="/images/common/ic-quick01.svg" alt="" aria-hidden="true" />
+                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M10.2697 2.2016C8.87249 1.4662 6.11888 2.88718 5.32785 4.13815C4.97545 4.69794 5.00038 5.10135 5.00038 5.33022V17.5746L15.3266 24L17.2684 22.9397V11.0152L6.66613 4.92793C7.23507 4.21189 8.51463 3.33875 9.47407 3.68943L18.9176 8.74022L18.9177 22.0242L20.8644 20.962V7.67834L10.2697 2.2016Z" fill="currentColor"/>
+                        </svg>
                       </span>
                       <span className="full-menu__shortcut-label">밀알도서관 바로가기</span>
                     </a>

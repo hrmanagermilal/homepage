@@ -8,6 +8,7 @@
   <meta property="og:image" content="../images/og-img.jpg">
   <link rel="shortcut icon" href="../images/favicon.png"/>
   <link rel="stylesheet" href="../css/common.css" />
+  <script src="../js/motion.js"></script>
   <style>
     /* ══════════════════════════════════════
      * Obituary 부고
@@ -115,9 +116,9 @@
     <section class="obituary">
       <div class="wrap">
 
-        <h3 class="obituary-heading" data-heading="5xl">부고</h3>
+        <h3 class="obituary-heading" data-heading="5xl" data-ani="top">부고</h3>
 
-        <div class="obituary-top">
+        <div class="obituary-top" data-ani="top">
           <p class="obituary-count">총 <strong>6</strong>건</p>
           <form class="obituary-search" role="search" action="#" method="get">
             <div class="obituary-search__select-wrap">
@@ -139,7 +140,7 @@
 
         <ul class="obituary-list" data-grid="4">
 
-          <li>
+          <li data-ani="top">
             <a class="obituary-card" href="04-obituary-view.html#content">
               <div class="obituary-card__top">
                 <div class="obituary-card__head">
@@ -153,7 +154,7 @@
             </a>
           </li>
 
-          <li>
+          <li data-ani="top">
             <a class="obituary-card" href="04-obituary-view.html#content">
               <div class="obituary-card__top">
                 <div class="obituary-card__head">
@@ -167,7 +168,7 @@
             </a>
           </li>
 
-          <li>
+          <li data-ani="top">
             <a class="obituary-card" href="04-obituary-view.html#content">
               <div class="obituary-card__top">
                 <div class="obituary-card__head">
@@ -181,7 +182,7 @@
             </a>
           </li>
 
-          <li>
+          <li data-ani="top">
             <a class="obituary-card" href="04-obituary-view.html#content">
               <div class="obituary-card__top">
                 <div class="obituary-card__head">
@@ -195,7 +196,7 @@
             </a>
           </li>
 
-          <li>
+          <li data-ani="top">
             <a class="obituary-card" href="04-obituary-view.html#content">
               <div class="obituary-card__top">
                 <div class="obituary-card__head">
@@ -209,7 +210,7 @@
             </a>
           </li>
 
-          <li>
+          <li data-ani="top">
             <a class="obituary-card" href="04-obituary-view.html#content">
               <div class="obituary-card__top">
                 <div class="obituary-card__head">
@@ -225,7 +226,7 @@
 
         </ul>
 
-        <nav class="obituary-pagination" aria-label="페이지 네비게이션">
+        <nav class="obituary-pagination" aria-label="페이지 네비게이션" data-ani="top">
           <div class="obituary-pagination__nums">
             <a class="obituary-pagination__btn is-active" href="#" aria-current="page">1</a>
             <a class="obituary-pagination__btn" href="#">2</a>
