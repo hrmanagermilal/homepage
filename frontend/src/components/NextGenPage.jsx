@@ -1,16 +1,30 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import NextGenDepartment from "./nextgen_components/NextGenDepartment";
 import "./css/SubPage.css";
 import "./css/NextGenPage.css";
 
+const KEY_TO_TITLE = {
+  "young-adults": "청년부",
+  "km-youth": "KM 청소년부",
+  "em-youth": "EM 청소년부",
+  "children": "아동부",
+  "kindergarten": "유치부",
+  "infants": "영유아부",
+};
+
 const NEXTGEN_LNB_ITEMS = [
-  { label: "청년부", href: "/nextgen/young-adults" },
-  { label: "KM 청소년부", href: "/nextgen/km-youth" },
-  { label: "EM 청소년부", href: "/nextgen/em-youth" },
-  { label: "아동부", href: "/nextgen/children" },
-  { label: "유치부", href: "/nextgen/kindergarten" },
-  { label: "영유아부", href: "/nextgen/infants" },
+  { label: "청년부", key: "young-adults", href: "/nextgen#young-adults" },
+  { label: "KM 청소년부", key: "km-youth", href: "/nextgen#km-youth" },
+  { label: "EM 청소년부", key: "em-youth", href: "/nextgen#em-youth" },
+  { label: "아동부", key: "children", href: "/nextgen#children" },
+  { label: "유치부", key: "kindergarten", href: "/nextgen#kindergarten" },
+  { label: "영유아부", key: "infants", href: "/nextgen#infants" },
 ];
+
+function getKeyFromHash(hash) {
+  const key = (hash || "").replace("#", "");
+  return KEY_TO_TITLE[key] ? key : "young-adults";
+}
 
 const DEPARTMENT_CONTENT = {
   "청년부": {
@@ -172,14 +186,14 @@ function SubVisual({ title }) {
   );
 }
 
-function SubLnb({ currentTitle }) {
+function SubLnb({ activeKey }) {
   return (
     <div className="lnb-wrap">
       <nav className="lnb" aria-label="다음세대 메뉴">
         {NEXTGEN_LNB_ITEMS.map((item, idx) => (
           <a
-            key={item.label}
-            className={`lnb__btn${item.label === currentTitle ? " is-active" : ""}${idx > 0 ? " lnb__btn--sep" : ""}`}
+            key={item.key}
+            className={`lnb__btn${activeKey === item.key ? " is-active" : ""}${idx > 0 ? " lnb__btn--sep" : ""}`}
             href={item.href}
           >
             {item.label}
@@ -190,10 +204,18 @@ function SubLnb({ currentTitle }) {
   );
 }
 
-export default function NextGenPage({ title }) {
+export default function NextGenPage() {
   const containerRef = useRef(null);
-  const safeTitle = DEPARTMENT_CONTENT[title] ? title : "청년부";
+  const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
+  const safeTitle = KEY_TO_TITLE[activeKey] || "청년부";
   const content = DEPARTMENT_CONTENT[safeTitle];
+
+  useEffect(() => {
+    const onHashChange = () => setActiveKey(getKeyFromHash(window.location.hash));
+    window.addEventListener("hashchange", onHashChange);
+    onHashChange();
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -284,7 +306,7 @@ export default function NextGenPage({ title }) {
         <SubVisual title={safeTitle} />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
-        <SubLnb currentTitle={safeTitle} />
+        <SubLnb activeKey={activeKey} />
         <NextGenDepartment {...content} />
       </div>
     </div>

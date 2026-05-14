@@ -9,19 +9,10 @@ import IntroductionPage from "./components/IntroductionPage";
 import NextGenPage from "./components/NextGenPage";
 import MinistryPage from "./components/MinistryPage";
 import OnlineGivingPage from "./components/OnlineGivingPage";
-import NoticePage from "./components/NoticePage";
+import NewsPage from "./components/NewsPage";
 import NoticeViewPage from "./components/NoticeViewPage";
-import ObituaryPage from "./components/ObituaryPage";
 import ObituaryViewPage from "./components/ObituaryViewPage";
 
-const NEXTGEN_PAGE_TITLES = {
-  "/nextgen/young-adults": "청년부",
-  "/nextgen/km-youth": "KM 청소년부",
-  "/nextgen/em-youth": "EM 청소년부",
-  "/nextgen/children": "아동부",
-  "/nextgen/kindergarten": "유치부",
-  "/nextgen/infants": "영유아부",
-};
 
 export default function App() {
   const hasPathInitializedRef = useRef(false);
@@ -30,11 +21,9 @@ export default function App() {
   const isMinistryPage = currentPath.startsWith("/ministry");
   const isOnlineGivingPage = currentPath.startsWith("/online-giving");
   const isNoticeViewPage = /^\/news\/notice\/\d+$/.test(currentPath);
-  const isNoticePage = currentPath.startsWith("/news/notice") && !isNoticeViewPage;
   const isObituaryViewPage = /^\/news\/obituary\/\d+$/.test(currentPath);
-  const isObituaryPage = currentPath.startsWith("/news/obituary") && !isObituaryViewPage;
-  const nextGenPageTitle = NEXTGEN_PAGE_TITLES[currentPath] || null;
-  const isNextGenSubmenuPage = Boolean(nextGenPageTitle);
+  const isNewsPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage;
+  const isNextGenSubmenuPage = currentPath.startsWith("/nextgen");
   const [health, setHealth] = useState(null);
   const [hero, setHero] = useState(null);
   const [heroLinks, setHeroLinks] = useState([]);
@@ -53,7 +42,7 @@ export default function App() {
 
   // Hashes on these paths are tab selectors, not scroll anchors
   const isTabHashPage = useCallback((path) => {
-    return path.startsWith("/ministry") || path.startsWith("/nextgen");
+    return path.startsWith("/ministry") || path.startsWith("/nextgen") || path.startsWith("/news");
   }, []);
 
   const scrollToHash = useCallback(() => {
@@ -199,14 +188,12 @@ export default function App() {
         <OnlineGivingPage />
       ) : isNoticeViewPage ? (
         <NoticeViewPage />
-      ) : isNoticePage ? (
-        <NoticePage />
       ) : isObituaryViewPage ? (
         <ObituaryViewPage />
-      ) : isObituaryPage ? (
-        <ObituaryPage />
+      ) : isNewsPage ? (
+        <NewsPage />
       ) : isNextGenSubmenuPage ? (
-        <NextGenPage title={nextGenPageTitle} />
+        <NextGenPage />
       ) : (
         <LandingPage
           hero={hero}
@@ -220,7 +207,7 @@ export default function App() {
         />
       )}
       <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
-      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isNoticePage || isObituaryViewPage || isObituaryPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isNewsPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }

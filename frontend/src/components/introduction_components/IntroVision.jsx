@@ -104,10 +104,10 @@ export default function IntroVision({ visionStatements = [], language = "kr" }) 
   return (
     <section id="introduction01" className="intro-vision">
       <div className="wrap-narrow">
-        <div className="intro-vision__head">
+                <div className="intro-vision__head">
           <h3 data-heading="5xl">{copy.heading}</h3>
         </div>
-
+        
         <div className="intro-vision__cards">
           <div className="intro-vision__bg-ellipse" aria-hidden="true">
             <img src="/images/sub/01-introduction/vision-ellipse-bg.png" alt="" />

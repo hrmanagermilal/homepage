@@ -43,22 +43,15 @@ export default function LandingPage({
     let isAnimating = false;
     let wheelLockUntil = 0;
 
-    const getClosestSectionIndex = () => {
-      const viewportMid = window.innerHeight / 2;
-      let bestIndex = 0;
-      let bestDistance = Number.POSITIVE_INFINITY;
-
+    const getActiveSectionIndex = () => {
+      let activeIndex = 0;
       sections.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
-        const sectionMid = rect.top + rect.height / 2;
-        const distance = Math.abs(sectionMid - viewportMid);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          bestIndex = index;
+        if (rect.top <= 4) {
+          activeIndex = index;
         }
       });
-
-      return bestIndex;
+      return activeIndex;
     };
 
     const moveToSection = (index) => {
@@ -84,8 +77,33 @@ export default function LandingPage({
         return;
       }
 
-      const currentIndex = getClosestSectionIndex();
       const direction = event.deltaY > 0 ? 1 : -1;
+      const currentIndex = getActiveSectionIndex();
+      const currentSection = sections[currentIndex];
+      const rect = currentSection.getBoundingClientRect();
+
+      // Scrolling down but section bottom is not yet fully visible → scroll one viewport down (or to section bottom if closer)
+      if (direction > 0 && rect.bottom > window.innerHeight + 4) {
+        event.preventDefault();
+        wheelLockUntil = now + 500;
+        isAnimating = true;
+        const scrollAmount = Math.min(window.innerHeight, rect.bottom - window.innerHeight);
+        window.scrollTo({ top: window.scrollY + scrollAmount, behavior: "smooth" });
+        window.setTimeout(() => { isAnimating = false; }, 700);
+        return;
+      }
+
+      // Scrolling up but section top is not yet fully visible → scroll one viewport up (or to section top if closer)
+      if (direction < 0 && rect.top < -4) {
+        event.preventDefault();
+        wheelLockUntil = now + 500;
+        isAnimating = true;
+        const scrollAmount = Math.min(window.innerHeight, -rect.top);
+        window.scrollTo({ top: window.scrollY - scrollAmount, behavior: "smooth" });
+        window.setTimeout(() => { isAnimating = false; }, 700);
+        return;
+      }
+
       const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
 
       if (nextIndex === currentIndex) {
