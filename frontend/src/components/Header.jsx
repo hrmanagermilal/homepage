@@ -1,4 +1,5 @@
 ﻿import { useState, useRef, useEffect, useCallback } from "react";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const NAV_ITEMS = [
   {
@@ -47,7 +48,7 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function Header({ quickLinks = [], landingTitles = [] }) {
+export default function Header({ quickLinks = [], landingTitles = [], theme, setTheme }) {
   const [fullMenuOpen, setFullMenuOpen] = useState(false);
   const [bgmPlaying, setBgmPlaying] = useState(false);
   const [fullMenuHoveredIdx, setFullMenuHoveredIdx] = useState(-1);
@@ -223,6 +224,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
           </nav>
 
           <div className="site-header__util">
+            {<ThemeSwitcher theme={theme} setTheme={setTheme} />}
             <a className="site-header__news-btn" href="/news#notice">
               <img src="/images/common/icon-header-news.svg" alt="" />
               <span>밀알 소식 바로가기</span>
