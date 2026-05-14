@@ -34,7 +34,7 @@ function SubVisual({ heroLanguage, setHeroLanguage }) {
   const heroCopy = HERO_COPY[heroLanguage];
 
   return (
-    <section className="sub-visual sub-visual--intro" aria-label="Introduction 서브 비주얼" data-snap-section="true">
+    <section className="sub-visual sub-visual--intro" aria-label="Introduction 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
         <figure className="sub-visual__bg-img intro-bg" />
       </div>
@@ -125,22 +125,20 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
     let isAnimating = false;
     let wheelLockUntil = 0;
 
-    const getClosestSectionIndex = () => {
-      const viewportMid = window.innerHeight / 2;
-      let bestIndex = 0;
-      let bestDistance = Number.POSITIVE_INFINITY;
-
+    // Returns the index of the section currently in view.
+    // For tall sections, this is the last section whose top has entered the viewport.
+    // Threshold accounts for the 90rem scroll-margin-top used on sub-sections.
+    const getActiveSectionIndex = () => {
+      const remPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const threshold = remPx * 92; // slightly above the 90rem scroll-margin-top
+      let activeIndex = 0;
       sections.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
-        const sectionMid = rect.top + rect.height / 2;
-        const distance = Math.abs(sectionMid - viewportMid);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          bestIndex = index;
+        if (rect.top <= threshold) {
+          activeIndex = index;
         }
       });
-
-      return bestIndex;
+      return activeIndex;
     };
 
     const moveToSection = (index) => {
@@ -166,8 +164,33 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
         return;
       }
 
-      const currentIndex = getClosestSectionIndex();
       const direction = event.deltaY > 0 ? 1 : -1;
+      const currentIndex = getActiveSectionIndex();
+      const currentSection = sections[currentIndex];
+      const rect = currentSection.getBoundingClientRect();
+
+      // Scrolling down but section bottom is not yet fully visible → scroll one viewport down (or to section bottom if closer)
+      if (direction > 0 && rect.bottom > window.innerHeight + 4) {
+        event.preventDefault();
+        wheelLockUntil = now + 500;
+        isAnimating = true;
+        const scrollAmount = Math.min(window.innerHeight, rect.bottom - window.innerHeight);
+        window.scrollTo({ top: window.scrollY + scrollAmount, behavior: "smooth" });
+        window.setTimeout(() => { isAnimating = false; }, 700);
+        return;
+      }
+
+      // Scrolling up but section top is not yet fully visible → scroll one viewport up (or to section top if closer)
+      if (direction < 0 && rect.top < -4) {
+        event.preventDefault();
+        wheelLockUntil = now + 500;
+        isAnimating = true;
+        const scrollAmount = Math.min(window.innerHeight, -rect.top);
+        window.scrollTo({ top: window.scrollY - scrollAmount, behavior: "smooth" });
+        window.setTimeout(() => { isAnimating = false; }, 700);
+        return;
+      }
+
       const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
 
       if (nextIndex === currentIndex) {
@@ -187,19 +210,21 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
 
   return (
     <div ref={containerRef}>
-      <SubVisual heroLanguage={heroLanguage} setHeroLanguage={setHeroLanguage} />
-      <div className="sub-content" id="content">
+      <div data-snap-section="true">
+        <SubVisual heroLanguage={heroLanguage} setHeroLanguage={setHeroLanguage} />
+      </div>
+      <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb heroLanguage={heroLanguage} />
-        <div data-snap-section="true">
-          <IntroVision visionStatements={visionStatements} language={heroLanguage} />
-        </div>
-        <div data-snap-section="true">
-          <IntroPastor language={heroLanguage} />
-        </div>
-        <div data-snap-section="true">
-          <IntroMinisters members={members} language={heroLanguage} />
-        </div>
-        <section id="introduction04" data-snap-section="true">
+        <IntroVision visionStatements={visionStatements} language={heroLanguage} />
+      </div>
+      <div data-snap-section="true" style={{ scrollMarginTop: "90rem" }}>
+        <IntroPastor language={heroLanguage} />
+      </div>
+      <div data-snap-section="true" style={{ scrollMarginTop: "90rem" }}>
+        <IntroMinisters members={members} language={heroLanguage} />
+      </div>
+      <div data-snap-section="true" style={{ scrollMarginTop: "90rem" }}>
+        <section id="introduction04">
           <IntroPartner togetherItems={togetherItems} language={heroLanguage} />
         </section>
       </div>

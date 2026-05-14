@@ -11,14 +11,14 @@ const NAV_ITEMS = [
     ],
   },
   {
-    num: "02", label: "다음세대", path: "/nextgen/young-adults",
+    num: "02", label: "다음세대", path: "/nextgen#young-adults",
     subs: [
-      { label: "청년부", path: "/nextgen/young-adults" },
-      { label: "KM 청소년부", path: "/nextgen/km-youth" },
-      { label: "EM 청소년부", path: "/nextgen/em-youth" },
-      { label: "아동부", path: "/nextgen/children" },
-      { label: "유치부", path: "/nextgen/kindergarten" },
-      { label: "영유아부", path: "/nextgen/infants" },
+      { label: "청년부", path: "/nextgen#young-adults" },
+      { label: "KM 청소년부", path: "/nextgen#km-youth" },
+      { label: "EM 청소년부", path: "/nextgen#em-youth" },
+      { label: "아동부", path: "/nextgen#children" },
+      { label: "유치부", path: "/nextgen#kindergarten" },
+      { label: "영유아부", path: "/nextgen#infants" },
     ],
   },
   {
@@ -35,10 +35,10 @@ const NAV_ITEMS = [
     ],
   },
   {
-    num: "04", label: "소식", path: "/news/notice",
+    num: "04", label: "소식", path: "/news#notice",
     subs: [
-      { label: "공지", path: "/news/notice" },
-      { label: "부고", path: "/news/obituary" },
+      { label: "공지", path: "/news#notice" },
+      { label: "부고", path: "/news#obituary" },
     ],
   },
   {
@@ -209,7 +209,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
           </nav>
 
           <div className="site-header__util">
-            <a className="site-header__news-btn" href="/news/notice">
+            <a className="site-header__news-btn" href="/news#notice">
               <img src="/images/common/icon-header-news.svg" alt="" />
               <span>밀알 소식 바로가기</span>
             </a>
@@ -306,7 +306,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
             <div className="full-menu__info">
               <div className="full-menu__info-section">
                 <h2 className="full-menu__info-title">공지사항</h2>
-                <a className="full-menu__info-card" href="/news/notice">
+                <a className="full-menu__info-card" href="/news#notice">
                   <span className="full-menu__info-card-text">밀알교회 홈페이지가 새롭게 리뉴얼 되었습니다.</span>
                   <span className="full-menu__info-arrow">
                     <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
@@ -318,7 +318,7 @@ export default function Header({ quickLinks = [], landingTitles = [] }) {
 
               <div className="full-menu__info-section">
                 <h2 className="full-menu__info-title">최근 부고 소식</h2>
-                <a className="full-menu__info-card" href="/news/obituary">
+                <a className="full-menu__info-card" href="/news#obituary">
                   <span className="full-menu__obituary-icon">
                     <img src="/images/common/icon-obituary-cross.svg" alt="" />
                   </span>

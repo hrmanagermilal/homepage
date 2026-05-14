@@ -11,12 +11,12 @@ const FOOTER_NAV = [
   {
     title: "다음세대",
     links: [
-      { label: "청년부", path: "/nextgen/young-adults" },
-      { label: "KM 청소년부", path: "/nextgen/km-youth" },
-      { label: "EM 청소년부", path: "/nextgen/em-youth" },
-      { label: "아동부", path: "/nextgen/children" },
-      { label: "유치부", path: "/nextgen/kindergarten" },
-      { label: "영유아부", path: "/nextgen/infants" },
+      { label: "청년부", path: "/nextgen#young-adults" },
+      { label: "KM 청소년부", path: "/nextgen#km-youth" },
+      { label: "EM 청소년부", path: "/nextgen#em-youth" },
+      { label: "아동부", path: "/nextgen#children" },
+      { label: "유치부", path: "/nextgen#kindergarten" },
+      { label: "영유아부", path: "/nextgen#infants" },
     ],
   },
   {
@@ -35,8 +35,8 @@ const FOOTER_NAV = [
   {
     title: "소식",
     links: [
-      { label: "공지", path: "/news/notice" },
-      { label: "부고", path: "/news/obituary" },
+      { label: "공지", path: "/news#notice" },
+      { label: "부고", path: "/news#obituary" },
     ],
   },
   {

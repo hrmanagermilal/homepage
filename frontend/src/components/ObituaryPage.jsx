@@ -167,6 +167,12 @@ export default function ObituaryPage() {
         <ObituarySubVisual />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
+        <div className="lnb-wrap">
+          <nav className="lnb" aria-label="소식 메뉴">
+            <button className="lnb__btn" onClick={() => { window.history.pushState({}, "", "/news/notice"); window.dispatchEvent(new Event("locationchange")); }}>공지</button>
+            <button className="lnb__btn lnb__btn--sep is-active" onClick={() => { window.history.pushState({}, "", "/news/obituary"); window.dispatchEvent(new Event("locationchange")); }}>부고</button>
+          </nav>
+        </div>
         <section className="obituary">
           <div className="wrap">
             <h3 className="obituary-heading" data-heading="5xl">

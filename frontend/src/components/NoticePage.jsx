@@ -231,6 +231,12 @@ export default function NoticePage() {
         <NoticeSubVisual />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
+        <div className="lnb-wrap">
+          <nav className="lnb" aria-label="소식 메뉴">
+            <button className="lnb__btn is-active" onClick={() => { window.history.pushState({}, "", "/news/notice"); window.dispatchEvent(new Event("locationchange")); }}>공지</button>
+            <button className="lnb__btn lnb__btn--sep" onClick={() => { window.history.pushState({}, "", "/news/obituary"); window.dispatchEvent(new Event("locationchange")); }}>부고</button>
+          </nav>
+        </div>
         <section className="notice">
           <div className="wrap-narrow">
             <div className="notice-top">
