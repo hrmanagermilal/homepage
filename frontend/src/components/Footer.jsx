@@ -117,10 +117,7 @@ export default function Footer() {
             </dl>
           </address>
 
-          <ul className="footer__policy">
-            <li><a className="footer-policy-btn" href="/privacy/01-privacy01.html">개인정보처리방침</a></li>
-            <li><a className="footer-policy-btn" href="/privacy/01-privacy02.html">이메일무단수집거부</a></li>
-          </ul>
+
         </div>
       </div>
     </footer>
