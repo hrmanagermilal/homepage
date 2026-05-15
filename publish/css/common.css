@@ -59,6 +59,8 @@
       --c-secondary3: #EFE9DF ;
       --c-icon3 : #E2D4BD;
 
+      --c-gradation: linear-gradient(139deg,rgba(31, 143, 61, 1) 0%, rgba(191, 201, 36, 1) 100%);
+
       --b-title:     #252820;
       --b-default:   #666;
       --w:           #fff;
