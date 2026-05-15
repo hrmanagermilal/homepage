@@ -50,6 +50,15 @@
       --c-primary:   #3a472b;
       --c-secondary: #5e7742;
       --c-icon : #BECFAA;
+
+      --c-primary2:   #1C314C;
+      --c-secondary2: #E9ECEF ;
+      --c-icon2 : #BDCCD9;
+
+      --c-primary3:   #39221C;
+      --c-secondary3: #EFE9DF ;
+      --c-icon3 : #E2D4BD;
+
       --b-title:     #252820;
       --b-default:   #666;
       --w:           #fff;
