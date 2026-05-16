@@ -60,10 +60,6 @@ export default function Footer() {
         <img src="/images/common/footer-texture.jpg" alt="" />
       </div>
 
-      <button className="btn-top" type="button" aria-label="맨 위로 이동" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-        <img src="/images/common/icon-scroll-top.svg" alt="" />
-      </button>
-
       <div className="wrap">
         <div className="footer__top">
           <div className="footer__brand" data-ani="top">
@@ -93,6 +89,10 @@ export default function Footer() {
               </div>
             ))}
           </nav>
+
+          <button className="btn-top" type="button" aria-label="맨 위로 이동" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <img src="/images/common/icon-scroll-top.svg" alt="" />
+          </button>
         </div>
 
         <div className="footer__divider" role="separator"></div>
