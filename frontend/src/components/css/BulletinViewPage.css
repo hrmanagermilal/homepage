@@ -1,0 +1,182 @@
+/* ══════════════════════════════════════
+ * Bulletin View Page
+ * ══════════════════════════════════════ */
+
+.bulletin.board-view {
+  padding-bottom: 120rem;
+}
+
+/* Header */
+.bulletin-view__header {
+  padding-bottom: 20rem;
+  border-bottom: 1px solid var(--op-b10);
+  margin-bottom: 40rem;
+  text-align: center;
+}
+
+.bulletin-view__title {
+  color: var(--b-title);
+  font-size: var(--font-xxxl);
+  margin-bottom: 16rem;
+}
+
+.bulletin-view__meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24rem;
+  font-size: var(--font-xsm);
+  color: var(--op-b30);
+}
+
+.bulletin-view__meta-item {
+  white-space: nowrap;
+}
+
+/* Image viewer */
+.bulletin-viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rem;
+  margin-bottom: 60rem;
+}
+
+/* Main image + side arrows + right thumbnails */
+.bulletin-viewer__main-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.bulletin-viewer__main {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Card: auto height, no crop */
+.bulletin-viewer__card {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 460rem;
+  height: auto !important;
+  background: #f0ece7;
+  border-radius: 10rem;
+  box-shadow: 0 10rem 20rem rgba(0, 0, 0, 0.15);
+}
+
+.bulletin-viewer__card img {
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block;
+}
+
+/* Thumbnail column wrapper */
+.bulletin-viewer__thumb-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rem;
+  flex-shrink: 0;
+}
+
+/* Up / Down arrows for thumbnail column — removed */
+/* Thumbnail strip — vertical column on the right */
+.bulletin-viewer__thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+  width: 80rem;
+  flex-shrink: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bulletin-viewer__thumbs .main-weekly__nav-item {
+  position: relative;
+  overflow: hidden;
+  flex: none;
+  width: 80rem;
+  height: 110rem;
+  border-radius: 6rem;
+  opacity: 0.4;
+  cursor: pointer;
+  box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.1);
+  mix-blend-mode: luminosity;
+  border: 3rem solid transparent;
+  transition: all 0.3s ease;
+}
+
+.bulletin-viewer__thumbs .main-weekly__nav-item.is-active {
+  opacity: 1;
+  mix-blend-mode: normal;
+  box-shadow: inset 0 0 0 3rem var(--c-secondary), 0 4rem 8rem rgba(0, 0, 0, 0.1);
+  border-color: var(--c-secondary);
+}
+
+.bulletin-viewer__thumbs .main-weekly__nav-item img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* States */
+.bulletin-view__loading,
+.bulletin-view__error,
+.bulletin-view__no-images {
+  text-align: center;
+  padding: 80rem 0;
+  color: var(--op-b30);
+  font-size: var(--font-default);
+}
+
+/* List button */
+.bulletin.board-view .view-btn-wrap {
+  justify-content: center;
+}
+
+.btn-list {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100rem;
+  padding: 12rem 24rem;
+  font-size: var(--font-default);
+  font-weight: 600;
+  color: var(--b-title);
+  background: none;
+  border: 1px solid var(--op-b10);
+  border-radius: 4rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-list:hover {
+  background: var(--op-b05);
+  border-color: var(--op-b20);
+}
+
+@media (max-width: 540px) {
+  .bulletin-viewer__card {
+    width: 240rem;
+  }
+
+  .bulletin-viewer__thumbs {
+    width: 56rem;
+  }
+
+  .bulletin-viewer__thumbs .main-weekly__nav-item {
+    width: 56rem;
+    height: 78rem;
+  }
+}
+}

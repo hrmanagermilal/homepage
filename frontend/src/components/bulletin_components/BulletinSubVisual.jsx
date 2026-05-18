@@ -1,8 +1,8 @@
-export default function ObituaryViewSubVisual() {
+export default function BulletinSubVisual() {
   return (
-    <section className="sub-visual" aria-label="부고 상세 서브 비주얼">
+    <section className="sub-visual" aria-label="주보 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        <figure className="sub-visual__bg-img obituary-bg" />
+        <figure className="sub-visual__bg-img notice-bg" />
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />
@@ -19,6 +19,7 @@ export default function ObituaryViewSubVisual() {
           </span>
           <span className="sub-visual__lnb-text">소식</span>
         </nav>
+        <h2 className="sub-visual__title">온라인 주보</h2>
       </div>
       <div className="sub-visual__scroll-down" aria-hidden="true">
         <i />

@@ -39,7 +39,8 @@ TRUNCATE TABLE section_titles;
 TRUNCATE TABLE hero_front_images;
 TRUNCATE TABLE hero_background_images;
 TRUNCATE TABLE quick_links;
-TRUNCATE TABLE news;
+TRUNCATE TABLE notice;
+TRUNCATE TABLE obituary;
 TRUNCATE TABLE members;
 TRUNCATE TABLE landing_page_titles;
 TRUNCATE TABLE service_times;
@@ -179,40 +180,80 @@ INSERT INTO sermons (title, category_id, youtube_url, youtube_id, description, p
 -- ===============================================
 
 INSERT INTO bulletins (title, week_number, `year`) VALUES 
+('2026년 10주차 주보', 10, 2026),
+('2026년 9주차 주보', 9, 2026),
+('2026년 8주차 주보', 8, 2026),
+('2026년 7주차 주보', 7, 2026),
+('2026년 6주차 주보', 6, 2026),
+('2026년 5주차 주보', 5, 2026),
 ('2026년 4주차 주보', 4, 2026),
 ('2026년 3주차 주보', 3, 2026),
 ('2026년 2주차 주보', 2, 2026);
 
-SET @bulletin_id = LAST_INSERT_ID();
-
 -- 주보 이미지 (테스트용)
 INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
-(@bulletin_id, '/images/main/weekly-bulletin-01.png', 1),
-(@bulletin_id, '/images/main/weekly-bulletin-02.png', 2),
-(@bulletin_id, '/images/main/weekly-bulletin-03.png', 3),
-(@bulletin_id, '/images/main/weekly-bulletin-04.png', 4),
-(@bulletin_id, '/images/main/weekly-bulletin-05.png', 5),
-(@bulletin_id, '/images/main/weekly-bulletin-06.png', 6);
-
--- ===============================================
--- 4. 공지사항 테스트 데이터
--- ===============================================
-
-INSERT INTO announcements (admin_id, title, content, link, category, is_pinned) VALUES 
-(@admin_user_id, '부활절 특별 예배 안내', '2026년 4월 19일 부활절 예배를 드립니다. 모두 참석해주시기 바랍니다.', 
- '/announcement/easter-2026', 'event', TRUE),
-
-(@admin_user_id, '새신자 환영 프로그램', '새신자 분들을 위한 환영 프로그램이 4월 22일 수요일에 있습니다.', 
- '/announcement/new-member', 'general', TRUE),
-
-(@admin_user_id, '성경공부 모임 안내', '매주 목요일 오후 7시 성경공부 모임이 있습니다. 참석을 원하시는 분들은 사무실로 연락바랍니다.', 
- NULL, 'general', FALSE),
-
-(@admin_user_id, '교회 청소 당번', '4월 20일 주일 예배 후 교회 청소를 하게 됩니다. 모든 교우들의 참여를 부탁드립니다.', 
- NULL, 'general', FALSE),
-
-(@admin_user_id, '기도 제목 모음', '4월 17일부터 26일까지 중보기도 기간입니다. 기도 제목을 제출해주시기 바랍니다.', 
- '/prayer-topics', 'general', FALSE);
+(1, '/images/main/weekly-bulletin-01.png', 1),
+(1, '/images/main/weekly-bulletin-02.png', 2),
+(1, '/images/main/weekly-bulletin-03.png', 3),
+(1, '/images/main/weekly-bulletin-04.png', 4),
+(1, '/images/main/weekly-bulletin-05.png', 5),
+(1, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(2, '/images/main/weekly-bulletin-01.png', 1),
+(2, '/images/main/weekly-bulletin-02.png', 2),
+(2, '/images/main/weekly-bulletin-03.png', 3),
+(2, '/images/main/weekly-bulletin-04.png', 4),
+(2, '/images/main/weekly-bulletin-05.png', 5),
+(2, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(3, '/images/main/weekly-bulletin-01.png', 1),
+(3, '/images/main/weekly-bulletin-02.png', 2),
+(3, '/images/main/weekly-bulletin-03.png', 3),
+(3, '/images/main/weekly-bulletin-04.png', 4),
+(3, '/images/main/weekly-bulletin-05.png', 5),
+(3, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(4, '/images/main/weekly-bulletin-01.png', 1),
+(4, '/images/main/weekly-bulletin-02.png', 2),
+(4, '/images/main/weekly-bulletin-03.png', 3),
+(4, '/images/main/weekly-bulletin-04.png', 4),
+(4, '/images/main/weekly-bulletin-05.png', 5),
+(4, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(5, '/images/main/weekly-bulletin-01.png', 1),
+(5, '/images/main/weekly-bulletin-02.png', 2),
+(5, '/images/main/weekly-bulletin-03.png', 3),
+(5, '/images/main/weekly-bulletin-04.png', 4),
+(5, '/images/main/weekly-bulletin-05.png', 5),
+(5, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(6, '/images/main/weekly-bulletin-01.png', 1),
+(6, '/images/main/weekly-bulletin-02.png', 2),
+(6, '/images/main/weekly-bulletin-03.png', 3),
+(6, '/images/main/weekly-bulletin-04.png', 4),
+(6, '/images/main/weekly-bulletin-05.png', 5),
+(6, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(7, '/images/main/weekly-bulletin-01.png', 1),
+(7, '/images/main/weekly-bulletin-02.png', 2),
+(7, '/images/main/weekly-bulletin-03.png', 3),
+(7, '/images/main/weekly-bulletin-04.png', 4),
+(7, '/images/main/weekly-bulletin-05.png', 5),
+(7, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(8, '/images/main/weekly-bulletin-01.png', 1),
+(8, '/images/main/weekly-bulletin-02.png', 2),
+(8, '/images/main/weekly-bulletin-03.png', 3),
+(8, '/images/main/weekly-bulletin-04.png', 4),
+(8, '/images/main/weekly-bulletin-05.png', 5),
+(8, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(9, '/images/main/weekly-bulletin-01.png', 1),
+(9, '/images/main/weekly-bulletin-02.png', 2),
+(9, '/images/main/weekly-bulletin-03.png', 3),
+(9, '/images/main/weekly-bulletin-04.png', 4),
+(9, '/images/main/weekly-bulletin-05.png', 5),
+(9, '/images/main/weekly-bulletin-06.png', 6);
 
 -- ===============================================
 -- 5. 함께하는 교회 테스트 데이터
@@ -258,15 +299,28 @@ INSERT INTO ministry (`key`, name, subtitle, title, image, description, points, 
 '러브토론토 홈페이지',         'https://lovetoronto.org/', 1, 8);
 
 -- ===============================================
--- 8. 뉴스/소식 테스트 데이터
+-- 8. 부고 (obituary) 테스트 데이터
 -- ===============================================
 
-INSERT INTO news (title, content, image, link, btn_text) VALUES 
-('제3회 가스펠오락관 - 암송축제편', '', '/images/main/news-thumb-01.jpg', '#', '신청하러 가기'),
-('BAPTISM',                       '', '/images/main/news-thumb-02.jpg', '#', NULL),
-('워크톤 페스티벌',               '', '/images/main/news-thumb-03.jpg', '#', '신청하러 가기'),
-('새로운 소식',                   '', '/images/main/news-thumb-04.jpg', '#', '신청하러 가기'),
-('새로운 소식',                   '', '/images/main/news-thumb-05.jpg', '#', '신청하러 가기');
+INSERT INTO obituary (title, description, content, date) VALUES
+('박주희 집사(김주환 집사)<br>모친 소천(영광 2순)',    '강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로',                                                              '강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로 소천하셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',   '2026-04-17'),
+('이효숙 성도 부친 소천<br>(청장년 1순)',              '이무남 성도님(딸: 이효숙 성도)께서 2026년 4월 12일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.',                                                     '이무남 성도님(딸: 이효숙 성도)께서 2026년 4월 12일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',        '2026-04-12'),
+('이진아(윤석원)집사 부친 소천<br>(온유 4순)',          '이건대 장로님(딸: 이진아 집사, 사위: 윤석원 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.',                                      '이건대 장로님(딸: 이진아 집사, 사위: 윤석원 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-19'),
+('김일환(이순녀)집사 소천(모세회)',                    '김일환 집사님(이순녀 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.',                                                  '김일환 집사님(이순녀 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',      '2026-03-02'),
+('서예원 집사 부친 소천(충성 5순)',                    '서재호 성도님(딸: 서예원 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.',                                           '서재호 성도님(딸: 서예원 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',  '2026-02-19'),
+('조양임 집사(심택)모친 소천<br>(기쁨 4순)',           '유명자 집사님(딸: 조양임 집사, 사위: 심택 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.',                                     '유명자 집사님(딸: 조양임 집사, 사위: 심택 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-15');
+
+-- ===============================================
+-- 8-1. 공지 (notice) 테스트 데이터
+-- ===============================================
+
+INSERT INTO notice (title, content, writer_name, emergency_level, created_date, views, image, link, link_text) VALUES
+('폭설로 인한 대면예배 취소안내',   '금일 폭설로 인해 대면예배가 취소되었습니다. 온라인 예배로 대체하오니 양해 부탁드립니다.', '행정부', 'urgent', '2026-05-18', 0, NULL, NULL, NULL),
+('제3회 가스펠오락관 - 암송축제편', '제3회 가스펠오락관 암송축제편 행사를 안내드립니다. 많은 참여 바랍니다.', '교육부', 'normal', '2026-05-01', 245, '/images/main/news-thumb-01.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('BAPTISM',                         '세례 예식 안내드립니다. 세례를 원하시는 분들은 교역자에게 문의해 주시기 바랍니다.', '행정부', 'normal', '2026-04-20', 312, '/images/main/news-thumb-02.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', NULL),
+('워크톤 페스티벌',                 '워크톤 페스티벌에 초대합니다. 즐거운 시간이 될 것입니다.', '청년부', 'normal', '2026-04-10', 189, '/images/main/news-thumb-03.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '성전관리', 'normal', '2026-03-25', 156, '/images/main/news-thumb-04.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '행정부', 'normal', '2026-03-10', 421, '/images/main/news-thumb-05.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기');
 
 -- ===============================================
 -- 9. 멤버 관리 테스트 데이터
@@ -368,6 +422,8 @@ INSERT INTO banner_image (image_url, alt_text) VALUES
 
 -- 각 테이블의 데이터 개수 확인
 SELECT '=== 데이터 삽입 완료 ===' as message;
+SELECT 'obituary', COUNT(*) FROM obituary
+UNION ALL
 SELECT 'quick_links', COUNT(*) FROM quick_links
 UNION ALL
 SELECT 'section_titles', COUNT(*) FROM section_titles
@@ -388,7 +444,9 @@ SELECT 'departments', COUNT(*) FROM departments
 UNION ALL
 SELECT 'ministry', COUNT(*) FROM ministry
 UNION ALL
-SELECT 'news', COUNT(*) FROM news
+SELECT 'obituary', COUNT(*) FROM obituary
+UNION ALL
+SELECT 'notice', COUNT(*) FROM notice
 UNION ALL
 SELECT 'members', COUNT(*) FROM members
 UNION ALL

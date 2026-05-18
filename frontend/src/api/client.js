@@ -91,9 +91,13 @@ export const api = {
   getMinistry: () => request("/api/ministry"),
   getMinistryById: (id) => request(`/api/ministry/${id}`),
 
-  // News
-  getNews: (params = {}) => request(`/api/news${toQueryString(params)}`),
-  getNewsById: (id) => request(`/api/news/${id}`),
+  // Obituary
+  getObituary: () => request("/api/obituary"),
+  getObituaryById: (id) => request(`/api/obituary/${id}`),
+
+  // Notice
+  getNotice: (params = {}) => request(`/api/notice${toQueryString(params)}`),
+  getNoticeById: (id) => request(`/api/notice/${id}`),
 
   // Members
   getMembers: () => request("/api/members"),

@@ -16,8 +16,7 @@ export default function LandingPage({
   departments,
   serviceTimes,
   bulletins,
-  announcements,
-  news,
+  notices,
   shuttleBusSchedule,
   parkingLot,
   parkingMap,
@@ -146,7 +145,7 @@ export default function LandingPage({
         <ServiceTime serviceTimes={serviceTimes} section={sections.find((s) => s.category === "Worship")} />
       </div>
       <div data-snap-section="true">
-        <Announcement items={news} section={sections.find((s) => s.category === "News")} />
+        <Announcement items={notices} section={sections.find((s) => s.category === "News")} />
       </div>
       <div data-snap-section="true">
         <Contacts shuttleBusSchedule={shuttleBusSchedule} parkingLot={parkingLot} parkingMap={parkingMap} section={sections.find((s) => s.category === "Directions")} />

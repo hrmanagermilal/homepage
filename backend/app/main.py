@@ -16,7 +16,8 @@ from .routers import (
     landing_titles,
     members,
     ministry,
-    news,
+    notice,
+    obituary,
     parking_lot,
     parking_map,
     sections,
@@ -67,9 +68,10 @@ app.include_router(members.router, prefix=PREFIX)
 app.include_router(announcements.router, prefix=PREFIX)
 app.include_router(bulletins.router, prefix=PREFIX)
 app.include_router(sermons.router, prefix=PREFIX)
-app.include_router(news.router, prefix=PREFIX)
 app.include_router(departments.router, prefix=PREFIX)
 app.include_router(ministry.router, prefix=PREFIX)
+app.include_router(notice.router, prefix=PREFIX)
+app.include_router(obituary.router, prefix=PREFIX)
 app.include_router(service_times.router, prefix=PREFIX)
 app.include_router(shuttle_bus.router, prefix=PREFIX)
 app.include_router(parking_lot.router, prefix=PREFIX)

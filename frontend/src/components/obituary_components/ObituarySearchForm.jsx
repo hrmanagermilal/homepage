@@ -8,14 +8,6 @@ export default function ObituarySearchForm({ onSearch, searchQuery, onSearchChan
 
   return (
     <form className="obituary-search" role="search" onSubmit={handleSubmit}>
-      <div className="obituary-search__select-wrap">
-        <select className="obituary-search__select" name="field" aria-label="검색 기준" defaultValue="title">
-          <option value="title">제목</option>
-        </select>
-        <span className="obituary-search__arrow" aria-hidden="true">
-          <img src="/images/sub/04-obituary/ic-arrow-select.svg" alt="" />
-        </span>
-      </div>
       <div className="obituary-search__field-wrap">
         <input
           className="obituary-search__input"

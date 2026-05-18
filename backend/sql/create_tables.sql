@@ -135,29 +135,6 @@ CREATE TABLE IF NOT EXISTS bulletin_images (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===============================================
--- 4. ANNOUNCEMENT 테이블
--- ===============================================
-
-CREATE TABLE IF NOT EXISTS announcements (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  admin_id INT UNSIGNED NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  content TEXT NOT NULL,  
-  link VARCHAR(500),
-  image VARCHAR(500),
-  category ENUM('general', 'event', 'urgent') DEFAULT 'general',
-  is_pinned BOOLEAN DEFAULT FALSE,
-  views INT DEFAULT 0,
-  is_active TINYINT(1) NOT NULL DEFAULT 1,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_admin (admin_id),
-  INDEX idx_category (category),
-  INDEX idx_pinned_active (is_pinned, is_active),
-  INDEX idx_created (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ===============================================
 -- 5. TOGETHER CHURCH 테이블
 -- ===============================================
 
@@ -335,25 +312,42 @@ CREATE TABLE IF NOT EXISTS banner_image (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===============================================
--- 14. NEWS 테이블
+-- 14. NOTICE (공지) 테이블
 -- ===============================================
 
-CREATE TABLE IF NOT EXISTS news (
+CREATE TABLE IF NOT EXISTS notice (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(255) NOT NULL,
+  title VARCHAR(500) NOT NULL,
   content TEXT NOT NULL,
-  image VARCHAR(500),
-  link VARCHAR(500),
-  btn_text VARCHAR(100),
-  author VARCHAR(100),
-  category ENUM('news', 'update', 'photo') DEFAULT 'news',
+  writer_name VARCHAR(100) NOT NULL,
+  emergency_level ENUM('normal', 'important', 'urgent') DEFAULT 'normal',
+  link VARCHAR(500) NULL,
+  link_text VARCHAR(255) NULL,
+  image VARCHAR(500) NULL,
+  created_date DATE NOT NULL,
   views INT DEFAULT 0,
-  tags VARCHAR(500),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_category (category),
-  INDEX idx_created (created_at),
+  INDEX idx_created_date (created_date),
   INDEX idx_views (views)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
+-- 14-1. OBITUARY (부고) 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS obituary (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(500) NOT NULL,
+  description TEXT NULL,
+  content TEXT NULL,
+  date DATE NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_date (date),
+  INDEX idx_active (is_active),
+  INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
