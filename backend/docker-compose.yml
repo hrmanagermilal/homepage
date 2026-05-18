@@ -77,4 +77,5 @@ volumes:
 
 networks:
   milal-net:
+    name: milal-net
     driver: bridge
