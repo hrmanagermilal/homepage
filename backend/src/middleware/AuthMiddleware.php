@@ -3,7 +3,7 @@
  * JWT Authentication Middleware
  */
 
-namespace MillalHomepage\Middleware;
+namespace MilalHomepage\Middleware;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;

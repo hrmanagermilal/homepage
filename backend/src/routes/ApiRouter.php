@@ -4,33 +4,33 @@
  * 경로 라우팅 및 요청 처리
  */
 
-namespace MillalHomepage\Routes;
+namespace MilalHomepage\Routes;
 
-use MillalHomepage\Utils\ResponseFormatter;
-use MillalHomepage\Routes\Handlers\AuthHandler;
-use MillalHomepage\Routes\Handlers\HeroHandler;
-use MillalHomepage\Routes\Handlers\QuickLinkHandler;
-use MillalHomepage\Routes\Handlers\SermonHandler;
-use MillalHomepage\Routes\Handlers\BulletinHandler;
-use MillalHomepage\Routes\Handlers\AnnouncementHandler;
-use MillalHomepage\Routes\Handlers\TogetherHandler;
-use MillalHomepage\Routes\Handlers\DepartmentHandler;
-use MillalHomepage\Routes\Handlers\NextGenHandler;
-use MillalHomepage\Routes\Handlers\MinistryHandler;
-use MillalHomepage\Routes\Handlers\NewsHandler;
-use MillalHomepage\Routes\Handlers\MemberHandler;
-use MillalHomepage\Routes\Handlers\UserHandler;
-use MillalHomepage\Routes\Handlers\TrackingHandler;
-use MillalHomepage\Routes\Handlers\AnalyticsHandler;
-use MillalHomepage\Routes\Handlers\LandingTitleHandler;
-use MillalHomepage\Routes\Handlers\SectionHandler;
-use MillalHomepage\Routes\Handlers\VisionStatementHandler;
-use MillalHomepage\Routes\Handlers\ServiceTimeHandler;
-use MillalHomepage\Routes\Handlers\ShuttleBusScheduleHandler;
-use MillalHomepage\Routes\Handlers\ParkingLotHandler;
-use MillalHomepage\Routes\Handlers\ParkingMapHandler;
-use MillalHomepage\Routes\Handlers\BannerImageHandler;
-use MillalHomepage\Routes\Handlers\DocsHandler;
+use MilalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Routes\Handlers\AuthHandler;
+use MilalHomepage\Routes\Handlers\HeroHandler;
+use MilalHomepage\Routes\Handlers\QuickLinkHandler;
+use MilalHomepage\Routes\Handlers\SermonHandler;
+use MilalHomepage\Routes\Handlers\BulletinHandler;
+use MilalHomepage\Routes\Handlers\AnnouncementHandler;
+use MilalHomepage\Routes\Handlers\TogetherHandler;
+use MilalHomepage\Routes\Handlers\DepartmentHandler;
+use MilalHomepage\Routes\Handlers\NextGenHandler;
+use MilalHomepage\Routes\Handlers\MinistryHandler;
+use MilalHomepage\Routes\Handlers\NewsHandler;
+use MilalHomepage\Routes\Handlers\MemberHandler;
+use MilalHomepage\Routes\Handlers\UserHandler;
+use MilalHomepage\Routes\Handlers\TrackingHandler;
+use MilalHomepage\Routes\Handlers\AnalyticsHandler;
+use MilalHomepage\Routes\Handlers\LandingTitleHandler;
+use MilalHomepage\Routes\Handlers\SectionHandler;
+use MilalHomepage\Routes\Handlers\VisionStatementHandler;
+use MilalHomepage\Routes\Handlers\ServiceTimeHandler;
+use MilalHomepage\Routes\Handlers\ShuttleBusScheduleHandler;
+use MilalHomepage\Routes\Handlers\ParkingLotHandler;
+use MilalHomepage\Routes\Handlers\ParkingMapHandler;
+use MilalHomepage\Routes\Handlers\BannerImageHandler;
+use MilalHomepage\Routes\Handlers\DocsHandler;
 
 class ApiRouter {
     private $request_method;

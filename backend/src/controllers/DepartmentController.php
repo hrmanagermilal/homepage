@@ -4,11 +4,11 @@
  * 부서/팀 관리 API 처리 (NextGen, Ministry)
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\Department;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\Department;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class DepartmentController {
     private $departmentModel;

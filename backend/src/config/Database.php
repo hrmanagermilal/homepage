@@ -5,7 +5,7 @@
  * PDO를 사용한 MySQL 데이터베이스 연결 클래스
  */
 
-namespace MillalHomepage\Config;
+namespace MilalHomepage\Config;
 
 class Database {
     private $host = 'localhost';

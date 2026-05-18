@@ -4,11 +4,11 @@
  * 뉴스 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\News;
-use MillalHomepage\Utils\{ResponseFormatter, Validators, ImageProcessor};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\News;
+use MilalHomepage\Utils\{ResponseFormatter, Validators, ImageProcessor};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class NewsController {
     private $newsModel;

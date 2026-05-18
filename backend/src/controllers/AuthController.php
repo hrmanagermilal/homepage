@@ -4,11 +4,11 @@
  * 인증 관련 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\User;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\User;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Middleware\AuthMiddleware;
 use Firebase\JWT\JWT;
 
 class AuthController {

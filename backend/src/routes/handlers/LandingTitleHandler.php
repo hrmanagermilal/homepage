@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class LandingTitleHandler {
     private $method;
@@ -13,7 +13,7 @@ class LandingTitleHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\LandingPageTitleController();
+            $controller = new \MilalHomepage\Controllers\LandingPageTitleController();
 
             // Route: GET /api/landing-titles
             if ($this->method === 'GET' && !$id) {

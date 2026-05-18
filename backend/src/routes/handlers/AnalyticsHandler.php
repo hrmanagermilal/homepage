@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class AnalyticsHandler {
     private $method;
@@ -13,7 +13,7 @@ class AnalyticsHandler {
 
     public function handle($action, $sub_action) {
         try {
-            $controller = new \MillalHomepage\Controllers\PageViewController();
+            $controller = new \MilalHomepage\Controllers\PageViewController();
 
             // Route: GET /api/analytics/pages
             if ($this->method === 'GET' && $action === 'pages') {

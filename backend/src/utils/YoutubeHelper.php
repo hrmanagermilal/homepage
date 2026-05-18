@@ -3,7 +3,7 @@
  * YouTube Helper Functions
  */
 
-namespace MillalHomepage\Utils;
+namespace MilalHomepage\Utils;
 
 class YoutubeHelper {
     

@@ -3,9 +3,9 @@
  * Database Helper (Alias for Config\Database)
  */
 
-namespace MillalHomepage\Utils;
+namespace MilalHomepage\Utils;
 
-use MillalHomepage\Config\Database as DatabaseConfig;
+use MilalHomepage\Config\Database as DatabaseConfig;
 
 class Database {
     private static $instance = null;

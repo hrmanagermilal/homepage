@@ -4,12 +4,12 @@
  * 멤버 관리 비즈니스 로직
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\Member;
-use MillalHomepage\Utils\ResponseFormatter;
-use MillalHomepage\Utils\Validators;
-use MillalHomepage\Utils\ImageProcessor;
+use MilalHomepage\Models\Member;
+use MilalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\Validators;
+use MilalHomepage\Utils\ImageProcessor;
 
 class MemberController {
     private $model;

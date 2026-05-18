@@ -4,9 +4,9 @@
  * 사용자 관리 데이터 접근
  */
 
-namespace MillalHomepage\Models;
+namespace MilalHomepage\Models;
 
-use MillalHomepage\Utils\Database;
+use MilalHomepage\Utils\Database;
 
 class User {
     private $db;

@@ -4,11 +4,11 @@
  * 히어로 섹션 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\Hero;
-use MillalHomepage\Utils\{ResponseFormatter, Validators, ImageProcessor};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\Hero;
+use MilalHomepage\Utils\{ResponseFormatter, Validators, ImageProcessor};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class HeroController {
     private $heroModel;

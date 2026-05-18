@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class HeroHandler {
     private $method;
@@ -13,7 +13,7 @@ class HeroHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\HeroController();
+            $controller = new \MilalHomepage\Controllers\HeroController();
 
             // GET /api/hero/background-images
             if ($this->method === 'GET' && $id === 'background-images' && !$action) {

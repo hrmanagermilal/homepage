@@ -3,7 +3,7 @@
  * API Response Formatter
  */
 
-namespace MillalHomepage\Utils;
+namespace MilalHomepage\Utils;
 
 class ResponseFormatter {
     

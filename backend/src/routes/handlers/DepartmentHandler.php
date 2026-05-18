@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class DepartmentHandler {
     private $method;
@@ -13,7 +13,7 @@ class DepartmentHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\DepartmentController();
+            $controller = new \MilalHomepage\Controllers\DepartmentController();
 
             // Route: GET /api/departments
             if ($this->method === 'GET' && !$id) {

@@ -3,7 +3,7 @@
  * Image Processor using Intervention/Image
  */
 
-namespace MillalHomepage\Utils;
+namespace MilalHomepage\Utils;
 
 use Intervention\Image\ImageManagerStatic as Image;
 

@@ -4,11 +4,11 @@
  * 섹션 타이틀/서브타이틀 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\Section;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\Section;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class SectionController {
     private $sectionModel;

@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class AuthHandler {
     private $method;
@@ -13,7 +13,7 @@ class AuthHandler {
 
     public function handle($action, $sub_id) {
         try {
-            $controller = new \MillalHomepage\Controllers\AuthController();
+            $controller = new \MilalHomepage\Controllers\AuthController();
 
             // Route: POST /api/auth/login
             if ($this->method === 'POST' && $action === 'login') {

@@ -4,11 +4,11 @@
  * 공지사항 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\Announcement;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\Announcement;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class AnnouncementController {
     private $announcementModel;

@@ -4,10 +4,10 @@
  * 예배 시간 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\ServiceTime;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Models\ServiceTime;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
 
 class ServiceTimeController {
     private $model;

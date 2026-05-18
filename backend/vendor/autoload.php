@@ -6,7 +6,7 @@
 
 spl_autoload_register(function ($class) {
     // Project namespace
-    $prefix = 'MillalHomepage\\';
+    $prefix = 'MilalHomepage\\';
     $base_dir = __DIR__ . '/../src/';
     
     // Check if the class uses the project namespace

@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class BulletinHandler {
     private $method;
@@ -13,7 +13,7 @@ class BulletinHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\BulletinController();
+            $controller = new \MilalHomepage\Controllers\BulletinController();
 
             // Route: GET /api/bulletins
             if ($this->method === 'GET' && !$id) {

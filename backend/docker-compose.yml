@@ -36,6 +36,7 @@ services:
       MAX_FILE_SIZE: 10485760
     volumes:
       - .:/var/www/html:cached
+      - /var/www/html/vendor
       - uploads_data:/var/www/html/uploads
       - ./logs:/var/www/html/logs
     depends_on:

@@ -3,9 +3,9 @@
  * Bulletin Model
  */
 
-namespace MillalHomepage\Models;
+namespace MilalHomepage\Models;
 
-use MillalHomepage\Utils\Database;
+use MilalHomepage\Utils\Database;
 
 class Bulletin {
     private $db;

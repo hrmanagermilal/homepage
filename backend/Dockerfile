@@ -6,7 +6,11 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Configure and install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -20,7 +24,11 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application source (vendor must be pre-built)
+# Install PHP dependencies first (cache-friendly layer)
+COPY composer.json composer.lock* ./
+RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
+
+# Copy application source
 COPY . .
 
 # Create required directories

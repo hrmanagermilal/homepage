@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class NextGenHandler {
     private $method;
@@ -13,7 +13,7 @@ class NextGenHandler {
 
     public function handle($id, $action, $sub_id) {
         try {
-            $controller = new \MillalHomepage\Controllers\DepartmentController();
+            $controller = new \MilalHomepage\Controllers\DepartmentController();
 
             // Route: GET /api/nextgen
             if ($this->method === 'GET' && !$id) {

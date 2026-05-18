@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class ParkingMapHandler {
     private $method;
@@ -13,7 +13,7 @@ class ParkingMapHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\ParkingMapController();
+            $controller = new \MilalHomepage\Controllers\ParkingMapController();
 
             if ($this->method === 'GET' && !$id) {
                 echo $controller->getActive();

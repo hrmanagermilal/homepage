@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class NewsHandler {
     private $method;
@@ -13,7 +13,7 @@ class NewsHandler {
 
     public function handle($id, $action, $sub_id) {
         try {
-            $controller = new \MillalHomepage\Controllers\NewsController();
+            $controller = new \MilalHomepage\Controllers\NewsController();
 
             // Route: GET /api/news
             if ($this->method === 'GET' && !$id) {

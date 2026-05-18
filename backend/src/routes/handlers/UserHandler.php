@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class UserHandler {
     private $method;
@@ -13,7 +13,7 @@ class UserHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\UserController();
+            $controller = new \MilalHomepage\Controllers\UserController();
 
             // Route: GET /api/users
             if ($this->method === 'GET' && !$id) {

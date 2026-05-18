@@ -23,12 +23,13 @@
   },
   "autoload": {
     "psr-4": {
-      "MillalHomepage\\": "src/"
-    }
+      "MilalHomepage\\": "src/"
+    },
+    "classmap": ["src/"]
   },
   "autoload-dev": {
     "psr-4": {
-      "MillalHomepage\\Tests\\": "tests/"
+      "MilalHomepage\\Tests\\": "tests/"
     }
   },
   "scripts": {

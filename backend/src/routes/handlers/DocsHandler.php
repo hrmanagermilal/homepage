@@ -1,6 +1,6 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
 class DocsHandler {
     public function handleDocs() {

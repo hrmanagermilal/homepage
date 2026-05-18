@@ -3,10 +3,10 @@
  * ParkingMap Controller
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\ParkingMap;
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Models\ParkingMap;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class ParkingMapController {
     private $model;

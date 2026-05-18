@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class TrackingHandler {
     private $method;
@@ -13,7 +13,7 @@ class TrackingHandler {
 
     public function handle($action, $sub_action) {
         try {
-            $controller = new \MillalHomepage\Controllers\PageViewController();
+            $controller = new \MilalHomepage\Controllers\PageViewController();
 
             // Route: POST /api/track/pageview
             if ($this->method === 'POST' && $action === 'pageview') {

@@ -4,11 +4,11 @@
  * 페이지 조회 통계 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\PageView;
-use MillalHomepage\Utils\ResponseFormatter;
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\PageView;
+use MilalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class PageViewController {
     private $pageViewModel;

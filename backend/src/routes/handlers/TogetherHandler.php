@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class TogetherHandler {
     private $method;
@@ -13,7 +13,7 @@ class TogetherHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\TogetherController();
+            $controller = new \MilalHomepage\Controllers\TogetherController();
 
             // Route: GET /api/together
             if ($this->method === 'GET' && !$id) {

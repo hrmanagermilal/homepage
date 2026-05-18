@@ -4,11 +4,11 @@
  * 설교 정보 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\Sermon;
-use MillalHomepage\Utils\{ResponseFormatter, Validators, YoutubeHelper};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\Sermon;
+use MilalHomepage\Utils\{ResponseFormatter, Validators, YoutubeHelper};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class SermonController {
     private $sermonModel;

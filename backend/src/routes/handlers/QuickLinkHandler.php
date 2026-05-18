@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class QuickLinkHandler {
     private $method;
@@ -13,7 +13,7 @@ class QuickLinkHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\QuickLinkController();
+            $controller = new \MilalHomepage\Controllers\QuickLinkController();
 
             if ($this->method === 'GET' && !$id) {
                 echo $controller->getAll();

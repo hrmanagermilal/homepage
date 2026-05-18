@@ -4,9 +4,9 @@
  * 멤버 관리 데이터 접근
  */
 
-namespace MillalHomepage\Models;
+namespace MilalHomepage\Models;
 
-use MillalHomepage\Utils\Database;
+use MilalHomepage\Utils\Database;
 
 class Member {
     private $db;

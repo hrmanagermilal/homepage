@@ -4,11 +4,11 @@
  * 사용자 관리 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\User;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\User;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class UserController {
     private $userModel;

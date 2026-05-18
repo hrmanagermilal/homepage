@@ -363,7 +363,7 @@ api/
   },
   "autoload": {
     "psr-4": {
-      "MillalHomepage\\": "api/"
+      "MilalHomepage\\": "api/"
     }
   }
 }

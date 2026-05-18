@@ -38,32 +38,32 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /var/www/html/public/index.php on line 28
-[17-Apr-2026 19:48:48 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MillalHomepage\Utils\Database::prepare() in /var/www/html/src/Models/User.php:32
+[17-Apr-2026 19:48:48 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MilalHomepage\Utils\Database::prepare() in /var/www/html/src/Models/User.php:32
 Stack trace:
-#0 /var/www/html/src/Controllers/UserController.php(54): MillalHomepage\Models\User->getAll(10, 0)
-#1 /var/www/html/src/Routes/ApiRouter.php(208): MillalHomepage\Controllers\UserController->getAll()
-#2 /var/www/html/src/Routes/ApiRouter.php(81): MillalHomepage\Routes\ApiRouter->handleUsers(NULL, NULL)
-#3 /var/www/html/public/index.php(35): MillalHomepage\Routes\ApiRouter->dispatch()
+#0 /var/www/html/src/Controllers/UserController.php(54): MilalHomepage\Models\User->getAll(10, 0)
+#1 /var/www/html/src/Routes/ApiRouter.php(208): MilalHomepage\Controllers\UserController->getAll()
+#2 /var/www/html/src/Routes/ApiRouter.php(81): MilalHomepage\Routes\ApiRouter->handleUsers(NULL, NULL)
+#3 /var/www/html/public/index.php(35): MilalHomepage\Routes\ApiRouter->dispatch()
 #4 {main}
   thrown in /var/www/html/src/Models/User.php on line 32
-[17-Apr-2026 20:02:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MillalHomepage\Controllers\HeroController::getHero() in /var/www/html/src/Routes/ApiRouter.php:156
+[17-Apr-2026 20:02:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MilalHomepage\Controllers\HeroController::getHero() in /var/www/html/src/Routes/ApiRouter.php:156
 Stack trace:
-#0 /var/www/html/src/Routes/ApiRouter.php(49): MillalHomepage\Routes\ApiRouter->handleHero(NULL, NULL, NULL)
-#1 /var/www/html/public/index.php(35): MillalHomepage\Routes\ApiRouter->dispatch()
+#0 /var/www/html/src/Routes/ApiRouter.php(49): MilalHomepage\Routes\ApiRouter->handleHero(NULL, NULL, NULL)
+#1 /var/www/html/public/index.php(35): MilalHomepage\Routes\ApiRouter->dispatch()
 #2 {main}
   thrown in /var/www/html/src/Routes/ApiRouter.php on line 156
-[17-Apr-2026 20:03:05 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MillalHomepage\Controllers\HeroController::getHero() in /var/www/html/src/Routes/ApiRouter.php:156
+[17-Apr-2026 20:03:05 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MilalHomepage\Controllers\HeroController::getHero() in /var/www/html/src/Routes/ApiRouter.php:156
 Stack trace:
-#0 /var/www/html/src/Routes/ApiRouter.php(49): MillalHomepage\Routes\ApiRouter->handleHero(NULL, NULL, NULL)
-#1 /var/www/html/public/index.php(35): MillalHomepage\Routes\ApiRouter->dispatch()
+#0 /var/www/html/src/Routes/ApiRouter.php(49): MilalHomepage\Routes\ApiRouter->handleHero(NULL, NULL, NULL)
+#1 /var/www/html/public/index.php(35): MilalHomepage\Routes\ApiRouter->dispatch()
 #2 {main}
   thrown in /var/www/html/src/Routes/ApiRouter.php on line 156
-[17-Apr-2026 20:15:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MillalHomepage\Utils\Database::prepare() in /var/www/html/src/Models/Member.php:32
+[17-Apr-2026 20:15:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method MilalHomepage\Utils\Database::prepare() in /var/www/html/src/Models/Member.php:32
 Stack trace:
-#0 /var/www/html/src/Controllers/MemberController.php(29): MillalHomepage\Models\Member->getAll(50, 0)
-#1 /var/www/html/src/Routes/ApiRouter.php(451): MillalHomepage\Controllers\MemberController->getAll()
-#2 /var/www/html/src/Routes/ApiRouter.php(85): MillalHomepage\Routes\ApiRouter->handleMembers(NULL, NULL)
-#3 /var/www/html/public/index.php(35): MillalHomepage\Routes\ApiRouter->dispatch()
+#0 /var/www/html/src/Controllers/MemberController.php(29): MilalHomepage\Models\Member->getAll(50, 0)
+#1 /var/www/html/src/Routes/ApiRouter.php(451): MilalHomepage\Controllers\MemberController->getAll()
+#2 /var/www/html/src/Routes/ApiRouter.php(85): MilalHomepage\Routes\ApiRouter->handleMembers(NULL, NULL)
+#3 /var/www/html/public/index.php(35): MilalHomepage\Routes\ApiRouter->dispatch()
 #4 {main}
   thrown in /var/www/html/src/Models/Member.php on line 32
 [12-May-2026 20:54:45 UTC] PHP Deprecated:  strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in /var/www/html/src/Routes/ApiRouter.php on line 40

@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class ShuttleBusScheduleHandler {
     private $method;
@@ -13,7 +13,7 @@ class ShuttleBusScheduleHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\ShuttleBusScheduleController();
+            $controller = new \MilalHomepage\Controllers\ShuttleBusScheduleController();
 
             if ($this->method === 'GET' && !$id) {
                 echo $controller->getAll();

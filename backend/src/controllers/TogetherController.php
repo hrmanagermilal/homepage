@@ -4,11 +4,11 @@
  * 함께하는 교회 파트너 API 처리
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\Together;
-use MillalHomepage\Utils\{ResponseFormatter, Validators, ImageProcessor};
-use MillalHomepage\Middleware\AuthMiddleware;
+use MilalHomepage\Models\Together;
+use MilalHomepage\Utils\{ResponseFormatter, Validators, ImageProcessor};
+use MilalHomepage\Middleware\AuthMiddleware;
 
 class TogetherController {
     private $togetherModel;

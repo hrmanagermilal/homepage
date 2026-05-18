@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class ParkingLotHandler {
     private $method;
@@ -13,7 +13,7 @@ class ParkingLotHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\ParkingLotController();
+            $controller = new \MilalHomepage\Controllers\ParkingLotController();
 
             if ($this->method === 'GET' && !$id) {
                 echo $controller->getAll();

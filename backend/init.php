@@ -52,7 +52,7 @@ foreach ($upload_dirs as $dir) {
 echo "\n데이터베이스 연결 테스트:\n";
 
 try {
-    $db = new \\MillalHomepage\\Config\\Database();
+    $db = new \\MilalHomepage\\Config\\Database();
     $pdo = $db->connect();
     echo "✓ 데이터베이스 연결 성공\n";
 } catch (\\Exception $e) {

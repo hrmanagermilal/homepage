@@ -5,9 +5,9 @@
  * 사용자의 페이지 방문 기록을 저장하고 조회
  */
 
-namespace MillalHomepage\Models;
+namespace MilalHomepage\Models;
 
-use MillalHomepage\Utils\Database;
+use MilalHomepage\Utils\Database;
 
 class PageView {
     private $db;

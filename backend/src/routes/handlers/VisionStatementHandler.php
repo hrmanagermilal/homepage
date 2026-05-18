@@ -1,8 +1,8 @@
 <?php
 
-namespace MillalHomepage\Routes\Handlers;
+namespace MilalHomepage\Routes\Handlers;
 
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class VisionStatementHandler {
     private $method;
@@ -13,7 +13,7 @@ class VisionStatementHandler {
 
     public function handle($id, $action) {
         try {
-            $controller = new \MillalHomepage\Controllers\VisionStatementController();
+            $controller = new \MilalHomepage\Controllers\VisionStatementController();
 
             if ($this->method === 'GET' && !$id) {
                 echo $controller->getAll();

@@ -3,10 +3,10 @@
  * ParkingLot Controller
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\ParkingLot;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Models\ParkingLot;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
 
 class ParkingLotController {
     private $model;

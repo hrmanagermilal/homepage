@@ -3,9 +3,9 @@
  * News Model
  */
 
-namespace MillalHomepage\Models;
+namespace MilalHomepage\Models;
 
-use MillalHomepage\Utils\Database;
+use MilalHomepage\Utils\Database;
 
 class News {
     private $db;

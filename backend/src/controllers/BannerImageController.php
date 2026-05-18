@@ -3,10 +3,10 @@
  * BannerImage Controller
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\BannerImage;
-use MillalHomepage\Utils\ResponseFormatter;
+use MilalHomepage\Models\BannerImage;
+use MilalHomepage\Utils\ResponseFormatter;
 
 class BannerImageController {
     private $model;

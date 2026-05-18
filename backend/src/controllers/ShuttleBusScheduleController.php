@@ -3,10 +3,10 @@
  * ShuttleBusSchedule Controller
  */
 
-namespace MillalHomepage\Controllers;
+namespace MilalHomepage\Controllers;
 
-use MillalHomepage\Models\ShuttleBusSchedule;
-use MillalHomepage\Utils\{ResponseFormatter, Validators};
+use MilalHomepage\Models\ShuttleBusSchedule;
+use MilalHomepage\Utils\{ResponseFormatter, Validators};
 
 class ShuttleBusScheduleController {
     private $model;

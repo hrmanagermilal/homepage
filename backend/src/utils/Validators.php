@@ -3,7 +3,7 @@
  * Input Validators
  */
 
-namespace MillalHomepage\Utils;
+namespace MilalHomepage\Utils;
 
 class Validators {
     
