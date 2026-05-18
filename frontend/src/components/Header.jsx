@@ -183,19 +183,6 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
             <img src="/images/common/logo.png" alt="밀알교회" />
           </a>
 
-          <button
-            className="site-header__volume"
-            type="button"
-            aria-label={bgmPlaying ? "배경음악 일시 정지" : "배경음악 재생"}
-            aria-pressed={bgmPlaying}
-            onClick={toggleBgm}
-          >
-            <img
-              src={bgmPlaying ? "/images/common/icon-volume.svg" : "/images/common/icon-volume--mute.svg"}
-              alt=""
-            />
-          </button>
-
           <nav className="site-header__gnb" aria-label="주 메뉴">
             <ul className="site-header__gnb-list">
               {NAV_ITEMS.map((item, idx) => (
@@ -320,7 +307,7 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
                   ) : null
                 )}
 
-                <p className="full-menu__copy">ⓒ MILAL CHURCH .All Right Reserved.</p>
+                <p className="full-menu__copy">ⓒ Milal Church. All Right Reserved.</p>
               </nav>
             </div>
 

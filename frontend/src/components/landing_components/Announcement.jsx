@@ -23,7 +23,7 @@ export default function Announcement({ items = [], section = null }) {
         title: item.title || "새로운 소식",
         image: getNewsImage(item, idx),
         link: item.link || "#",
-        btnText: item.link ? "자세히 보기" : null,
+        btnText: item.btn_text || null,
       }))
     : FALLBACK_NEWS;
 

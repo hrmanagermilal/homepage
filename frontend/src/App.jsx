@@ -28,9 +28,7 @@ export default function App() {
   const isObituaryViewPage = /^\/news\/obituary\/\d+$/.test(currentPath);
   const isNewsPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage;
   const isNextGenSubmenuPage = currentPath.startsWith("/nextgen");
-  const [health, setHealth] = useState(null);
   const [hero, setHero] = useState(null);
-  const [heroLinks, setHeroLinks] = useState([]);
   const [quickLinks, setQuickLinks] = useState([]);
   const [landingTitles, setLandingTitles] = useState([]);
   const [members, setMembers] = useState([]);
@@ -40,7 +38,13 @@ export default function App() {
   const [togetherItems, setTogetherItems] = useState([]);
   const [bulletins, setBulletins] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
+  const [news, setNews] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [serviceTimes, setServiceTimes] = useState([]);
+  const [shuttleBusSchedule, setShuttleBusSchedule] = useState([]);
+  const [parkingLot, setParkingLot] = useState([]);
+  const [parkingMap, setParkingMap] = useState(null);
+  const [bannerImage, setBannerImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -87,9 +91,7 @@ export default function App() {
       setError("");
       try {
         const [
-          healthResponse,
           heroResponse,
-          heroLinkResponse,
           quickLinkResponse,
           landingTitleResponse,
           memberResponse,
@@ -100,26 +102,34 @@ export default function App() {
           bulletinsResponse,
           announcementsResponse,
           departmentsResponse,
+          serviceTimesResponse,
+          newsResponse,
+          shuttleBusScheduleResponse,
+          parkingLotResponse,
+          parkingMapResponse,
+          bannerImageResponse,
         ] = await Promise.all([
-          api.getHealth(),
-          api.getHero(),
-          api.getHeroLinks(),
+          api.getHeroBackgroundImages(),
           api.getQuickLinks(),
           api.getLandingTitles(),
           api.getMembers(),
           api.getSections(),
           api.getVisionStatements(),
-          api.getSermons({ page: 1, limit: 5 }),
+          api.getSermons({ page: 1, limit: 100 }),
           api.getTogether(),
           api.getBulletins({ page: 1, limit: 6 }),
           api.getAnnouncements({ page: 1, limit: 5 }),
           api.getDepartments(),
+          api.getServiceTimes(),
+          api.getNews({ page: 1, limit: 5 }),
+          api.getShuttleBusSchedule(),
+          api.getParkingLot(),
+          api.getParkingMap(),
+          api.getBannerImage(),
         ]);
 
         if (!mounted) return;
-        setHealth(healthResponse?.message || "Online");
-        setHero(heroResponse?.data ?? null);
-        setHeroLinks(heroLinkResponse?.data ?? []);
+        setHero({ backgroundImages: heroResponse?.data ?? [] });
         setQuickLinks(quickLinkResponse?.data ?? []);
         setLandingTitles(landingTitleResponse?.data || []);
         setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
@@ -129,7 +139,13 @@ export default function App() {
         setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
         setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
         setAnnouncements(announcementsResponse?.data?.data ?? announcementsResponse?.data ?? []);
+        setNews(newsResponse?.data?.data ?? newsResponse?.data ?? []);
         setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
+        setServiceTimes(serviceTimesResponse?.data ?? []);
+        setShuttleBusSchedule(shuttleBusScheduleResponse?.data ?? []);
+        setParkingLot(parkingLotResponse?.data ?? []);
+        setParkingMap(parkingMapResponse?.data ?? null);
+        setBannerImage(bannerImageResponse?.data ?? null);
       } catch (e) {
         if (!mounted) return;
         setError(e.message || "Failed to connect backend API");
@@ -174,15 +190,25 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPath, loading, isTabHashPage]);
 
+  console.log("quickLinks", quickLinks);
+  console.log("landingTitles", landingTitles);
+  console.log("members", members);
+  console.log("sections", sections);
+  console.log("visionStatements", visionStatements);
+  console.log("sermons", sermons);
+  console.log("togetherItems", togetherItems);
+  console.log("bulletins", bulletins);
+  console.log("announcements", announcements);
+  console.log("departments", departments);
+  console.log("serviceTimes", serviceTimes);
+  console.log("news", news);
+  console.log("shuttleBusSchedule", shuttleBusSchedule);
+  console.log("parkingLot", parkingLot);
+  console.log("parkingMap", parkingMap);
+
   return (
     <Box>
       <Header quickLinks={quickLinks} landingTitles={landingTitles} theme={theme} setTheme={setTheme} />
-
-      {loading ? (
-        <div className="app-loading-overlay" aria-live="polite" aria-busy="true">
-          <CircularProgress />
-        </div>
-      ) : null}
 
       {isIntroductionPage ? (
         <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} />
@@ -204,13 +230,19 @@ export default function App() {
           quickLinks={quickLinks}
           sermons={sermons}
           departments={departments}
+          serviceTimes={serviceTimes}
           bulletins={bulletins}
           announcements={announcements}
+          news={news}
+          shuttleBusSchedule={shuttleBusSchedule}
+          parkingLot={parkingLot}
+          parkingMap={parkingMap}
+          bannerImage={bannerImage}
           sections={sections}
           togetherItems={togetherItems}
         />
       )}
-      <Footer landingTitles={landingTitles} heroLinks={heroLinks} />
+      <Footer landingTitles={landingTitles} />
       {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isNewsPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );

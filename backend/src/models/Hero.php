@@ -34,20 +34,18 @@ class Hero {
             $bgStmt = $this->db->prepare("
                 SELECT id, image_url, `order`, alt_text 
                 FROM hero_background_images 
-                WHERE hero_id = ? 
                 ORDER BY `order` ASC
             ");
-            $bgStmt->execute([$hero['id']]);
+            $bgStmt->execute();
             $hero['backgroundImages'] = $bgStmt->fetchAll();
             
             // 프론트 이미지 조회
             $fgStmt = $this->db->prepare("
                 SELECT id, image_url, alt_text 
                 FROM hero_front_images 
-                WHERE hero_id = ? 
                 LIMIT 1
             ");
-            $fgStmt->execute([$hero['id']]);
+            $fgStmt->execute();
             $hero['frontImage'] = $fgStmt->fetch();
             
             return $hero;
@@ -118,19 +116,36 @@ class Hero {
     /**
      * 배경 이미지 개수 확인
      */
-    public function countBackgroundImages($heroId) {
+    public function countBackgroundImages() {
         try {
             $stmt = $this->db->prepare("
                 SELECT COUNT(*) as count 
-                FROM hero_background_images 
-                WHERE hero_id = ?
+                FROM hero_background_images
             ");
-            $stmt->execute([$heroId]);
+            $stmt->execute();
             $result = $stmt->fetch();
             
             return $result['count'];
         } catch (\PDOException $e) {
             return 0;
+        }
+    }
+
+    /**
+     * 배경 이미지 목록 조회
+     */
+    public function getBackgroundImages() {
+        try {
+            $stmt = $this->db->prepare("
+                SELECT id, image_url, `order`, alt_text 
+                FROM hero_background_images 
+                ORDER BY `order` ASC
+            ");
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            error_log("Get background images error: " . $e->getMessage());
+            return [];
         }
     }
     

@@ -48,6 +48,24 @@ class HeroController {
     }
     
     /**
+     * GET /api/hero/background-images
+     * 배경 이미지 목록 조회
+     */
+    public function getBackgroundImages() {
+        try {
+            $images = $this->heroModel->getBackgroundImages();
+            return ResponseFormatter::success($images, 'Hero background images');
+        } catch (\Exception $e) {
+            return ResponseFormatter::error(
+                'DATABASE_ERROR',
+                'Failed to fetch background images: ' . $e->getMessage(),
+                null,
+                500
+            );
+        }
+    }
+
+    /**
      * POST /api/hero/background-images
      * 배경 이미지 추가 (최대 10개)
      */

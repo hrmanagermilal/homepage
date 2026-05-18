@@ -28,6 +28,8 @@ export function VideoCard({
   live = false,
   className = "",
   index = 0,
+  thumbnail,
+  hide_title = true,
 }) {
   return (
     <a
@@ -38,18 +40,20 @@ export function VideoCard({
       data-ani="top"
     >
       <div className="youtube-card__thumb">
-        <img src={getYoutubeThumb(url, index)} alt={title || "설교 썸네일"} />
+        <img src={hide_title ? thumbnail : (thumbnail || getYoutubeThumb(url, index))} alt={title || "설교 썸네일"} />
       </div>
-      <div className="youtube-card__gradient"></div>
+      {!hide_title && <div className="youtube-card__gradient"></div>}
       {live ? (
         <div className="youtube-card__live-badge" aria-label="라이브 방송 중">
           <span className="youtube-card__live-dot" aria-hidden="true"></span>
           <span className="youtube-card__live-text">LIVE</span>
         </div>
       ) : null}
-      <div className="youtube-card__label">
-        <h3>{title || "제목 없음"}{preacher ? <><br />{preacher}</> : null}</h3>
-      </div>
+      {!hide_title && (
+        <div className="youtube-card__label">
+          <h3>{title || "제목 없음"}{preacher ? <><br />{preacher}</> : null}</h3>
+        </div>
+      )}
     </a>
   );
 }

@@ -212,6 +212,8 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
     return () => {};
   }, []);
 
+  console.log('visionStatements', visionStatements);
+
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">

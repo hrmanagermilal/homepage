@@ -6,7 +6,7 @@ import Sermon from "./landing_components/Sermon";
 import ServiceTime from "./landing_components/ServiceTime";
 import Jubo from "./landing_components/Jubo";
 import Announcement from "./landing_components/Announcement";
-import Contacts from "./Contacts";
+import Contacts from "./landing_components/Contacts";
 import FooterTop from "./FooterTop";
 
 export default function LandingPage({
@@ -14,8 +14,14 @@ export default function LandingPage({
   quickLinks,
   sermons,
   departments,
+  serviceTimes,
   bulletins,
   announcements,
+  news,
+  shuttleBusSchedule,
+  parkingLot,
+  parkingMap,
+  bannerImage,
   sections,
   togetherItems,
 }) {
@@ -131,22 +137,22 @@ export default function LandingPage({
         <Hero hero={hero} quickLinks={quickLinks} />
       </div>
       <div data-snap-section="true">
-        <Sermon items={sermons} section={sections.find((s) => s.title === "최신 설교")} />
+        <Sermon items={sermons} section={sections.find((s) => s.category === "Sermon")} />
       </div>
       <div data-snap-section="true">
-        <Jubo items={bulletins} section={sections.find((s) => s.title === "주보")} />
+        <Jubo items={bulletins} section={sections.find((s) => s.category === "Jubo")} />
       </div>
       <div data-snap-section="true">
-        <ServiceTime departments={departments} section={sections.find((s) => s.title === "예배 시간")} />
+        <ServiceTime serviceTimes={serviceTimes} section={sections.find((s) => s.category === "Worship")} />
       </div>
       <div data-snap-section="true">
-        <Announcement items={announcements} section={sections.find((s) => s.title === "공지사항")} />
+        <Announcement items={news} section={sections.find((s) => s.category === "News")} />
       </div>
       <div data-snap-section="true">
-        <Contacts section={sections.find((s) => s.title === "오시는 길")} />
+        <Contacts shuttleBusSchedule={shuttleBusSchedule} parkingLot={parkingLot} parkingMap={parkingMap} section={sections.find((s) => s.category === "Directions")} />
       </div>
       <div data-snap-section="true">
-        <FooterTop items={togetherItems} section={sections.find((s) => s.title === "함께하는 교회")} />
+        <FooterTop bannerImage={bannerImage} section={sections.find((s) => s.category === "Community")} />
       </div>
     </div>
   );

@@ -375,7 +375,7 @@
     .footer__texture img {position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;}
 
     /* btn-top */
-    .btn-top {display: flex; justify-content: center; align-items: center; position: absolute; top: -110rem; right: var(--margin); width: 80rem; height: 80rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5rem; cursor: pointer;}
+    .btn-top {display: flex; justify-content: center; align-items: center; flex-shrink: 0; align-self: flex-start; margin-left: auto; width: 60rem; height: 60rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5rem; cursor: pointer;}
     .btn-top img {display: block; width: 15.75rem; height: 13.199rem; transform: rotate(90deg) scaleY(-1);}
 
     /* Footer 상단 */
@@ -385,7 +385,7 @@
     .footer__copy {font-size: var(--font-xxsm); line-height: 1; color: rgba(255,255,255,0.2);}
 
     /* GNB */
-    .footer__nav {display: flex; gap: 50rem; padding-top: 8rem;}
+    .footer__nav {display: flex; gap: 50rem; padding-top: 8rem; margin-left: 80rem;}
     .footer__nav > ul {display: contents;}
     .footer-nav__col {display: flex; flex-direction: column; gap: 17rem;}
     .footer-nav__title {font-size: var(--font-default); font-weight: 600; color: var(--w); white-space: nowrap; text-decoration: none;}
@@ -416,7 +416,7 @@
 
     @media (max-width: 1023px) {
     	.footer__top {flex-direction: column; gap: 50rem; padding-bottom: 60rem;}
-    	.footer__nav {flex-wrap: wrap; gap: 30rem 40rem;}
+    	.footer__nav {flex-wrap: wrap; gap: 30rem 40rem; margin-left: 0;}
     	.footer__info {flex-wrap: wrap; gap: 20rem 30rem;}
     	.footer__bottom {flex-direction: column; align-items: flex-start; gap: 24rem;}
     }
@@ -433,16 +433,16 @@
       .footer__info-label {color: rgba(255, 255, 255, .3);}
       .footer__policy {margin-top: 30rem;}
 
-      .btn-top {top: -100rem; width: 65rem; height: 65rem;}
+      .btn-top {position: absolute; top: 22rem; right: var(--margin); width: 65rem; height: 65rem; margin-left: 0;}
     }
 
 
     @media (max-width: 540px) {
     	#footer {padding-top: 40rem;}
-    	.btn-top {width: 64rem; height: 64rem; top: -88rem;}
+    	.btn-top {position: absolute; width: 64rem; height: 64rem; top: 18rem; right: var(--margin); margin-left: 0;}
     	.footer__logo {width: auto; height: 46rem; object-position: left;}
     	.footer__top {padding-bottom: 44rem;}
-    	.footer__nav {gap: 24rem 30rem;}
+    	.footer__nav {gap: 24rem 30rem; margin-left: 0;}
     	.footer__info {gap: 16rem 24rem;}
     	.footer__bottom {padding: 30rem 0;}
     	.footer-policy-btn {padding: 12rem 16rem; font-size: var(--font-xxsm);}

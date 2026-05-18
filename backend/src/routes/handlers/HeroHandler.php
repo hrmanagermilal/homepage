@@ -11,11 +11,17 @@ class HeroHandler {
         $this->method = $method;
     }
 
-    public function handle($id, $action, $sub_id) {
+    public function handle($id, $action) {
         try {
             $controller = new \MillalHomepage\Controllers\HeroController();
 
-            // Route: GET /api/hero
+            // GET /api/hero/background-images
+            if ($this->method === 'GET' && $id === 'background-images' && !$action) {
+                echo $controller->getBackgroundImages();
+                return;
+            }
+
+            // GET /api/hero
             if ($this->method === 'GET' && !$id) {
                 echo $controller->get();
                 return;
