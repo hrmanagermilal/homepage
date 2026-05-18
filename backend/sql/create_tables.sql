@@ -193,6 +193,14 @@ CREATE TABLE IF NOT EXISTS departments (
   clergy_name VARCHAR(100),
   clergy_position VARCHAR(100),
   clergy_phone VARCHAR(20),
+  heading_title TEXT NULL,
+  pastor_email VARCHAR(150) NULL,
+  kakao_link VARCHAR(500) NULL,
+  kakao_label VARCHAR(255) NULL,
+  notice_title VARCHAR(255) NULL,
+  notice_description TEXT NULL,
+  notice_button_label VARCHAR(100) NULL,
+  notice_button_href VARCHAR(500) NULL,
   `order` INT DEFAULT 0,
   is_active TINYINT(1) NOT NULL DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -512,6 +520,43 @@ CREATE TABLE IF NOT EXISTS texts (
 -- ===============================================
 -- 모든 테이블 생성 완료
 COMMIT;
+
+-- ===============================================
+-- 스키마 마이그레이션: departments 신규 컬럼 추가
+-- (테이블이 이미 존재하는 경우를 위한 마이그레이션)
+-- ===============================================
+DROP PROCEDURE IF EXISTS _migrate_departments;
+DELIMITER //
+CREATE PROCEDURE _migrate_departments()
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'heading_title') THEN
+    ALTER TABLE departments ADD COLUMN heading_title TEXT NULL AFTER clergy_phone;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'pastor_email') THEN
+    ALTER TABLE departments ADD COLUMN pastor_email VARCHAR(150) NULL AFTER heading_title;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'kakao_link') THEN
+    ALTER TABLE departments ADD COLUMN kakao_link VARCHAR(500) NULL AFTER pastor_email;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'kakao_label') THEN
+    ALTER TABLE departments ADD COLUMN kakao_label VARCHAR(255) NULL AFTER kakao_link;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'notice_title') THEN
+    ALTER TABLE departments ADD COLUMN notice_title VARCHAR(255) NULL AFTER kakao_label;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'notice_description') THEN
+    ALTER TABLE departments ADD COLUMN notice_description TEXT NULL AFTER notice_title;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'notice_button_label') THEN
+    ALTER TABLE departments ADD COLUMN notice_button_label VARCHAR(100) NULL AFTER notice_description;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'departments' AND COLUMN_NAME = 'notice_button_href') THEN
+    ALTER TABLE departments ADD COLUMN notice_button_href VARCHAR(500) NULL AFTER notice_button_label;
+  END IF;
+END //
+DELIMITER ;
+CALL _migrate_departments();
+DROP PROCEDURE IF EXISTS _migrate_departments;
 
 -- 테이블 조회
 SHOW TABLES;

@@ -109,7 +109,7 @@ export default function App() {
           parkingMapResponse,
           bannerImageResponse,
         ] = await Promise.all([
-          api.getHeroBackgroundImages(),
+          api.getHero(),
           api.getQuickLinks(),
           api.getLandingTitles(),
           api.getMembers(),
@@ -129,7 +129,10 @@ export default function App() {
         ]);
 
         if (!mounted) return;
-        setHero({ backgroundImages: heroResponse?.data ?? [] });
+        setHero({
+          backgroundImages: heroResponse?.data?.background_images ?? heroResponse?.data ?? [],
+          front_images: heroResponse?.data?.front_images ?? [],
+        });
         setQuickLinks(quickLinkResponse?.data ?? []);
         setLandingTitles(landingTitleResponse?.data || []);
         setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
@@ -190,6 +193,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPath, loading, isTabHashPage]);
 
+  console.log("hero", hero);
   console.log("quickLinks", quickLinks);
   console.log("landingTitles", landingTitles);
   console.log("members", members);
@@ -205,6 +209,7 @@ export default function App() {
   console.log("shuttleBusSchedule", shuttleBusSchedule);
   console.log("parkingLot", parkingLot);
   console.log("parkingMap", parkingMap);
+  console.log("bannerImage", bannerImage);
 
   return (
     <Box>
@@ -223,7 +228,7 @@ export default function App() {
       ) : isNewsPage ? (
         <NewsPage />
       ) : isNextGenSubmenuPage ? (
-        <NextGenPage />
+        <NextGenPage departments={departments.filter(d => d.department_type === 'nextgen')} />
       ) : (
         <LandingPage
           hero={hero}

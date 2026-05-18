@@ -86,7 +86,7 @@ INSERT INTO hero_background_images (image_url, `order`, alt_text) VALUES
 
 -- 프론트 이미지
 INSERT INTO hero_front_images (image_url, alt_text) VALUES 
-('/uploads/hero/front/hero_front.jpg', 'Welcome Image');
+('/images/main/main-visual-text.png', '밀알교회는 하나님의 사람을 세웁니다.\n모퉁이돌 되신 예수 안에 함께 지어져 가는 공동체입니다.');
 
 -- 퀵 링크
 INSERT INTO quick_links (title, link, image, `desc`) VALUES
@@ -226,13 +226,13 @@ INSERT INTO together_items (title, description, image, link, `order`, is_active)
 -- 6. 다음세대 부서 테스트 데이터
 -- ===============================================
 
-INSERT INTO departments (department_type, name, description, age_group, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, `order`) VALUES 
-('nextgen', '영유아부', '0-3세 영아를 위한 전담 보육 사역', '0-3세', '주일', '오전 10시 30분', '2층 유아실', '박영선 사역자', '담당 보육사', '010-1234-5678', 1),
-('nextgen', '유치부', '4-6세 유아 신앙교육', '4-6세', '주일', '오전 10시 30분', '2층 유년실', '김미영 사역자', '담당 교사', '010-2345-6789', 2),
-('nextgen', '아동부', '초등학교 학생 신앙교육', '7-12세', '주일', '오전 10시 30분', '3층 초등실', '이순신 사역자', '담당 목사', '010-3456-7890', 3),
-('nextgen', 'EM 중고등부', '중학교 학생 신앙교육', '13-15세', '주일', '오전 10시 30분', '3층 중등실', '정준호 전도사', '담당 전도사', '010-4567-8901', 4),
-('nextgen', 'KM 중고등부', '고등학교 학생 신앙교육 및 제자훈련', '16-18세', '주일', '오전 10시 30분', '4층 고등실', '강민수 전도사', '담당 전도사', '010-5678-9012', 5),
-('nextgen', '청년부', '대학생 및 미혼 청년 신앙공동체', '19-29세', '주일', '오전 11시', '본당', '최윤희 전도사', '담당 전도사', '010-6789-0123', 6);
+INSERT INTO departments (department_type, name, description, heading_title, image, age_group, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, pastor_email, kakao_link, kakao_label, notice_title, notice_description, notice_button_label, notice_button_href, `order`) VALUES
+('nextgen', '청년부', '토론토의 새벽이슬 같은 청년들이 모이면 예배하고,\n흩어지면 빛을 발하는 공동체입니다.', 'Milight, Time to Shine. 하나님이여 우리를 돌이키시고\n주의 얼굴빛을 비추사 우리가 구원을 얻게 하소서 (시편 80:3)', '/images/sub/02-next-generation/pastor-photo.jpg', '19-29세', '주일', '오후 2시', '밀알교회 1층 본당', '신효성 목사', '담당 목사', NULL, 'rev.shin@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '청년부 카카오톡 채널 추가하기', '청년부 소식', '청년부의 소식과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 1),
+('nextgen', 'KM 청소년부', '말씀과 기도로 다음세대가 정체성을 세우고, 건강한 공동체를 경험하도록 돕습니다.', 'KM 청소년부, 믿음 안에서 함께 성장합니다.', '/images/sub/01-introduction/minister-05.jpg', '13-18세', '주일', '오전 11시', '밀알교회 2층 청소년부 예배실', '차승현 목사', '담당 목사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'KM 청소년부 카카오톡 채널 추가하기', 'KM 청소년부 소식', '주간 프로그램과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 2),
+('nextgen', 'EM 청소년부', 'We gather for worship and discipleship, and go out as Christ-centered witnesses in daily life.', 'EM Youth, Grounded in the Word.', '/images/sub/01-introduction/minister-09.jpg', '13-18세', '주일', '오후 1시', '밀알교회 2층 청소년부 예배실', '조나단 목사', '담당 목사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'EM Youth 카카오톡 채널 추가하기', 'EM Youth 소식', '프로그램 일정과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 3),
+('nextgen', '아동부', '예배와 말씀, 활동을 통해 아이들이 즐겁게 하나님을 알아가도록 세웁니다.', '아동부, 예수님을 닮아가는 어린이들', '/images/sub/01-introduction/minister-13.jpg', '7-12세', '주일', '오전 11시', '밀알교회 아동부실', '김진아 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '아동부 카카오톡 채널 추가하기', '아동부 프로그램', '월간 프로그램과 학부모 안내자료를 다운로드하세요.', '자료 다운로드', '#', 4),
+('nextgen', '유치부', '아이들의 눈높이에 맞춘 예배와 활동으로 하나님의 사랑을 자연스럽게 배우게 합니다.', '유치부, 믿음의 씨앗을 심는 시간', '/images/sub/01-introduction/minister-12.jpg', '4-6세', '주일', '오전 11시', '밀알교회 유치부실', '김비치 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '유치부 카카오톡 채널 추가하기', '유치부 프로그램', '월간 공지사항과 부모교육 자료를 다운로드하세요.', '자료 다운로드', '#', 5),
+('nextgen', '영유아부', '부모와 교사가 함께 아이들의 신앙 첫 걸음을 따뜻하게 동행합니다.', '영유아부, 사랑 안에서 첫 걸음을', '/images/sub/01-introduction/minister-14.jpg', '0-3세', '주일', '오전 11시', '밀알교회 영유아부실', '주은지 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '영유아부 카카오톡 채널 추가하기', '영유아부 프로그램', '월간 프로그램과 부모 양육 안내자료를 다운로드하세요.', '자료 다운로드', '#', 6);
 
 -- ===============================================
 -- 7. 사역 부서 테스트 데이터
