@@ -212,6 +212,35 @@ CREATE TABLE IF NOT EXISTS departments (
   INDEX idx_ministry_type (ministry_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ===============================================
+-- 8-1. MINISTRY 사역 테이블 (전용 테이블)
+-- ===============================================
+CREATE TABLE IF NOT EXISTS ministry (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  `key` VARCHAR(50) NOT NULL UNIQUE,
+  name VARCHAR(100) NOT NULL,
+  subtitle VARCHAR(255) NULL,
+  title VARCHAR(255) NULL,
+  image VARCHAR(500) NULL,
+  description TEXT NULL,
+  points TEXT NULL,
+  notice_title VARCHAR(255) NULL,
+  notice_description TEXT NULL,
+  notice_button_label VARCHAR(100) NULL,
+  notice_button_href VARCHAR(500) NULL,
+  notice_button_external TINYINT(1) NOT NULL DEFAULT 0,
+  cta_label VARCHAR(255) NULL,
+  cta_href VARCHAR(500) NULL,
+  cta_external TINYINT(1) NOT NULL DEFAULT 0,
+  `order` INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_key (`key`),
+  INDEX idx_order (`order`),
+  INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS department_announcements (
   id INT PRIMARY KEY AUTO_INCREMENT,
   department_id INT NOT NULL,

@@ -1,13 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FEATURES } from "../config/features";
+import MinistrySubSection from "./ministry_components/MinistrySubSection";
 import MinistryYangyuk from "./ministry_components/MinistryYangyuk";
-import MinistrySmallGroup from "./ministry_components/MinistrySmallGroup";
-import MinistryFamily from "./ministry_components/MinistryFamily";
-import MinistryMission from "./ministry_components/MinistryMission";
-import MinistryScholarship from "./ministry_components/MinistryScholarship";
-import MinistryGospelProject from "./ministry_components/MinistryGospelProject";
-import MinistryDanielSchool from "./ministry_components/MinistryDanielSchool";
-import MinistryLoveToronto from "./ministry_components/MinistryLoveToronto";
 import "./css/SubPage.css";
 import "./css/MinistryPage.css";
 
@@ -22,16 +16,7 @@ const LNB_ITEMS = [
   { label: "러브토론토", key: "ministry07", href: "/ministry#ministry07" },
 ];
 
-const COMPONENT_BY_KEY = {
-  ministry01: MinistryYangyuk,
-  ministry02: MinistrySmallGroup,
-  ministry03: MinistryFamily,
-  ministry04: MinistryMission,
-  ministry05: MinistryScholarship,
-  ministry08: MinistryGospelProject,
-  ministry06: MinistryDanielSchool,
-  ministry07: MinistryLoveToronto,
-};
+const VALID_KEYS = new Set(LNB_ITEMS.map((item) => item.key));
 
 const SUBTITLE_BY_KEY = {
   ministry01: "우리는 밀알 공동체입니다.",
@@ -46,7 +31,7 @@ const SUBTITLE_BY_KEY = {
 
 function getKeyFromHash(hash) {
   const key = (hash || "").replace("#", "");
-  return COMPONENT_BY_KEY[key] ? key : "ministry01";
+  return VALID_KEYS.has(key) ? key : "ministry01";
 }
 
 function SubVisual({ title, activeKey }) {
@@ -120,7 +105,25 @@ const BG_IMAGES = [
   "/images/sub/visual/sub-visual0302.jpg",
 ];
 
-export default function MinistryPage() {
+function mapMinistryToProps(item) {
+  if (!item) return {};
+  return {
+    description: item.description || "",
+    points: Array.isArray(item.points)
+      ? item.points
+      : (item.points ? item.points.split("\n").filter(Boolean) : []),
+    noticeTitle: item.notice_title || undefined,
+    noticeDescription: item.notice_description || undefined,
+    noticeButtonLabel: item.notice_button_label || undefined,
+    noticeButtonHref: item.notice_button_href || "#",
+    noticeButtonExternal: !!item.notice_button_external,
+    ctaLabel: item.cta_label || undefined,
+    ctaHref: item.cta_href || "#",
+    ctaExternal: !!item.cta_external,
+  };
+}
+
+export default function MinistryPage({ ministries = [] }) {
   const containerRef = useRef(null);
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
 
@@ -228,8 +231,9 @@ export default function MinistryPage() {
     return () => {};
   }, []);
 
-  const ActiveComponent = useMemo(() => COMPONENT_BY_KEY[activeKey] || MinistryYangyuk, [activeKey]);
-  const activeLabel = useMemo(() => LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역", [activeKey]);
+  const activeMinistry = ministries.find((m) => m.key === activeKey);
+  const activeProps = mapMinistryToProps(activeMinistry);
+  const activeLabel = LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역";
 
   return (
     <div ref={containerRef}>
@@ -238,7 +242,10 @@ export default function MinistryPage() {
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
-        <ActiveComponent />
+        {activeKey === "ministry02"
+          ? <MinistryYangyuk {...activeProps} />
+          : <MinistrySubSection {...activeProps} />
+        }
       </div>
     </div>
   );

@@ -40,6 +40,7 @@ export default function App() {
   const [announcements, setAnnouncements] = useState([]);
   const [news, setNews] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [ministries, setMinistries] = useState([]);
   const [serviceTimes, setServiceTimes] = useState([]);
   const [shuttleBusSchedule, setShuttleBusSchedule] = useState([]);
   const [parkingLot, setParkingLot] = useState([]);
@@ -102,6 +103,7 @@ export default function App() {
           bulletinsResponse,
           announcementsResponse,
           departmentsResponse,
+          ministriesResponse,
           serviceTimesResponse,
           newsResponse,
           shuttleBusScheduleResponse,
@@ -120,6 +122,7 @@ export default function App() {
           api.getBulletins({ page: 1, limit: 6 }),
           api.getAnnouncements({ page: 1, limit: 5 }),
           api.getDepartments(),
+          api.getMinistry(),
           api.getServiceTimes(),
           api.getNews({ page: 1, limit: 5 }),
           api.getShuttleBusSchedule(),
@@ -144,6 +147,7 @@ export default function App() {
         setAnnouncements(announcementsResponse?.data?.data ?? announcementsResponse?.data ?? []);
         setNews(newsResponse?.data?.data ?? newsResponse?.data ?? []);
         setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
+        setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
         setServiceTimes(serviceTimesResponse?.data ?? []);
         setShuttleBusSchedule(shuttleBusScheduleResponse?.data ?? []);
         setParkingLot(parkingLotResponse?.data ?? []);
@@ -210,6 +214,7 @@ export default function App() {
   console.log("parkingLot", parkingLot);
   console.log("parkingMap", parkingMap);
   console.log("bannerImage", bannerImage);
+  console.log("ministries", ministries);
 
   return (
     <Box>
@@ -218,7 +223,7 @@ export default function App() {
       {isIntroductionPage ? (
         <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} />
       ) : isMinistryPage ? (
-        <MinistryPage />
+        <MinistryPage ministries={ministries} />
       ) : isOnlineGivingPage ? (
         <OnlineGivingPage />
       ) : isNoticeViewPage ? (
