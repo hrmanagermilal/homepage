@@ -29,7 +29,6 @@ TRUNCATE TABLE department_announcements;
 TRUNCATE TABLE departments;
 TRUNCATE TABLE ministry;
 TRUNCATE TABLE together_items;
-TRUNCATE TABLE announcements;
 TRUNCATE TABLE bulletin_images;
 TRUNCATE TABLE bulletins;
 TRUNCATE TABLE sermons;
@@ -435,8 +434,6 @@ UNION ALL
 SELECT 'sermons', COUNT(*) FROM sermons
 UNION ALL
 SELECT 'bulletins', COUNT(*) FROM bulletins
-UNION ALL
-SELECT 'announcements', COUNT(*) FROM announcements
 UNION ALL
 SELECT 'together_items', COUNT(*) FROM together_items
 UNION ALL

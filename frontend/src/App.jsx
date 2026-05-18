@@ -39,7 +39,6 @@ export default function App() {
   const [sermons, setSermons] = useState([]);
   const [togetherItems, setTogetherItems] = useState([]);
   const [bulletins, setBulletins] = useState([]);
-  const [announcements, setAnnouncements] = useState([]);
   const [notices, setNotices] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [ministries, setMinistries] = useState([]);
@@ -103,8 +102,7 @@ export default function App() {
           visionStatementsResponse,
           sermonsResponse,
           togetherResponse,
-          bulletinsResponse,
-          announcementsResponse,
+          bulletinsResponse,          
           departmentsResponse,
           ministriesResponse,
           obituariesResponse,
@@ -124,7 +122,6 @@ export default function App() {
           api.getSermons({ page: 1, limit: 100 }),
           api.getTogether(),
           api.getBulletins({ page: 1, limit: 50 }),
-          api.getAnnouncements({ page: 1, limit: 5 }),
           api.getDepartments(),
           api.getMinistry(),
           api.getObituary(),
@@ -149,7 +146,6 @@ export default function App() {
         setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
         setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
         setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
-        setAnnouncements(announcementsResponse?.data?.data ?? announcementsResponse?.data ?? []);
         setNotices(noticesResponse?.data?.data ?? noticesResponse?.data ?? []);
         setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
         setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
@@ -212,7 +208,6 @@ export default function App() {
   console.log("sermons", sermons);
   console.log("togetherItems", togetherItems);
   console.log("bulletins", bulletins);
-  console.log("announcements", announcements);
   console.log("departments", departments);
   console.log("shuttleBusSchedule", shuttleBusSchedule);
   console.log("parkingLot", parkingLot);

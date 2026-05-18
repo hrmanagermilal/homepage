@@ -7,7 +7,6 @@ from fastapi.staticfiles import StaticFiles
 from .database import init_db
 from .routers import (
     analytics,
-    announcements,
     auth_routes,
     banner_image,
     bulletins,
@@ -65,7 +64,6 @@ app.include_router(landing_titles.router, prefix=PREFIX)
 app.include_router(sections.router, prefix=PREFIX)
 app.include_router(vision_statements.router, prefix=PREFIX)
 app.include_router(members.router, prefix=PREFIX)
-app.include_router(announcements.router, prefix=PREFIX)
 app.include_router(bulletins.router, prefix=PREFIX)
 app.include_router(sermons.router, prefix=PREFIX)
 app.include_router(departments.router, prefix=PREFIX)

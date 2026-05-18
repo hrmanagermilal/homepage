@@ -74,10 +74,6 @@ export const api = {
   getBulletins: (params = {}) => request(`/api/bulletins${toQueryString(params)}`),
   getBulletinById: (id) => request(`/api/bulletins/${id}`),
 
-  // Announcements
-  getAnnouncements: (params = {}) =>
-    request(`/api/announcements${toQueryString(params)}`),
-  getAnnouncementById: (id) => request(`/api/announcements/${id}`),
 
   // Together
   getTogether: () => request("/api/together"),
