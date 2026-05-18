@@ -26,7 +26,7 @@ WORKDIR /var/www/html
 
 # Install PHP dependencies first (cache-friendly layer)
 COPY composer.json composer.lock* ./
-RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
+RUN composer install --no-dev --no-scripts --no-progress --prefer-dist --no-audit
 
 # Copy application source
 COPY . .
