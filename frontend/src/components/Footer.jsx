@@ -64,7 +64,6 @@ export default function Footer() {
         <div className="footer__top">
           <div className="footer__brand" data-ani="top">
             <img className="footer__logo" src="/images/common/footer-logo.png" alt="밀알교회" />
-            <p className="footer__copy">ⓒ MILAL CHURCH .All Right Reserved. {currentYear}</p>
           </div>
 
           <nav className="footer__nav" data-ani="top" aria-label="사이트 메뉴">
@@ -114,6 +113,10 @@ export default function Footer() {
             <dl className="footer__info-item">
               <dt className="footer__info-label">E-MAIL</dt>
               <dd className="footer__info-value"><a href="mailto:milalchurch405@gmail.com">milalchurch405@gmail.com</a></dd>
+            </dl>
+            <dl className="footer__info-item">
+              <dt className="footer__info-label">COPYRIGHT</dt>
+              <dd className="footer__info-value">ⓒ Milal Church. All Right Reserved. {currentYear}</dd>
             </dl>
           </address>
 

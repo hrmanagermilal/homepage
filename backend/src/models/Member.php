@@ -23,10 +23,10 @@ class Member {
      */
     public function getAll($limit = 50, $offset = 0) {
         try {
-            $query = "SELECT id, name, email, title, role, picture, is_active, created_at 
+            $query = "SELECT id, name, name_en, email, title, category, role, picture, position, biography, tags, tags_en, sort_order, is_active, created_at 
                      FROM members 
                      WHERE is_active = TRUE 
-                     ORDER BY created_at DESC 
+                     ORDER BY sort_order ASC, created_at ASC 
                      LIMIT :limit OFFSET :offset";
             
             $stmt = $this->db->prepare($query);
@@ -48,10 +48,10 @@ class Member {
      */
     public function getByRole($role) {
         try {
-            $stmt = $this->db->prepare("SELECT id, name, email, title, role, picture, created_at 
+            $stmt = $this->db->prepare("SELECT id, name, name_en, email, title, category, role, picture, position, biography, tags, tags_en, sort_order, created_at 
                                        FROM members 
-                                       WHERE role = ? AND is_active = TRUE 
-                                       ORDER BY created_at DESC");
+                                       WHERE category = ? AND is_active = TRUE 
+                                       ORDER BY sort_order ASC, created_at ASC");
             $stmt->execute([$role]);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\Exception $e) {

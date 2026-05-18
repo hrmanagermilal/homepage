@@ -2,15 +2,6 @@
 import { IconQuickWorship, IconQuickBulletin } from "./HeroIcons";
 import "./css/Hero.css";
 
-const SLIDES = [
-  { src: "/images/main/main-visual-slide-01.jpg", alt: "" },
-  { src: "/images/main/main-visual-slide-02.jpg", alt: "" },
-  { src: "/images/main/main-visual-slide-04.jpg", alt: "" },
-  { src: "/images/main/main-visual-slide-05.jpg", alt: "" },
-  { src: "/images/main/main-visual-slide-06.jpg", alt: "" },
-  { src: "/images/main/main-visual-slide-07.jpg", alt: "" },
-];
-
 const DEFAULT_ICON_WORSHIP = "/images/main/icon-quick-worship.svg";
 const DEFAULT_ICON_BULLETIN = "/images/main/icon-quick-bulletin.svg";
 
@@ -83,7 +74,7 @@ export default function Hero({ hero = null, quickLinks = [] }) {
       })
       .filter((item) => Boolean(item?.src));
 
-    return mapped.length ? mapped : SLIDES;
+    return mapped;
   }, [hero]);
 
   const frontImageSrc = useMemo(() => {
@@ -130,9 +121,9 @@ export default function Hero({ hero = null, quickLinks = [] }) {
   const displayLinks = quickLinks.length > 0
     ? quickLinks.slice(0, 2).map((ql) => ({
       href: ql.link || "#",
-      icon: ql.iconUrl ? (resolveMediaPath(ql.iconUrl, "/uploads/hero/") || DEFAULT_QUICK_LINKS[0].icon) : DEFAULT_QUICK_LINKS[0].icon,
+      icon: ql.image ? (resolveMediaPath(ql.image, "/uploads/hero/") || DEFAULT_QUICK_LINKS[0].icon) : DEFAULT_QUICK_LINKS[0].icon,
       title: ql.title || "",
-      desc: ql.description || "",
+      desc: ql.desc || "",
     }))
     : DEFAULT_QUICK_LINKS;
 

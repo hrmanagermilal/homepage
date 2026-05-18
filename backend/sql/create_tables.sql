@@ -19,32 +19,12 @@ USE milal_homepage;
 -- 1. HERO SECTION 테이블
 -- ===============================================
 
-CREATE TABLE IF NOT EXISTS heroes (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(255),
-  subtitle TEXT,
-  is_active TINYINT(1) NOT NULL DEFAULT 1,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_active (is_active),
-  INDEX idx_created (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS hero_link (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(255),
-  icon_url TEXT,
-  link_url TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_created (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 CREATE TABLE IF NOT EXISTS quick_links (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255),
   link VARCHAR(500),
   image VARCHAR(500),
+  `desc` VARCHAR(500),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_title (title),
@@ -53,23 +33,18 @@ CREATE TABLE IF NOT EXISTS quick_links (
 
 CREATE TABLE IF NOT EXISTS hero_background_images (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  hero_id INT NOT NULL,
   image_url VARCHAR(500),
   `order` INT DEFAULT 0,
   alt_text VARCHAR(255),
-  uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (hero_id) REFERENCES heroes(id) ON DELETE CASCADE,
-  INDEX idx_hero_order (hero_id, `order`)
+  uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS hero_front_images (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  hero_id INT NOT NULL UNIQUE,
   image_url VARCHAR(500),
   alt_text VARCHAR(255),
   uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (hero_id) REFERENCES heroes(id) ON DELETE CASCADE,
-  INDEX idx_hero_front (hero_id)
+  INDEX idx_hero_front (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===============================================
@@ -77,6 +52,7 @@ CREATE TABLE IF NOT EXISTS hero_front_images (
 -- ===============================================
 CREATE TABLE IF NOT EXISTS section_titles (
   id INT PRIMARY KEY AUTO_INCREMENT,
+  category VARCHAR(100),
   title VARCHAR(255),
   subtitle TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -87,7 +63,9 @@ CREATE TABLE IF NOT EXISTS section_titles (
 CREATE TABLE IF NOT EXISTS vision_statements (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
+  title_en VARCHAR(255) NULL,
   points TEXT,
+  points_en TEXT NULL,
   `order` INT DEFAULT 0,
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -115,12 +93,13 @@ CREATE TABLE IF NOT EXISTS sermons (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
   category_id INT,
-  youtube_url VARCHAR(500) NOT NULL,
+  youtube_url VARCHAR(500) NULL,
   youtube_id VARCHAR(50),
   description TEXT,
   preacher VARCHAR(100),
   sermon_date DATE,
   thumbnail VARCHAR(500),
+  is_live TINYINT(1) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (category_id) REFERENCES sermon_categories(id) ON DELETE SET NULL,
@@ -239,7 +218,87 @@ CREATE TABLE IF NOT EXISTS department_announcements (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===============================================
--- 7. NEWS 테이블
+-- 9. SERVICE TIME 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS service_times (
+  id         INT PRIMARY KEY AUTO_INCREMENT,
+  category   VARCHAR(50)  NOT NULL,
+  name       VARCHAR(100) NOT NULL,
+  day        VARCHAR(50)  NULL,
+  time       VARCHAR(100) NOT NULL,
+  sort_order INT          NOT NULL DEFAULT 0,
+  is_active  TINYINT(1)   NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_category (category),
+  INDEX idx_order    (sort_order),
+  INDEX idx_active   (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
+-- 10. SHUTTLE BUS SCHEDULE 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS shuttle_bus_schedule (
+  id            INT PRIMARY KEY AUTO_INCREMENT,
+  direction     ENUM('finch_to_church', 'church_to_finch') NOT NULL,
+  time          VARCHAR(50)  NOT NULL,
+  service_label VARCHAR(50)  NOT NULL,
+  sort_order    INT          NOT NULL DEFAULT 0,
+  is_active     TINYINT(1)   NOT NULL DEFAULT 1,
+  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_direction (direction),
+  INDEX idx_order     (sort_order),
+  INDEX idx_active    (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
+-- 11. PARKING LOT 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS parking_lot (
+  id         INT PRIMARY KEY AUTO_INCREMENT,
+  content    TEXT         NOT NULL,
+  sort_order INT          NOT NULL DEFAULT 0,
+  is_active  TINYINT(1)   NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_order  (sort_order),
+  INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
+-- 12. PARKING MAP 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS parking_map (
+  id         INT PRIMARY KEY AUTO_INCREMENT,
+  image_url  VARCHAR(500) NOT NULL,
+  alt_text   VARCHAR(255) NULL,
+  is_active  TINYINT(1)   NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
+-- 13. BANNER IMAGE 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS banner_image (
+  id         INT PRIMARY KEY AUTO_INCREMENT,
+  image_url  VARCHAR(500) NOT NULL,
+  alt_text   VARCHAR(255) NULL,
+  is_active  TINYINT(1)   NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
+-- 14. NEWS 테이블
 -- ===============================================
 
 CREATE TABLE IF NOT EXISTS news (
@@ -247,6 +306,8 @@ CREATE TABLE IF NOT EXISTS news (
   title VARCHAR(255) NOT NULL,
   content TEXT NOT NULL,
   image VARCHAR(500),
+  link VARCHAR(500),
+  btn_text VARCHAR(100),
   author VARCHAR(100),
   category ENUM('news', 'update', 'photo') DEFAULT 'news',
   views INT DEFAULT 0,
@@ -290,13 +351,16 @@ CREATE TABLE IF NOT EXISTS page_views (
 CREATE TABLE IF NOT EXISTS members (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
+  name_en VARCHAR(100) NULL,
   email VARCHAR(150),
   title VARCHAR(100),
-  category ENUM('목회자', '장로', '간사') DEFAULT '간사',
+  category VARCHAR(200) DEFAULT '간사',
   role VARCHAR(100),
   picture VARCHAR(500),
   position VARCHAR(200) NULL,
   biography TEXT NULL,
+  tags TEXT NULL,
+  tags_en TEXT NULL,
   sort_order INT NOT NULL DEFAULT 0,
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

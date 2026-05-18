@@ -44,7 +44,7 @@ export const api = {
   baseUrl: API_BASE_URL,
 
   // Base / health
-  getHealth: () => request("/api"),
+  getHealth: () => request("/api/hero"),
 
   // Auth (GET)
   getAuthMe: (token) =>
@@ -54,6 +54,7 @@ export const api = {
 
   // Hero
   getHero: () => request("/api/hero"),
+  getHeroBackgroundImages: () => request("/api/hero/background-images"),
 
   // Sections
   getSections: () => request("/api/sections"),
@@ -110,9 +111,6 @@ export const api = {
     request(`/api/analytics/recent${toQueryString(params)}`),
 
   // Hero links
-  getHeroLinks: () => request("/api/hero-links"),
-  getHeroLinkById: (id) => request(`/api/hero-links/${id}`),
-
   // Quick links
   getQuickLinks: () => request("/api/quick-links"),
   getQuickLinkById: (id) => request(`/api/quick-links/${id}`),
@@ -120,6 +118,22 @@ export const api = {
   // Landing titles
   getLandingTitles: () => request("/api/landing-titles"),
   getLandingTitleById: (id) => request(`/api/landing-titles/${id}`),
+
+  // Service times
+  getServiceTimes: (params = {}) => request(`/api/service-times${toQueryString(params)}`),
+  getServiceTimeById: (id) => request(`/api/service-times/${id}`),
+
+  // Shuttle bus schedule
+  getShuttleBusSchedule: () => request('/api/shuttle-bus-schedule'),
+
+  // Parking lot
+  getParkingLot: () => request('/api/parking-lot'),
+
+  // Parking map
+  getParkingMap: () => request('/api/parking-map'),
+
+  // Banner image
+  getBannerImage: () => request('/api/banner-image'),
 
   // Existing write endpoint used in UI
   login: (username, password) =>

@@ -9,7 +9,6 @@ namespace MillalHomepage\Routes;
 use MillalHomepage\Utils\ResponseFormatter;
 use MillalHomepage\Routes\Handlers\AuthHandler;
 use MillalHomepage\Routes\Handlers\HeroHandler;
-use MillalHomepage\Routes\Handlers\HeroLinkHandler;
 use MillalHomepage\Routes\Handlers\QuickLinkHandler;
 use MillalHomepage\Routes\Handlers\SermonHandler;
 use MillalHomepage\Routes\Handlers\BulletinHandler;
@@ -26,6 +25,11 @@ use MillalHomepage\Routes\Handlers\AnalyticsHandler;
 use MillalHomepage\Routes\Handlers\LandingTitleHandler;
 use MillalHomepage\Routes\Handlers\SectionHandler;
 use MillalHomepage\Routes\Handlers\VisionStatementHandler;
+use MillalHomepage\Routes\Handlers\ServiceTimeHandler;
+use MillalHomepage\Routes\Handlers\ShuttleBusScheduleHandler;
+use MillalHomepage\Routes\Handlers\ParkingLotHandler;
+use MillalHomepage\Routes\Handlers\ParkingMapHandler;
+use MillalHomepage\Routes\Handlers\BannerImageHandler;
 use MillalHomepage\Routes\Handlers\DocsHandler;
 
 class ApiRouter {
@@ -66,11 +70,7 @@ class ApiRouter {
                 break;
 
             case 'hero':
-                (new HeroHandler($method))->handle($id, $action, $sub_id);
-                break;
-
-            case 'hero-links':
-                (new HeroLinkHandler($method))->handle($id, $action);
+                (new HeroHandler($method))->handle($id, $action);
                 break;
 
             case 'quick-links':
@@ -135,6 +135,26 @@ class ApiRouter {
 
             case 'vision-statements':
                 (new VisionStatementHandler($method))->handle($id, $action);
+                break;
+
+            case 'service-times':
+                (new ServiceTimeHandler($method))->handle($id, $action);
+                break;
+
+            case 'shuttle-bus-schedule':
+                (new ShuttleBusScheduleHandler($method))->handle($id, $action);
+                break;
+
+            case 'parking-lot':
+                (new ParkingLotHandler($method))->handle($id, $action);
+                break;
+
+            case 'parking-map':
+                (new ParkingMapHandler($method))->handle($id, $action);
+                break;
+
+            case 'banner-image':
+                (new BannerImageHandler($method))->handle($id, $action);
                 break;
 
             case 'docs':

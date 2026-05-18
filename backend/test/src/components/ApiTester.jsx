@@ -3,6 +3,8 @@ import EndpointButton from './EndpointButton'
 import ResponseDisplay from './ResponseDisplay'
 import '../styles/ApiTester.css'
 
+const API_BASE = 'http://localhost'
+
 const API_ENDPOINTS = [
   { name: 'Hero', path: '/api/hero' },
   { name: 'Hero Links', path: '/api/hero-links' },
@@ -31,7 +33,7 @@ function ApiTester() {
     setSelectedEndpoint(endpoint.path)
     
     try {
-      const response = await fetch(endpoint.path)
+      const response = await fetch(API_BASE + endpoint.path)
       const data = await response.json()
       
       setResponses(prev => ({
@@ -64,7 +66,7 @@ function ApiTester() {
     setLoading(true)
     for (const endpoint of API_ENDPOINTS) {
       try {
-        const response = await fetch(endpoint.path)
+        const response = await fetch(API_BASE + endpoint.path)
         const data = await response.json()
         
         setResponses(prev => ({
