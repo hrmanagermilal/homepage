@@ -85,13 +85,13 @@ export default function Jubo({ items = [], section = null }) {
         </div>
       </section>
 
-      <div className={`weekly-popup${popupOpen ? " is-open" : ""}`} role="dialog" aria-modal="true" aria-label="주보 크게 보기">
+      <div className={`weekly-popup${popupOpen ? " is-open" : ""}`} role="dialog" aria-modal="true" aria-label="주보 크게 보기" onClick={() => setPopupOpen(false)}>
         <button className="weekly-popup__close" type="button" aria-label="닫기" onClick={() => setPopupOpen(false)}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L15 15M15 1L1 15" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
-        <img className="weekly-popup__img" src={currentImage} alt={currentPage?.title || "주보 크게 보기"} />
+        <img className="weekly-popup__img" src={currentImage} alt={currentPage?.title || "주보 크게 보기"} onClick={(e) => e.stopPropagation()} />
       </div>
     </>
   );

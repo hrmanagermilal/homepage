@@ -13,7 +13,6 @@ function getNewsImage(item, index) {
 }
 
 export default function Announcement({ items = [], section = null }) {
-  console.log("Announcement items", items);
   const withImage = items.filter((item) => item?.image);
   const cards = withImage.length
     ? withImage.map((item, idx) => ({
@@ -30,6 +29,8 @@ export default function Announcement({ items = [], section = null }) {
   const sectionRef = useRef(null);
   const stateRef = useRef({ current: 0, total: cards.length, animating: false, timer: null, dragging: false, hasDragged: false, startX: 0, startSX: 0 });
   const [selectedCard, setSelectedCard] = useState(null);
+  const [dotIndex, setDotIndex] = useState(0);
+  const setDotIndexRef = useRef(setDotIndex);
   // Keep a stable ref so the DOM event listener can access current values
   const cardsRef = useRef(cards);
   const setSelectedCardRef = useRef(setSelectedCard);
@@ -58,6 +59,7 @@ export default function Announcement({ items = [], section = null }) {
 
   const goTo = useCallback((idx) => {
     const s = stateRef.current;
+    console.log(`goTo ${idx}, current: ${s.current}, total: ${s.total}`);
     if (s.animating) return;
     s.animating = true;
     s.current = idx;
@@ -85,6 +87,8 @@ export default function Announcement({ items = [], section = null }) {
     s.total = total;
     s.current = total;
 
+    if (total === 0) return;
+
     // Insert clones: [clones] [originals] [clones]
     const origCards = Array.from(track.querySelectorAll(".news-card"));
     const preFrag = document.createDocumentFragment();
@@ -100,12 +104,15 @@ export default function Announcement({ items = [], section = null }) {
       if (s.current < total) { s.current += total; moveTo(s.current, false); }
       else if (s.current >= total * 2) { s.current -= total; moveTo(s.current, false); }
       s.animating = false;
+      setDotIndexRef.current(s.current - total);
     };
 
     const onResize = () => moveTo(s.current, false);
 
     const prevBtn = section.querySelector(".slider-nav__btn.is-prev");
     const nextBtn = section.querySelector(".slider-nav__btn.is-next");
+    const mobilePrevBtn = section.querySelector(".main-news__mobile-btn--prev");
+    const mobileNextBtn = section.querySelector(".main-news__mobile-btn--next");
     const slider  = section.querySelector(".main-news__slider");
 
     const onPrev = () => { goTo(s.current - 1); startAuto(); };
@@ -115,6 +122,8 @@ export default function Announcement({ items = [], section = null }) {
     window.addEventListener("resize", onResize);
     if (prevBtn) prevBtn.addEventListener("click", onPrev);
     if (nextBtn) nextBtn.addEventListener("click", onNext);
+    if (mobilePrevBtn) mobilePrevBtn.addEventListener("click", onPrev);
+    if (mobileNextBtn) mobileNextBtn.addEventListener("click", onNext);
     if (slider) { slider.addEventListener("mouseenter", stopAuto); slider.addEventListener("mouseleave", startAuto); }
 
     // Drag / swipe
@@ -173,6 +182,8 @@ export default function Announcement({ items = [], section = null }) {
       window.removeEventListener("resize", onResize);
       if (prevBtn) prevBtn.removeEventListener("click", onPrev);
       if (nextBtn) nextBtn.removeEventListener("click", onNext);
+      if (mobilePrevBtn) mobilePrevBtn.removeEventListener("click", onPrev);
+      if (mobileNextBtn) mobileNextBtn.removeEventListener("click", onNext);
       if (slider) { slider.removeEventListener("mouseenter", stopAuto); slider.removeEventListener("mouseleave", startAuto); }
       track.removeEventListener("mousedown",   onMouseDown);
       document.removeEventListener("mousemove", onMouseMove);
@@ -184,7 +195,7 @@ export default function Announcement({ items = [], section = null }) {
       track.removeEventListener("dragstart",   onDragStart);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [items.length]);
 
   // Lock body scroll and handle Escape key when modal is open
   useEffect(() => {
@@ -239,18 +250,36 @@ export default function Announcement({ items = [], section = null }) {
             <a data-text="sm" className="main-news__notice-text" href="/news/notice">{noticeText}</a>
           </div>
 
-          <div className="main-news__slider" data-ani="top">
-            <div className="main-news__track" id="newsTrack" ref={trackRef}>
-              {cards.map((card, idx) => (
-                <article className="news-card" key={`${card.title}-${idx}`} data-card-idx={idx} style={{ cursor: "pointer" }}>
-                  <div className="news-card__thumb"><img src={card.image} alt={card.title} /></div>
-                  <div className="news-card__body">
-                    <h3 data-heading="xl">{card.title}</h3>
-                    {card.btnText && <a className="btn-basic btn-basic--white" href={card.link} target="_blank" rel="noopener noreferrer">{card.btnText}</a>}
-                  </div>
-                </article>
-              ))}
+          <div className="main-news__slider-wrap">
+            <div className="main-news__slider" data-ani="top">
+              <div className="main-news__track" id="newsTrack" ref={trackRef}>
+                {cards.map((card, idx) => (
+                  <article className="news-card" key={`${card.title}-${idx}`} data-card-idx={idx} style={{ cursor: "pointer" }}>
+                    <div className="news-card__thumb"><img src={card.image} alt={card.title} /></div>
+                    <div className="news-card__body">
+                      <h3 data-heading="xl">{card.title}</h3>
+                      {card.btnText && <a className="btn-basic btn-basic--white" href={card.link} target="_blank" rel="noopener noreferrer">{card.btnText}</a>}
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
+{/* 
+            {cards.length > 0 && (
+              <div className="main-news__mobile-nav">
+                <button className="main-news__mobile-btn main-news__mobile-btn--prev" type="button" aria-label="이전">
+                  <img src="/images/main/icon-arrow-news.svg" alt="" aria-hidden="true" />
+                </button>
+                <div className="main-news__mobile-dots" aria-hidden="true">
+                  {cards.map((_, i) => (
+                    <span key={i} className={`main-news__mobile-dot${i === dotIndex ? " is-active" : ""}`} />
+                  ))}
+                </div>
+                <button className="main-news__mobile-btn main-news__mobile-btn--next" type="button" aria-label="다음">
+                  <img src="/images/main/icon-arrow-news.svg" alt="" aria-hidden="true" />
+                </button>
+              </div>
+            )} */}
           </div>
         </div>
       </section>

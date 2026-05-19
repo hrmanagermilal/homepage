@@ -34,6 +34,21 @@
   .news-card:hover .news-card__thumb {box-shadow: 0 20rem 30rem rgba(66,55,37,0.08);}
 }
 
+/* ══════════════════════════════════════
+ * main-news 모바일 네비 (← dots →)
+ * ══════════════════════════════════════ */
+.main-news__slider-wrap {position: relative;}
+.main-news__mobile-nav {display: none; align-items: center; gap: 12rem; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));}
+.main-news__mobile-btn {display: flex; align-items: center; justify-content: center; width: 36rem; height: 36rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer; flex-shrink: 0; transition: background 0.2s ease;}
+.main-news__mobile-btn img {display: block; width: 12rem; height: 9rem; filter: brightness(0) invert(1); pointer-events: none;}
+.main-news__mobile-btn--next img {transform: scaleX(-1);}
+@media (hover: hover) and (pointer: fine) {
+  .main-news__mobile-btn:hover {background: rgba(255,255,255,0.25);}
+}
+.main-news__mobile-dots {display: flex; align-items: center; gap: 8rem;}
+.main-news__mobile-dot {display: block; width: 7rem; height: 7rem; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s ease, transform 0.3s ease;}
+.main-news__mobile-dot.is-active {background: #fff; transform: scale(1.25);}
+
 @media (max-width: 860px) {
   .news-card {gap: 18rem;}
 }
@@ -57,6 +72,7 @@
   .main-news__track {gap: 8rem;}
   .news-card {flex: 0 0 100%; gap: 16rem;}
   .news-card__thumb {border-radius: 12rem;}
+  .main-news__mobile-nav {display: flex; position: absolute; top: calc((270 / 478) * (100vw - 40rem) / 2); left: 50%; transform: translate(-50%, -50%); z-index: 5; white-space: nowrap;}
 }
 
 /* ══════════════════════════════════════
