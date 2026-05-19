@@ -38,6 +38,7 @@ const NAV_ITEMS = [
   {
     num: "04", label: "소식", path: "/news#notice",
     subs: [
+      { label: "온라인 주보", path: "/news#bulletin" },
       { label: "공지", path: "/news#notice" },
       { label: "부고", path: "/news#obituary" },
     ],

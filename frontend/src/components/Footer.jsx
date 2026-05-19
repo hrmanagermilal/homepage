@@ -35,6 +35,7 @@ const FOOTER_NAV = [
   {
     title: "소식",
     links: [
+      { label: "온라인 주보", path: "/news#bulletin" },
       { label: "공지", path: "/news#notice" },
       { label: "부고", path: "/news#obituary" },
     ],

@@ -5,7 +5,7 @@ services:
     image: nginx:1.25-alpine
     container_name: milal-nginx
     ports:
-      - "80:80"
+      - "8080:80"
       - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile
     container_name: milal-backend
     expose:
-      - "9000"
+      - "8000"
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -31,12 +31,10 @@ services:
       DB_PASSWORD: milal_pass_2024
       JWT_SECRET: change-this-to-a-secure-random-string
       JWT_EXPIRY: 604800
-      UPLOADS_PATH: ./uploads
-      MAX_FILE_SIZE: 10485760
+      CORS_ORIGIN: "*"
+      UPLOADS_PATH: /app/uploads
     volumes:
-      - .:/var/www/html:cached
-      - uploads_data:/var/www/html/uploads
-      - ./logs:/var/www/html/logs
+      - uploads_data:/app/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -76,4 +74,5 @@ volumes:
 
 networks:
   milal-net:
+    name: milal-net
     driver: bridge

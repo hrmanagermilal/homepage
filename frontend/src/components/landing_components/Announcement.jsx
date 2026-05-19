@@ -2,11 +2,6 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import "./css/Announcement.css";
 
 const FALLBACK_NEWS = [
-  { title: "제3회 가스펠오락관 - 암송축제편", image: "/images/main/news-thumb-01.jpg", link: "#", btnText: "신청하러 가기" },
-  { title: "BAPTISM", image: "/images/main/news-thumb-02.jpg", link: "#", btnText: null },
-  { title: "워크톤 페스티벌", image: "/images/main/news-thumb-03.jpg", link: "#", btnText: "신청하러 가기" },
-  { title: "새로운 소식", image: "/images/main/news-thumb-04.jpg", link: "#", btnText: "신청하러 가기" },
-  { title: "새로운 소식", image: "/images/main/news-thumb-05.jpg", link: "#", btnText: "신청하러 가기" },
 ];
 
 function getNewsImage(item, index) {
@@ -18,12 +13,14 @@ function getNewsImage(item, index) {
 }
 
 export default function Announcement({ items = [], section = null }) {
-  const cards = items.length
-    ? items.slice(0, 5).map((item, idx) => ({
+  console.log("Announcement items", items);
+  const withImage = items.filter((item) => item?.image);
+  const cards = withImage.length
+    ? withImage.map((item, idx) => ({
         title: item.title || "새로운 소식",
         image: getNewsImage(item, idx),
         link: item.link || "#",
-        btnText: item.btn_text || null,
+        btnText: item.link_text || null,
       }))
     : FALLBACK_NEWS;
 
@@ -249,7 +246,7 @@ export default function Announcement({ items = [], section = null }) {
                   <div className="news-card__thumb"><img src={card.image} alt={card.title} /></div>
                   <div className="news-card__body">
                     <h3 data-heading="xl">{card.title}</h3>
-                    {card.btnText && <a className="btn-basic btn-basic--white" href={card.link}>{card.btnText}</a>}
+                    {card.btnText && <a className="btn-basic btn-basic--white" href={card.link} target="_blank" rel="noopener noreferrer">{card.btnText}</a>}
                   </div>
                 </article>
               ))}
@@ -274,7 +271,7 @@ export default function Announcement({ items = [], section = null }) {
             <div className="news-card-modal__body">
               <h3 className="news-card-modal__title">{selectedCard.title}</h3>
               {selectedCard.btnText && (
-                <a className="news-card-modal__button" href={selectedCard.link}>{selectedCard.btnText}</a>
+                <a className="news-card-modal__button" href={selectedCard.link} target="_blank" rel="noopener noreferrer">{selectedCard.btnText}</a>
               )}
             </div>
           </div>

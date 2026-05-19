@@ -14,6 +14,7 @@ import OnlineGivingPage from "./components/OnlineGivingPage";
 import NewsPage from "./components/NewsPage";
 import NoticeViewPage from "./components/NoticeViewPage";
 import ObituaryViewPage from "./components/ObituaryViewPage";
+import BulletinViewPage from "./components/BulletinViewPage";
 
 
 export default function App() {
@@ -26,7 +27,8 @@ export default function App() {
   const isOnlineGivingPage = currentPath.startsWith("/online-giving");
   const isNoticeViewPage = /^\/news\/notice\/\d+$/.test(currentPath);
   const isObituaryViewPage = /^\/news\/obituary\/\d+$/.test(currentPath);
-  const isNewsPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage;
+  const isBulletinViewPage = /^\/news\/bulletin\/\d+$/.test(currentPath);
+  const isNewsPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage && !isBulletinViewPage;
   const isNextGenSubmenuPage = currentPath.startsWith("/nextgen");
   const [hero, setHero] = useState(null);
   const [quickLinks, setQuickLinks] = useState([]);
@@ -37,9 +39,10 @@ export default function App() {
   const [sermons, setSermons] = useState([]);
   const [togetherItems, setTogetherItems] = useState([]);
   const [bulletins, setBulletins] = useState([]);
-  const [announcements, setAnnouncements] = useState([]);
-  const [news, setNews] = useState([]);
+  const [notices, setNotices] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [ministries, setMinistries] = useState([]);
+  const [obituaries, setObituaries] = useState([]);
   const [serviceTimes, setServiceTimes] = useState([]);
   const [shuttleBusSchedule, setShuttleBusSchedule] = useState([]);
   const [parkingLot, setParkingLot] = useState([]);
@@ -99,17 +102,18 @@ export default function App() {
           visionStatementsResponse,
           sermonsResponse,
           togetherResponse,
-          bulletinsResponse,
-          announcementsResponse,
+          bulletinsResponse,          
           departmentsResponse,
+          ministriesResponse,
+          obituariesResponse,
           serviceTimesResponse,
-          newsResponse,
+          noticesResponse,
           shuttleBusScheduleResponse,
           parkingLotResponse,
           parkingMapResponse,
           bannerImageResponse,
         ] = await Promise.all([
-          api.getHeroBackgroundImages(),
+          api.getHero(),
           api.getQuickLinks(),
           api.getLandingTitles(),
           api.getMembers(),
@@ -117,11 +121,12 @@ export default function App() {
           api.getVisionStatements(),
           api.getSermons({ page: 1, limit: 100 }),
           api.getTogether(),
-          api.getBulletins({ page: 1, limit: 6 }),
-          api.getAnnouncements({ page: 1, limit: 5 }),
+          api.getBulletins({ page: 1, limit: 50 }),
           api.getDepartments(),
+          api.getMinistry(),
+          api.getObituary(),
           api.getServiceTimes(),
-          api.getNews({ page: 1, limit: 5 }),
+          api.getNotice({ page: 1, limit: 50 }),
           api.getShuttleBusSchedule(),
           api.getParkingLot(),
           api.getParkingMap(),
@@ -129,7 +134,10 @@ export default function App() {
         ]);
 
         if (!mounted) return;
-        setHero({ backgroundImages: heroResponse?.data ?? [] });
+        setHero({
+          backgroundImages: heroResponse?.data?.background_images ?? heroResponse?.data ?? [],
+          front_images: heroResponse?.data?.front_images ?? [],
+        });
         setQuickLinks(quickLinkResponse?.data ?? []);
         setLandingTitles(landingTitleResponse?.data || []);
         setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
@@ -138,9 +146,10 @@ export default function App() {
         setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
         setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
         setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
-        setAnnouncements(announcementsResponse?.data?.data ?? announcementsResponse?.data ?? []);
-        setNews(newsResponse?.data?.data ?? newsResponse?.data ?? []);
+        setNotices(noticesResponse?.data?.data ?? noticesResponse?.data ?? []);
         setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
+        setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
+        setObituaries(obituariesResponse?.data?.data ?? obituariesResponse?.data ?? []);
         setServiceTimes(serviceTimesResponse?.data ?? []);
         setShuttleBusSchedule(shuttleBusScheduleResponse?.data ?? []);
         setParkingLot(parkingLotResponse?.data ?? []);
@@ -180,7 +189,7 @@ export default function App() {
     }
 
     const hasHash = Boolean(window.location.hash);
-    const isDetailPath = /^\/news\/(notice|obituary)\/\d+$/.test(currentPath);
+    const isDetailPath = /^\/news\/(notice|obituary|bulletin)\/\d+$/.test(currentPath);
 
     // Hash-based pages and detail views already control their own scroll position.
     if (hasHash || isTabHashPage(currentPath) || isDetailPath) {
@@ -190,6 +199,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPath, loading, isTabHashPage]);
 
+  console.log("hero", hero);
   console.log("quickLinks", quickLinks);
   console.log("landingTitles", landingTitles);
   console.log("members", members);
@@ -198,13 +208,12 @@ export default function App() {
   console.log("sermons", sermons);
   console.log("togetherItems", togetherItems);
   console.log("bulletins", bulletins);
-  console.log("announcements", announcements);
   console.log("departments", departments);
-  console.log("serviceTimes", serviceTimes);
-  console.log("news", news);
   console.log("shuttleBusSchedule", shuttleBusSchedule);
   console.log("parkingLot", parkingLot);
   console.log("parkingMap", parkingMap);
+  console.log("bannerImage", bannerImage);
+  console.log("ministries", ministries);
 
   return (
     <Box>
@@ -213,17 +222,19 @@ export default function App() {
       {isIntroductionPage ? (
         <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} />
       ) : isMinistryPage ? (
-        <MinistryPage />
+        <MinistryPage ministries={ministries} />
       ) : isOnlineGivingPage ? (
         <OnlineGivingPage />
       ) : isNoticeViewPage ? (
-        <NoticeViewPage />
+        <NoticeViewPage notices={notices} />
       ) : isObituaryViewPage ? (
-        <ObituaryViewPage />
+        <ObituaryViewPage obituaries={obituaries} />
+      ) : isBulletinViewPage ? (
+        <BulletinViewPage />
       ) : isNewsPage ? (
-        <NewsPage />
+        <NewsPage notices={notices} obituaries={obituaries} bulletins={bulletins} />
       ) : isNextGenSubmenuPage ? (
-        <NextGenPage />
+        <NextGenPage departments={departments.filter(d => d.department_type === 'nextgen')} />
       ) : (
         <LandingPage
           hero={hero}
@@ -232,8 +243,7 @@ export default function App() {
           departments={departments}
           serviceTimes={serviceTimes}
           bulletins={bulletins}
-          announcements={announcements}
-          news={news}
+          notices={notices}
           shuttleBusSchedule={shuttleBusSchedule}
           parkingLot={parkingLot}
           parkingMap={parkingMap}
@@ -243,7 +253,7 @@ export default function App() {
         />
       )}
       <Footer landingTitles={landingTitles} />
-      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isNewsPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isBulletinViewPage || isNewsPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }

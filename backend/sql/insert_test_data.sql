@@ -27,8 +27,8 @@ TRUNCATE TABLE roles;
 TRUNCATE TABLE page_views;
 TRUNCATE TABLE department_announcements;
 TRUNCATE TABLE departments;
+TRUNCATE TABLE ministry;
 TRUNCATE TABLE together_items;
-TRUNCATE TABLE announcements;
 TRUNCATE TABLE bulletin_images;
 TRUNCATE TABLE bulletins;
 TRUNCATE TABLE sermons;
@@ -38,7 +38,8 @@ TRUNCATE TABLE section_titles;
 TRUNCATE TABLE hero_front_images;
 TRUNCATE TABLE hero_background_images;
 TRUNCATE TABLE quick_links;
-TRUNCATE TABLE news;
+TRUNCATE TABLE notice;
+TRUNCATE TABLE obituary;
 TRUNCATE TABLE members;
 TRUNCATE TABLE landing_page_titles;
 TRUNCATE TABLE service_times;
@@ -86,7 +87,7 @@ INSERT INTO hero_background_images (image_url, `order`, alt_text) VALUES
 
 -- 프론트 이미지
 INSERT INTO hero_front_images (image_url, alt_text) VALUES 
-('/uploads/hero/front/hero_front.jpg', 'Welcome Image');
+('/images/main/main-visual-text.png', '밀알교회는 하나님의 사람을 세웁니다.\n모퉁이돌 되신 예수 안에 함께 지어져 가는 공동체입니다.');
 
 -- 퀵 링크
 INSERT INTO quick_links (title, link, image, `desc`) VALUES
@@ -178,40 +179,80 @@ INSERT INTO sermons (title, category_id, youtube_url, youtube_id, description, p
 -- ===============================================
 
 INSERT INTO bulletins (title, week_number, `year`) VALUES 
+('2026년 10주차 주보', 10, 2026),
+('2026년 9주차 주보', 9, 2026),
+('2026년 8주차 주보', 8, 2026),
+('2026년 7주차 주보', 7, 2026),
+('2026년 6주차 주보', 6, 2026),
+('2026년 5주차 주보', 5, 2026),
 ('2026년 4주차 주보', 4, 2026),
 ('2026년 3주차 주보', 3, 2026),
 ('2026년 2주차 주보', 2, 2026);
 
-SET @bulletin_id = LAST_INSERT_ID();
-
 -- 주보 이미지 (테스트용)
 INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
-(@bulletin_id, '/images/main/weekly-bulletin-01.png', 1),
-(@bulletin_id, '/images/main/weekly-bulletin-02.png', 2),
-(@bulletin_id, '/images/main/weekly-bulletin-03.png', 3),
-(@bulletin_id, '/images/main/weekly-bulletin-04.png', 4),
-(@bulletin_id, '/images/main/weekly-bulletin-05.png', 5),
-(@bulletin_id, '/images/main/weekly-bulletin-06.png', 6);
-
--- ===============================================
--- 4. 공지사항 테스트 데이터
--- ===============================================
-
-INSERT INTO announcements (admin_id, title, content, link, category, is_pinned) VALUES 
-(@admin_user_id, '부활절 특별 예배 안내', '2026년 4월 19일 부활절 예배를 드립니다. 모두 참석해주시기 바랍니다.', 
- '/announcement/easter-2026', 'event', TRUE),
-
-(@admin_user_id, '새신자 환영 프로그램', '새신자 분들을 위한 환영 프로그램이 4월 22일 수요일에 있습니다.', 
- '/announcement/new-member', 'general', TRUE),
-
-(@admin_user_id, '성경공부 모임 안내', '매주 목요일 오후 7시 성경공부 모임이 있습니다. 참석을 원하시는 분들은 사무실로 연락바랍니다.', 
- NULL, 'general', FALSE),
-
-(@admin_user_id, '교회 청소 당번', '4월 20일 주일 예배 후 교회 청소를 하게 됩니다. 모든 교우들의 참여를 부탁드립니다.', 
- NULL, 'general', FALSE),
-
-(@admin_user_id, '기도 제목 모음', '4월 17일부터 26일까지 중보기도 기간입니다. 기도 제목을 제출해주시기 바랍니다.', 
- '/prayer-topics', 'general', FALSE);
+(1, '/images/main/weekly-bulletin-01.png', 1),
+(1, '/images/main/weekly-bulletin-02.png', 2),
+(1, '/images/main/weekly-bulletin-03.png', 3),
+(1, '/images/main/weekly-bulletin-04.png', 4),
+(1, '/images/main/weekly-bulletin-05.png', 5),
+(1, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(2, '/images/main/weekly-bulletin-01.png', 1),
+(2, '/images/main/weekly-bulletin-02.png', 2),
+(2, '/images/main/weekly-bulletin-03.png', 3),
+(2, '/images/main/weekly-bulletin-04.png', 4),
+(2, '/images/main/weekly-bulletin-05.png', 5),
+(2, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(3, '/images/main/weekly-bulletin-01.png', 1),
+(3, '/images/main/weekly-bulletin-02.png', 2),
+(3, '/images/main/weekly-bulletin-03.png', 3),
+(3, '/images/main/weekly-bulletin-04.png', 4),
+(3, '/images/main/weekly-bulletin-05.png', 5),
+(3, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(4, '/images/main/weekly-bulletin-01.png', 1),
+(4, '/images/main/weekly-bulletin-02.png', 2),
+(4, '/images/main/weekly-bulletin-03.png', 3),
+(4, '/images/main/weekly-bulletin-04.png', 4),
+(4, '/images/main/weekly-bulletin-05.png', 5),
+(4, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(5, '/images/main/weekly-bulletin-01.png', 1),
+(5, '/images/main/weekly-bulletin-02.png', 2),
+(5, '/images/main/weekly-bulletin-03.png', 3),
+(5, '/images/main/weekly-bulletin-04.png', 4),
+(5, '/images/main/weekly-bulletin-05.png', 5),
+(5, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(6, '/images/main/weekly-bulletin-01.png', 1),
+(6, '/images/main/weekly-bulletin-02.png', 2),
+(6, '/images/main/weekly-bulletin-03.png', 3),
+(6, '/images/main/weekly-bulletin-04.png', 4),
+(6, '/images/main/weekly-bulletin-05.png', 5),
+(6, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(7, '/images/main/weekly-bulletin-01.png', 1),
+(7, '/images/main/weekly-bulletin-02.png', 2),
+(7, '/images/main/weekly-bulletin-03.png', 3),
+(7, '/images/main/weekly-bulletin-04.png', 4),
+(7, '/images/main/weekly-bulletin-05.png', 5),
+(7, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(8, '/images/main/weekly-bulletin-01.png', 1),
+(8, '/images/main/weekly-bulletin-02.png', 2),
+(8, '/images/main/weekly-bulletin-03.png', 3),
+(8, '/images/main/weekly-bulletin-04.png', 4),
+(8, '/images/main/weekly-bulletin-05.png', 5),
+(8, '/images/main/weekly-bulletin-06.png', 6);
+INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
+(9, '/images/main/weekly-bulletin-01.png', 1),
+(9, '/images/main/weekly-bulletin-02.png', 2),
+(9, '/images/main/weekly-bulletin-03.png', 3),
+(9, '/images/main/weekly-bulletin-04.png', 4),
+(9, '/images/main/weekly-bulletin-05.png', 5),
+(9, '/images/main/weekly-bulletin-06.png', 6);
 
 -- ===============================================
 -- 5. 함께하는 교회 테스트 데이터
@@ -226,35 +267,59 @@ INSERT INTO together_items (title, description, image, link, `order`, is_active)
 -- 6. 다음세대 부서 테스트 데이터
 -- ===============================================
 
-INSERT INTO departments (department_type, name, description, age_group, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, `order`) VALUES 
-('nextgen', '영유아부', '0-3세 영아를 위한 전담 보육 사역', '0-3세', '주일', '오전 10시 30분', '2층 유아실', '박영선 사역자', '담당 보육사', '010-1234-5678', 1),
-('nextgen', '유치부', '4-6세 유아 신앙교육', '4-6세', '주일', '오전 10시 30분', '2층 유년실', '김미영 사역자', '담당 교사', '010-2345-6789', 2),
-('nextgen', '아동부', '초등학교 학생 신앙교육', '7-12세', '주일', '오전 10시 30분', '3층 초등실', '이순신 사역자', '담당 목사', '010-3456-7890', 3),
-('nextgen', 'EM 중고등부', '중학교 학생 신앙교육', '13-15세', '주일', '오전 10시 30분', '3층 중등실', '정준호 전도사', '담당 전도사', '010-4567-8901', 4),
-('nextgen', 'KM 중고등부', '고등학교 학생 신앙교육 및 제자훈련', '16-18세', '주일', '오전 10시 30분', '4층 고등실', '강민수 전도사', '담당 전도사', '010-5678-9012', 5),
-('nextgen', '청년부', '대학생 및 미혼 청년 신앙공동체', '19-29세', '주일', '오전 11시', '본당', '최윤희 전도사', '담당 전도사', '010-6789-0123', 6);
+INSERT INTO departments (department_type, name, description, heading_title, image, age_group, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, pastor_email, kakao_link, kakao_label, notice_title, notice_description, notice_button_label, notice_button_href, `order`) VALUES
+('nextgen', '청년부', '토론토의 새벽이슬 같은 청년들이 모이면 예배하고,\n흩어지면 빛을 발하는 공동체입니다.', 'Milight, Time to Shine. 하나님이여 우리를 돌이키시고\n주의 얼굴빛을 비추사 우리가 구원을 얻게 하소서 (시편 80:3)', '/images/sub/02-next-generation/pastor-photo.jpg', '19-29세', '주일', '오후 2시', '밀알교회 1층 본당', '신효성 목사', '담당 목사', NULL, 'rev.shin@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '청년부 카카오톡 채널 추가하기', '청년부 소식', '청년부의 소식과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 1),
+('nextgen', 'KM 청소년부', '말씀과 기도로 다음세대가 정체성을 세우고, 건강한 공동체를 경험하도록 돕습니다.', 'KM 청소년부, 믿음 안에서 함께 성장합니다.', '/images/sub/01-introduction/minister-05.jpg', '13-18세', '주일', '오전 11시', '밀알교회 2층 청소년부 예배실', '차승현 목사', '담당 목사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'KM 청소년부 카카오톡 채널 추가하기', 'KM 청소년부 소식', '주간 프로그램과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 2),
+('nextgen', 'EM 청소년부', 'We gather for worship and discipleship, and go out as Christ-centered witnesses in daily life.', 'EM Youth, Grounded in the Word.', '/images/sub/01-introduction/minister-09.jpg', '13-18세', '주일', '오후 1시', '밀알교회 2층 청소년부 예배실', '조나단 목사', '담당 목사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'EM Youth 카카오톡 채널 추가하기', 'EM Youth 소식', '프로그램 일정과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 3),
+('nextgen', '아동부', '예배와 말씀, 활동을 통해 아이들이 즐겁게 하나님을 알아가도록 세웁니다.', '아동부, 예수님을 닮아가는 어린이들', '/images/sub/01-introduction/minister-13.jpg', '7-12세', '주일', '오전 11시', '밀알교회 아동부실', '김진아 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '아동부 카카오톡 채널 추가하기', '아동부 프로그램', '월간 프로그램과 학부모 안내자료를 다운로드하세요.', '자료 다운로드', '#', 4),
+('nextgen', '유치부', '아이들의 눈높이에 맞춘 예배와 활동으로 하나님의 사랑을 자연스럽게 배우게 합니다.', '유치부, 믿음의 씨앗을 심는 시간', '/images/sub/01-introduction/minister-12.jpg', '4-6세', '주일', '오전 11시', '밀알교회 유치부실', '김비치 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '유치부 카카오톡 채널 추가하기', '유치부 프로그램', '월간 공지사항과 부모교육 자료를 다운로드하세요.', '자료 다운로드', '#', 5),
+('nextgen', '영유아부', '부모와 교사가 함께 아이들의 신앙 첫 걸음을 따뜻하게 동행합니다.', '영유아부, 사랑 안에서 첫 걸음을', '/images/sub/01-introduction/minister-14.jpg', '0-3세', '주일', '오전 11시', '밀알교회 영유아부실', '주은지 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '영유아부 카카오톡 채널 추가하기', '영유아부 프로그램', '월간 프로그램과 부모 양육 안내자료를 다운로드하세요.', '자료 다운로드', '#', 6);
 
 -- ===============================================
--- 7. 사역 부서 테스트 데이터
+-- 7. 사역 (ministry) 테스트 데이터
 -- ===============================================
 
-INSERT INTO departments (department_type, name, description, ministry_type, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, `order`) VALUES 
-('ministry', '선교', '국내외 선교사역을 담당하는 부서', '선교', '주일', '오후 1시', '교육실', '박민준 목사', '담당 목사', '010-7890-1234', 1),
-('ministry', '양육', '신앙교육 및 성경공부 리더십 개발', '교육', '수요일', '오후 7시 30분', '교육실', '유미희 전도사', '담당 전도사', '010-8901-2345', 2),
-('ministry', '소그룹', '중보기도를 통한 영적 중보사역', '기도', '화요일', '오전 6시', '기도실', '남궁순임 집사', '회장', '010-9012-3456', 3),
-('ministry', '가족', '예배 찬양 및 음악사역', '찬양', '토요일', '오후 2시 30분', '본당', '홍길동 집사', '팀장', '010-0123-4567', 4),
-('ministry', '가스펠오락관', '지역사회 봉사 및 장애인 돌봄', '봉사', '둘째주일', '오후 2시', '교육실', '이순신 권사', '회장', '010-1234-5678', 5);
+INSERT INTO ministry (`key`, name, subtitle, title, image, description, points, notice_title, notice_description, notice_button_label, notice_button_href, notice_button_external, cta_label, cta_href, cta_external, `order`) VALUES
+('ministry01', '양육',             '우리는 밀알 공동체입니다.',                                          'Milal MBA — 말씀으로 세워가는 훈련 과정',      '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '밀알교회는 Milal MBA라는 훈련 프로그램을 통해 성도들이 말씀 위에 세워지도록 돕습니다. 거실반 2.0부터 성경대학, 성장반, 일대일 제자양육까지 각 단계별 과정을 통해 삶을 변화시키는 신앙훈련을 제공합니다.',   '거실반 2.0 — 소그룹 중심의 삶 나눔과 말씀 적용 기초 과정\n구약/신약 성경대학 — 성경 전체의 흐름을 체계적으로 배우는 과정\n성장반 — 신앙의 깊이를 더하는 중급 훈련 과정\n일대일 제자양육 — 개인 맞춤형 제자훈련 과정',          'Milal MBA 등록 안내',                          '각 과정별 일정과 등록 방법을 안내 PDF에서 확인하세요.',              '등록 안내 다운로드',     '#',                           0, NULL,                         '#',                       0, 1),
+('ministry02', '소그룹',           '함께 말씀으로 자라는 공동체입니다.',                                  '함께 말씀으로 자라는 공동체',          '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '소그룹은 예배의 감동을 일상의 나눔으로 이어가는 자리입니다. 연령과 삶의 단계에 맞는 모임을 통해 말씀을 적용하고 서로를 돌봅니다.',                    '주중 정기 모임으로 말씀 나눔과 기도\n새가족이 자연스럽게 정착하도록 연결\n필요를 함께 나누고 실제적으로 돕는 공동체',                                     '소그룹 나눔 가이드 공유드립니다.',              '소그룹 인도자와 순원이 함께 사용할 수 있는 PDF 자료입니다.',    '소그룹 자료 다운로드', '#',                           0, NULL,                         '#',                       0, 2),
+('ministry03', '가정',             '당신의 첫 제자는 당신의 자녀입니다.',                                 '당신의 첫 제자는 당신의 자녀입니다.',  '/images/sub/03-ministry/sub-visual-bg.jpg',          '가정 사역은 부부와 부모, 자녀가 함께 하나님 안에서 건강한 관계를 세워가도록 돕습니다.',                                                                  '가정예배와 신앙 대화 훈련\n부부/부모 교육 및 상담 연계\n세대 간 신앙 계승을 위한 실천 안내',                                                              '가정예배 자료를 안내드립니다.',                 '가정에서 바로 활용할 수 있는 월간 예배 가이드를 내려받으세요.',  '가정예배 자료 다운로드', '#',                          0, NULL,                         '#',                       0, 3),
+('ministry04', '선교',             '세상을 향한 은혜의 통로입니다.',                                      '복음을 들고 세상으로',                 '/images/sub/03-ministry/sub-visual-bg-front.jpg',    '지역과 열방을 향한 선교적 삶을 실천합니다. 교회는 선교사와 선교지를 위해 지속적으로 기도하고 동역합니다.',                                               '선교지 후원과 정기 중보기도\n지역사회 섬김 프로젝트 참여\n단기 선교와 다음세대 선교 교육',                                                                '선교 기도제목과 소식지를 나눕니다.',            '이번 달 선교 소식과 중보기도 제목을 PDF로 확인하세요.',          '선교 소식지 다운로드', '#',                           0, NULL,                         '#',                       0, 4),
+('ministry05', '장학',             '다음세대를 세워가는 믿음의 투자입니다.',                               '북미주 대학생을 위한 밀알 장학금',     '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '밀알교회는 하나님의 사랑을 전하기 위해 북미주 대학 및 대학원에서 학문에 정진하고 있는 학생들에게 밀알장학금을 지원합니다. 2009년에 시작된 이 사역은 신앙에 뿌리를 둔 차세대를 지원하는 것은 물론, 아직 그리스도인이 아닌 학생들에게도 열려 있는 선교적 사역입니다. 장학위원회는 이 사역을 통해 학생들이 미래의 글로벌 인재로 성장하여 이 땅에서 하나님의 사랑을 전하는 선한 메신저가 되기를 기도합니다.',  '밀알 리더십 장학금 — 한인/비한인 대학·대학원생 대상, 재정 지원 및 리더십 계발\n이용술 장로 기념 장학금 — 비한인 학생 학업 및 리더십 계발 지원\n갈종영 집사 기념 장학금 — 한인 여성 신학생 영적 리더십 지원\n이중호 장로 기념 장학금 — 소형·개척교회 목회자 자녀 학업 지원\n권인숙 권사 기념 장학금 — 한인 음대생 예술적·인격적 성장 지원\n각 $1,500 / 캐나다 대학·대학원 Full-Time 재학생 / 출석 교회 무관 신청 가능',   '2025 밀알교회 장학금 신청 안내',               '서류 제출 마감: 2025년 10월 21일(화) 자정(동부시간). 이메일: milalscholarshipcomm@gmail.com. 수여식: 2025년 11월 16일(주일 3부).',  '장학 신청서 다운로드', '#',                           0, NULL,                         '#',                       0, 5),
+('ministry08', '가스펠프로젝트',   '체계적인 성경적 가치관 확립입니다.',                                  '체계적인 성경적 가치관 확립',          '/images/sub/visual/gospel-intro.jpg',                '밀알교회는 가스펠프로젝트를 통해 흔들리지 않는 체계적인 커리큘럼으로 다음세대를 지속적으로 말씀 위에 세워갑니다. 교육부서부터 장년에 이르기까지 전 세대가 주일예배에서 같은 본문으로 말씀을 듣고, 성경 전체를 체계적으로 배우며 99가지 교리를 통해 자신의 신앙을 변증할 수 있도록 훈련합니다.',   '커리큘럼 — 교역자 자체 커리큘럼이 아닌 밀알교회의 체계적·지속적 말씀 훈련 과정\n온 세대 연합 — 교육부서부터 장년까지 주일예배에서 같은 본문으로 말씀을 들음\n성경 중심 — 성경 전체를 체계적으로 배우며 성경적 가치관 확립\n교리 기반 — 99가지 교리를 배워 자신의 신앙을 변증할 수 있도록 지속 훈련',    '가스펠프로젝트 안내 자료',                      '학기 일정과 교재 안내, 가정 적용 자료를 확인하세요.',           '안내 자료 다운로드',   '#',                           0, NULL,                         '#',                       0, 6),
+('ministry06', '다니엘한글문화학교', '하나님의 자녀가 하나님의 자녀에게 한글과 문화를 가르치는 학교입니다.', '하나님의 자녀가 하나님의 자녀에게',    '/images/sub/03-ministry/sub-visual-bg.jpg',          '다니엘한글문화학교는 다음세대가 한글과 한국 문화를 배우며 신앙 안에서 정체성을 세워가도록 돕습니다.',                                                    '연령별 한글/문화 통합 교육\n가정과 연계한 학습 지원\n믿음 안에서 건강한 정체성 형성',                                                                    '다니엘한글문화학교 등록 안내',                  '학기 일정과 등록 방법, 준비사항을 PDF에서 확인해 주세요.',       '등록 안내 다운로드',   '#',                           0, '다니엘한글문화학교 바로가기', '#',                 0, 7),
+('ministry07', '러브토론토',       '토론토를 향한 주님의 사랑과 긍휼입니다.',                             
+'지역 한인 사회를 섬기는 러브 토론토',  
+'/images/sub/03-ministry/sub-visual-bg-front.jpg',    
+'러브 토론토는 2016년에 발족하여 2018년 캐나다 정부의 인가를 받은 비영리자선단체입니다. 캐나다에서 어려움을 겪는 한인들을 돕기 위해 의료·법률·정신건강·한방 전문가의 자원봉사 및 협력으로 다양한 서비스를 제공합니다.',                            
+'진료 서비스 — 의료·한방 전문가 자원봉사로 진료 제공\n법률상담 서비스 — 법률 전문가 자원봉사 법률 상담\n정신건강상담 서비스 — 정신건강 전문가 상담 연계\n도시빈민 급식 사역\n물댄동산 후원회 — 구제 사역\n러브토론토를 넘어 — 러브네이버, 러브밴쿠버',  '러브토론토 봉사 일정 안내',                     
+'자세한 사항은 러브토론토 홈페이지에서 확인하세요..',            
+'상세 보기(홈페이지로 이동)',       
+'https://lovetoronto.org/', 1, 
+'러브토론토 홈페이지',         'https://lovetoronto.org/', 1, 8);
 
 -- ===============================================
--- 8. 뉴스/소식 테스트 데이터
+-- 8. 부고 (obituary) 테스트 데이터
 -- ===============================================
 
-INSERT INTO news (title, content, image, link, btn_text) VALUES 
-('제3회 가스펠오락관 - 암송축제편', '', '/images/main/news-thumb-01.jpg', '#', '신청하러 가기'),
-('BAPTISM',                       '', '/images/main/news-thumb-02.jpg', '#', NULL),
-('워크톤 페스티벌',               '', '/images/main/news-thumb-03.jpg', '#', '신청하러 가기'),
-('새로운 소식',                   '', '/images/main/news-thumb-04.jpg', '#', '신청하러 가기'),
-('새로운 소식',                   '', '/images/main/news-thumb-05.jpg', '#', '신청하러 가기');
+INSERT INTO obituary (title, description, content, date) VALUES
+('박주희 집사(김주환 집사)<br>모친 소천(영광 2순)',    '강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로',                                                              '강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로 소천하셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',   '2026-04-17'),
+('이효숙 성도 부친 소천<br>(청장년 1순)',              '이무남 성도님(딸: 이효숙 성도)께서 2026년 4월 12일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.',                                                     '이무남 성도님(딸: 이효숙 성도)께서 2026년 4월 12일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',        '2026-04-12'),
+('이진아(윤석원)집사 부친 소천<br>(온유 4순)',          '이건대 장로님(딸: 이진아 집사, 사위: 윤석원 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.',                                      '이건대 장로님(딸: 이진아 집사, 사위: 윤석원 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-19'),
+('김일환(이순녀)집사 소천(모세회)',                    '김일환 집사님(이순녀 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.',                                                  '김일환 집사님(이순녀 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',      '2026-03-02'),
+('서예원 집사 부친 소천(충성 5순)',                    '서재호 성도님(딸: 서예원 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.',                                           '서재호 성도님(딸: 서예원 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',  '2026-02-19'),
+('조양임 집사(심택)모친 소천<br>(기쁨 4순)',           '유명자 집사님(딸: 조양임 집사, 사위: 심택 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.',                                     '유명자 집사님(딸: 조양임 집사, 사위: 심택 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-15');
+
+-- ===============================================
+-- 8-1. 공지 (notice) 테스트 데이터
+-- ===============================================
+
+INSERT INTO notice (title, content, writer_name, emergency_level, created_date, views, image, link, link_text) VALUES
+('폭설로 인한 대면예배 취소안내',   '금일 폭설로 인해 대면예배가 취소되었습니다. 온라인 예배로 대체하오니 양해 부탁드립니다.', '행정부', 'urgent', '2026-05-18', 0, NULL, NULL, NULL),
+('제3회 가스펠오락관 - 암송축제편', '제3회 가스펠오락관 암송축제편 행사를 안내드립니다. 많은 참여 바랍니다.', '교육부', 'normal', '2026-05-01', 245, '/images/main/news-thumb-01.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('BAPTISM',                         '세례 예식 안내드립니다. 세례를 원하시는 분들은 교역자에게 문의해 주시기 바랍니다.', '행정부', 'normal', '2026-04-20', 312, '/images/main/news-thumb-02.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', NULL),
+('워크톤 페스티벌',                 '워크톤 페스티벌에 초대합니다. 즐거운 시간이 될 것입니다.', '청년부', 'normal', '2026-04-10', 189, '/images/main/news-thumb-03.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '성전관리', 'normal', '2026-03-25', 156, '/images/main/news-thumb-04.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '행정부', 'normal', '2026-03-10', 421, '/images/main/news-thumb-05.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기');
 
 -- ===============================================
 -- 9. 멤버 관리 테스트 데이터
@@ -356,6 +421,8 @@ INSERT INTO banner_image (image_url, alt_text) VALUES
 
 -- 각 테이블의 데이터 개수 확인
 SELECT '=== 데이터 삽입 완료 ===' as message;
+SELECT 'obituary', COUNT(*) FROM obituary
+UNION ALL
 SELECT 'quick_links', COUNT(*) FROM quick_links
 UNION ALL
 SELECT 'section_titles', COUNT(*) FROM section_titles
@@ -368,13 +435,15 @@ SELECT 'sermons', COUNT(*) FROM sermons
 UNION ALL
 SELECT 'bulletins', COUNT(*) FROM bulletins
 UNION ALL
-SELECT 'announcements', COUNT(*) FROM announcements
-UNION ALL
 SELECT 'together_items', COUNT(*) FROM together_items
 UNION ALL
 SELECT 'departments', COUNT(*) FROM departments
 UNION ALL
-SELECT 'news', COUNT(*) FROM news
+SELECT 'ministry', COUNT(*) FROM ministry
+UNION ALL
+SELECT 'obituary', COUNT(*) FROM obituary
+UNION ALL
+SELECT 'notice', COUNT(*) FROM notice
 UNION ALL
 SELECT 'members', COUNT(*) FROM members
 UNION ALL

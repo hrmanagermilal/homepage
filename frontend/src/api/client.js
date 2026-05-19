@@ -1,5 +1,7 @@
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
+console.log("API_BASE_URL:", API_BASE_URL);
+
 function toQueryString(params = {}) {
   const search = new URLSearchParams();
 
@@ -72,10 +74,6 @@ export const api = {
   getBulletins: (params = {}) => request(`/api/bulletins${toQueryString(params)}`),
   getBulletinById: (id) => request(`/api/bulletins/${id}`),
 
-  // Announcements
-  getAnnouncements: (params = {}) =>
-    request(`/api/announcements${toQueryString(params)}`),
-  getAnnouncementById: (id) => request(`/api/announcements/${id}`),
 
   // Together
   getTogether: () => request("/api/together"),
@@ -89,9 +87,13 @@ export const api = {
   getMinistry: () => request("/api/ministry"),
   getMinistryById: (id) => request(`/api/ministry/${id}`),
 
-  // News
-  getNews: (params = {}) => request(`/api/news${toQueryString(params)}`),
-  getNewsById: (id) => request(`/api/news/${id}`),
+  // Obituary
+  getObituary: () => request("/api/obituary"),
+  getObituaryById: (id) => request(`/api/obituary/${id}`),
+
+  // Notice
+  getNotice: (params = {}) => request(`/api/notice${toQueryString(params)}`),
+  getNoticeById: (id) => request(`/api/notice/${id}`),
 
   // Members
   getMembers: () => request("/api/members"),

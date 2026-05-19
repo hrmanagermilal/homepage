@@ -6,14 +6,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # Leave empty to proxy /api through nginx to host port 8080 (backend).
+        # Set to the full backend URL (e.g. https://api.milalchurch.com) to
+        # call the backend directly from the browser (requires CORS to allow
+        # the frontend origin on the backend).
+        VITE_API_BASE_URL: ""
     ports:
-      - "80:5173"
-    environment:
-      VITE_API_BASE_URL: ""
-      VITE_API_PROXY_TARGET: "http://host.docker.internal:8080"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - .:/app
-      - /app/node_modules
+      - "80:80"
+    networks:
+      - milal-net
     restart: unless-stopped
+
+networks:
+  milal-net:
+    external: true
