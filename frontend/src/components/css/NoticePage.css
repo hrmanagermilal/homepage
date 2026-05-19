@@ -426,25 +426,32 @@
 
   .notice-table-wrapper {
     margin-bottom: 30rem;
+    overflow-x: hidden;
   }
 
   .notice-table {
-    min-width: 400rem;
+    min-width: unset;
+    width: 100%;
     font-size: 11rem;
   }
 
+  .notice-table th:last-child,
+  .notice-table td:last-child {
+    display: none;
+  }
+
   .notice-table__cell {
-    padding: 10rem 12rem;
+    padding: 10rem 10rem;
     font-size: 11rem;
   }
 
   .notice-table__cell--number {
-    width: 40rem;
-    min-width: 40rem;
+    width: 36rem;
+    min-width: 36rem;
   }
 
   .notice-table__cell--title {
-    min-width: 150rem;
+    min-width: unset;
     padding: 10rem 10rem;
   }
 
@@ -454,8 +461,8 @@
   }
 
   .notice-table__cell--date {
-    width: 90rem;
-    min-width: 90rem;
+    width: 80rem;
+    min-width: 80rem;
   }
 
   .notice-table__cell--views {
