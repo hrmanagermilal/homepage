@@ -163,7 +163,16 @@ export default function Announcement({ items = [], section = null }) {
       const cardEl = e.target.closest(".news-card");
       if (!cardEl) return;
       const idx = parseInt(cardEl.dataset.cardIdx, 10);
-      if (!isNaN(idx)) setSelectedCardRef.current(cardsRef.current[idx]);
+      if (!isNaN(idx)) {
+        const card = cardsRef.current[idx];
+        setSelectedCardRef.current(card);
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "announcement_card_click", {
+            event_category: "Announcement",
+            event_label: card?.title || "unknown",
+          });
+        }
+      }
     };
     const onDragStart = (e) => e.preventDefault();
 
@@ -264,22 +273,6 @@ export default function Announcement({ items = [], section = null }) {
                 ))}
               </div>
             </div>
-{/* 
-            {cards.length > 0 && (
-              <div className="main-news__mobile-nav">
-                <button className="main-news__mobile-btn main-news__mobile-btn--prev" type="button" aria-label="이전">
-                  <img src="/images/main/icon-arrow-news.svg" alt="" aria-hidden="true" />
-                </button>
-                <div className="main-news__mobile-dots" aria-hidden="true">
-                  {cards.map((_, i) => (
-                    <span key={i} className={`main-news__mobile-dot${i === dotIndex ? " is-active" : ""}`} />
-                  ))}
-                </div>
-                <button className="main-news__mobile-btn main-news__mobile-btn--next" type="button" aria-label="다음">
-                  <img src="/images/main/icon-arrow-news.svg" alt="" aria-hidden="true" />
-                </button>
-              </div>
-            )} */}
           </div>
         </div>
       </section>
@@ -300,7 +293,21 @@ export default function Announcement({ items = [], section = null }) {
             <div className="news-card-modal__body">
               <h3 className="news-card-modal__title">{selectedCard.title}</h3>
               {selectedCard.btnText && (
-                <a className="news-card-modal__button" href={selectedCard.link} target="_blank" rel="noopener noreferrer">{selectedCard.btnText}</a>
+                <a
+                  className="news-card-modal__button"
+                  href={selectedCard.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    if (typeof window.gtag === "function") {
+                      window.gtag("event", "announcement_card_link_click", {
+                        event_category: "Announcement",
+                        event_label: selectedCard.title || "unknown",
+                        link_url: selectedCard.link || "",
+                      });
+                    }
+                  }}
+                >{selectedCard.btnText}</a>
               )}
             </div>
           </div>

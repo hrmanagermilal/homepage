@@ -88,6 +88,28 @@ export default function App() {
   }, [scrollToHash]);
 
   useEffect(() => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "page_view", {
+        page_path: currentPath + window.location.hash,
+        page_location: window.location.href,
+      });
+    }
+  }, [currentPath]);
+
+  useEffect(() => {
+    const trackHash = () => {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "page_view", {
+          page_path: window.location.pathname + window.location.hash,
+          page_location: window.location.href,
+        });
+      }
+    };
+    window.addEventListener("hashchange", trackHash);
+    return () => window.removeEventListener("hashchange", trackHash);
+  }, []);
+
+  useEffect(() => {
     let mounted = true;
     async function load() {
       setLoading(true);
