@@ -88,16 +88,7 @@ export default function App() {
   }, [scrollToHash]);
 
   useEffect(() => {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "page_view", {
-        page_path: currentPath + window.location.hash,
-        page_location: window.location.href,
-      });
-    }
-  }, [currentPath]);
-
-  useEffect(() => {
-    const trackHash = () => {
+    const trackPageView = () => {
       if (typeof window.gtag === "function") {
         window.gtag("event", "page_view", {
           page_path: window.location.pathname + window.location.hash,
@@ -105,8 +96,12 @@ export default function App() {
         });
       }
     };
-    window.addEventListener("hashchange", trackHash);
-    return () => window.removeEventListener("hashchange", trackHash);
+    window.addEventListener("locationchange", trackPageView);
+    window.addEventListener("hashchange", trackPageView);
+    return () => {
+      window.removeEventListener("locationchange", trackPageView);
+      window.removeEventListener("hashchange", trackPageView);
+    };
   }, []);
 
   useEffect(() => {

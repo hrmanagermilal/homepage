@@ -61,7 +61,7 @@ export default function Jubo({ items = [], section = null }) {
                 </div>
 
                 <div className="main-weekly__btns">
-                  <a className="btn-basic-big btn-basic-big--trans" href="/news/notice">전체 주보 보러가기</a>
+                  <a className="btn-basic-big btn-basic-big--trans" href="/news#bulletin">전체 주보 보러가기</a>
                   <div className="slider-nav slider-nav--trans">
                     <button className="slider-nav__btn is-prev" type="button" aria-label="이전" onClick={goPrev}>
                       <img src="/images/main/icon-arrow-weekly.svg" alt="" aria-hidden="true" />
