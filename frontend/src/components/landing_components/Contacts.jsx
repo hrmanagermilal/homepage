@@ -1,8 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import "../css/Contacts.css";
 
 const TABS = ["오시는 길 안내", "셔틀버스 안내", "주차장 안내"];
 const MAP_SRC = "https://maps.google.com/maps?q=405+Gordon+Baker+Rd,+Toronto+ON+M2H+2S6,+Canada&output=embed&hl=ko";
+const SHUTTLE_MAP_SRC = "https://maps.google.com/maps?q=16+Hendon+Ave,+North+York,+ON+M2M+1A2&output=embed&hl=ko";
 
 const FALLBACK_SHUTTLE = [
   { direction: "finch_to_church", time: "오전 9시 15분",  service_label: "2부",          sort_order: 1 },
@@ -22,6 +23,15 @@ const FALLBACK_PARKING = [
 
 export default function Contacts({ shuttleBusSchedule = [], parkingLot = [], parkingMap = null, section = null }) {
   const [activeTab, setActiveTab] = useState(0);
+  const [parkingPopupOpen, setParkingPopupOpen] = useState(false);
+
+  useEffect(() => {
+    if (!parkingPopupOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => { if (e.key === "Escape") setParkingPopupOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; document.removeEventListener("keydown", onKey); };
+  }, [parkingPopupOpen]);
 
   const title    = section?.title    ?? "오시는 길";
   const subtitle = section?.subtitle ?? "밀알교회는 열린 공동체입니다. 주님의 이름으로 언제나 당신을 환영합니다.";
@@ -33,6 +43,7 @@ export default function Contacts({ shuttleBusSchedule = [], parkingLot = [], par
   const churchToFinch = useMemo(() => shuttleRows.filter((r) => r.direction === "church_to_finch"), [shuttleRows]);
 
   return (
+    <>
     <section className="main-direction" id="contacts">
       <div className="wrap">
         <div className="main-title" data-ani="top">
@@ -171,18 +182,47 @@ export default function Contacts({ shuttleBusSchedule = [], parkingLot = [], par
             <div className={`main-direction__map-panel${activeTab === 1 ? " is-active" : ""}`} id="dir-map-1">
               <iframe
                 title="밀알교회 셔틀버스 안내 지도"
-                src={MAP_SRC}
+                src={SHUTTLE_MAP_SRC}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
             <div className={`main-direction__map-panel main-direction__map-panel--parking${activeTab === 2 ? " is-active" : ""}`} id="dir-map-2">
-              <img src={parkingMap?.image_url || "/images/main/parking-map.jpg"} alt={parkingMap?.alt_text || "밀알교회 주차장 안내 지도"} />
+              <div
+                className="parking-map__wrap"
+                role="button"
+                tabIndex={0}
+                onClick={() => setParkingPopupOpen(true)}
+                onKeyDown={(e) => e.key === "Enter" && setParkingPopupOpen(true)}
+              >
+                <img src={parkingMap?.image_url || "/images/main/parking-map.jpg"} alt={parkingMap?.alt_text || "밀알교회 주차장 안내 지도"} />
+                <div className="parking-map__hover-btn">
+                  <img src="/images/main/icon-zoom.svg" alt="" aria-hidden="true" />
+                  <p>크게 보기</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    {parkingPopupOpen && (
+      <div className="parking-map-popup" role="dialog" aria-modal="true" aria-label="주차장 안내 지도 크게 보기" onClick={() => setParkingPopupOpen(false)}>
+        <button className="parking-map-popup__close" type="button" aria-label="닫기" onClick={() => setParkingPopupOpen(false)}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L15 15M15 1L1 15" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+        <img
+          className="parking-map-popup__img"
+          src={parkingMap?.image_url || "/images/main/parking-map.jpg"}
+          alt={parkingMap?.alt_text || "밀알교회 주차장 안내 지도"}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    )}
+  </>
   );
 }

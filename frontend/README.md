@@ -1,41 +1,51 @@
 # Frontend (React + MUI)
 
-This app is a React + Material UI frontend for the backend APIs.
+React 18 + Material UI + Vite 5 프론트엔드 (밀알교회 공식 홈페이지)
 
-## Setup
+## 스택
 
-1. Install dependencies
+- **React 18** + **React DOM**
+- **Material UI 6** (`@mui/material`, `@mui/icons-material`)
+- **Emotion** (`@emotion/react`, `@emotion/styled`)
+- **Vite 5** (빌드 / 개발 서버)
+- **Manrope** 폰트 (`@fontsource/manrope`)
+
+## 로컬 개발
 
 ```bash
 cd frontend
 npm install
-```
-
-2. Create env file
-
-```bash
-copy .env.example .env
-```
-
-3. Start dev server
-
-```bash
 npm run dev
 ```
 
-The app runs at http://localhost:5173.
+개발 서버: **http://localhost:3000**
 
-## Backend API
-
-Set backend URL in .env:
+## Docker 실행
 
 ```bash
-VITE_API_BASE_URL=http://localhost:8000
+cd frontend
+docker compose up --build -d
 ```
 
-Used endpoints:
-- GET /api
-- GET /api/sermons
-- GET /api/announcements
-- GET /api/departments
-- POST /api/auth/login
+Docker 서비스: **http://localhost** (포트 80)
+
+프론트엔드 컨테이너는 `/api/` 요청을 내부적으로 `milal-nginx` (백엔드, 포트 80)로 프록시합니다.
+
+## 환경 변수
+
+| 변수 | 기본값 | 설명 |
+|------|--------|------|
+| `VITE_API_PROXY_TARGET` | `http://localhost` | API 프록시 대상 (Docker 내부: `http://milal-nginx`) |
+| `VITE_ALLOWED_HOSTS` | _(없음)_ | 추가 허용 호스트 (쉼표 구분) |
+
+## 주요 API 엔드포인트
+
+| 경로 | 설명 |
+|------|------|
+| `GET /api/sermons` | 설교 목록 |
+| `GET /api/bulletins` | 주보 목록 |
+| `GET /api/notice` | 공지사항 목록 |
+| `GET /api/departments` | 부서 목록 |
+| `GET /api/members` | 교역자/간사 목록 |
+| `GET /api/hero` | 히어로 이미지 + 빠른링크 |
+| `POST /api/auth/login` | 관리자 로그인 |

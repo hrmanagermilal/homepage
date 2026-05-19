@@ -2,24 +2,124 @@
 
 밀알교회 공식 웹사이트 / Official Website of Milal Church
 
-## 1. 프로젝트 개요 (Project Overview)
+## 1. 프로젝트 개요
 
-### 목표 (Objectives)
-- **기존 홈페이지 개편** — www.milalchurch.com의 UI/UX를 현대화하고 사용자 경험을 극대화
-- **구조 변경** — 확장 가능하고 유지보수하기 쉬운 아키텍처로 재설계
-- **반응형 디자인** — 모든 디바이스(PC, 태블릿, 모바일)에서 최적의 사용자 경험 제공
-- **모바일 우선** — 모바일 환경을 기본으로 설계하고 데스크톱 환경으로 확장
-
-### Key Features
-- **반응형 웹 디자인 (Responsive Web Design)** — Bootstrap/Tailwind 기반 모바일-우선 접근
-- **현대적 UI/UX** — 직관적인 네비게이션과 사용자 중심 인터페이스
-- **고성능 API 백엔드** — PHP 8.1 + MySQL 8.0 기반 RESTful API
-- **보안** — JWT 인증, SSL/TLS 암호화, CORS 정책 관리
-- **Docker 기반 배포** — 컨테이너화된 환경으로 일관된 개발 및 운영
+- **기존 홈페이지 개편** — UI/UX 현대화 및 사용자 경험 개선
+- **반응형 디자인** — 모바일/태블릿/PC 모든 환경 지원
+- **Docker 기반 배포** — 컨테이너화된 일관된 개발/운영 환경
 
 ---
 
-## 2. 프로젝트 구조 (Project Structure)
+## 2. 프로젝트 구조
+
+```
+homepage/
+├── backend/          # REST API 백엔드 (Python FastAPI + MySQL)
+├── frontend/         # 공개 홈페이지 (React 18 + MUI + Vite)
+├── milalCMS/         # 관리자 CMS (PHP 8.2 + Apache)
+├── compose-all.sh    # 전체 서비스 일괄 시작 스크립트
+└── publish/          # 정적 HTML 참고 파일 (개발 참조용)
+```
+
+---
+
+## 3. 서비스 구성
+
+| 서비스 | 컨테이너 | 외부 포트 | 역할 |
+|-------|---------|-----------|------|
+| 백엔드 Nginx | milal-nginx | **8080** | API 리버스 프록시 |
+| 백엔드 App | milal-backend | - (내부) | FastAPI REST API |
+| 데이터베이스 | milal-db | **3307** | MySQL 8.0 |
+| 프론트엔드 | milal-frontend | **80** | React 공개 홈페이지 |
+| CMS 관리자 | milal-cms | **8090** | PHP 관리자 패널 |
+
+> 프론트엔드 컨테이너는 `/api/` 요청을 내부적으로 `milal-nginx`로 프록시합니다.
+
+모든 컨테이너는 `milal-net` 브리지 네트워크를 공유합니다.
+
+---
+
+## 4. 개발 환경 설정
+
+### 사전 요구사항
+- Docker Desktop
+- Git
+
+### 전체 서비스 시작
+
+```bash
+# 백엔드 먼저 시작 (milal-net 네트워크 생성)
+cd backend && docker compose up --build -d && cd ..
+
+# 프론트엔드
+cd frontend && docker compose up --build -d && cd ..
+
+# CMS (milal-net에 자동으로 합류)
+cd milalCMS && docker compose up --build -d && cd ..
+```
+
+또는 스크립트로 한 번에:
+
+```bash
+bash compose-all.sh
+```
+
+### 접속 주소
+
+| 서비스 | URL |
+|-------|-----|
+| 공개 홈페이지 | http://localhost |
+| REST API | http://localhost:8080/api/ |
+| CMS 관리자 | http://localhost:8090 |
+| MySQL (직접) | localhost:3307 |
+
+---
+
+## 5. 데이터베이스
+
+**DB**: `milal_homepage` | **User**: `milal_user` | **Pass**: `milal_pass_2024`
+
+### 주요 테이블
+
+| 테이블 | 설명 |
+|-------|------|
+| `quick_links` | 히어로 빠른링크 |
+| `hero_background_images` | 히어로 배경 이미지 슬라이드 |
+| `hero_front_images` | 히어로 전면 이미지 |
+| `sermons` | 설교 (YouTube 연동) |
+| `bulletins` + `bulletin_images` | 주보 및 이미지 |
+| `notice` | 공지사항 (emergency_level: normal/important/urgent) |
+| `obituary` | 부고 |
+| `departments` | 부서 (nextgen / ministry) |
+| `members` | 교역자/간사 |
+| `together_items` | 함께하는 교회 |
+| `service_times` | 예배 시간표 |
+| `shuttle_bus_schedule` | 셔틀버스 시간표 |
+| `parking_lot` / `parking_map` | 주차 안내 |
+| `users` | 관리자 계정 |
+| `page_views` | 페이지뷰 분석 |
+
+전체 스키마: [`backend/sql/create_tables.sql`](backend/sql/create_tables.sql)
+
+---
+
+## 6. 각 서비스 상세
+
+- **[backend/README.md](backend/README.md)** — FastAPI 엔드포인트 목록, DB 접속 정보
+- **[frontend/README.md](frontend/README.md)** — React 개발 서버, 빌드 방법
+- **milalCMS/** — PHP MVC 관리자 패널, 포트 8090
+
+---
+
+## 7. SSL 설정 (프로덕션)
+
+```bash
+cd backend
+nano init-ssl.sh  # 도메인 수정
+chmod +x init-ssl.sh
+./init-ssl.sh
+```
+
 
 ```
 homepage/
