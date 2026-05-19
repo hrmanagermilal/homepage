@@ -45,7 +45,7 @@ export default function Jubo({ items = [], section = null }) {
               <div className="main-weekly__thumb-area">
                 <div className="main-weekly__thumb-wrap" role="button" tabIndex={0} onClick={() => setPopupOpen(true)} onKeyDown={(e) => (e.key === "Enter" ? setPopupOpen(true) : null)}>
                   <div className="main-weekly__card">
-                    <img src={currentImage} alt={currentPage?.title || "밀알 주보"} />
+                    <img key={activeIndex} src={currentImage} alt={currentPage?.title || "밀알 주보"} />
                   </div>
                   <div className="main-weekly__hover-btn">
                     <img src="/images/main/icon-zoom.svg" alt="" />
