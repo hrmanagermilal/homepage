@@ -71,7 +71,7 @@ export default function Sermon({ items = [], section = null }) {
               <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M1 1L5 5.5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              리스트 더보기
+              리스트 더 보기
             </button>
             <a className="main-youtube__more-link" href="https://youtube.com/@milalchurch" target="_blank" rel="noopener noreferrer">
               유튜브 바로가기
