@@ -79,52 +79,20 @@
       --icon-accent:  #a8bcd6;
     }
 
-    /* ── Dark Red ── */
-    [data-theme="dark-red"] {
-      --c-primary:   #4a1a1a;
-      --c-secondary: #822d2d;
-      --b-title:     #1a0f0f;
-      --b-default:   #7a5a5a;
+    /* ── Dark Brown ── */
+    [data-theme="dark-brown"] {
+      --c-primary:   #39221C;
+      --c-secondary: #7A4A3A;
+      --b-title:     #1a0e0a;
+      --b-default:   #7a6a62;
       --w:           #fff;
-      --bg-light:    #f5edec;
-      --bg-subtle:   #e8d1d1;
-      --bg-primary:  #380f0f;
-      --bg-table:    #e8d1d1;
-      --bg-dark:     #1e1212;
-      --icon-primary: #4a1a1a;
-      --icon-accent:  #c9a8a8;
-    }
-
-    /* ── Gold ── */
-    [data-theme="gold"] {
-      --c-primary:   #5a3e10;
-      --c-secondary: #8a6020;
-      --b-title:     #1a1208;
-      --b-default:   #7a6a4a;
-      --w:           #fff;
-      --bg-light:    #f7f2e8;
-      --bg-subtle:   #e8dfc8;
-      --bg-primary:  #3e2800;
-      --bg-table:    #e8dfc8;
-      --bg-dark:     #1e1800;
-      --icon-primary: #5a3e10;
-      --icon-accent:  #c8b078;
-    }
-
-    /* ── Dark Orange ── */
-    [data-theme="dark-orange"] {
-      --c-primary:   #6b2d0f;
-      --c-secondary: #c05a1a;
-      --b-title:     #1a0e08;
-      --icon-primary: #6b2d0f;
-      --icon-accent:  #d4a080;
-      --b-default:   #7a5a40;
-      --w:           #fff;
-      --bg-light:    #f7efe8;
-      --bg-subtle:   #ead8c8;
-      --bg-primary:  #4a1e08;
-      --bg-table:    #ead8c8;
-      --bg-dark:     #1e1008;
+      --bg-light:    #f5f0eb;
+      --bg-subtle:   #e8ddd5;
+      --bg-primary:  #251410;
+      --bg-table:    #e8ddd5;
+      --bg-dark:     #1a100d;
+      --icon-primary: #6B4035;
+      --icon-accent:  #A8866E;
     }
 
     :root {
