@@ -6,8 +6,8 @@ import "./css/SubPage.css";
 import "./css/MinistryPage.css";
 
 const LNB_ITEMS = [
-  { label: "양육", key: "ministry01", href: "/ministry#ministry01" },
   { label: "소그룹", key: "ministry02", href: "/ministry#ministry02" },
+  { label: "양육", key: "ministry01", href: "/ministry#ministry01" },
   { label: "가정", key: "ministry03", href: "/ministry#ministry03" },
   { label: "선교", key: "ministry04", href: "/ministry#ministry04" },
   { label: "장학", key: "ministry05", href: "/ministry#ministry05" },
@@ -29,9 +29,20 @@ const SUBTITLE_BY_KEY = {
   ministry07: "토론토를 향한 주님의 사랑과 긍휼입니다.",
 };
 
+const BG_IMAGES = [
+  "/images/sub/03-ministry/sub-visual-bg.jpg",
+  "/images/sub/visual/gospel-intro.jpg",
+  "/images/sub/visual/sub-visual0307.jpg",
+  "/images/sub/visual/sub-visual0303.jpg",
+  "/images/sub/visual/sub-visual0306.jpg",
+  "/images/sub/visual/sub-visual0207.jpg",
+  "/images/sub/visual/sub-visual0305.jpg",
+  "/images/sub/visual/sub-visual0302.jpg",
+];
+
 function getKeyFromHash(hash) {
   const key = (hash || "").replace("#", "");
-  return VALID_KEYS.has(key) ? key : "ministry01";
+  return VALID_KEYS.has(key) ? key : "ministry02";
 }
 
 function SubVisual({ title, activeKey }) {
@@ -93,17 +104,6 @@ function SubLnb({ activeKey }) {
     </div>
   );
 }
-
-const BG_IMAGES = [
-  "/images/sub/03-ministry/sub-visual-bg.jpg",
-  "/images/sub/visual/gospel-intro.jpg",
-  "/images/sub/visual/sub-visual0307.jpg",
-  "/images/sub/visual/sub-visual0303.jpg",
-  "/images/sub/visual/sub-visual0306.jpg",
-  "/images/sub/visual/sub-visual0207.jpg",
-  "/images/sub/visual/sub-visual0305.jpg",
-  "/images/sub/visual/sub-visual0302.jpg",
-];
 
 function mapMinistryToProps(item) {
   if (!item) return {};

@@ -22,8 +22,8 @@ const FOOTER_NAV = [
   {
     title: "사역",
     links: [
-      { label: "양육", path: "/ministry#ministry01" },
       { label: "소그룹", path: "/ministry#ministry02" },
+      { label: "양육", path: "/ministry#ministry01" },
       { label: "가정", path: "/ministry#ministry03" },
       { label: "선교", path: "/ministry#ministry04" },
       { label: "장학", path: "/ministry#ministry05" },

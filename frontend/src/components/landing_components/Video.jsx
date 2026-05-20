@@ -31,6 +31,16 @@ export function VideoCard({
   thumbnail,
   hide_title = true,
 }) {
+  const handleClick = () => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "youtube_click", {
+        event_category: "Video",
+        event_label: title || url || "unknown",
+        video_url: url || "",
+      });
+    }
+  };
+
   return (
     <a
       className={`youtube-card${live ? " youtube-card--live" : ""}${className}`.trim()}
@@ -38,6 +48,7 @@ export function VideoCard({
       target="_blank"
       rel="noopener noreferrer"
       data-ani="top"
+      onClick={handleClick}
     >
       <div className="youtube-card__thumb">
         <img src={hide_title ? thumbnail : (thumbnail || getYoutubeThumb(url, index))} alt={title || "설교 썸네일"} />

@@ -88,48 +88,41 @@ export default function App() {
   }, [scrollToHash]);
 
   useEffect(() => {
+    const trackPageView = () => {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "page_view", {
+          page_path: window.location.pathname + window.location.hash,
+          page_location: window.location.href,
+        });
+      }
+    };
+    window.addEventListener("locationchange", trackPageView);
+    window.addEventListener("hashchange", trackPageView);
+    return () => {
+      window.removeEventListener("locationchange", trackPageView);
+      window.removeEventListener("hashchange", trackPageView);
+    };
+  }, []);
+
+  useEffect(() => {
     let mounted = true;
     async function load() {
       setLoading(true);
       setError("");
+
+      // ── Phase 1: landing-page essentials (blocks the loading spinner) ──────
       try {
         const [
           heroResponse,
           quickLinkResponse,
           landingTitleResponse,
-          memberResponse,
           sectionsResponse,
-          visionStatementsResponse,
-          sermonsResponse,
-          togetherResponse,
-          bulletinsResponse,          
-          departmentsResponse,
-          ministriesResponse,
-          obituariesResponse,
-          serviceTimesResponse,
-          noticesResponse,
-          shuttleBusScheduleResponse,
-          parkingLotResponse,
-          parkingMapResponse,
           bannerImageResponse,
         ] = await Promise.all([
           api.getHero(),
           api.getQuickLinks(),
           api.getLandingTitles(),
-          api.getMembers(),
           api.getSections(),
-          api.getVisionStatements(),
-          api.getSermons({ page: 1, limit: 100 }),
-          api.getTogether(),
-          api.getBulletins({ page: 1, limit: 50 }),
-          api.getDepartments(),
-          api.getMinistry(),
-          api.getObituary(),
-          api.getServiceTimes(),
-          api.getNotice({ page: 1, limit: 50 }),
-          api.getShuttleBusSchedule(),
-          api.getParkingLot(),
-          api.getParkingMap(),
           api.getBannerImage(),
         ]);
 
@@ -140,26 +133,64 @@ export default function App() {
         });
         setQuickLinks(quickLinkResponse?.data ?? []);
         setLandingTitles(landingTitleResponse?.data || []);
-        setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
         setSections(sectionsResponse?.data ?? []);
-        setVisionStatements(visionStatementsResponse?.data ?? []);
+        setBannerImage(bannerImageResponse?.data ?? null);
+        setLoading(false); // release spinner — landing page is ready
+      } catch (e) {
+        if (!mounted) return;
+        setError(e.message || "Failed to connect backend API");
+        setLoading(false);
+        return;
+      }
+
+      // ── Phase 2: secondary content (silent, no spinner) ───────────────────
+      try {
+        const [
+          sermonsResponse,
+          bulletinsResponse,
+          noticesResponse,
+          togetherResponse,
+          departmentsResponse,
+          serviceTimesResponse,
+          shuttleBusScheduleResponse,
+          parkingLotResponse,
+          parkingMapResponse,
+          memberResponse,
+          visionStatementsResponse,
+          ministriesResponse,
+          obituariesResponse,
+        ] = await Promise.all([
+          api.getSermons({ page: 1, limit: 100 }),
+          api.getBulletins({ page: 1, limit: 50 }),
+          api.getNotice({ page: 1, limit: 50 }),
+          api.getTogether(),
+          api.getDepartments(),
+          api.getServiceTimes(),
+          api.getShuttleBusSchedule(),
+          api.getParkingLot(),
+          api.getParkingMap(),
+          api.getMembers(),
+          api.getVisionStatements(),
+          api.getMinistry(),
+          api.getObituary(),
+        ]);
+
+        if (!mounted) return;
         setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
-        setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
         setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
         setNotices(noticesResponse?.data?.data ?? noticesResponse?.data ?? []);
+        setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
         setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
-        setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
-        setObituaries(obituariesResponse?.data?.data ?? obituariesResponse?.data ?? []);
         setServiceTimes(serviceTimesResponse?.data ?? []);
         setShuttleBusSchedule(shuttleBusScheduleResponse?.data ?? []);
         setParkingLot(parkingLotResponse?.data ?? []);
         setParkingMap(parkingMapResponse?.data ?? null);
-        setBannerImage(bannerImageResponse?.data ?? null);
-      } catch (e) {
-        if (!mounted) return;
-        setError(e.message || "Failed to connect backend API");
-      } finally {
-        if (mounted) setLoading(false);
+        setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
+        setVisionStatements(visionStatementsResponse?.data ?? []);
+        setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
+        setObituaries(obituariesResponse?.data?.data ?? obituariesResponse?.data ?? []);
+      } catch (_) {
+        // Secondary content failures are non-fatal
       }
     }
 

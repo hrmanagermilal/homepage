@@ -74,6 +74,7 @@
   height: auto !important;
   object-fit: contain !important;
   display: block;
+  animation: jubo-card-fadein 0.35s ease;
 }
 
 /* Thumbnail column wrapper */
@@ -103,7 +104,8 @@
   overflow: hidden;
   flex: none;
   width: 80rem;
-  height: 110rem;
+  height: auto;
+  aspect-ratio: 2/3;
   border-radius: 6rem;
   opacity: 0.4;
   cursor: pointer;
@@ -166,17 +168,27 @@
 }
 
 @media (max-width: 540px) {
+  .bulletin-viewer__main-wrap {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    gap: 10rem;
+    align-items: start;
+    justify-content: unset;
+  }
   .bulletin-viewer__card {
-    width: 240rem;
+    width: 100%;
   }
-
+  .bulletin-viewer__thumb-col {
+    align-self: center;
+  }
   .bulletin-viewer__thumbs {
-    width: 56rem;
+    width: 100%;
+    gap: 6rem;
   }
-
   .bulletin-viewer__thumbs .main-weekly__nav-item {
-    width: 56rem;
-    height: 78rem;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2/3;
+    border-radius: 4rem;
   }
-}
 }

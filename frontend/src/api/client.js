@@ -137,6 +137,9 @@ export const api = {
   // Banner image
   getBannerImage: () => request('/api/banner-image'),
 
+  // Pastor introduction
+  getPastorIntroduction: () => request('/api/pastor-introduction'),
+
   // Existing write endpoint used in UI
   login: (username, password) =>
     request("/api/auth/login", {

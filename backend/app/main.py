@@ -19,6 +19,7 @@ from .routers import (
     obituary,
     parking_lot,
     parking_map,
+    pastor_introduction,
     sections,
     sermons,
     service_times,
@@ -75,6 +76,7 @@ app.include_router(shuttle_bus.router, prefix=PREFIX)
 app.include_router(parking_lot.router, prefix=PREFIX)
 app.include_router(parking_map.router, prefix=PREFIX)
 app.include_router(banner_image.router, prefix=PREFIX)
+app.include_router(pastor_introduction.router, prefix=PREFIX)
 app.include_router(together.router, prefix=PREFIX)
 app.include_router(users.router, prefix=PREFIX)
 app.include_router(tracking.router, prefix=PREFIX)

@@ -53,7 +53,7 @@ function BulletinImageViewer({ bulletin }) {
             aria-label="크게 보기"
           >
             <div className="bulletin-viewer__card">
-              <img src={currentImg.image_url} alt={`${bulletin.title} ${activeIndex + 1}페이지`} />
+              <img key={activeIndex} src={currentImg.image_url} alt={`${bulletin.title} ${activeIndex + 1}페이지`} />
             </div>
             <div className="main-weekly__hover-btn">
               <img src="/images/main/icon-zoom.svg" alt="" />

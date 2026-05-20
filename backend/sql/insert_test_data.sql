@@ -47,6 +47,7 @@ TRUNCATE TABLE shuttle_bus_schedule;
 TRUNCATE TABLE parking_lot;
 TRUNCATE TABLE parking_map;
 TRUNCATE TABLE banner_image;
+TRUNCATE TABLE pastor_introduction;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ===============================================
@@ -80,7 +81,6 @@ INSERT INTO hero_background_images (image_url, `order`, alt_text) VALUES
 ('/images/main/main-visual-slide-01.jpg', 2, 'Church Building'),
 ('/images/main/main-visual-slide-02.jpg', 3, 'Worship Service'),
 ('/images/main/main-visual-slide-04.jpg', 4, 'Community Service'),
-('/images/main/main-visual-slide-05.jpg', 5, 'Church Building'),
 ('/images/main/main-visual-slide-06.jpg', 6, 'Worship Service');
 
 
@@ -106,25 +106,23 @@ INSERT INTO section_titles (category, title, subtitle) VALUES
 ('Directions', '오시는 길', '밀알교회는 열린 공동체입니다. 주님의 이름으로 언제나 당신을 환영합니다.'),
 ('Community', '교회같은 가정, 가정같은 교회', '교회같은 가정, 가정같은 교회를 꿈꾸며 하늘의 복을 받아\n세상의 복을 나누는 교회가 되길 꿈꾸는 교회입니다.');
 
--- 기존 DB에 영문 컬럼 추가 (이미 존재하면 건너뜀)
-
 -- 비전 선언문 (한국어 + 영어)
 INSERT INTO vision_statements (title, title_en, points, points_en, `order`, is_active) VALUES
 ('예배 공동체', 'Worship Community',
  '찬양과 설교, 설교후 찬양, 결단의 흐름이 되는 역동적 예배\n각 예배의 차별화를 통한 영적 필요충족\n예배팀을 세우는 훈련과 예배 중보기도 활성화\n가정, 전세대가 같이 드리는 예배',
- 'A dynamic worship flow from praise to sermon, response praise, and commitment\nMeeting spiritual needs through distinct worship services\nTraining worship teams and strengthening intercessory prayer during worship\nFamily and all generations worshiping together',
+ 'Dynamic worship that flows through praise, the sermon, post-sermon praise, and a call to commitment\nMeeting spiritual needs through distinct and differentiated worship services\nEquipping worship teams and fostering intercessory prayer during worship\nWorship where families and all generations come together',
  1, TRUE),
 ('목양 공동체', 'Shepherding Community',
  '담임목사와 순장들의 깊은관계 속 동역자화\n''한 사람'' 철학을 통한 깊은 성도 목양\n간증과 기쁨의 스토리가 흐르는 교회\n공동체 내에서의 치유와 성장 중점',
- 'Co-laboring through deep relationships between the senior pastor and cell leaders\nDeep pastoral care through the ''one person'' philosophy\nA church where testimonies and stories of joy are shared\nA community focused on healing and growth',
+ 'Becoming co-laborers through deep relationships between the senior pastor and small group leaders\nProviding intentional and personal pastoral care through the “one person” philosophy\nA church filled with testimonies and stories of joy\nA community that prioritizes healing and growth',
  2, TRUE),
 ('훈련 공동체', 'Training Community',
  '말씀으로 사람을 세우는 교회\n다음세대를 위한 체계적 지속적 훈련\n교회같은 가정을 이루는 가정 제자훈련 (Gospel Project / Family talk)',
- 'A church that builds people through the Word\nSystematic and continuous training for the next generation\nFamily discipleship that builds church-like homes (Gospel Project / Family Talk)',
+ 'A church that raises and equips people through the Word\nSystematic and ongoing training for the next generation\nFamily discipleship that cultivates Christ-centered homes (Gospel Project / Family Talk)',
  3, TRUE),
 ('미셔널 공동체', 'Missional Community',
  'Glocal (Global + Local) 섬김과 지속적 선교\n전략 선교지역에 대한 지속적 선교\n가족선교 및 다음세대 선교를 통한 선교적 교회',
- 'Glocal (Global + Local) service and ongoing mission\nSustained mission work in strategic mission regions\nA missional church through family mission and next-generation mission',
+ 'Glocal (Global + Local) service and ongoing mission work\nOngoing mission engagement in strategic regions\nA missional church shaped by family missions and next-generation missions',
  4, TRUE);
 
 -- ===============================================
@@ -177,7 +175,6 @@ INSERT INTO sermons (title, category_id, youtube_url, youtube_id, description, p
 -- ===============================================
 -- 3. 주보 테스트 데이터
 -- ===============================================
-
 INSERT INTO bulletins (title, week_number, `year`) VALUES 
 ('2026년 10주차 주보', 10, 2026),
 ('2026년 9주차 주보', 9, 2026),
@@ -269,11 +266,11 @@ INSERT INTO together_items (title, description, image, link, `order`, is_active)
 
 INSERT INTO departments (department_type, name, description, heading_title, image, age_group, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, pastor_email, kakao_link, kakao_label, notice_title, notice_description, notice_button_label, notice_button_href, `order`) VALUES
 ('nextgen', '청년부', '토론토의 새벽이슬 같은 청년들이 모이면 예배하고,\n흩어지면 빛을 발하는 공동체입니다.', 'Milight, Time to Shine. 하나님이여 우리를 돌이키시고\n주의 얼굴빛을 비추사 우리가 구원을 얻게 하소서 (시편 80:3)', '/images/sub/02-next-generation/pastor-photo.jpg', '19-29세', '주일', '오후 2시', '밀알교회 1층 본당', '신효성 목사', '담당 목사', NULL, 'rev.shin@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '청년부 카카오톡 채널 추가하기', '청년부 소식', '청년부의 소식과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 1),
-('nextgen', 'KM 청소년부', '말씀과 기도로 다음세대가 정체성을 세우고, 건강한 공동체를 경험하도록 돕습니다.', 'KM 청소년부, 믿음 안에서 함께 성장합니다.', '/images/sub/01-introduction/minister-05.jpg', '13-18세', '주일', '오전 11시', '밀알교회 2층 청소년부 예배실', '차승현 목사', '담당 목사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'KM 청소년부 카카오톡 채널 추가하기', 'KM 청소년부 소식', '주간 프로그램과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 2),
-('nextgen', 'EM 청소년부', 'We gather for worship and discipleship, and go out as Christ-centered witnesses in daily life.', 'EM Youth, Grounded in the Word.', '/images/sub/01-introduction/minister-09.jpg', '13-18세', '주일', '오후 1시', '밀알교회 2층 청소년부 예배실', '조나단 목사', '담당 목사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'EM Youth 카카오톡 채널 추가하기', 'EM Youth 소식', '프로그램 일정과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 3),
-('nextgen', '아동부', '예배와 말씀, 활동을 통해 아이들이 즐겁게 하나님을 알아가도록 세웁니다.', '아동부, 예수님을 닮아가는 어린이들', '/images/sub/01-introduction/minister-13.jpg', '7-12세', '주일', '오전 11시', '밀알교회 아동부실', '김진아 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '아동부 카카오톡 채널 추가하기', '아동부 프로그램', '월간 프로그램과 학부모 안내자료를 다운로드하세요.', '자료 다운로드', '#', 4),
-('nextgen', '유치부', '아이들의 눈높이에 맞춘 예배와 활동으로 하나님의 사랑을 자연스럽게 배우게 합니다.', '유치부, 믿음의 씨앗을 심는 시간', '/images/sub/01-introduction/minister-12.jpg', '4-6세', '주일', '오전 11시', '밀알교회 유치부실', '김비치 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '유치부 카카오톡 채널 추가하기', '유치부 프로그램', '월간 공지사항과 부모교육 자료를 다운로드하세요.', '자료 다운로드', '#', 5),
-('nextgen', '영유아부', '부모와 교사가 함께 아이들의 신앙 첫 걸음을 따뜻하게 동행합니다.', '영유아부, 사랑 안에서 첫 걸음을', '/images/sub/01-introduction/minister-14.jpg', '0-3세', '주일', '오전 11시', '밀알교회 영유아부실', '주은지 전도사', '담당 전도사', NULL, 'nextgen@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '영유아부 카카오톡 채널 추가하기', '영유아부 프로그램', '월간 프로그램과 부모 양육 안내자료를 다운로드하세요.', '자료 다운로드', '#', 6);
+('nextgen', 'KM 청소년부', '말씀과 기도로 다음세대가 정체성을 세우고, 건강한 공동체를 경험하도록 돕습니다.', 'KM 청소년부, 믿음 안에서 함께 성장합니다.', '/images/sub/01-introduction/minister-05.jpg', '13-18세', '주일', '오전 11시', '밀알교회 2층 청소년부 예배실', '차승현 목사', '담당 목사', NULL, 'seunghyuncha@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'KM 청소년부 카카오톡 채널 추가하기', 'KM 청소년부 소식', '주간 프로그램과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 2),
+('nextgen', 'EM 청소년부', 'We gather for worship and discipleship, and go out as Christ-centered witnesses in daily life.', 'EM Youth, Grounded in the Word.', '/images/sub/01-introduction/minister-09.jpg', '13-18세', '주일', '오후 1시', '밀알교회 2층 청소년부 예배실', '조나단 목사', '담당 목사', NULL, 'jonathankim@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'EM Youth 카카오톡 채널 추가하기', 'EM Youth 소식', '프로그램 일정과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 3),
+('nextgen', '아동부', '예배와 말씀, 활동을 통해 아이들이 즐겁게 하나님을 알아가도록 세웁니다.', '아동부, 예수님을 닮아가는 어린이들', '/images/sub/01-introduction/minister-13.jpg', '7-12세', '주일', '오전 11시', '밀알교회 아동부실', '김진아 전도사', '담당 전도사', NULL, 'jina.kim@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '아동부 카카오톡 채널 추가하기', '아동부 프로그램', '월간 프로그램과 학부모 안내자료를 다운로드하세요.', '자료 다운로드', '#', 4),
+('nextgen', '유치부', '아이들의 눈높이에 맞춘 예배와 활동으로 하나님의 사랑을 자연스럽게 배우게 합니다.', '유치부, 믿음의 씨앗을 심는 시간', '/images/sub/01-introduction/minister-12.jpg', '4-6세', '주일', '오전 11시', '밀알교회 유치부실', '김비치 전도사', '담당 전도사', NULL, 'bichi.kim@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '유치부 카카오톡 채널 추가하기', '유치부 프로그램', '월간 공지사항과 부모교육 자료를 다운로드하세요.', '자료 다운로드', '#', 5),
+('nextgen', '영유아부', '부모와 교사가 함께 아이들의 신앙 첫 걸음을 따뜻하게 동행합니다.', '영유아부, 사랑 안에서 첫 걸음을', '/images/sub/01-introduction/minister-14.jpg', '0-3세', '주일', '오전 11시', '밀알교회 영유아부실', '주은지 전도사', '담당 전도사', NULL, 'eunji.ju@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '영유아부 카카오톡 채널 추가하기', '영유아부 프로그램', '월간 프로그램과 부모 양육 안내자료를 다운로드하세요.', '자료 다운로드', '#', 6);
 
 -- ===============================================
 -- 7. 사역 (ministry) 테스트 데이터
@@ -302,12 +299,12 @@ INSERT INTO ministry (`key`, name, subtitle, title, image, description, points, 
 -- ===============================================
 
 INSERT INTO obituary (title, description, content, date) VALUES
-('박주희 집사(김주환 집사)<br>모친 소천(영광 2순)',    '강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로',                                                              '강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로 소천하셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',   '2026-04-17'),
-('이효숙 성도 부친 소천<br>(청장년 1순)',              '이무남 성도님(딸: 이효숙 성도)께서 2026년 4월 12일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.',                                                     '이무남 성도님(딸: 이효숙 성도)께서 2026년 4월 12일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',        '2026-04-12'),
-('이진아(윤석원)집사 부친 소천<br>(온유 4순)',          '이건대 장로님(딸: 이진아 집사, 사위: 윤석원 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.',                                      '이건대 장로님(딸: 이진아 집사, 사위: 윤석원 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-19'),
-('김일환(이순녀)집사 소천(모세회)',                    '김일환 집사님(이순녀 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.',                                                  '김일환 집사님(이순녀 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',      '2026-03-02'),
-('서예원 집사 부친 소천(충성 5순)',                    '서재호 성도님(딸: 서예원 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.',                                           '서재호 성도님(딸: 서예원 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',  '2026-02-19'),
-('조양임 집사(심택)모친 소천<br>(기쁨 4순)',           '유명자 집사님(딸: 조양임 집사, 사위: 심택 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.',                                     '유명자 집사님(딸: 조양임 집사, 사위: 심택 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-15');
+('박OO 집사<br>모친 OOO 소천(영광 O순)',    'OOO 권사님(딸: 박OO 집사, 사위: 김OO 집사) 께서 2026년 4월 17일(금) 향년 84세로',                                                              'OOO 권사님(딸: 박OO 집사, 사위: 김OO 집사) 께서 2026년 4월 OO일(금) 향년 OO세로 소천하셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',   '2026-04-01'),
+('이OO 성도 부친 소천<br>(청장년 O순)',              '이OO 성도님(딸: 이O 성도)께서 2026년 4월 1O일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.',                                                     '이OO 성도님(딸: 이O 성도)께서 2026년 4월 1O일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',        '2026-04-10'),
+('이OO(윤OO)집사 부친 소천<br>(온유 O순)',          '이OO 장로님(딸: 이OO 집사, 사위: 윤OO 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.',                                      '이OO 장로님(딸: 이OO 집사, 사위: 윤OO 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-19'),
+('김OO(이OO)집사 소천(모세회 O순)',                    '김OO 집사님(이OO 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.',                                                  '김OO 집사님(이OO 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',      '2026-03-02'),
+('서OO 집사 부친 소천(충성 O순)',                    '서OO 성도님(딸: 서OO 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.',                                           '서OO 성도님(딸: 서OO 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.',  '2026-02-19'),
+('조OO 집사(OOO)모친 소천<br>(기쁨 O순)',           '유OO 집사님(딸: 조OO 집사, 사위: OOO집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.',                                     '유OO 집사님(딸: 조OOO 집사, 사위: OOO 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.<br>유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.', '2026-02-15');
 
 -- ===============================================
 -- 8-1. 공지 (notice) 테스트 데이터
@@ -328,15 +325,15 @@ INSERT INTO notice (title, content, writer_name, emergency_level, created_date, 
 -- 기존 DB에 name_en, tags, tags_en 컬럼 추가 (이미 존재하면 건너뜀)
 
 INSERT INTO members (name, name_en, email, title, category, role, picture, position, tags, tags_en, sort_order, is_active) VALUES
-('박형일',      'Hyung Il Park',  'hyungilpark@milalchurch.com',    '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-01.jpg', '담임목사 / Senior Pastor', NULL,                                                                                                   NULL,                                                                                                                                                             1,  TRUE),
-('이기쁨',      'Kippeum Lee',    'kippeumlee@milalchurch.com',     '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-02.jpg', '목사',                     '목회행정(선임)\n목회부\n공동체(생명, 충성)\n공간기획',                                             'Senior Admin\nMinistry Dept.\nCommunity (Life, Faithfulness)\nSpace Planning',                                                                                 2,  TRUE),
-('김준영',      'Junyoung Kim',   'junyoungkim@milalchurch.com',    '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-03.jpg', '목사',                     '예배부(1부/2부 찬양인도)\n봉사부(건물관리/주차/경조)\n공동체(기쁨,진리)',                       'Worship Dept. (1st/2nd service praise leading)\nService Dept. (building/parking/condolence)\nCommunity (Joy, Truth)',                                          3,  TRUE),
-('신효성',      'Hyosung Shin',   'rev.shin@milalchurch.com',       '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-04.jpg', '목사',                     '청년부\n선교부\n장학',                                                                         'Youth Dept.\nMission Dept.\nScholarship',                                                                                                                       4,  TRUE),
-('차승현',      'Seunghyun Cha',  'seunghyuncha@milalchurch.com',   '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-05.jpg', '목사',                     '청소년부(KM 해세드)\n캠퍼스 신입생 심방\n청소년부 선교 및 통합훈련',                          'Youth Dept. (KM Hesed)\nCampus Freshman Visitation\nYouth Mission & Integrated Training',                                                                        5,  TRUE),
-('이웅',        'Ung Lee',        'unglee@milalchurch.com',          '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-06.jpg', '목사',                     '교육총괄\n가스펠프로젝트\n목회기획\n공동체(은혜,영광)',                                       'Education Oversight\nGospel Project\nMinistry Planning\nCommunity (Grace, Glory)',                                                                               6,  TRUE),
-('오성요',      'Sung Yo Oh',     'osungyo@milalchurch.com',         '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-07.jpg', '목사',                     '목양(소그룹)\n찬양인도(주일3부, 금요찬양집회)\n친교부 공동체(믿음,온유)',                    'Shepherding (Small Groups)\nPraise Leading (3rd service, Friday Praise)\nFellowship Community (Faith, Meekness)',                                               7,  TRUE),
-('배상진',      'Sangjin Bae',    'sangjinbae@milalchurch.com',     '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-08.jpg', '목사',                     '훈련사역부\n청장년부\n다니엘한글문화학교\nChild Care\n공동체(감사)',                          'Training Ministry Dept.\nYoung Adult Dept.\nDaniel Korean Culture School\nChild Care\nCommunity (Gratitude)',                                                    8,  TRUE),
-('Jonathan Kim','Jonathan Kim',   'jonathankim@milalchurch.com',    '목사',   '목회자', '목사',   '/images/sub/01-introduction/minister-09.jpg', '목사',                     '청소년부(EM 오하나)',                                                                           'Youth Dept. (EM Ohana)',                                                                                                                                         9,  TRUE),
+('박형일',      'Hyung Il Park',  'hyungilpark@milalchurch.com',    '담임목사',   '목회자', '담임목사',   '/images/sub/01-introduction/minister-01.jpg', '담임목사 / Senior Pastor', NULL,                                                                                                   NULL,                                                                                                                                                             1,  TRUE),
+('이기쁨',      'Kippeum Lee',    'kippeumlee@milalchurch.com',     '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-02.jpg', '목사',                     '목회행정(선임)\n목회부\n공동체(생명, 충성)\n공간기획',                                             'Senior Admin\nMinistry Dept.\nCommunity (Life, Faithfulness)\nSpace Planning',                                                                                 2,  TRUE),
+('김준영',      'Junyoung Kim',   'junyoungkim@milalchurch.com',    '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-03.jpg', '목사',                     '예배부(1부/2부 찬양인도)\n봉사부(건물관리/주차/경조)\n공동체(기쁨,진리)',                       'Worship Dept. (1st/2nd service praise leading)\nService Dept. (building/parking/condolence)\nCommunity (Joy, Truth)',                                          3,  TRUE),
+('신효성',      'Hyosung Shin',   'rev.shin@milalchurch.com',       '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-04.jpg', '목사',                     '청년부\n선교부\n장학',                                                                         'Youth Dept.\nMission Dept.\nScholarship',                                                                                                                       4,  TRUE),
+('차승현',      'Seunghyun Cha',  'seunghyuncha@milalchurch.com',   '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-05.jpg', '목사',                     '청소년부(KM 해세드)\n캠퍼스 신입생 심방\n청소년부 선교 및 통합훈련',                          'Youth Dept. (KM Hesed)\nCampus Freshman Visitation\nYouth Mission & Integrated Training',                                                                        5,  TRUE),
+('이웅',        'Ung Lee',        'unglee@milalchurch.com',          '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-06.jpg', '목사',                     '교육총괄\n가스펠프로젝트\n목회기획\n공동체(은혜,영광)',                                       'Education Oversight\nGospel Project\nMinistry Planning\nCommunity (Grace, Glory)',                                                                               6,  TRUE),
+('오성요',      'Sung Yo Oh',     'osungyo@milalchurch.com',         '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-07.jpg', '목사',                     '목양(소그룹)\n찬양인도(주일3부, 금요찬양집회)\n친교부 공동체(믿음,온유)',                    'Shepherding (Small Groups)\nPraise Leading (3rd service, Friday Praise)\nFellowship Community (Faith, Meekness)',                                               7,  TRUE),
+('배상진',      'Sangjin Bae',    'sangjinbae@milalchurch.com',     '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-08.jpg', '목사',                     '훈련사역부\n청장년부\n다니엘한글문화학교\nChild Care\n공동체(감사)',                          'Training Ministry Dept.\nYoung Adult Dept.\nDaniel Korean Culture School\nChild Care\nCommunity (Gratitude)',                                                    8,  TRUE),
+('김조나단','Jonathan Kim',   'jonathankim@milalchurch.com',    '부목사',   '목회자', '부목사',   '/images/sub/01-introduction/minister-09.jpg', '목사',                     '청소년부(EM 오하나)',                                                                           'Youth Dept. (EM Ohana)',                                                                                                                                         9,  TRUE),
 ('최수라',      'Soora Choi',     'soorachoi@milalchurch.com',       '전도사', '목회자', '전도사', '/images/sub/01-introduction/minister-10.jpg', '전도사',                   '새가족\n가정사역부(마더/파더 와이즈)\n공동체(지혜 A,B)',                                      'New Members\nFamily Ministry (Mother/Father Wise)\nCommunity (Wisdom A,B)',                                                                                     10, TRUE),
 ('최정수',      'Jeongsu Choi',   'jeongsuchoi@milalchurch.com',    '전도사', '목회자', '전도사', '/images/sub/01-introduction/minister-11.jpg', '전도사',                   '시니어 사역 (다윗/여호수아/모세회)',                                                            'Senior Ministry (David/Joshua/Moses Group)',                                                                                                                     11, TRUE),
 ('김비치',      'Bichi Kim',      'bichi.kim@milalchurch.com',      '전도사', '목회자', '전도사', '/images/sub/01-introduction/minister-12.jpg', '전도사',                   '유치부',                                                                                         'Preschool Dept.',                                                                                                                                                12, TRUE),
@@ -416,6 +413,31 @@ INSERT INTO banner_image (image_url, alt_text) VALUES
 ('/images/main/banner-bg.png', '교회같은 가정, 가정같은 교회');
 
 -- ===============================================
+-- 15. 담임목사 소개 테스트 데이터
+-- ===============================================
+
+INSERT INTO pastor_introduction
+  (photo_alt_ko, photo_alt_en,
+   title_line1_ko, title_line2_ko, title_line1_en, title_line2_en,
+   paragraphs_ko, paragraphs_en,
+   pastor_role_ko, pastor_role_en,
+   pastor_name_ko, pastor_name_en,
+   career_title_ko, career_title_en,
+   career_ko, career_en)
+VALUES (
+  '담임목사 사진', 'Senior Pastor portrait',
+  '복음으로 하나 되어,', '세상으로 나아가는 교회',
+  'United in the Gospel,', 'Sent into the World',
+  '밀알교회에 오신 것을 환영합니다.\n\n밀알교회는 캐나다 토론토에 위치한 해외한인장로회(KPCA) 소속\n장로교회입니다. 저희 교회는 교회같은 가정, 가정같은 교회를 꿈꾸며\n하늘의 복을 받아 세상의 복을 나누는 교회가 되길 꿈꾸는 교회입니다.\n\n예배, 목양, 훈련, 미셔널 공동체를 이루며 제자의 삶을 통해\n복음을 증거하고 세상을 변화시키며 훈련된 증인으로 파송되어\n세상과 삶의 현장에 하나님 나라를 확장해가는 미셔널 공동체인 교회입니다.\n\n공동체 안에 있을 때 사람은 성장합니다.\n성장하는 귀한 공동체로 여러분을 초대합니다.',
+  'Welcome to Milal Church.\n\nMilal Church is a Presbyterian church in Toronto, Canada, affiliated with KPCA.\nWe dream of homes like churches and a church like home,\nreceiving heaven\'s blessing to share blessing with the world.\n\nAs a worshiping, shepherding, training, and missional community,\nwe proclaim the Gospel through a disciple\'s life, transform the world,\nand are sent as trained witnesses to expand God\'s Kingdom in daily life.\n\nPeople grow when they belong to a community.\nWe invite you to be part of this growing and life-giving community.',
+  '담임목사', 'Senior Pastor',
+  '박형일', 'Hyung Il Park',
+  '약력', 'Career',
+  '서강대학교 경영학과 졸업\n총신대학교 신학대학원 졸업\nSouthern Baptist Theological Seminary 목회학 박사\n현) Toronto KOSTA 이사\n현) Love Toronto 이사장',
+  'B.B.A., Sogang University\nM.Div., Chongshin Theological Seminary\nD.Min., The Southern Baptist Theological Seminary\nBoard Member, Toronto KOSTA (Current)\nChairman, Love Toronto (Current)'
+);
+
+-- ===============================================
 -- 데이터 삽입 완료
 -- ===============================================
 
@@ -455,7 +477,8 @@ SELECT 'parking_lot', COUNT(*) FROM parking_lot
 UNION ALL
 SELECT 'parking_map', COUNT(*) FROM parking_map
 UNION ALL
-SELECT 'banner_image', COUNT(*) FROM banner_image;
-
+SELECT 'banner_image', COUNT(*) FROM banner_image
+UNION ALL
+SELECT 'pastor_introduction', COUNT(*) FROM pastor_introduction;
 
 COMMIT;
