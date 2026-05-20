@@ -59,6 +59,10 @@
       --c-secondary3: #EFE9DF ;
       --c-icon3 : #E2D4BD;
 
+      --c-primary4:   #248A3B;
+      --c-secondary4: #78CA31 ;
+      --c-icon4 : #D9F0B8;
+
       --c-gradation: linear-gradient(139deg,rgba(31, 143, 61, 1) 0%, rgba(191, 201, 36, 1) 100%);
 
       --b-title:     #252820;
