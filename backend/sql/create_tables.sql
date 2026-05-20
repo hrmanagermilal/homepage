@@ -312,6 +312,34 @@ CREATE TABLE IF NOT EXISTS banner_image (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===============================================
+-- 13-1. PASTOR INTRODUCTION 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS pastor_introduction (
+  id               INT PRIMARY KEY AUTO_INCREMENT,
+  photo_alt_ko     VARCHAR(255)  NULL,
+  photo_alt_en     VARCHAR(255)  NULL,
+  title_line1_ko   VARCHAR(255)  NULL,
+  title_line2_ko   VARCHAR(255)  NULL,
+  title_line1_en   VARCHAR(255)  NULL,
+  title_line2_en   VARCHAR(255)  NULL,
+  paragraphs_ko    TEXT          NULL,
+  paragraphs_en    TEXT          NULL,
+  pastor_role_ko   VARCHAR(100)  NULL,
+  pastor_role_en   VARCHAR(100)  NULL,
+  pastor_name_ko   VARCHAR(100)  NULL,
+  pastor_name_en   VARCHAR(100)  NULL,
+  career_title_ko  VARCHAR(100)  NULL,
+  career_title_en  VARCHAR(100)  NULL,
+  career_ko        TEXT          NULL,
+  career_en        TEXT          NULL,
+  is_active        TINYINT(1)    NOT NULL DEFAULT 1,
+  created_at       TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+  updated_at       TIMESTAMP     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===============================================
 -- 14. NOTICE (공지) 테이블
 -- ===============================================
 

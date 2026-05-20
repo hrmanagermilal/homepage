@@ -25,8 +25,8 @@ const NAV_ITEMS = [
   {
     num: "03", label: "사역", path: "/ministry",
     subs: [
-      { label: "양육", path: "/ministry#ministry01" },
       { label: "소그룹", path: "/ministry#ministry02" },
+      { label: "양육", path: "/ministry#ministry01" },
       { label: "가정", path: "/ministry#ministry03" },
       { label: "선교", path: "/ministry#ministry04" },
       { label: "장학", path: "/ministry#ministry05" },
@@ -212,7 +212,7 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
           </nav>
 
           <div className="site-header__util">
-            {<ThemeSwitcher theme={theme} setTheme={setTheme} />}
+            {false && <ThemeSwitcher theme={theme} setTheme={setTheme} /> /*ThemeSwitcher 비활성화*/}
             <a className="site-header__news-btn" href="/news#notice">
               <img src="/images/common/icon-header-news.svg" alt="" />
               <span>밀알 소식 바로가기</span>
