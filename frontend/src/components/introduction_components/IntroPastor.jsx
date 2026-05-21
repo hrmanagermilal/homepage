@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { api } from "../../api/client";
+import { useMemo } from "react";
 import "./css/IntroPastor.css";
 
 function parseDbRow(row, lang) {
@@ -19,16 +18,11 @@ function parseDbRow(row, lang) {
   };
 }
 
-export default function IntroPastor({ language = "kr" }) {
-  const [copy, setCopy] = useState(null);
-
-  useEffect(() => {
-    api.getPastorIntroduction()
-      .then((res) => {
-        if (res?.data) setCopy(parseDbRow(res.data, language));
-      })
-      .catch(() => {});
-  }, [language]);
+export default function IntroPastor({ pastorData = null, language = "kr" }) {
+  const copy = useMemo(
+    () => (pastorData ? parseDbRow(pastorData, language) : null),
+    [pastorData, language]
+  );
 
   if (!copy) return null;
 
