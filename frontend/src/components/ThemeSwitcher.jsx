@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 
 const THEMES = [
-  { id: "dark-green", label: "Dark Green", swatch: "#3a472b" },
-  { id: "dark-blue",  label: "Dark Blue",  swatch: "#1a2c4e" },
-  { id: "dark-red",   label: "Dark Red",   swatch: "#4a1a1a" },
-  { id: "gold",        label: "Gold",         swatch: "#5a3e10" },
-  { id: "dark-orange", label: "Dark Orange",  swatch: "#6b2d0f" },
+  { id: "dark-green", label: "Green", swatch: "#3a472b" },
+  { id: "dark-blue",  label: "Blue",  swatch: "#1a2c4e" },
+  { id: "dark-brown", label: "Brown", swatch: "#39221C" },
 ];
 
 const STORAGE_KEY = "milal-theme";

@@ -20,16 +20,16 @@ export default function NextGenDepartment({
   return (
     <section className="next-gen">
       <div className="wrap-narrow">
-        <div className="next-gen__head">
+        <div className="next-gen__head" data-ani="top">
           <h3 className="next-gen__head-title" data-heading="3xl">
             {headingTitle}
           </h3>
           <p className="next-gen__head-sub">{headingSub}</p>
         </div>
 
-        <div className="next-gen__divider" role="separator" />
+        <div className="next-gen__divider" data-ani="top" role="separator" />
 
-        <div className="next-gen__worship">
+        <div className="next-gen__worship" data-ani="top">
           <h4 className="next-gen__worship-label" data-heading="lg">
             {worshipLabel}
           </h4>
@@ -45,7 +45,7 @@ export default function NextGenDepartment({
           </ul>
         </div>
 
-        <div className="next-gen__pastor">
+        <div className="next-gen__pastor" data-ani="top">
           <div className="next-gen__pastor-photo">
             <img src={pastorPhoto || "/images/sub/02-next-generation/pastor-photo.jpg"} alt={photoAlt} />
           </div>

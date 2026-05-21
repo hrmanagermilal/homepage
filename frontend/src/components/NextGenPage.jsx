@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { FEATURES } from "../config/features";
 import NextGenDepartment from "./nextgen_components/NextGenDepartment";
 import "./css/SubPage.css";
 import "./css/NextGenPage.css";
@@ -188,7 +189,7 @@ function SubVisual({ title }) {
 
 function SubLnb({ activeKey }) {
   return (
-    <div className="lnb-wrap">
+    <div className="lnb-wrap" data-ani="top">
       <nav className="lnb" aria-label="다음세대 메뉴">
         {NEXTGEN_LNB_ITEMS.map((item, idx) => (
           <a
@@ -204,11 +205,41 @@ function SubLnb({ activeKey }) {
   );
 }
 
-export default function NextGenPage() {
+function renderTextWithBreaks(text) {
+  if (!text) return null;
+  const parts = text.split("\n");
+  if (parts.length === 1) return text;
+  return parts.reduce((acc, part, i) => {
+    if (i === 0) return [part];
+    return [...acc, <br key={i} />, part];
+  }, []);
+}
+
+function mapDeptToContent(dept) {
+  return {
+    headingTitle: renderTextWithBreaks(dept.heading_title) || dept.name,
+    headingSub: renderTextWithBreaks(dept.description),
+    worshipTime: [dept.worship_day, dept.worship_time].filter(Boolean).join(" "),
+    worshipLocation: dept.worship_location || "",
+    pastorName: dept.clergy_name || "",
+    pastorEmail: dept.pastor_email || "",
+    pastorPhoto: dept.image || null,
+    photoAlt: dept.clergy_name ? `${dept.clergy_name} 사진` : "",
+    kakaoLink: dept.kakao_link || "",
+    kakaoLabel: dept.kakao_label || "",
+    noticeTitle: dept.notice_title || "",
+    noticeDescription: dept.notice_description || "",
+    noticeButtonLabel: dept.notice_button_label || "",
+    noticeButtonHref: dept.notice_button_href || "#",
+  };
+}
+
+export default function NextGenPage({ departments = [] }) {
   const containerRef = useRef(null);
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
   const safeTitle = KEY_TO_TITLE[activeKey] || "청년부";
-  const content = DEPARTMENT_CONTENT[safeTitle];
+  const apiDept = departments.find(d => d.name === safeTitle);
+  const content = apiDept ? mapDeptToContent(apiDept) : DEPARTMENT_CONTENT[safeTitle];
 
   useEffect(() => {
     const onHashChange = () => setActiveKey(getKeyFromHash(window.location.hash));
@@ -294,10 +325,13 @@ export default function NextGenPage() {
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
 
   return (

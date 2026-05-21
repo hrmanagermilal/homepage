@@ -2,11 +2,6 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import "./css/Announcement.css";
 
 const FALLBACK_NEWS = [
-  { title: "제3회 가스펠오락관 - 암송축제편", image: "/images/main/news-thumb-01.jpg", link: "#", btnText: "신청하러 가기" },
-  { title: "BAPTISM", image: "/images/main/news-thumb-02.jpg", link: "#", btnText: null },
-  { title: "워크톤 페스티벌", image: "/images/main/news-thumb-03.jpg", link: "#", btnText: "신청하러 가기" },
-  { title: "새로운 소식", image: "/images/main/news-thumb-04.jpg", link: "#", btnText: "신청하러 가기" },
-  { title: "새로운 소식", image: "/images/main/news-thumb-05.jpg", link: "#", btnText: "신청하러 가기" },
 ];
 
 function getNewsImage(item, index) {
@@ -18,12 +13,13 @@ function getNewsImage(item, index) {
 }
 
 export default function Announcement({ items = [], section = null }) {
-  const cards = items.length
-    ? items.slice(0, 5).map((item, idx) => ({
+  const withImage = items.filter((item) => item?.image);
+  const cards = withImage.length
+    ? withImage.map((item, idx) => ({
         title: item.title || "새로운 소식",
         image: getNewsImage(item, idx),
         link: item.link || "#",
-        btnText: item.link ? "자세히 보기" : null,
+        btnText: item.link_text || null,
       }))
     : FALLBACK_NEWS;
 
@@ -33,6 +29,8 @@ export default function Announcement({ items = [], section = null }) {
   const sectionRef = useRef(null);
   const stateRef = useRef({ current: 0, total: cards.length, animating: false, timer: null, dragging: false, hasDragged: false, startX: 0, startSX: 0 });
   const [selectedCard, setSelectedCard] = useState(null);
+  const [dotIndex, setDotIndex] = useState(0);
+  const setDotIndexRef = useRef(setDotIndex);
   // Keep a stable ref so the DOM event listener can access current values
   const cardsRef = useRef(cards);
   const setSelectedCardRef = useRef(setSelectedCard);
@@ -61,6 +59,7 @@ export default function Announcement({ items = [], section = null }) {
 
   const goTo = useCallback((idx) => {
     const s = stateRef.current;
+    console.log(`goTo ${idx}, current: ${s.current}, total: ${s.total}`);
     if (s.animating) return;
     s.animating = true;
     s.current = idx;
@@ -88,6 +87,8 @@ export default function Announcement({ items = [], section = null }) {
     s.total = total;
     s.current = total;
 
+    if (total === 0) return;
+
     // Insert clones: [clones] [originals] [clones]
     const origCards = Array.from(track.querySelectorAll(".news-card"));
     const preFrag = document.createDocumentFragment();
@@ -103,12 +104,15 @@ export default function Announcement({ items = [], section = null }) {
       if (s.current < total) { s.current += total; moveTo(s.current, false); }
       else if (s.current >= total * 2) { s.current -= total; moveTo(s.current, false); }
       s.animating = false;
+      setDotIndexRef.current(s.current - total);
     };
 
     const onResize = () => moveTo(s.current, false);
 
     const prevBtn = section.querySelector(".slider-nav__btn.is-prev");
     const nextBtn = section.querySelector(".slider-nav__btn.is-next");
+    const mobilePrevBtn = section.querySelector(".main-news__mobile-btn--prev");
+    const mobileNextBtn = section.querySelector(".main-news__mobile-btn--next");
     const slider  = section.querySelector(".main-news__slider");
 
     const onPrev = () => { goTo(s.current - 1); startAuto(); };
@@ -118,6 +122,8 @@ export default function Announcement({ items = [], section = null }) {
     window.addEventListener("resize", onResize);
     if (prevBtn) prevBtn.addEventListener("click", onPrev);
     if (nextBtn) nextBtn.addEventListener("click", onNext);
+    if (mobilePrevBtn) mobilePrevBtn.addEventListener("click", onPrev);
+    if (mobileNextBtn) mobileNextBtn.addEventListener("click", onNext);
     if (slider) { slider.addEventListener("mouseenter", stopAuto); slider.addEventListener("mouseleave", startAuto); }
 
     // Drag / swipe
@@ -157,7 +163,16 @@ export default function Announcement({ items = [], section = null }) {
       const cardEl = e.target.closest(".news-card");
       if (!cardEl) return;
       const idx = parseInt(cardEl.dataset.cardIdx, 10);
-      if (!isNaN(idx)) setSelectedCardRef.current(cardsRef.current[idx]);
+      if (!isNaN(idx)) {
+        const card = cardsRef.current[idx];
+        setSelectedCardRef.current(card);
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "announcement_card_click", {
+            event_category: "Announcement",
+            event_label: card?.title || "unknown",
+          });
+        }
+      }
     };
     const onDragStart = (e) => e.preventDefault();
 
@@ -176,6 +191,8 @@ export default function Announcement({ items = [], section = null }) {
       window.removeEventListener("resize", onResize);
       if (prevBtn) prevBtn.removeEventListener("click", onPrev);
       if (nextBtn) nextBtn.removeEventListener("click", onNext);
+      if (mobilePrevBtn) mobilePrevBtn.removeEventListener("click", onPrev);
+      if (mobileNextBtn) mobileNextBtn.removeEventListener("click", onNext);
       if (slider) { slider.removeEventListener("mouseenter", stopAuto); slider.removeEventListener("mouseleave", startAuto); }
       track.removeEventListener("mousedown",   onMouseDown);
       document.removeEventListener("mousemove", onMouseMove);
@@ -187,7 +204,7 @@ export default function Announcement({ items = [], section = null }) {
       track.removeEventListener("dragstart",   onDragStart);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [items.length]);
 
   // Lock body scroll and handle Escape key when modal is open
   useEffect(() => {
@@ -210,7 +227,7 @@ export default function Announcement({ items = [], section = null }) {
 
       <section className="main-news" ref={sectionRef}>
         <div className="wrap">
-          <div className="main-news__head">
+          <div className="main-news__head" data-ani="top">
             <div className="main-title">
               <h2 data-heading="5xl" className="main-title__heading">새로운 소식</h2>
               <p className="main-title__sub">다양한 행사들과 소식을 놓치지 마세요.</p>
@@ -234,7 +251,7 @@ export default function Announcement({ items = [], section = null }) {
             </div>
           </div>
 
-          <div className="main-news__notice tablet-block">
+          <div className="main-news__notice tablet-block" data-ani="top">
             <div className="main-news__notice-label">
               <img src="/images/main/icon-notice.svg" alt="" aria-hidden="true" />
               <span data-text="sm-sb">공지사항</span>
@@ -242,17 +259,19 @@ export default function Announcement({ items = [], section = null }) {
             <a data-text="sm" className="main-news__notice-text" href="/news/notice">{noticeText}</a>
           </div>
 
-          <div className="main-news__slider">
-            <div className="main-news__track" id="newsTrack" ref={trackRef}>
-              {cards.map((card, idx) => (
-                <article className="news-card" key={`${card.title}-${idx}`} data-card-idx={idx} style={{ cursor: "pointer" }}>
-                  <div className="news-card__thumb"><img src={card.image} alt={card.title} /></div>
-                  <div className="news-card__body">
-                    <h3 data-heading="xl">{card.title}</h3>
-                    {card.btnText && <a className="btn-basic btn-basic--white" href={card.link}>{card.btnText}</a>}
-                  </div>
-                </article>
-              ))}
+          <div className="main-news__slider-wrap">
+            <div className="main-news__slider" data-ani="top">
+              <div className="main-news__track" id="newsTrack" ref={trackRef}>
+                {cards.map((card, idx) => (
+                  <article className="news-card" key={`${card.title}-${idx}`} data-card-idx={idx} style={{ cursor: "pointer" }}>
+                    <div className="news-card__thumb"><img src={card.image} alt={card.title} /></div>
+                    <div className="news-card__body">
+                      <h3 data-heading="xl">{card.title}</h3>
+                      {card.btnText && <a className="btn-basic btn-basic--white" href={card.link} target="_blank" rel="noopener noreferrer">{card.btnText}</a>}
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -274,7 +293,21 @@ export default function Announcement({ items = [], section = null }) {
             <div className="news-card-modal__body">
               <h3 className="news-card-modal__title">{selectedCard.title}</h3>
               {selectedCard.btnText && (
-                <a className="news-card-modal__button" href={selectedCard.link}>{selectedCard.btnText}</a>
+                <a
+                  className="news-card-modal__button"
+                  href={selectedCard.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    if (typeof window.gtag === "function") {
+                      window.gtag("event", "announcement_card_link_click", {
+                        event_category: "Announcement",
+                        event_label: selectedCard.title || "unknown",
+                        link_url: selectedCard.link || "",
+                      });
+                    }
+                  }}
+                >{selectedCard.btnText}</a>
               )}
             </div>
           </div>

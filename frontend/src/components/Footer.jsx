@@ -22,8 +22,8 @@ const FOOTER_NAV = [
   {
     title: "사역",
     links: [
-      { label: "양육", path: "/ministry#ministry01" },
       { label: "소그룹", path: "/ministry#ministry02" },
+      { label: "양육", path: "/ministry#ministry01" },
       { label: "가정", path: "/ministry#ministry03" },
       { label: "선교", path: "/ministry#ministry04" },
       { label: "장학", path: "/ministry#ministry05" },
@@ -35,6 +35,7 @@ const FOOTER_NAV = [
   {
     title: "소식",
     links: [
+      { label: "온라인 주보", path: "/news#bulletin" },
       { label: "공지", path: "/news#notice" },
       { label: "부고", path: "/news#obituary" },
     ],
@@ -60,18 +61,13 @@ export default function Footer() {
         <img src="/images/common/footer-texture.jpg" alt="" />
       </div>
 
-      <button className="btn-top" type="button" aria-label="맨 위로 이동" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-        <img src="/images/common/icon-scroll-top.svg" alt="" />
-      </button>
-
       <div className="wrap">
         <div className="footer__top">
-          <div className="footer__brand">
+          <div className="footer__brand" data-ani="top">
             <img className="footer__logo" src="/images/common/footer-logo.png" alt="밀알교회" />
-            <p className="footer__copy">ⓒ MILAL CHURCH .All Right Reserved. {currentYear}</p>
           </div>
 
-          <nav className="footer__nav" aria-label="사이트 메뉴">
+          <nav className="footer__nav" data-ani="top" aria-label="사이트 메뉴">
             {FOOTER_NAV.map((group) => (
               <div key={group.title} className="footer-nav__col">
                 <a className="footer-nav__title" href={group.links[0]?.path || "#"}>
@@ -93,12 +89,16 @@ export default function Footer() {
               </div>
             ))}
           </nav>
+
+          <button className="btn-top" type="button" aria-label="맨 위로 이동" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <img src="/images/common/icon-scroll-top.svg" alt="" />
+          </button>
         </div>
 
         <div className="footer__divider" role="separator"></div>
 
         <div className="footer__bottom">
-          <address className="footer__info">
+          <address className="footer__info" data-ani="top">
             <dl className="footer__info-item">
               <dt className="footer__info-label">ADDRESS</dt>
               <dd className="footer__info-value">405 Gordon Baker Rd. Toronto Ontario Canada M2H 2S6</dd>
@@ -114,6 +114,10 @@ export default function Footer() {
             <dl className="footer__info-item">
               <dt className="footer__info-label">E-MAIL</dt>
               <dd className="footer__info-value"><a href="mailto:milalchurch405@gmail.com">milalchurch405@gmail.com</a></dd>
+            </dl>
+            <dl className="footer__info-item">
+              <dt className="footer__info-label">COPYRIGHT</dt>
+              <dd className="footer__info-value">ⓒ Milal Church. All Right Reserved. {currentYear}</dd>
             </dl>
           </address>
 

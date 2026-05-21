@@ -52,15 +52,14 @@
 @media (max-width: 1480px) { .main-youtube__list {--yt-gap: 30rem;} }
 @media (max-width: 1023px) {
   .main-youtube {padding: 80rem 0 60rem;}
-  .main-youtube__more-btn {display: none;}
-  .main-youtube__more-link {display: inline-flex;}
   .main-youtube__head {flex-direction: column; gap: 24rem; margin-bottom: 32rem;}
   .main-youtube__tab {margin-top: 0;}
   .main-youtube__scroll {overflow-x: auto; margin-left: calc(-1 * var(--margin)); margin-right: calc(-1 * var(--margin)); -webkit-overflow-scrolling: touch; scrollbar-width: none;}
   .main-youtube__scroll::-webkit-scrollbar {display: none;}
   .main-youtube__list {width: max-content; padding: 0 40rem; gap: 20rem;}
-  .main-youtube__list.is-expanded {flex-wrap: nowrap;}
-  .main-youtube__list.is-expanded .youtube-card {flex: none; width: 380rem;}
+  .main-youtube__scroll:has(.main-youtube__list.is-expanded) {overflow-x: visible; margin-left: 0; margin-right: 0;}
+  .main-youtube__list.is-expanded {flex-wrap: wrap; width: auto; padding: 0;}
+  .main-youtube__list.is-expanded .youtube-card {flex: 0 0 calc((100% - 20rem) / 2); height: 280rem;}
   .youtube-card {flex: none; width: 380rem; height: 280rem;}
   .youtube-card__label {right: 16rem; left: 24rem;}
   .youtube-card__label h3 {font-size: var(--font-default);}
@@ -68,7 +67,7 @@
 }
 @media (max-width: 860px) {
   .main-youtube__list {padding: 0 32rem;}
-  .main-youtube__list.is-expanded .youtube-card {width: 300rem;}
+  .main-youtube__list.is-expanded .youtube-card {height: 230rem;}
   .youtube-card {width: 300rem; height: 230rem;}
   .youtube-card__label {right: 14rem; left: 20rem;}
   .youtube-card__label h3 {font-size: var(--font-xsm);}
@@ -81,7 +80,7 @@
   .main-youtube__head {gap: 16rem;}
   .main-youtube__more {margin-top: 30rem;}
   .main-youtube__list {padding: 0 20rem; gap: 12rem;}
-  .main-youtube__list.is-expanded .youtube-card {width: 240rem;}
+  .main-youtube__list.is-expanded .youtube-card {height: 200rem;}
   .youtube-card {width: 240rem; height: 200rem; border-radius: 8rem;}
   .youtube-card__label {right: 12rem; left: 16rem;}
   .youtube-card__label h3 {font-size: 12rem;}

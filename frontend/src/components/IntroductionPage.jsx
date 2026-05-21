@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { FEATURES } from "../config/features";
 import IntroVision from "./introduction_components/IntroVision";
 import IntroPastor from "./introduction_components/IntroPastor";
 import IntroMinisters from "./introduction_components/IntroMinisters";
@@ -63,7 +64,7 @@ function SubVisual({ heroLanguage, setHeroLanguage }) {
           >
             KR
           </button>
-          <span className="sub-visual__lang-divider" aria-hidden="true" />
+
           <button
             type="button"
             className={`sub-visual__lang-btn${heroLanguage === "en" ? " is-active" : ""}`}
@@ -85,7 +86,7 @@ function SubLnb({ heroLanguage }) {
   const items = LNB_ITEMS[heroLanguage] || LNB_ITEMS.kr;
 
   return (
-    <div className="lnb-wrap">
+    <div className="lnb-wrap" data-ani="top">
       <nav className="lnb" aria-label={heroLanguage === "en" ? "Introduction section tabs" : "Introduction 메뉴"}>
         {items.map((item, idx) => (
           <a key={idx} className={`lnb__btn${idx === 0 ? " is-active" : ""}${idx > 0 ? " lnb__btn--sep" : ""}`}
@@ -202,11 +203,16 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
+
+  console.log('visionStatements', visionStatements);
 
   return (
     <div ref={containerRef}>

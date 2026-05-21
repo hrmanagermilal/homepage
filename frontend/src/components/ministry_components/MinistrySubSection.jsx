@@ -44,7 +44,7 @@ export default function MinistrySubSection({
             <p className="ministry-subsection__notice-desc">{noticeDescription}</p>
           </div>
           <a
-            className="btn-basic-big btn-basic-big--trans ministry-subsection__notice-btn"
+            className="btn-basic-big btn-basic-big--trans"
             href={noticeButtonHref}
             {...(noticeButtonExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           >

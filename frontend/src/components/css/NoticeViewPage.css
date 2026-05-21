@@ -43,11 +43,48 @@
   margin: 0;
 }
 
+/* 공지 이미지 */
+.notice-view__image-wrap {
+  margin-top: 40rem;
+  margin-bottom: 40rem;
+  text-align: center;
+}
+
+.notice-view__image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8rem;
+}
+
+/* 공지 링크 버튼 */
+.notice-view__link-wrap {
+  margin-top: 40rem;
+  text-align: center;
+}
+
+.notice-view__link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14rem 40rem;
+  background: var(--primary, #4a7c59);
+  color: #fff;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  border-radius: 4rem;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.notice-view__link-btn:hover {
+  background: var(--primary-dark, #3a6247);
+}
+
 /* 뷰 버튼 래퍼 */
 .view-btn-wrap {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 60rem;
   gap: 20rem;
@@ -204,7 +241,9 @@
   }
 
   .view-btn-wrap {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     margin-top: 0;
     gap: 15rem;
   }

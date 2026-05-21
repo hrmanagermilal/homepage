@@ -7,35 +7,34 @@ const FALLBACK_IMAGES = [
   "/images/main/weekly-bulletin-03.png",
   "/images/main/weekly-bulletin-04.png",
   "/images/main/weekly-bulletin-05.png",
-  "/images/main/weekly-bulletin-05.png",
+  "/images/main/weekly-bulletin-06.png",
 ];
 
-function getBulletinImage(item, index) {
-  const file = item?.thumbnail || item?.thumbnail_url || item?.image || item?.image_url || item?.file_path || item?.file_url;
-  if (!file) return FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
-  if (String(file).startsWith("http")) return file;
-  if (String(file).startsWith("/")) return file;
-  return `/uploads/bulletin/${file}`;
-}
-
 export default function Jubo({ items = [], section = null }) {
-  const bulletins = useMemo(() => {
-    if (items.length) return items.slice(0, 6);
-    return FALLBACK_IMAGES.map((img, index) => ({ id: `fallback-${index}`, title: `주보 ${index + 1}`, _img: img }));
+  // Use the most recent bulletin's images as individual pages
+  const pages = useMemo(() => {
+    const latest = items[0];
+    if (latest?.images?.length) {
+      return latest.images
+        .slice()
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        .map((img) => ({ id: img.id, src: img.image_url, title: latest.title }));
+    }
+    return FALLBACK_IMAGES.map((src, i) => ({ id: `fallback-${i}`, src, title: `주보 ${i + 1}` }));
   }, [items]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [popupOpen, setPopupOpen] = useState(false);
 
-  const currentItem = bulletins[activeIndex];
-  const currentImage = currentItem?._img || getBulletinImage(currentItem, activeIndex);
+  const currentPage = pages[activeIndex];
+  const currentImage = currentPage?.src;
 
-  const goPrev = () => setActiveIndex((prev) => (prev - 1 + bulletins.length) % bulletins.length);
-  const goNext = () => setActiveIndex((prev) => (prev + 1) % bulletins.length);
+  const goPrev = () => setActiveIndex((prev) => (prev - 1 + pages.length) % pages.length);
+  const goNext = () => setActiveIndex((prev) => (prev + 1) % pages.length);
 
   return (
     <>
-      <section id="weekly" className="main-weekly">
+      <section id="weekly" className="main-weekly" data-ani="top">
         <div className="main-weekly__inr">
           <div className="main-weekly__bg">
             <img src="/images/main/weekly-bg.jpg" alt="" />
@@ -46,7 +45,7 @@ export default function Jubo({ items = [], section = null }) {
               <div className="main-weekly__thumb-area">
                 <div className="main-weekly__thumb-wrap" role="button" tabIndex={0} onClick={() => setPopupOpen(true)} onKeyDown={(e) => (e.key === "Enter" ? setPopupOpen(true) : null)}>
                   <div className="main-weekly__card">
-                    <img src={currentImage} alt={currentItem?.title || "밀알 주보"} />
+                    <img key={activeIndex} src={currentImage} alt={currentPage?.title || "밀알 주보"} />
                   </div>
                   <div className="main-weekly__hover-btn">
                     <img src="/images/main/icon-zoom.svg" alt="" />
@@ -62,7 +61,7 @@ export default function Jubo({ items = [], section = null }) {
                 </div>
 
                 <div className="main-weekly__btns">
-                  <a className="btn-basic-big btn-basic-big--trans" href="/news/notice">전체 주보 보러가기</a>
+                  <a className="btn-basic-big btn-basic-big--trans" href="/news#bulletin">전체 주보 보러가기</a>
                   <div className="slider-nav slider-nav--trans">
                     <button className="slider-nav__btn is-prev" type="button" aria-label="이전" onClick={goPrev}>
                       <img src="/images/main/icon-arrow-weekly.svg" alt="" aria-hidden="true" />
@@ -74,9 +73,9 @@ export default function Jubo({ items = [], section = null }) {
                 </div>
 
                 <ul className="main-weekly__nav" id="weeklyNav">
-                  {bulletins.map((item, idx) => (
-                    <li key={item.id || idx} className={`main-weekly__nav-item${idx === activeIndex ? " is-active" : ""}`} onClick={() => setActiveIndex(idx)}>
-                      <img src={item._img || getBulletinImage(item, idx)} alt={item.title || `주보 ${idx + 1}`} />
+                  {pages.map((page, idx) => (
+                    <li key={page.id} className={`main-weekly__nav-item${idx === activeIndex ? " is-active" : ""}`} onClick={() => setActiveIndex(idx)}>
+                      <img src={page.src} alt={`주보 ${idx + 1}페이지`} />
                     </li>
                   ))}
                 </ul>
@@ -86,13 +85,13 @@ export default function Jubo({ items = [], section = null }) {
         </div>
       </section>
 
-      <div className={`weekly-popup${popupOpen ? " is-open" : ""}`} role="dialog" aria-modal="true" aria-label="주보 크게 보기">
+      <div className={`weekly-popup${popupOpen ? " is-open" : ""}`} role="dialog" aria-modal="true" aria-label="주보 크게 보기" onClick={() => setPopupOpen(false)}>
         <button className="weekly-popup__close" type="button" aria-label="닫기" onClick={() => setPopupOpen(false)}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L15 15M15 1L1 15" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
-        <img className="weekly-popup__img" src={currentImage} alt={currentItem?.title || "주보 크게 보기"} />
+        <img className="weekly-popup__img" src={currentImage} alt={currentPage?.title || "주보 크게 보기"} onClick={(e) => e.stopPropagation()} />
       </div>
     </>
   );

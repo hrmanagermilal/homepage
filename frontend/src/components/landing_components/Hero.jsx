@@ -2,17 +2,11 @@
 import { IconQuickWorship, IconQuickBulletin } from "./HeroIcons";
 import "./css/Hero.css";
 
-const SLIDES = [
-  { src: "/images/main/main-visual-slide-01.jpg", alt: "" },
-  { src: "/images/main/main-visual-slide-02.jpg", alt: "" },
-  { src: "/images/main/main-visual-slide-03.png", alt: "" },
-];
-
-const DEFAULT_ICON_WORSHIP  = "/images/main/icon-quick-worship.svg";
+const DEFAULT_ICON_WORSHIP = "/images/main/icon-quick-worship.svg";
 const DEFAULT_ICON_BULLETIN = "/images/main/icon-quick-bulletin.svg";
 
 function QuickIcon({ src }) {
-  if (src === DEFAULT_ICON_WORSHIP)  return <IconQuickWorship />;
+  if (src === DEFAULT_ICON_WORSHIP) return <IconQuickWorship />;
   if (src === DEFAULT_ICON_BULLETIN) return <IconQuickBulletin />;
   return <img src={src} alt="" aria-hidden="true" />;
 }
@@ -80,15 +74,20 @@ export default function Hero({ hero = null, quickLinks = [] }) {
       })
       .filter((item) => Boolean(item?.src));
 
-    return mapped.length ? mapped : SLIDES;
+    if (mapped.length === 0) {
+      return [{ src: "/images/main/main-visual-slide-07.jpg", alt: "" }];
+    }
+
+    return mapped;
   }, [hero]);
 
   const frontImageSrc = useMemo(() => {
+    const frontImages = hero?.front_images || [];
     const raw =
+      frontImages[0]?.image_url ||
+      frontImages[0]?.imageUrl ||
       hero?.frontImage ||
       hero?.front_image ||
-      hero?.frontImageUrl ||
-      hero?.front_image_url ||
       hero?.textImage ||
       hero?.text_image;
 
@@ -99,6 +98,11 @@ export default function Hero({ hero = null, quickLinks = [] }) {
       return resolveMediaPath(objRaw, "/uploads/hero/front/") || "/images/main/main-visual-text.png";
     }
     return resolveMediaPath(raw, "/uploads/hero/front/") || "/images/main/main-visual-text.png";
+  }, [hero]);
+
+  const frontSubtitle = useMemo(() => {
+    const frontImages = hero?.front_images || [];
+    return frontImages[0]?.alt_text || null;
   }, [hero]);
 
   useEffect(() => {
@@ -126,11 +130,11 @@ export default function Hero({ hero = null, quickLinks = [] }) {
 
   const displayLinks = quickLinks.length > 0
     ? quickLinks.slice(0, 2).map((ql) => ({
-        href: ql.link || "#",
-        icon: ql.iconUrl ? (resolveMediaPath(ql.iconUrl, "/uploads/hero/") || DEFAULT_QUICK_LINKS[0].icon) : DEFAULT_QUICK_LINKS[0].icon,
-        title: ql.title || "",
-        desc: ql.description || "",
-      }))
+      href: ql.link || "#",
+      icon: ql.image ? (resolveMediaPath(ql.image, "/uploads/hero/") || DEFAULT_QUICK_LINKS[0].icon) : DEFAULT_QUICK_LINKS[0].icon,
+      title: ql.title || "",
+      desc: ql.desc || "",
+    }))
     : DEFAULT_QUICK_LINKS;
 
   return (
@@ -162,8 +166,14 @@ export default function Hero({ hero = null, quickLinks = [] }) {
           />
         </h1>
         <p className="main-visual__sub">
-          밀알교회는 하나님의 사람을 세웁니다.<br />
-          모퉁이돌 되신 예수 안에 함께 지어져 가는 공동체입니다.
+          {frontSubtitle
+            ? frontSubtitle.split("\n").map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))
+            : <>
+                밀알교회는 하나님의 사람을 세웁니다.<br />
+                모퉁이돌 되신 예수 안에 함께 지어져 가는 공동체입니다.
+              </>}
         </p>
       </div>
 

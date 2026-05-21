@@ -1,6 +1,6 @@
 export default function DonationNotice() {
   return (
-    <div className="donation-notice" role="note">
+    <div className="donation-notice" data-ani="top" role="note">
       <span className="donation-notice__icon" aria-hidden="true">
         !
       </span>

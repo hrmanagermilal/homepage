@@ -1,18 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FEATURES } from "../config/features";
+import MinistrySubSection from "./ministry_components/MinistrySubSection";
 import MinistryYangyuk from "./ministry_components/MinistryYangyuk";
-import MinistrySmallGroup from "./ministry_components/MinistrySmallGroup";
-import MinistryFamily from "./ministry_components/MinistryFamily";
-import MinistryMission from "./ministry_components/MinistryMission";
-import MinistryScholarship from "./ministry_components/MinistryScholarship";
-import MinistryGospelProject from "./ministry_components/MinistryGospelProject";
-import MinistryDanielSchool from "./ministry_components/MinistryDanielSchool";
-import MinistryLoveToronto from "./ministry_components/MinistryLoveToronto";
 import "./css/SubPage.css";
 import "./css/MinistryPage.css";
 
 const LNB_ITEMS = [
-  { label: "양육", key: "ministry01", href: "/ministry#ministry01" },
   { label: "소그룹", key: "ministry02", href: "/ministry#ministry02" },
+  { label: "양육", key: "ministry01", href: "/ministry#ministry01" },
   { label: "가정", key: "ministry03", href: "/ministry#ministry03" },
   { label: "선교", key: "ministry04", href: "/ministry#ministry04" },
   { label: "장학", key: "ministry05", href: "/ministry#ministry05" },
@@ -21,16 +16,7 @@ const LNB_ITEMS = [
   { label: "러브토론토", key: "ministry07", href: "/ministry#ministry07" },
 ];
 
-const COMPONENT_BY_KEY = {
-  ministry01: MinistryYangyuk,
-  ministry02: MinistrySmallGroup,
-  ministry03: MinistryFamily,
-  ministry04: MinistryMission,
-  ministry05: MinistryScholarship,
-  ministry08: MinistryGospelProject,
-  ministry06: MinistryDanielSchool,
-  ministry07: MinistryLoveToronto,
-};
+const VALID_KEYS = new Set(LNB_ITEMS.map((item) => item.key));
 
 const SUBTITLE_BY_KEY = {
   ministry01: "우리는 밀알 공동체입니다.",
@@ -43,9 +29,20 @@ const SUBTITLE_BY_KEY = {
   ministry07: "토론토를 향한 주님의 사랑과 긍휼입니다.",
 };
 
+const BG_IMAGES = [
+  "/images/sub/03-ministry/sub-visual-bg.jpg",
+  "/images/sub/visual/gospel-intro.jpg",
+  "/images/sub/visual/sub-visual0307.jpg",
+  "/images/sub/visual/sub-visual0303.jpg",
+  "/images/sub/visual/sub-visual0306.jpg",
+  "/images/sub/visual/sub-visual0207.jpg",
+  "/images/sub/visual/sub-visual0305.jpg",
+  "/images/sub/visual/sub-visual0302.jpg",
+];
+
 function getKeyFromHash(hash) {
   const key = (hash || "").replace("#", "");
-  return COMPONENT_BY_KEY[key] ? key : "ministry01";
+  return VALID_KEYS.has(key) ? key : "ministry02";
 }
 
 function SubVisual({ title, activeKey }) {
@@ -91,7 +88,7 @@ function SubVisual({ title, activeKey }) {
 
 function SubLnb({ activeKey }) {
   return (
-    <div className="lnb-wrap">
+    <div className="lnb-wrap" data-ani="top">
       <nav className="lnb" aria-label="사역 메뉴">
         {LNB_ITEMS.map((item, idx) => (
           <a
@@ -108,18 +105,25 @@ function SubLnb({ activeKey }) {
   );
 }
 
-const BG_IMAGES = [
-  "/images/sub/03-ministry/sub-visual-bg.jpg",
-  "/images/sub/visual/gospel-intro.jpg",
-  "/images/sub/visual/sub-visual0307.jpg",
-  "/images/sub/visual/sub-visual0303.jpg",
-  "/images/sub/visual/sub-visual0306.jpg",
-  "/images/sub/visual/sub-visual0207.jpg",
-  "/images/sub/visual/sub-visual0305.jpg",
-  "/images/sub/visual/sub-visual0302.jpg",
-];
+function mapMinistryToProps(item) {
+  if (!item) return {};
+  return {
+    description: item.description || "",
+    points: Array.isArray(item.points)
+      ? item.points
+      : (item.points ? item.points.split("\n").filter(Boolean) : []),
+    noticeTitle: item.notice_title || undefined,
+    noticeDescription: item.notice_description || undefined,
+    noticeButtonLabel: item.notice_button_label || undefined,
+    noticeButtonHref: item.notice_button_href || "#",
+    noticeButtonExternal: !!item.notice_button_external,
+    ctaLabel: item.cta_label || undefined,
+    ctaHref: item.cta_href || "#",
+    ctaExternal: !!item.cta_external,
+  };
+}
 
-export default function MinistryPage() {
+export default function MinistryPage({ ministries = [] }) {
   const containerRef = useRef(null);
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
 
@@ -218,14 +222,18 @@ export default function MinistryPage() {
       moveToSection(nextIndex);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-    };
+    if (FEATURES.SCROLL_SNAP_ENABLED) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        window.removeEventListener("wheel", onWheel);
+      };
+    }
+    return () => {};
   }, []);
 
-  const ActiveComponent = useMemo(() => COMPONENT_BY_KEY[activeKey] || MinistryYangyuk, [activeKey]);
-  const activeLabel = useMemo(() => LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역", [activeKey]);
+  const activeMinistry = ministries.find((m) => m.key === activeKey);
+  const activeProps = mapMinistryToProps(activeMinistry);
+  const activeLabel = LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역";
 
   return (
     <div ref={containerRef}>
@@ -234,7 +242,10 @@ export default function MinistryPage() {
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
-        <ActiveComponent />
+        {activeKey === "ministry02"
+          ? <MinistryYangyuk {...activeProps} />
+          : <MinistrySubSection {...activeProps} />
+        }
       </div>
     </div>
   );

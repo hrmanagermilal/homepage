@@ -8,7 +8,7 @@ export default function DonationCard({
   onButtonClick,
 }) {
   return (
-    <div className="donation-card">
+    <div className="donation-card" data-ani="top">
       <div className={`donation-card__logo${logoWide ? " donation-card__logo--wide" : ""}`}>
         <img src={logo} alt={logoAlt} />
       </div>

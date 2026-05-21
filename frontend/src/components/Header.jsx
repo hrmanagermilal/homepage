@@ -25,8 +25,8 @@ const NAV_ITEMS = [
   {
     num: "03", label: "사역", path: "/ministry",
     subs: [
-      { label: "양육", path: "/ministry#ministry01" },
       { label: "소그룹", path: "/ministry#ministry02" },
+      { label: "양육", path: "/ministry#ministry01" },
       { label: "가정", path: "/ministry#ministry03" },
       { label: "선교", path: "/ministry#ministry04" },
       { label: "장학", path: "/ministry#ministry05" },
@@ -38,6 +38,7 @@ const NAV_ITEMS = [
   {
     num: "04", label: "소식", path: "/news#notice",
     subs: [
+      { label: "온라인 주보", path: "/news#bulletin" },
       { label: "공지", path: "/news#notice" },
       { label: "부고", path: "/news#obituary" },
     ],
@@ -183,19 +184,6 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
             <img src="/images/common/logo.png" alt="밀알교회" />
           </a>
 
-          <button
-            className="site-header__volume"
-            type="button"
-            aria-label={bgmPlaying ? "배경음악 일시 정지" : "배경음악 재생"}
-            aria-pressed={bgmPlaying}
-            onClick={toggleBgm}
-          >
-            <img
-              src={bgmPlaying ? "/images/common/icon-volume.svg" : "/images/common/icon-volume--mute.svg"}
-              alt=""
-            />
-          </button>
-
           <nav className="site-header__gnb" aria-label="주 메뉴">
             <ul className="site-header__gnb-list">
               {NAV_ITEMS.map((item, idx) => (
@@ -224,7 +212,7 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
           </nav>
 
           <div className="site-header__util">
-            {<ThemeSwitcher theme={theme} setTheme={setTheme} />}
+            {false && <ThemeSwitcher theme={theme} setTheme={setTheme} /> /*ThemeSwitcher 비활성화*/}
             <a className="site-header__news-btn" href="/news#notice">
               <img src="/images/common/icon-header-news.svg" alt="" />
               <span>밀알 소식 바로가기</span>
@@ -320,7 +308,7 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
                   ) : null
                 )}
 
-                <p className="full-menu__copy">ⓒ MILAL CHURCH .All Right Reserved.</p>
+                <p className="full-menu__copy">ⓒ Milal Church. All Right Reserved.</p>
               </nav>
             </div>
 

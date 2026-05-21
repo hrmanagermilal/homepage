@@ -1,6 +1,148 @@
 # 밀알교회 API 백엔드
 
-PHP와 MySQL을 기반으로 한 REST API 서버입니다.
+Python 3.12 + FastAPI + MySQL 8.0 기반 REST API 서버
+
+## 스택
+
+- **Python 3.12** + **FastAPI**
+- **MySQL 8.0** (DB: `milal_homepage`)
+- **Nginx** 리버스 프록시
+- **Docker Compose** 오케스트레이션
+
+## 서비스 구성
+
+```
+Client → Nginx (포트 8080) → FastAPI app (내부 8000) → MySQL (내부 3306)
+```
+
+| 컨테이너 | 이름 | 외부 포트 | 역할 |
+|---------|------|-----------|------|
+| nginx | milal-nginx | 8080 (HTTP) / 443 (HTTPS) | 리버스 프록시 |
+| app | milal-backend | - (내부 8000) | FastAPI API 서버 |
+| db | milal-db | **3307** (호스트 접근용) | MySQL 8.0 |
+
+## 빠른 시작 (Docker)
+
+```bash
+cd backend
+docker compose up --build -d
+```
+
+API: **http://localhost:8080/api/**
+
+## 데이터베이스 접속 정보
+
+| 항목 | 값 |
+|------|----|
+| Host (Docker 내부) | `db` |
+| Host (호스트에서) | `localhost:3307` |
+| Database | `milal_homepage` |
+| User | `milal_user` |
+| Password | `milal_pass_2024` |
+| Root Password | `milal_root_2024` |
+
+## 디렉토리 구조
+
+```
+backend/
+├── app/
+│   ├── main.py              # FastAPI 앱 진입점
+│   ├── database.py          # DB 연결 (MySQL)
+│   ├── auth.py              # JWT 인증 유틸
+│   ├── response.py          # 공통 응답 포맷
+│   └── routers/             # API 라우터
+│       ├── hero.py          # 히어로 (배경/전면 이미지, 빠른링크)
+│       ├── sermons.py       # 설교
+│       ├── bulletins.py     # 주보
+│       ├── notice.py        # 공지사항
+│       ├── obituary.py      # 부고
+│       ├── departments.py   # 부서 (다음세대/사역)
+│       ├── members.py       # 교역자/간사
+│       ├── together.py      # 함께하는 교회
+│       ├── quick_links.py   # 빠른 링크
+│       ├── sections.py      # 섹션 타이틀
+│       ├── vision_statements.py  # 비전 선언
+│       ├── service_times.py # 예배 시간
+│       ├── shuttle_bus.py   # 셔틀버스 일정
+│       ├── parking_lot.py   # 주차 안내
+│       ├── parking_map.py   # 주차 지도
+│       ├── banner_image.py  # 배너 이미지
+│       ├── landing_titles.py # 랜딩 페이지 타이틀
+│       ├── ministry.py      # 사역 상세
+│       ├── analytics.py     # 페이지뷰 분석
+│       ├── tracking.py      # 페이지뷰 트래킹
+│       ├── auth_routes.py   # 인증 엔드포인트
+│       └── users.py         # 사용자 관리
+├── sql/
+│   ├── create_tables.sql    # 테이블 생성 스크립트
+│   └── insert_test_data.sql # 테스트 데이터
+├── nginx/
+│   └── default.conf         # Nginx 설정
+├── uploads/                 # 업로드 파일 저장 (Docker 볼륨)
+├── Dockerfile               # Python 3.12 이미지 정의
+└── docker-compose.yml       # 서비스 오케스트레이션
+```
+
+## 데이터베이스 테이블
+
+| 테이블 | 설명 | 주요 컬럼 |
+|-------|------|----------|
+| `quick_links` | 히어로 빠른링크 | id, title, link, image, desc |
+| `hero_background_images` | 히어로 배경 이미지 | id, image_url, order, alt_text |
+| `hero_front_images` | 히어로 전면 이미지 | id, image_url, alt_text |
+| `section_titles` | 섹션 타이틀 | id, category, title, subtitle |
+| `vision_statements` | 비전 선언 | id, title, title_en, points, order |
+| `sermon_categories` | 설교 카테고리 | id, title, image |
+| `sermons` | 설교 | id, title, category_id, youtube_url, preacher, sermon_date |
+| `bulletins` | 주보 | id, title, year, week_number |
+| `bulletin_images` | 주보 이미지 | id, bulletin_id, image_url, order |
+| `together_items` | 함께하는 교회 | id, title, description, image, link, order |
+| `departments` | 부서 (nextgen/ministry) | id, department_type, name, clergy_name, ... |
+| `ministry` | 사역 상세 | id, key, name, subtitle, ... |
+| `department_announcements` | 부서 공지 | id, department_id, title, content |
+| `service_times` | 예배 시간 | id, category, name, day, time |
+| `shuttle_bus_schedule` | 셔틀버스 | id, direction, time, service_label |
+| `parking_lot` | 주차 안내 | id, content, sort_order |
+| `parking_map` | 주차 지도 | id, image_url, alt_text |
+| `banner_image` | 배너 이미지 | id, image_url, alt_text |
+| `notice` | 공지사항 | id, title, content, writer_name, emergency_level, link, link_text, image, created_date |
+| `obituary` | 부고 | id, title, description, content, date, is_active |
+| `members` | 교역자/간사 | id, name, email, title, category, role, picture, sort_order |
+| `landing_page_titles` | 랜딩 타이틀 | id, title, descriptions |
+| `page_views` | 페이지뷰 분석 | id, page_path, browser_name, device_type, ip_address, viewed_at |
+| `users` | 관리자 계정 | id, username, email, password_hash, role, is_active |
+
+## 주요 API 엔드포인트
+
+| 경로 | 메서드 | 인증 | 설명 |
+|------|--------|------|------|
+| `/api/hero` | GET | - | 히어로 데이터 전체 조회 |
+| `/api/sermons` | GET | - | 설교 목록 |
+| `/api/bulletins` | GET | - | 주보 목록 |
+| `/api/notice` | GET | - | 공지사항 목록 |
+| `/api/obituary` | GET | - | 부고 목록 |
+| `/api/departments` | GET | - | 부서 목록 |
+| `/api/members` | GET | - | 교역자/간사 목록 |
+| `/api/together` | GET | - | 함께하는 교회 |
+| `/api/auth/login` | POST | - | 로그인 (JWT 발급) |
+| `/api/users` | GET/POST | ✅ | 사용자 관리 |
+| `/api/analytics/pages` | GET | ✅ | 페이지뷰 통계 |
+| `/api/track/pageview` | POST | - | 페이지뷰 기록 |
+
+인증이 필요한 요청은 헤더에 `Authorization: Bearer {token}`을 포함합니다.
+
+## 환경 변수 (docker-compose.yml)
+
+| 변수 | 값 |
+|------|----|
+| `DB_HOST` | `db` |
+| `DB_NAME` | `milal_homepage` |
+| `DB_USER` | `milal_user` |
+| `DB_PASSWORD` | `milal_pass_2024` |
+| `JWT_SECRET` | `change-this-to-a-secure-random-string` |
+| `JWT_EXPIRY` | `604800` (7일) |
+| `CORS_ORIGIN` | `*` |
+
 
 ## 설치 및 실행
 

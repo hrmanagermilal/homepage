@@ -50,6 +50,21 @@
       --c-primary:   #3a472b;
       --c-secondary: #5e7742;
       --c-icon : #BECFAA;
+
+      --c-primary2:   #1C314C;
+      --c-secondary2: #E9ECEF ;
+      --c-icon2 : #BDCCD9;
+
+      --c-primary3:   #39221C;
+      --c-secondary3: #EFE9DF ;
+      --c-icon3 : #E2D4BD;
+
+      --c-primary4:   #248A3B;
+      --c-secondary4: #78CA31 ;
+      --c-icon4 : #D9F0B8;
+
+      --c-gradation: linear-gradient(139deg,rgba(31, 143, 61, 1) 0%, rgba(191, 201, 36, 1) 100%);
+
       --b-title:     #252820;
       --b-default:   #666;
       --w:           #fff;

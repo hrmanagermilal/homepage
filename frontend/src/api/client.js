@@ -1,5 +1,7 @@
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
+console.log("API_BASE_URL:", API_BASE_URL);
+
 function toQueryString(params = {}) {
   const search = new URLSearchParams();
 
@@ -44,7 +46,7 @@ export const api = {
   baseUrl: API_BASE_URL,
 
   // Base / health
-  getHealth: () => request("/api"),
+  getHealth: () => request("/api/hero"),
 
   // Auth (GET)
   getAuthMe: (token) =>
@@ -54,6 +56,7 @@ export const api = {
 
   // Hero
   getHero: () => request("/api/hero"),
+  getHeroBackgroundImages: () => request("/api/hero/background-images"),
 
   // Sections
   getSections: () => request("/api/sections"),
@@ -71,10 +74,6 @@ export const api = {
   getBulletins: (params = {}) => request(`/api/bulletins${toQueryString(params)}`),
   getBulletinById: (id) => request(`/api/bulletins/${id}`),
 
-  // Announcements
-  getAnnouncements: (params = {}) =>
-    request(`/api/announcements${toQueryString(params)}`),
-  getAnnouncementById: (id) => request(`/api/announcements/${id}`),
 
   // Together
   getTogether: () => request("/api/together"),
@@ -88,9 +87,13 @@ export const api = {
   getMinistry: () => request("/api/ministry"),
   getMinistryById: (id) => request(`/api/ministry/${id}`),
 
-  // News
-  getNews: (params = {}) => request(`/api/news${toQueryString(params)}`),
-  getNewsById: (id) => request(`/api/news/${id}`),
+  // Obituary
+  getObituary: () => request("/api/obituary"),
+  getObituaryById: (id) => request(`/api/obituary/${id}`),
+
+  // Notice
+  getNotice: (params = {}) => request(`/api/notice${toQueryString(params)}`),
+  getNoticeById: (id) => request(`/api/notice/${id}`),
 
   // Members
   getMembers: () => request("/api/members"),
@@ -110,9 +113,6 @@ export const api = {
     request(`/api/analytics/recent${toQueryString(params)}`),
 
   // Hero links
-  getHeroLinks: () => request("/api/hero-links"),
-  getHeroLinkById: (id) => request(`/api/hero-links/${id}`),
-
   // Quick links
   getQuickLinks: () => request("/api/quick-links"),
   getQuickLinkById: (id) => request(`/api/quick-links/${id}`),
@@ -120,6 +120,25 @@ export const api = {
   // Landing titles
   getLandingTitles: () => request("/api/landing-titles"),
   getLandingTitleById: (id) => request(`/api/landing-titles/${id}`),
+
+  // Service times
+  getServiceTimes: (params = {}) => request(`/api/service-times${toQueryString(params)}`),
+  getServiceTimeById: (id) => request(`/api/service-times/${id}`),
+
+  // Shuttle bus schedule
+  getShuttleBusSchedule: () => request('/api/shuttle-bus-schedule'),
+
+  // Parking lot
+  getParkingLot: () => request('/api/parking-lot'),
+
+  // Parking map
+  getParkingMap: () => request('/api/parking-map'),
+
+  // Banner image
+  getBannerImage: () => request('/api/banner-image'),
+
+  // Pastor introduction
+  getPastorIntroduction: () => request('/api/pastor-introduction'),
 
   // Existing write endpoint used in UI
   login: (username, password) =>
