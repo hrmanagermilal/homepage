@@ -30,8 +30,8 @@ require_once BASE_PATH.'/app/Controllers/NewsController.php';
 require_once BASE_PATH.'/app/Controllers/CmsController.php';
 
 // ── Router ─────────────────────────────────────────────────
-$uri  = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-$base = trim(parse_url(BASE_URL, PHP_URL_PATH), '/');
+$uri  = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '', '/');
+$base = trim(parse_url(BASE_URL, PHP_URL_PATH) ?? '', '/');
 if ($base && strpos($uri, $base) === 0) $uri = trim(substr($uri, strlen($base)), '/');
 $parts  = explode('/', $uri);
 $module = $parts[0] ?? '';
@@ -52,10 +52,6 @@ $routes = [
     'heroes' => [
         ''                   => ['HeroController','index'],
         'list'               => ['HeroController','list'],
-        'detail'             => ['HeroController','detail'],
-        'create'             => ['HeroController','create'],
-        'update'             => ['HeroController','update'],
-        'delete'             => ['HeroController','delete'],
         'bg-image-add'       => ['HeroController','addBgImage'],
         'bg-image-delete'    => ['HeroController','deleteBgImage'],
         'bg-image-reorder'   => ['HeroController','reorderBgImages'],

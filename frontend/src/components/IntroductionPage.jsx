@@ -99,7 +99,7 @@ function SubLnb({ heroLanguage }) {
   );
 }
 
-export default function IntroductionPage({ togetherItems = [], members = [], visionStatements = [] }) {
+export default function IntroductionPage({ togetherItems = [], members = [], visionStatements = [], pastorIntroduction = null }) {
   const containerRef = useRef(null);
   const [heroLanguage, setHeroLanguage] = useState("kr");
 
@@ -224,7 +224,7 @@ export default function IntroductionPage({ togetherItems = [], members = [], vis
         <IntroVision visionStatements={visionStatements} language={heroLanguage} />
       </div>
       <div data-snap-section="true" style={{ scrollMarginTop: "90rem" }}>
-        <IntroPastor language={heroLanguage} />
+        <IntroPastor pastorData={pastorIntroduction} language={heroLanguage} />
       </div>
       <div data-snap-section="true" style={{ scrollMarginTop: "90rem" }}>
         <IntroMinisters members={members} language={heroLanguage} />

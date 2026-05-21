@@ -19,7 +19,7 @@
       <tbody>
       <?php foreach($departments as $r): ?>
       <tr data-id="<?= $r['id'] ?>">
-        <td><?php if($r['image']): ?><img src="<?= UPLOAD_URL.htmlspecialchars($r['image']) ?>" class="img-thumb" alt=""><?php else: ?><div style="width:40px;height:40px;background:var(--bg);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)"><i class="fas fa-sitemap"></i></div><?php endif; ?></td>
+        <td><?php if($r['image']): ?><img src="<?= htmlspecialchars(UploadHelper::imageUrl($r['image'])) ?>" class="img-thumb" alt=""><?php else: ?><div style="width:40px;height:40px;background:var(--bg);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)"><i class="fas fa-sitemap"></i></div><?php endif; ?></td>
         <td>
           <a href="<?= BASE_URL ?>/departments/view?id=<?= $r['id'] ?>" style="color:var(--text);font-weight:500">
             <?= htmlspecialchars($r['name']) ?>
@@ -104,7 +104,7 @@ async function openEdit(id){
   document.getElementById('d-cphone').value=r.clergy_phone||'';
   document.getElementById('d-order').value=r.order||0;
   document.getElementById('d-active').value=r.is_active;
-  document.getElementById('d-img-preview').innerHTML=r.image?`<img src="${BASE_URL+'/uploads/'+r.image}" style="max-height:80px;border-radius:4px">`:'';
+  document.getElementById('d-img-preview').innerHTML=r.image?`<img src="${r.image.startsWith('/')?r.image:BASE_URL+'/uploads/'+r.image}" style="max-height:80px;border-radius:4px">`:'';
   openModal('dept-modal');
 }
 async function saveDept(){
