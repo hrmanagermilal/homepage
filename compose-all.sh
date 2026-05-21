@@ -5,6 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="$ROOT_DIR/backend"
 FRONTEND_DIR="$ROOT_DIR/frontend"
+CMS_DIR="$ROOT_DIR/milalCMS"
 
 if ! command -v docker >/dev/null 2>&1; then
   echo "[ERROR] docker command not found. Install Docker Desktop first."
@@ -16,18 +17,26 @@ if ! docker compose version >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "[1/2] Building and starting backend services (nginx, app, db)..."
+echo "[1/3] Building and starting backend services (nginx, app, db)..."
 (
   cd "$BACKEND_DIR"
   docker compose up --build -d
 )
 
-echo "[2/2] Building and starting frontend service..."
+echo "[2/3] Building and starting frontend service..."
 (
   cd "$FRONTEND_DIR"
+  docker compose up --build -d
+)
+
+echo "[3/3] Building and starting milalCMS service..."
+(
+  cd "$CMS_DIR"
   docker compose up --build -d
 )
 
 echo "[DONE] All services are up."
 echo "- Frontend: http://localhost"
 echo "- Backend (nginx): http://localhost:8080"
+echo "- milalCMS (direct): http://localhost:8090"
+echo "- milalCMS (via nginx): http://localhost:81"

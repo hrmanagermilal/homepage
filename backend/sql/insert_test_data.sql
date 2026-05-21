@@ -56,21 +56,47 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- roles 테이블 먼저 삽입 (users.role_id FK 제약 조건 충족)
 INSERT INTO roles (name, slug, description) VALUES
-('관리자', 'admin',   '전체 관리 권한'),
-('매니저', 'manager', '컨텐츠 관리 권한'),
-('뷰어',   'viewer',  '읽기 전용 권한');
+('슈퍼 관리자', 'super-admin', '모든 권한'),
+('일반 관리자', 'manager',     '콘텐츠 관리'),
+('뷰어',        'viewer',      '조회 전용');
 
-SET @role_admin   = (SELECT id FROM roles WHERE slug = 'admin'   LIMIT 1);
-SET @role_manager = (SELECT id FROM roles WHERE slug = 'manager' LIMIT 1);
-SET @role_viewer  = (SELECT id FROM roles WHERE slug = 'viewer'  LIMIT 1);
+SET @role_admin   = (SELECT id FROM roles WHERE slug = 'super-admin' LIMIT 1);
+SET @role_manager = (SELECT id FROM roles WHERE slug = 'manager'     LIMIT 1);
+SET @role_viewer  = (SELECT id FROM roles WHERE slug = 'viewer'      LIMIT 1);
 
+-- 비밀번호: Admin@1234  (bcrypt cost=10)
 INSERT INTO users (username, email, password_hash, name, role_id, is_active) VALUES 
-('admin',    'admin@milalchurch.com',    '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '관리자', @role_admin,   TRUE),
-('manager1', 'manager1@milalchurch.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '담당자', @role_manager, TRUE),
-('viewer1',  'viewer1@milalchurch.com',  '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '사용자', @role_viewer,  TRUE),
-('viewer2',  'viewer2@milalchurch.com',  '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '방문자', @role_viewer,  TRUE);
+('admin',    'admin@milalchurch.com',    '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '관리자', @role_admin,   TRUE),
+('manager1', 'manager1@milalchurch.com', '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '담당자', @role_manager, TRUE),
+('viewer1',  'viewer1@milalchurch.com',  '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '사용자', @role_viewer,  TRUE),
+('viewer2',  'viewer2@milalchurch.com',  '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '방문자', @role_viewer,  TRUE);
 
 SET @admin_user_id = (SELECT id FROM users WHERE username = 'admin' LIMIT 1);
+
+INSERT INTO `permissions` (`name`,`slug`,`module`,`action`) VALUES
+('히어로 조회','heroes.view','heroes','view'),('히어로 등록','heroes.create','heroes','create'),
+('히어로 수정','heroes.edit','heroes','edit'),('히어로 삭제','heroes.delete','heroes','delete'),
+('교인 조회','members.view','members','view'),('교인 등록','members.create','members','create'),
+('교인 수정','members.edit','members','edit'),('교인 삭제','members.delete','members','delete'),
+('공지 조회','announcements.view','announcements','view'),('공지 등록','announcements.create','announcements','create'),
+('공지 수정','announcements.edit','announcements','edit'),('공지 삭제','announcements.delete','announcements','delete'),
+('뉴스 조회','news.view','news','view'),('뉴스 등록','news.create','news','create'),
+('뉴스 수정','news.edit','news','edit'),('뉴스 삭제','news.delete','news','delete'),
+('설교 조회','sermons.view','sermons','view'),('설교 등록','sermons.create','sermons','create'),
+('설교 수정','sermons.edit','sermons','edit'),('설교 삭제','sermons.delete','sermons','delete'),
+('주보 조회','bulletins.view','bulletins','view'),('주보 등록','bulletins.create','bulletins','create'),
+('주보 수정','bulletins.edit','bulletins','edit'),('주보 삭제','bulletins.delete','bulletins','delete'),
+('부서 조회','departments.view','departments','view'),('부서 등록','departments.create','departments','create'),
+('부서 수정','departments.edit','departments','edit'),('부서 삭제','departments.delete','departments','delete'),
+('CMS 조회','cms.view','cms','view'),('CMS 등록','cms.create','cms','create'),
+('CMS 수정','cms.edit','cms','edit'),('CMS 삭제','cms.delete','cms','delete'),
+('사용자 조회','users.view','users','view'),('사용자 등록','users.create','users','create'),
+('사용자 수정','users.edit','users','edit'),('사용자 삭제','users.delete','users','delete');
+
+INSERT INTO `role_permissions`(`role_id`,`permission_id`) SELECT @role_admin,id FROM `permissions`;
+INSERT INTO `role_permissions`(`role_id`,`permission_id`) SELECT @role_manager,id FROM `permissions` WHERE `module`!='users';
+INSERT INTO `role_permissions`(`role_id`,`permission_id`) SELECT @role_viewer,id FROM `permissions` WHERE `action`='view';
+
 
 -- ===============================================
 -- 1. 히어로 섹션 테스트 데이터

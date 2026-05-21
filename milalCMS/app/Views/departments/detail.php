@@ -11,7 +11,7 @@
   <div class="card">
     <div class="card-body" style="padding:24px;text-align:center">
       <?php if($dept['image']): ?>
-      <img src="<?= UPLOAD_URL.htmlspecialchars($dept['image']) ?>" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:14px" alt="">
+      <img src="<?= htmlspecialchars(UploadHelper::imageUrl($dept['image'])) ?>" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:14px" alt="">
       <?php else: ?>
       <div style="width:80px;height:80px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;color:#fff"><i class="fas fa-sitemap"></i></div>
       <?php endif; ?>
@@ -121,7 +121,7 @@
         <div class="form-group"><label class="form-label">연락처</label><input type="tel" id="d-cphone" class="form-control" value="<?= htmlspecialchars($dept['clergy_phone']??'') ?>"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">이미지 교체</label><input type="file" id="d-img" class="form-control" accept="image/*"><?php if($dept['image']): ?><div style="margin-top:6px"><img src="<?= UPLOAD_URL.htmlspecialchars($dept['image']) ?>" style="max-height:60px;border-radius:4px"></div><?php endif; ?></div>
+        <div class="form-group"><label class="form-label">이미지 교체</label><input type="file" id="d-img" class="form-control" accept="image/*"><?php if($dept['image']): ?><div style="margin-top:6px"><img src="<?= htmlspecialchars(UploadHelper::imageUrl($dept['image'])) ?>" style="max-height:60px;border-radius:4px"></div><?php endif; ?></div>
         <div class="form-group"><label class="form-label">정렬 순서</label><input type="number" id="d-order" class="form-control" value="<?= $dept['order']??0 ?>"></div>
         <div class="form-group"><label class="form-label">상태</label><select id="d-active" class="form-control"><option value="1" <?= $dept['is_active']?'selected':'' ?>>활성</option><option value="0" <?= !$dept['is_active']?'selected':'' ?>>비활성</option></select></div>
       </div>
