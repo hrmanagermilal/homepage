@@ -78,8 +78,8 @@ SET @admin_user_id = (SELECT id FROM users WHERE username = 'admin' LIMIT 1);
 
 INSERT INTO hero_background_images (image_url, `order`, alt_text) VALUES 
 ('/images/main/main-visual-slide-07.jpg', 1, 'Community Service'),
-('/images/main/main-visual-slide-01.jpg', 2, 'Church Building'),
-('/images/main/main-visual-slide-02.jpg', 3, 'Worship Service'),
+('/images/main/main-visual-slide-02.jpg', 2, 'Worship Service'),
+('/images/main/main-visual-slide-01.jpg', 3, 'Church Building'),
 ('/images/main/main-visual-slide-04.jpg', 4, 'Community Service'),
 ('/images/main/main-visual-slide-06.jpg', 6, 'Worship Service');
 
