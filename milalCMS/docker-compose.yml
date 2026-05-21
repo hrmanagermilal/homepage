@@ -15,7 +15,7 @@ services:
       DB_NAME: milal_homepage
       DB_USER: milal_user
       DB_PASS: milal_pass_2024
-      APP_BASE_URL: "http://ec2-13-58-1-108.us-east-2.compute.amazonaws.com:81"
+      APP_BASE_URL: "${APP_BASE_URL:-}"
     volumes:
       - uploads_data:/var/www/html/public/uploads
       - ../frontend/public/images:/var/www/html/public/images:ro
