@@ -1,3 +1,6 @@
+import { useMemo, useState } from "react";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import PdfImagePreviewModal from "../common/PdfImagePreviewModal";
 import "./css/NextGenDepartment.css";
 
 export default function NextGenDepartment({
@@ -17,6 +20,15 @@ export default function NextGenDepartment({
   noticeButtonLabel,
   noticeButtonHref,
 }) {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const isPdfNotice = useMemo(() => {
+    if (!noticeButtonHref) return false;
+    const normalized = String(noticeButtonHref).trim().toLowerCase();
+    const withoutQuery = normalized.split("?")[0].split("#")[0];
+    return withoutQuery.endsWith(".pdf");
+  }, [noticeButtonHref]);
+
   return (
     <section className="next-gen">
       <div className="wrap-narrow">
@@ -75,18 +87,35 @@ export default function NextGenDepartment({
               <p className="next-gen__notice-title">{noticeTitle}</p>
               <p className="next-gen__notice-desc">{noticeDescription}</p>
             </div>
+            {isPdfNotice && (
+              <button
+                type="button"
+                className="btn-basic-big btn-basic-big--trans next-gen__notice-btn next-gen__notice-btn--view"
+                onClick={() => setIsPreviewOpen(true)}
+              >
+                <RemoveRedEyeIcon className="next-gen__notice-view-icon" aria-hidden="true" />
+                <span>바로보기</span>
+              </button>
+            )}
             <a
               className="btn-basic-big btn-basic-big--trans next-gen__notice-btn"
               href={noticeButtonHref}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={isPdfNotice ? undefined : "_blank"}
+              rel={isPdfNotice ? undefined : "noopener noreferrer"}
+              download={isPdfNotice ? "" : undefined}
             >
               <i aria-hidden="true" />
               <span>{noticeButtonLabel}</span>
             </a>
+
           </div>
         )}
       </div>
+      <PdfImagePreviewModal
+        open={isPreviewOpen && isPdfNotice}
+        pdfUrl={noticeButtonHref}
+        onClose={() => setIsPreviewOpen(false)}
+      />
     </section>
   );
 }

@@ -1,3 +1,6 @@
+import { useMemo, useState } from "react";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import PdfImagePreviewModal from "../common/PdfImagePreviewModal";
 import "./css/MinistrySubSection.css";
 
 export default function MinistrySubSection({
@@ -12,6 +15,15 @@ export default function MinistrySubSection({
   ctaHref = "#",
   ctaExternal = false,
 }) {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const isPdfNotice = useMemo(() => {
+    if (!noticeButtonHref) return false;
+    const normalized = String(noticeButtonHref).trim().toLowerCase();
+    const withoutQuery = normalized.split("?")[0].split("#")[0];
+    return withoutQuery.endsWith(".pdf");
+  }, [noticeButtonHref]);
+
   return (
     <section className="ministry-subsection">
       <div className="wrap-narrow">
@@ -43,16 +55,33 @@ export default function MinistrySubSection({
             <p className="ministry-subsection__notice-title">{noticeTitle}</p>
             <p className="ministry-subsection__notice-desc">{noticeDescription}</p>
           </div>
+          {isPdfNotice ? (
+            <button
+              type="button"
+              className="btn-basic-big btn-basic-big--trans ministry-subsection__notice-btn ministry-subsection__notice-btn--view"
+              onClick={() => setIsPreviewOpen(true)}
+            >
+              <RemoveRedEyeIcon className="ministry-subsection__notice-view-icon" aria-hidden="true" />
+              <span>바로보기</span>
+            </button>
+          ) : null}
           <a
-            className="btn-basic-big btn-basic-big--trans"
+            className="btn-basic-big btn-basic-big--trans ministry-subsection__notice-btn"
             href={noticeButtonHref}
-            {...(noticeButtonExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            target={isPdfNotice ? undefined : noticeButtonExternal ? "_blank" : undefined}
+            rel={isPdfNotice ? undefined : noticeButtonExternal ? "noopener noreferrer" : undefined}
+            download={isPdfNotice ? "" : undefined}
           >
             <i aria-hidden="true" />
             <span>{noticeButtonLabel}</span>
           </a>
         </div>
       </div>
+      <PdfImagePreviewModal
+        open={isPreviewOpen && isPdfNotice}
+        pdfUrl={noticeButtonHref}
+        onClose={() => setIsPreviewOpen(false)}
+      />
     </section>
   );
 }
