@@ -1,0 +1,26 @@
+# Docker build artifacts
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Database scripts (mounted as volumes, not baked in)
+database/
+
+# IDE / OS noise
+.DS_Store
+Thumbs.db
+*.code-workspace
+.vscode/
+.idea/
+
+# Uploaded user files (mounted as a named volume)
+public/uploads/
+
+# Logs
+logs/
+*.log

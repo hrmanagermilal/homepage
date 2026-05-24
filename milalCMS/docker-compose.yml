@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # ── milalCMS PHP/Apache application ────────────────────────────────────────
+  cms:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: milal-cms
+    ports:
+      - "8090:80"
+    environment:
+      DB_HOST: milal-db          # backend's MySQL container on milal-net
+      DB_PORT: 3306
+      DB_NAME: milal_homepage
+      DB_USER: milal_user
+      DB_PASS: milal_pass_2024
+      APP_BASE_URL: "${APP_BASE_URL:-}"
+    volumes:
+      - uploads_data:/var/www/html/public/uploads
+      - ../frontend/public/uploads:/var/www/html/public/images:ro
+    restart: unless-stopped
+    networks:
+      milal-net:
+        aliases:
+          - milal-cms
+
+volumes:
+  uploads_data:
+    external: true
+    name: milal_uploads_data
+
+networks:
+  milal-net:
+    external: true               # created by the backend docker-compose stack

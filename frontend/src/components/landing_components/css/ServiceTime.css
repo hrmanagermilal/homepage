@@ -6,7 +6,7 @@
 
 /* 카드 목록 */
 .worship-list {margin-top: 45rem; gap: 42rem;}
-.worship-card {--th-w: 150rem; display: flex; flex-direction: column; gap: 18rem; min-width: 0; padding: 22rem 20rem 20rem; background: rgba(255,255,255,0.9); border-radius: 10rem; box-shadow: 0 10rem 7.5rem rgba(66,55,37,0.03);}
+.worship-card {--th-w: 110rem; display: flex; flex-direction: column; gap: 18rem; min-width: 0; padding: 22rem 20rem 20rem; background: rgba(255,255,255,0.9); border-radius: 10rem; box-shadow: 0 10rem 7.5rem rgba(66,55,37,0.03);}
 
 /* 카드 헤더 */
 .worship-card__head {display: flex; align-items: center; gap: 8rem; position: relative;}
@@ -33,7 +33,7 @@
 
 /* 카드 변형 */
 .worship-card--weekly,
-.worship-card--edu {--th-w: 180rem;}
+.worship-card--edu {--th-w: 140rem;}
 
 @media (max-width: 1200px) {
   .worship-list {grid-template-columns: 1fr 1fr; gap: 24rem;}

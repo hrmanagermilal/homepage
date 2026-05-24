@@ -48,6 +48,7 @@ export default function App() {
   const [parkingLot, setParkingLot] = useState([]);
   const [parkingMap, setParkingMap] = useState(null);
   const [bannerImage, setBannerImage] = useState(null);
+  const [pastorIntroduction, setPastorIntroduction] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -159,6 +160,7 @@ export default function App() {
           visionStatementsResponse,
           ministriesResponse,
           obituariesResponse,
+          pastorIntroductionResponse,
         ] = await Promise.all([
           api.getSermons({ page: 1, limit: 100 }),
           api.getBulletins({ page: 1, limit: 50 }),
@@ -173,6 +175,7 @@ export default function App() {
           api.getVisionStatements(),
           api.getMinistry(),
           api.getObituary(),
+          api.getPastorIntroduction(),
         ]);
 
         if (!mounted) return;
@@ -189,6 +192,7 @@ export default function App() {
         setVisionStatements(visionStatementsResponse?.data ?? []);
         setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
         setObituaries(obituariesResponse?.data?.data ?? obituariesResponse?.data ?? []);
+        setPastorIntroduction(pastorIntroductionResponse?.data ?? null);
       } catch (_) {
         // Secondary content failures are non-fatal
       }
@@ -209,6 +213,14 @@ export default function App() {
     if (loading) return;
     scrollToHash();
   }, [currentPath]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Re-scroll when pastor data arrives — prevents landing on IntroPastor when
+  // scrollToHash fires before the async data has loaded and caused a layout shift.
+  useEffect(() => {
+    if (!loading && window.location.pathname.startsWith("/introduction") && window.location.hash) {
+      scrollToHash();
+    }
+  }, [pastorIntroduction]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (loading) return;
@@ -251,7 +263,7 @@ export default function App() {
       <Header quickLinks={quickLinks} landingTitles={landingTitles} theme={theme} setTheme={setTheme} />
 
       {isIntroductionPage ? (
-        <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} />
+        <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} pastorIntroduction={pastorIntroduction} />
       ) : isMinistryPage ? (
         <MinistryPage ministries={ministries} />
       ) : isOnlineGivingPage ? (

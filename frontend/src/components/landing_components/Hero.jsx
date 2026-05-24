@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { IconQuickWorship, IconQuickBulletin } from "./HeroIcons";
 import "./css/Hero.css";
 
@@ -110,13 +110,15 @@ export default function Hero({ hero = null, quickLinks = [] }) {
   }, [frontImageSrc]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [lastInteraction, setLastInteraction] = useState(0);
+  const touchStartX = useRef(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 7000);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, lastInteraction]);
 
   useEffect(() => {
     if (currentSlide >= slides.length) {
@@ -124,9 +126,23 @@ export default function Hero({ hero = null, quickLinks = [] }) {
     }
   }, [currentSlide, slides.length]);
 
-  const goTo = (idx) => setCurrentSlide(idx);
-  const goPrev = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  const goNext = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const goTo = (idx) => { setCurrentSlide(idx); setLastInteraction(Date.now()); };
+  const goPrev = () => { setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length); setLastInteraction(Date.now()); };
+  const goNext = () => { setCurrentSlide((prev) => (prev + 1) % slides.length); setLastInteraction(Date.now()); };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goNext();
+      else goPrev();
+    }
+    touchStartX.current = null;
+  };
 
   const displayLinks = quickLinks.length > 0
     ? quickLinks.slice(0, 2).map((ql) => ({
@@ -138,7 +154,7 @@ export default function Hero({ hero = null, quickLinks = [] }) {
     : DEFAULT_QUICK_LINKS;
 
   return (
-    <section className="main-visual" id="hero" aria-label="메인 비주얼">
+<section className="main-visual" id="hero" aria-label="메인 비주얼" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
 
       {slides.map((slide, idx) => (
         <div

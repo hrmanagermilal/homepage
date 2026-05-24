@@ -56,21 +56,47 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- roles 테이블 먼저 삽입 (users.role_id FK 제약 조건 충족)
 INSERT INTO roles (name, slug, description) VALUES
-('관리자', 'admin',   '전체 관리 권한'),
-('매니저', 'manager', '컨텐츠 관리 권한'),
-('뷰어',   'viewer',  '읽기 전용 권한');
+('슈퍼 관리자', 'super-admin', '모든 권한'),
+('일반 관리자', 'manager',     '콘텐츠 관리'),
+('뷰어',        'viewer',      '조회 전용');
 
-SET @role_admin   = (SELECT id FROM roles WHERE slug = 'admin'   LIMIT 1);
-SET @role_manager = (SELECT id FROM roles WHERE slug = 'manager' LIMIT 1);
-SET @role_viewer  = (SELECT id FROM roles WHERE slug = 'viewer'  LIMIT 1);
+SET @role_admin   = (SELECT id FROM roles WHERE slug = 'super-admin' LIMIT 1);
+SET @role_manager = (SELECT id FROM roles WHERE slug = 'manager'     LIMIT 1);
+SET @role_viewer  = (SELECT id FROM roles WHERE slug = 'viewer'      LIMIT 1);
 
+-- 비밀번호: Admin@1234  (bcrypt cost=10)
 INSERT INTO users (username, email, password_hash, name, role_id, is_active) VALUES 
-('admin',    'admin@milalchurch.com',    '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '관리자', @role_admin,   TRUE),
-('manager1', 'manager1@milalchurch.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '담당자', @role_manager, TRUE),
-('viewer1',  'viewer1@milalchurch.com',  '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '사용자', @role_viewer,  TRUE),
-('viewer2',  'viewer2@milalchurch.com',  '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '방문자', @role_viewer,  TRUE);
+('admin',    'admin@milalchurch.com',    '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '관리자', @role_admin,   TRUE),
+('manager1', 'manager1@milalchurch.com', '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '담당자', @role_manager, TRUE),
+('viewer1',  'viewer1@milalchurch.com',  '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '사용자', @role_viewer,  TRUE),
+('viewer2',  'viewer2@milalchurch.com',  '$2y$10$teI0LQtWCH0U6u5IxfartuYUpwWkG9hWuIzLHpb042Gm8LPVmLvn.', '방문자', @role_viewer,  TRUE);
 
 SET @admin_user_id = (SELECT id FROM users WHERE username = 'admin' LIMIT 1);
+
+INSERT INTO `permissions` (`name`,`slug`,`module`,`action`) VALUES
+('히어로 조회','heroes.view','heroes','view'),('히어로 등록','heroes.create','heroes','create'),
+('히어로 수정','heroes.edit','heroes','edit'),('히어로 삭제','heroes.delete','heroes','delete'),
+('교인 조회','members.view','members','view'),('교인 등록','members.create','members','create'),
+('교인 수정','members.edit','members','edit'),('교인 삭제','members.delete','members','delete'),
+('공지 조회','announcements.view','announcements','view'),('공지 등록','announcements.create','announcements','create'),
+('공지 수정','announcements.edit','announcements','edit'),('공지 삭제','announcements.delete','announcements','delete'),
+('뉴스 조회','news.view','news','view'),('뉴스 등록','news.create','news','create'),
+('뉴스 수정','news.edit','news','edit'),('뉴스 삭제','news.delete','news','delete'),
+('설교 조회','sermons.view','sermons','view'),('설교 등록','sermons.create','sermons','create'),
+('설교 수정','sermons.edit','sermons','edit'),('설교 삭제','sermons.delete','sermons','delete'),
+('주보 조회','bulletins.view','bulletins','view'),('주보 등록','bulletins.create','bulletins','create'),
+('주보 수정','bulletins.edit','bulletins','edit'),('주보 삭제','bulletins.delete','bulletins','delete'),
+('부서 조회','departments.view','departments','view'),('부서 등록','departments.create','departments','create'),
+('부서 수정','departments.edit','departments','edit'),('부서 삭제','departments.delete','departments','delete'),
+('CMS 조회','cms.view','cms','view'),('CMS 등록','cms.create','cms','create'),
+('CMS 수정','cms.edit','cms','edit'),('CMS 삭제','cms.delete','cms','delete'),
+('사용자 조회','users.view','users','view'),('사용자 등록','users.create','users','create'),
+('사용자 수정','users.edit','users','edit'),('사용자 삭제','users.delete','users','delete');
+
+INSERT INTO `role_permissions`(`role_id`,`permission_id`) SELECT @role_admin,id FROM `permissions`;
+INSERT INTO `role_permissions`(`role_id`,`permission_id`) SELECT @role_manager,id FROM `permissions` WHERE `module`!='users';
+INSERT INTO `role_permissions`(`role_id`,`permission_id`) SELECT @role_viewer,id FROM `permissions` WHERE `action`='view';
+
 
 -- ===============================================
 -- 1. 히어로 섹션 테스트 데이터
@@ -78,8 +104,8 @@ SET @admin_user_id = (SELECT id FROM users WHERE username = 'admin' LIMIT 1);
 
 INSERT INTO hero_background_images (image_url, `order`, alt_text) VALUES 
 ('/images/main/main-visual-slide-07.jpg', 1, 'Community Service'),
-('/images/main/main-visual-slide-01.jpg', 2, 'Church Building'),
-('/images/main/main-visual-slide-02.jpg', 3, 'Worship Service'),
+('/images/main/main-visual-slide-02.jpg', 2, 'Worship Service'),
+('/images/main/main-visual-slide-01.jpg', 3, 'Church Building'),
 ('/images/main/main-visual-slide-04.jpg', 4, 'Community Service'),
 ('/images/main/main-visual-slide-06.jpg', 6, 'Worship Service');
 
@@ -265,7 +291,7 @@ INSERT INTO together_items (title, description, image, link, `order`, is_active)
 -- ===============================================
 
 INSERT INTO departments (department_type, name, description, heading_title, image, age_group, worship_day, worship_time, worship_location, clergy_name, clergy_position, clergy_phone, pastor_email, kakao_link, kakao_label, notice_title, notice_description, notice_button_label, notice_button_href, `order`) VALUES
-('nextgen', '청년부', '토론토의 새벽이슬 같은 청년들이 모이면 예배하고,\n흩어지면 빛을 발하는 공동체입니다.', 'Milight, Time to Shine. 하나님이여 우리를 돌이키시고\n주의 얼굴빛을 비추사 우리가 구원을 얻게 하소서 (시편 80:3)', '/images/sub/02-next-generation/pastor-photo.jpg', '19-29세', '주일', '오후 2시', '밀알교회 1층 본당', '신효성 목사', '담당 목사', NULL, 'rev.shin@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '청년부 카카오톡 채널 추가하기', '청년부 소식', '청년부의 소식과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 1),
+('nextgen', '청년부', '토론토의 새벽이슬 같은 청년들이 모이면 예배하고,\n흩어지면 빛을 발하는 공동체입니다.', 'Milight, Time to Shine. 하나님이여 우리를 돌이키시고\n주의 얼굴빛을 비추사 우리가 구원을 얻게 하소서 (시편 80:3)', '/images/sub/02-next-generation/pastor-photo.jpg', '19-29세', '주일', '오후 2시', '밀알교회 1층 본당', '신효성 목사', '담당 목사', NULL, 'rev.shin@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '청년부 카카오톡 채널 추가하기', '청년부 소식', '청년부의 소식과 공지사항을 다운로드하세요.', '공지사항 다운로드', '/pdf/jubo-2026-05-24.pdf', 1),
 ('nextgen', 'KM 청소년부', '말씀과 기도로 다음세대가 정체성을 세우고, 건강한 공동체를 경험하도록 돕습니다.', 'KM 청소년부, 믿음 안에서 함께 성장합니다.', '/images/sub/01-introduction/minister-05.jpg', '13-18세', '주일', '오전 11시', '밀알교회 2층 청소년부 예배실', '차승현 목사', '담당 목사', NULL, 'seunghyuncha@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'KM 청소년부 카카오톡 채널 추가하기', 'KM 청소년부 소식', '주간 프로그램과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 2),
 ('nextgen', 'EM 청소년부', 'We gather for worship and discipleship, and go out as Christ-centered witnesses in daily life.', 'EM Youth, Grounded in the Word.', '/images/sub/01-introduction/minister-09.jpg', '13-18세', '주일', '오후 1시', '밀알교회 2층 청소년부 예배실', '조나단 목사', '담당 목사', NULL, 'jonathankim@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', 'EM Youth 카카오톡 채널 추가하기', 'EM Youth 소식', '프로그램 일정과 공지사항을 다운로드하세요.', '공지사항 다운로드', '#', 3),
 ('nextgen', '아동부', '예배와 말씀, 활동을 통해 아이들이 즐겁게 하나님을 알아가도록 세웁니다.', '아동부, 예수님을 닮아가는 어린이들', '/images/sub/01-introduction/minister-13.jpg', '7-12세', '주일', '오전 11시', '밀알교회 아동부실', '김진아 전도사', '담당 전도사', NULL, 'jina.kim@milalchurch.com', 'https://pf.kakao.com/_xdqzRK', '아동부 카카오톡 채널 추가하기', '아동부 프로그램', '월간 프로그램과 학부모 안내자료를 다운로드하세요.', '자료 다운로드', '#', 4),
@@ -277,8 +303,8 @@ INSERT INTO departments (department_type, name, description, heading_title, imag
 -- ===============================================
 
 INSERT INTO ministry (`key`, name, subtitle, title, image, description, points, notice_title, notice_description, notice_button_label, notice_button_href, notice_button_external, cta_label, cta_href, cta_external, `order`) VALUES
-('ministry01', '양육',             '우리는 밀알 공동체입니다.',                                          'Milal MBA — 말씀으로 세워가는 훈련 과정',      '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '밀알교회는 Milal MBA라는 훈련 프로그램을 통해 성도들이 말씀 위에 세워지도록 돕습니다. 거실반 2.0부터 성경대학, 성장반, 일대일 제자양육까지 각 단계별 과정을 통해 삶을 변화시키는 신앙훈련을 제공합니다.',   '거실반 2.0 — 소그룹 중심의 삶 나눔과 말씀 적용 기초 과정\n구약/신약 성경대학 — 성경 전체의 흐름을 체계적으로 배우는 과정\n성장반 — 신앙의 깊이를 더하는 중급 훈련 과정\n일대일 제자양육 — 개인 맞춤형 제자훈련 과정',          'Milal MBA 등록 안내',                          '각 과정별 일정과 등록 방법을 안내 PDF에서 확인하세요.',              '등록 안내 다운로드',     '#',                           0, NULL,                         '#',                       0, 1),
-('ministry02', '소그룹',           '함께 말씀으로 자라는 공동체입니다.',                                  '함께 말씀으로 자라는 공동체',          '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '소그룹은 예배의 감동을 일상의 나눔으로 이어가는 자리입니다. 연령과 삶의 단계에 맞는 모임을 통해 말씀을 적용하고 서로를 돌봅니다.',                    '주중 정기 모임으로 말씀 나눔과 기도\n새가족이 자연스럽게 정착하도록 연결\n필요를 함께 나누고 실제적으로 돕는 공동체',                                     '소그룹 나눔 가이드 공유드립니다.',              '소그룹 인도자와 순원이 함께 사용할 수 있는 PDF 자료입니다.',    '소그룹 자료 다운로드', '#',                           0, NULL,                         '#',                       0, 2),
+('ministry01', '양육',             '우리는 밀알 공동체입니다.',                                          'Milal MBA — 말씀으로 세워가는 훈련 과정',      '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '밀알교회는 Milal MBA라는 훈련 프로그램을 통해 성도들이 말씀 위에 세워지도록 돕습니다. 거실반 2.0부터 성경대학, 성장반, 일대일 제자양육까지 각 단계별 과정을 통해 삶을 변화시키는 신앙훈련을 제공합니다.',   '거실반 2.0 — 소그룹 중심의 삶 나눔과 말씀 적용 기초 과정\n구약/신약 성경대학 — 성경 전체의 흐름을 체계적으로 배우는 과정\n성장반 — 신앙의 깊이를 더하는 중급 훈련 과정\n일대일 제자양육 — 개인 맞춤형 제자훈련 과정',          'Milal MBA 등록 안내',                          '각 과정별 일정과 등록 방법을 안내 PDF에서 확인하세요.',              '등록 안내 다운로드',     '/pdf/smallgroup-2026-05.pdf',                           0, NULL,                         '#',                       0, 1),
+('ministry02', '소그룹',           '함께 말씀으로 자라는 공동체입니다.',                                  '함께 말씀으로 자라는 공동체',          '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '소그룹은 예배의 감동을 일상의 나눔으로 이어가는 자리입니다. 연령과 삶의 단계에 맞는 모임을 통해 말씀을 적용하고 서로를 돌봅니다.',                    '주중 정기 모임으로 말씀 나눔과 기도\n새가족이 자연스럽게 정착하도록 연결\n필요를 함께 나누고 실제적으로 돕는 공동체',                                     '소그룹 나눔 가이드 공유드립니다.',              '소그룹 인도자와 순원이 함께 사용할 수 있는 PDF 자료입니다.',    '소그룹 자료 다운로드', '/pdf/smallgroup-2026-05.pdf',                           0, NULL,                         '#',                       0, 2),
 ('ministry03', '가정',             '당신의 첫 제자는 당신의 자녀입니다.',                                 '당신의 첫 제자는 당신의 자녀입니다.',  '/images/sub/03-ministry/sub-visual-bg.jpg',          '가정 사역은 부부와 부모, 자녀가 함께 하나님 안에서 건강한 관계를 세워가도록 돕습니다.',                                                                  '가정예배와 신앙 대화 훈련\n부부/부모 교육 및 상담 연계\n세대 간 신앙 계승을 위한 실천 안내',                                                              '가정예배 자료를 안내드립니다.',                 '가정에서 바로 활용할 수 있는 월간 예배 가이드를 내려받으세요.',  '가정예배 자료 다운로드', '#',                          0, NULL,                         '#',                       0, 3),
 ('ministry04', '선교',             '세상을 향한 은혜의 통로입니다.',                                      '복음을 들고 세상으로',                 '/images/sub/03-ministry/sub-visual-bg-front.jpg',    '지역과 열방을 향한 선교적 삶을 실천합니다. 교회는 선교사와 선교지를 위해 지속적으로 기도하고 동역합니다.',                                               '선교지 후원과 정기 중보기도\n지역사회 섬김 프로젝트 참여\n단기 선교와 다음세대 선교 교육',                                                                '선교 기도제목과 소식지를 나눕니다.',            '이번 달 선교 소식과 중보기도 제목을 PDF로 확인하세요.',          '선교 소식지 다운로드', '#',                           0, NULL,                         '#',                       0, 4),
 ('ministry05', '장학',             '다음세대를 세워가는 믿음의 투자입니다.',                               '북미주 대학생을 위한 밀알 장학금',     '/images/sub/03-ministry/ministry-yanguk-bg.jpg',     '밀알교회는 하나님의 사랑을 전하기 위해 북미주 대학 및 대학원에서 학문에 정진하고 있는 학생들에게 밀알장학금을 지원합니다. 2009년에 시작된 이 사역은 신앙에 뿌리를 둔 차세대를 지원하는 것은 물론, 아직 그리스도인이 아닌 학생들에게도 열려 있는 선교적 사역입니다. 장학위원회는 이 사역을 통해 학생들이 미래의 글로벌 인재로 성장하여 이 땅에서 하나님의 사랑을 전하는 선한 메신저가 되기를 기도합니다.',  '밀알 리더십 장학금 — 한인/비한인 대학·대학원생 대상, 재정 지원 및 리더십 계발\n이용술 장로 기념 장학금 — 비한인 학생 학업 및 리더십 계발 지원\n갈종영 집사 기념 장학금 — 한인 여성 신학생 영적 리더십 지원\n이중호 장로 기념 장학금 — 소형·개척교회 목회자 자녀 학업 지원\n권인숙 권사 기념 장학금 — 한인 음대생 예술적·인격적 성장 지원\n각 $1,500 / 캐나다 대학·대학원 Full-Time 재학생 / 출석 교회 무관 신청 가능',   '2025 밀알교회 장학금 신청 안내',               '서류 제출 마감: 2025년 10월 21일(화) 자정(동부시간). 이메일: milalscholarshipcomm@gmail.com. 수여식: 2025년 11월 16일(주일 3부).',  '장학 신청서 다운로드', '#',                           0, NULL,                         '#',                       0, 5),
@@ -393,11 +419,10 @@ INSERT INTO shuttle_bus_schedule (direction, time, service_label, sort_order) VA
 -- ===============================================
 
 INSERT INTO parking_lot (content, sort_order) VALUES
-('건물 정문 앞 A 주차장과 동쪽 C주차장은 닳푸른 회원, 장애인, 임산부, 방문자, 18개월 이하의 자녀 동반가정을 위한 주차장입니다.
-그 외의 성도들은 건물 북쪽 B주차장과 남쪽 D주차장을 이용해주시기 바랍니다.', 1),
-('1부 예배에 참석하시는 성도들 역시 해당 주차장에 주차해주시기 바랍니다.', 2),
+('건물 정문 앞 A 주차장과 동쪽 C주차장은 늘푸른 회원, 장애인, 임산부, 방문자, 18개월 이하의 자녀 동반가정을 위한 주차장입니다. 그 외의 성도들은 건물 북쪽 B주차장과 남쪽 D주차장을 이용해주시기 바랍니다.', 1),
+('1부 예배에 참석하시는 성도들 역시 해당 주차장에 주차해 주시기 바랍니다.', 2),
 ('교회에서 공지하는 이외의 장소에 주차하시면 주차위반 티켓을 받으실 수 있으니 유의 바랍니다.', 3),
-('출입구 쪽 주차는 진행에 방해가 되니 반드시 지정된 주차구역에만 주차해주시기 바랍니다.', 4);
+('출입구 쪽 주차는 진행에 방해가 되니 반드시 지정된 주차구역에만 주차해 주시기 바랍니다.', 4);
 -- ===============================================
 -- 13. 주차장 지도 테스트 데이터
 -- ===============================================

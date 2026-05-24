@@ -103,12 +103,16 @@
 .ministry-subsection__notice {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 30rem;
+  justify-content: flex-start;
+  gap: 14rem;
   margin-top: 24rem;
   border-radius: 20rem;
   padding: 42rem 50rem 44rem;
   background: var(--c-primary);
+}
+
+.ministry-subsection__notice-text {
+  flex: 1;
 }
 
 .ministry-subsection__notice-title {
@@ -130,6 +134,14 @@
 .ministry-subsection__notice-btn {
   gap: 8rem;
   flex-shrink: 0;
+}
+
+.ministry-subsection__notice-btn--view {
+  padding: 0 20rem;
+}
+
+.ministry-subsection__notice-view-icon {
+  font-size: 20rem !important;
 }
 
 .ministry-subsection__notice-btn i {
@@ -211,6 +223,10 @@
   .ministry-subsection__notice-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .ministry-subsection__notice-btn--view {
+    padding: 0 18rem;
   }
 
   .ministry-subsection__notice-btn i {

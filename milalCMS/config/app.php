@@ -7,11 +7,16 @@ if (!defined('BASE_PATH')) {
     define('BASE_PATH', dirname(__DIR__));
 }
 
-// BASE_URL: 하드코딩 없이 현재 요청 호스트 기준으로 자동 감지
+// BASE_URL: APP_BASE_URL 환경변수 우선, 없으면 요청 호스트 기준 자동 감지
 if (!defined('BASE_URL')) {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    define('BASE_URL', $scheme . '://' . $host);
+    $envUrl = getenv('APP_BASE_URL');
+    if ($envUrl) {
+        define('BASE_URL', rtrim($envUrl, '/'));
+    } else {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        define('BASE_URL', $scheme . '://' . $host);
+    }
 }
 
 define('UPLOAD_PATH', BASE_PATH . '/public/uploads/');

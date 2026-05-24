@@ -7,6 +7,7 @@ services:
     ports:
       - "8080:80"
       - "443:443"
+      - "81:81"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./certs:/etc/nginx/certs:ro
@@ -71,6 +72,7 @@ services:
 volumes:
   db_data:
   uploads_data:
+    name: milal_uploads_data
 
 networks:
   milal-net:

@@ -1,66 +1,14 @@
 <?php
 class HeroModel extends BaseModel {
 
-    // ── Heroes ────────────────────────────────────────────
-    public function getAll(): array {
-        return $this->fetchAll('SELECT * FROM heroes ORDER BY id ASC');
-    }
-    public function getActive(): array {
-        return $this->fetchAll('SELECT * FROM heroes WHERE is_active=1 ORDER BY id ASC');
-    }
-    public function findById(int $id): ?array {
-        return $this->fetch('SELECT * FROM heroes WHERE id=?', [$id]);
-    }
-    public function create(array $d): string {
-        return $this->insert(
-            'INSERT INTO heroes(title, subtitle, is_active) VALUES(?,?,?)',
-            [$d['title']??null, $d['subtitle']??null, $d['is_active']??1]
-        );
-    }
-    public function update(int $id, array $d): int {
-        return $this->execute(
-            'UPDATE heroes SET title=?, subtitle=?, is_active=?, updated_at=NOW() WHERE id=?',
-            [$d['title']??null, $d['subtitle']??null, $d['is_active']??1, $id]
-        );
-    }
-    public function delete(int $id): int {
-        return $this->execute('DELETE FROM heroes WHERE id=?', [$id]);
-    }
-
-    // ── Hero Links ────────────────────────────────────────
-    public function getLinks(): array {
-        return $this->fetchAll('SELECT * FROM hero_link ORDER BY id ASC');
-    }
-    public function findLink(int $id): ?array {
-        return $this->fetch('SELECT * FROM hero_link WHERE id=?', [$id]);
-    }
-    public function createLink(array $d): string {
-        return $this->insert(
-            'INSERT INTO hero_link(title, icon_url, link_url) VALUES(?,?,?)',
-            [$d['title']??null, $d['icon_url']??null, $d['link_url']??null]
-        );
-    }
-    public function updateLink(int $id, array $d): int {
-        return $this->execute(
-            'UPDATE hero_link SET title=?, icon_url=?, link_url=?, updated_at=NOW() WHERE id=?',
-            [$d['title']??null, $d['icon_url']??null, $d['link_url']??null, $id]
-        );
-    }
-    public function deleteLink(int $id): int {
-        return $this->execute('DELETE FROM hero_link WHERE id=?', [$id]);
-    }
-
     // ── Background Images ─────────────────────────────────
-    public function getBgImages(int $heroId): array {
-        return $this->fetchAll(
-            'SELECT * FROM hero_background_images WHERE hero_id=? ORDER BY `order` ASC',
-            [$heroId]
-        );
+    public function getBgImages(): array {
+        return $this->fetchAll('SELECT * FROM hero_background_images ORDER BY `order` ASC');
     }
-    public function addBgImage(int $heroId, string $url, int $order=0, ?string $alt=null): string {
+    public function addBgImage(string $url, int $order = 0, ?string $alt = null): string {
         return $this->insert(
-            'INSERT INTO hero_background_images(hero_id, image_url, `order`, alt_text) VALUES(?,?,?,?)',
-            [$heroId, $url, $order, $alt]
+            'INSERT INTO hero_background_images(image_url, `order`, alt_text) VALUES(?,?,?)',
+            [$url, $order, $alt]
         );
     }
     public function deleteBgImage(int $id): ?array {
@@ -75,25 +23,48 @@ class HeroModel extends BaseModel {
     }
 
     // ── Front Image ───────────────────────────────────────
-    public function getFrontImage(int $heroId): ?array {
-        return $this->fetch('SELECT * FROM hero_front_images WHERE hero_id=?', [$heroId]);
+    public function getFrontImage(): ?array {
+        return $this->fetch('SELECT * FROM hero_front_images LIMIT 1');
     }
-    public function upsertFrontImage(int $heroId, string $url, ?string $alt=null): void {
-        $existing = $this->getFrontImage($heroId);
+    public function upsertFrontImage(string $url, ?string $alt = null): void {
+        $existing = $this->getFrontImage();
         if ($existing)
             $this->execute(
-                'UPDATE hero_front_images SET image_url=?, alt_text=?, uploaded_at=NOW() WHERE hero_id=?',
-                [$url, $alt, $heroId]
+                'UPDATE hero_front_images SET image_url=?, alt_text=?, uploaded_at=NOW() WHERE id=?',
+                [$url, $alt, $existing['id']]
             );
         else
             $this->execute(
-                'INSERT INTO hero_front_images(hero_id, image_url, alt_text) VALUES(?,?,?)',
-                [$heroId, $url, $alt]
+                'INSERT INTO hero_front_images(image_url, alt_text) VALUES(?,?)',
+                [$url, $alt]
             );
     }
-    public function deleteFrontImage(int $heroId): ?array {
-        $row = $this->getFrontImage($heroId);
-        if ($row) $this->execute('DELETE FROM hero_front_images WHERE hero_id=?', [$heroId]);
+    public function deleteFrontImage(): ?array {
+        $row = $this->getFrontImage();
+        if ($row) $this->execute('DELETE FROM hero_front_images WHERE id=?', [$row['id']]);
         return $row;
+    }
+
+    // ── Quick Links ───────────────────────────────────────
+    public function getLinks(): array {
+        return $this->fetchAll('SELECT * FROM quick_links ORDER BY id ASC');
+    }
+    public function findLink(int $id): ?array {
+        return $this->fetch('SELECT * FROM quick_links WHERE id=?', [$id]);
+    }
+    public function createLink(array $d): string {
+        return $this->insert(
+            'INSERT INTO quick_links(title, link, image, `desc`) VALUES(?,?,?,?)',
+            [$d['title'] ?? null, $d['link'] ?? null, $d['image'] ?? null, $d['desc'] ?? null]
+        );
+    }
+    public function updateLink(int $id, array $d): int {
+        return $this->execute(
+            'UPDATE quick_links SET title=?, link=?, image=?, `desc`=? WHERE id=?',
+            [$d['title'] ?? null, $d['link'] ?? null, $d['image'] ?? null, $d['desc'] ?? null, $id]
+        );
+    }
+    public function deleteLink(int $id): int {
+        return $this->execute('DELETE FROM quick_links WHERE id=?', [$id]);
     }
 }

@@ -43,6 +43,16 @@ class UploadHelper {
         return false;
     }
 
+    /**
+     * Returns the correct URL for a stored image path.
+     * Paths starting with '/' are absolute (e.g. frontend static images) and used as-is.
+     * Other paths are relative upload paths and get UPLOAD_URL prepended.
+     */
+    public static function imageUrl(string $path): string {
+        if (empty($path)) return '';
+        return ($path[0] === '/') ? $path : UPLOAD_URL . $path;
+    }
+
     private static function mimeToExt(string $mime): string {
         return match($mime) {
             'image/jpeg', 'image/jpg' => 'jpg',
