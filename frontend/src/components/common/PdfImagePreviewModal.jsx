@@ -1,6 +1,21 @@
 import { useEffect, useState } from "react";
 import "../css/PdfImagePreviewModal.css";
 
+let sharedPdfWorkerPort = null;
+
+function ensurePdfWorkerPort(pdfjs) {
+  if (!sharedPdfWorkerPort) {
+    sharedPdfWorkerPort = new Worker(
+      new URL("pdfjs-dist/legacy/build/pdf.worker.min.mjs", import.meta.url),
+      { type: "module" },
+    );
+  }
+
+  if (pdfjs.GlobalWorkerOptions.workerPort !== sharedPdfWorkerPort) {
+    pdfjs.GlobalWorkerOptions.workerPort = sharedPdfWorkerPort;
+  }
+}
+
 export default function PdfImagePreviewModal({ open, pdfUrl, onClose }) {
   const [previewImages, setPreviewImages] = useState([]);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
@@ -18,11 +33,7 @@ export default function PdfImagePreviewModal({ open, pdfUrl, onClose }) {
         setPreviewError("");
 
         const pdfjs = await import("pdfjs-dist/legacy/build/pdf");
-        const workerUrl = new URL(
-          "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
-          import.meta.url,
-        ).toString();
-        pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+        ensurePdfWorkerPort(pdfjs);
 
         const loadingTask = pdfjs.getDocument(pdfUrl);
         const pdf = await loadingTask.promise;
