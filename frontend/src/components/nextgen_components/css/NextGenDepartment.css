@@ -196,6 +196,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 30rem;
   margin-top: 43rem;
   border-radius: 20rem;
@@ -226,6 +227,14 @@
 .next-gen__notice-btn {
   gap: 8rem;
   flex-shrink: 0;
+}
+
+.next-gen__notice-btn--view {
+  padding: 0 20rem;
+}
+
+.next-gen__notice-view-icon {
+  font-size: 20rem !important;
 }
 
 .next-gen__notice-btn i {

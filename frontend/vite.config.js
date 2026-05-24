@@ -1,15 +1,27 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
+import fs from "node:fs";
+import path from "node:path";
 
-// Rewrite /images/* → /uploads/* in the dev server so both paths work
-// (mirrors the nginx alias used in production).
+// Keep native /images access in dev, and fallback to /uploads only when
+// the requested /images file does not exist in public/.
 const imagesAlias = {
   name: "images-alias",
   configureServer(server) {
     server.middlewares.use((req, _res, next) => {
-      if (req.url?.startsWith("/images/")) {
+      if (!req.url?.startsWith("/images/")) {
+        next();
+        return;
+      }
+
+      const cleanPath = req.url.split("?")[0].split("#")[0];
+      const relPath = cleanPath.replace(/^\//, "");
+      const localImagePath = path.resolve(process.cwd(), "public", relPath);
+
+      if (!fs.existsSync(localImagePath)) {
         req.url = req.url.replace(/^\/images\//, "/uploads/");
       }
+
       next();
     });
   },

@@ -1,0 +1,125 @@
+.pdf-preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rem;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.pdf-preview-modal__inner {
+  position: relative;
+  width: min(980px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 12rem;
+  padding: 20rem 20rem 88rem;
+}
+
+.pdf-preview-modal__state {
+  margin: 20rem 0;
+  text-align: center;
+}
+
+.pdf-preview-modal__pages {
+  display: flex;
+  flex-direction: column;
+  gap: 14rem;
+  transform-origin: top center;
+  transition: transform 0.15s ease;
+}
+
+.pdf-preview-modal__pages img {
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8rem;
+}
+
+.pdf-preview-modal__fab-group {
+  position: fixed;
+  right: 44rem;
+  bottom: 44rem;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  gap: 10rem;
+}
+
+.pdf-preview-modal__fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50rem;
+  height: 50rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--c-primary);
+  color: var(--w);
+  font-size: 26rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.25);
+}
+
+.pdf-preview-modal__fab:hover {
+  background: var(--c-secondary);
+}
+
+.pdf-preview-modal__fab--close {
+  background: var(--c-secondary);
+  font-size: 22rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.pdf-preview-modal__fab--download {
+  background: var(--c-secondary);
+}
+
+.pdf-preview-modal__fab-download-icon {
+  display: block;
+  width: 22rem;
+  height: 22rem;
+  background: url(/images/sub/03-ministry/ic-download_w.svg) no-repeat center / contain;
+}
+
+.pdf-preview-modal__fab--close:hover {
+  background: var(--c-primary);
+}
+
+.pdf-preview-modal__fab--download:hover {
+  background: var(--c-primary);
+}
+
+@media (max-width: 540px) {
+  .pdf-preview-modal {
+    padding: 12rem;
+  }
+
+  .pdf-preview-modal__inner {
+    max-height: 92vh;
+    padding: 14rem 14rem 78rem;
+  }
+
+  .pdf-preview-modal__fab-group {
+    right: 20rem;
+    bottom: 20rem;
+    gap: 8rem;
+  }
+
+  .pdf-preview-modal__fab {
+    width: 44rem;
+    height: 44rem;
+    font-size: 22rem;
+  }
+
+  .pdf-preview-modal__fab-download-icon {
+    width: 20rem;
+    height: 20rem;
+  }
+}
