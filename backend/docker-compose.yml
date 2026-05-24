@@ -72,6 +72,7 @@ services:
 volumes:
   db_data:
   uploads_data:
+    name: milal_uploads_data
 
 networks:
   milal-net:

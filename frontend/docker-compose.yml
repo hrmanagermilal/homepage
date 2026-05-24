@@ -14,9 +14,16 @@ services:
         VITE_API_BASE_URL: ""
     ports:
       - "80:80"
+    volumes:
+      - uploads_data:/app/uploads
     networks:
       - milal-net
     restart: unless-stopped
+
+volumes:
+  uploads_data:
+    external: true
+    name: milal_uploads_data
 
 networks:
   milal-net:

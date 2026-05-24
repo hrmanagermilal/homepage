@@ -18,14 +18,17 @@ services:
       APP_BASE_URL: "${APP_BASE_URL:-}"
     volumes:
       - uploads_data:/var/www/html/public/uploads
-      - ../frontend/public/images:/var/www/html/public/images:ro
+      - ../frontend/public/uploads:/var/www/html/public/images:ro
     restart: unless-stopped
     networks:
-      - milal-net
+      milal-net:
+        aliases:
+          - milal-cms
 
 volumes:
   uploads_data:
-    name: milal-cms-uploads
+    external: true
+    name: milal_uploads_data
 
 networks:
   milal-net:

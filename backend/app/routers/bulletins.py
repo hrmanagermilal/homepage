@@ -1,7 +1,6 @@
 import os
 import uuid
 
-import fitz  # PyMuPDF
 from fastapi import APIRouter, Depends, File, Form, Query, UploadFile
 from pymysql.connections import Connection
 
@@ -49,17 +48,6 @@ def get_one(item_id: int, db: Connection = Depends(get_db)):
         return error("Not found", "NOT_FOUND", 404)
     return success(_attach_images(serialize(row), db))
 
-
-BULLETIN_UPLOAD_DIR = "uploads/bulletin"
-# Per-page section boundaries as fractions of page width [left_edge, ..., right_edge]
-# Index 0 = page 1, index 1 = page 2, etc. Last entry is reused for any extra pages.
-COLUMN_SPLITS: list[list[float]] = [
-    [0.0, 4.085/12.36, (4.085+4.13)/12.36, 1.0],  # page 1
-    [0.0, 4.14/12.36, (4.14+4.14)/12.36, 1.0],  # page 2
-]
-RENDER_SCALE = 2.0  # ~144 DPI
-
-
 @router.post("/upload-pdf")
 async def upload_pdf(
     file: UploadFile = File(...),
@@ -70,8 +58,56 @@ async def upload_pdf(
 ):
     if not (file.filename or "").lower().endswith(".pdf"):
         return error("Only PDF files are accepted", "INVALID_FILE_TYPE", 400)
+    try:
+        pdf_bytes = await file.read()
+    except Exception:
+        return error("Failed to read PDF file", "INVALID_FILE", 400)    
+    
+    return await bulletin_pdf_to_image(
+        pdf_bytes, title, year, week_number, db
+    )
 
-    pdf_bytes = await file.read()
+@router.post("/transform-pdf")
+async def transform_pdf(
+    file_path: str = Form(...),
+    title: str = Form(...),
+    year: int = Form(...),
+    week_number: int = Form(...),
+    db: Connection = Depends(get_db),
+):
+    if not (file_path or "").lower().endswith(".pdf"):
+        return error("Only PDF files are accepted", "INVALID_FILE_TYPE", 400)
+
+    try:
+        with open(file_path, "rb") as f:
+            pdf_bytes = f.read()
+    except Exception:
+        return error("Failed to read PDF file", "INVALID_FILE_PATH", 400)
+    return await bulletin_pdf_to_image(pdf_bytes, title, year, week_number, db)
+
+BULLETIN_UPLOAD_DIR = "uploads/bulletin"
+# Per-page section boundaries as fractions of page width [left_edge, ..., right_edge]
+# Index 0 = page 1, index 1 = page 2, etc. Last entry is reused for any extra pages.
+COLUMN_SPLITS: list[list[float]] = [
+    [0.0, 4.085/12.36, (4.085+4.13)/12.36, 1.0],  # page 1
+    [0.0, 4.14/12.36, (4.14+4.14)/12.36, 1.0],  # page 2
+]
+RENDER_SCALE = 2.0  # ~144 DPI
+CONTRAST_FACTOR = 1.2  # subtle contrast boost (1.0 = original)
+
+
+async def bulletin_pdf_to_image(
+    pdf_bytes: bytes,
+    title: str = Form(...),
+    year: int = Form(...),
+    week_number: int = Form(...),
+    db: Connection = Depends(get_db),
+):
+    try:
+        import fitz  # PyMuPDF
+        from PIL import Image, ImageEnhance
+    except ImportError as exc:
+        return error(f"PDF processing library not installed: {exc}", "MISSING_DEPENDENCY", 500)
 
     try:
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
@@ -96,9 +132,11 @@ async def upload_pdf(
                     rect.x0 + pct_end * rect.width, rect.y1,
                 )
                 pix = page.get_pixmap(matrix=mat, clip=clip)
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                img = ImageEnhance.Contrast(img).enhance(CONTRAST_FACTOR)
                 filename = f"{uuid.uuid4().hex}.png"
                 filepath = os.path.join(BULLETIN_UPLOAD_DIR, filename)
-                pix.save(filepath)
+                img.save(filepath, "PNG")
                 saved.append({
                     "image_url": f"uploads/bulletin/{filename}",
                     "order": total_order,
@@ -124,3 +162,4 @@ async def upload_pdf(
         cur.execute("SELECT * FROM bulletins WHERE id = %s", (bulletin_id,))
         row = cur.fetchone()
     return success(_attach_images(serialize(row), db))
+
