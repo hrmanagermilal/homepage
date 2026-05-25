@@ -49,7 +49,7 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function Header({ quickLinks = [], landingTitles = [], theme, setTheme }) {
+export default function Header({ quickLinks = [], landingTitles = [], theme, setTheme, notice = [] }) {
   const [fullMenuOpen, setFullMenuOpen] = useState(false);
   const [bgmPlaying, setBgmPlaying] = useState(false);
   const [fullMenuHoveredIdx, setFullMenuHoveredIdx] = useState(-1);

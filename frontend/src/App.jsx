@@ -260,7 +260,7 @@ export default function App() {
 
   return (
     <Box>
-      <Header quickLinks={quickLinks} landingTitles={landingTitles} theme={theme} setTheme={setTheme} />
+      <Header quickLinks={quickLinks} landingTitles={landingTitles} theme={theme} setTheme={setTheme} notice={notices} />
 
       {isIntroductionPage ? (
         <IntroductionPage togetherItems={togetherItems} members={members} visionStatements={visionStatements} pastorIntroduction={pastorIntroduction} />
