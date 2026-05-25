@@ -138,6 +138,7 @@
 
 <script>
 const UPLOAD_URL_BASE = '<?= BASE_URL ?>';
+const BACKEND_API_URL = window.location.protocol + '//' + window.location.hostname + ':80';
 let _pendingPdf = null;
 let _editPendingPdf = null;
 
@@ -220,7 +221,8 @@ async function saveBulletin() {
         fd2.append('file_path', d.data.stored_pdf_filename);
         fd2.append('bulletin_id', d.data.id);
         console.log('[transform-pdf] file_path:', d.data.stored_pdf_filename, 'bulletin_id:', d.data.id);
-        const cr = await fetch('<?= rtrim(getenv("BACKEND_API_URL") ?: "/", "/") ?>/api/bulletins/transform-pdf',
+        const cr = await fetch(`${BACKEND_API_URL}/api/bulletins/transform-pdf`,
+
           {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd2});
         const cd = await cr.json();
         if(cd.success){
