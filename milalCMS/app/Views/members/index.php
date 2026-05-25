@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('members.edit'); $canCreate=AuthMiddleware::hasPermission('members.create'); $canDelete=AuthMiddleware::hasPermission('members.delete'); ?>
+<?php $canEdit=hasPerm('members.edit'); $canCreate=hasPerm('members.create'); $canDelete=hasPerm('members.delete'); ?>
 
 <div class="card">
   <div class="card-header">
@@ -103,8 +103,9 @@ async function saveMember(){
   fd.append('is_active',document.getElementById('m-active').value);
   const pic=document.getElementById('member-pic').files[0];if(pic)fd.append('picture',pic);
   const btn=document.getElementById('member-save-btn');btn.disabled=true;
+  showSpinner('교인 정보 저장 중...');
   const d=await fetch(BASE_URL+'/members/create',{method:'POST',body:fd}).then(r=>r.json());
-  btn.disabled=false;
+  hideSpinner();btn.disabled=false;
   if(d.success){toast(d.message);closeModal('member-modal');location.reload();}else toast(d.message,'error');
 }
 async function deleteRow(id){

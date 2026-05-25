@@ -1,54 +1,38 @@
 <?php
-// NOTE: `announcements` table does not exist in the current schema.
-// All methods return empty data / no-ops to prevent 500 errors.
 class AnnouncementModel extends BaseModel {
     public function getAll(int $page=1, int $perPage=ITEMS_PER_PAGE, string $category=''): array {
-        try {
-            $offset=($page-1)*$perPage;
-            $where=''; $params=[];
-            if($category){$where='WHERE a.category=?';$params[]=$category;}
-            $rows=$this->fetchAll(
-                "SELECT a.*,u.name AS author_name FROM announcements a
-                 LEFT JOIN users u ON u.id=a.admin_id
-                 $where ORDER BY a.is_pinned DESC,a.id DESC LIMIT ? OFFSET ?",
-                array_merge($params,[$perPage,$offset])
-            );
-            $total=$this->countQuery("SELECT COUNT(*) FROM announcements a $where",$params);
-            return ['rows'=>$rows,'total'=>$total];
-        } catch (PDOException $e) { return ['rows'=>[],'total'=>0]; }
+        $offset=($page-1)*$perPage;
+        $where=''; $params=[];
+        if($category){$where='WHERE a.category=?';$params[]=$category;}
+        $rows=$this->fetchAll(
+            "SELECT a.*,u.name AS author_name FROM announcements a
+             LEFT JOIN users u ON u.id=a.admin_id
+             $where ORDER BY a.is_pinned DESC,a.id DESC LIMIT ? OFFSET ?",
+            array_merge($params,[$perPage,$offset])
+        );
+        $total=$this->countQuery("SELECT COUNT(*) FROM announcements a $where",$params);
+        return ['rows'=>$rows,'total'=>$total];
     }
     public function findById(int $id): ?array {
-        try { return $this->fetch('SELECT a.*,u.name AS author_name FROM announcements a LEFT JOIN users u ON u.id=a.admin_id WHERE a.id=?',[$id]); }
-        catch (PDOException $e) { return null; }
+        return $this->fetch('SELECT a.*,u.name AS author_name FROM announcements a LEFT JOIN users u ON u.id=a.admin_id WHERE a.id=?',[$id]);
     }
     public function create(array $d, int $userId): string {
-        try {
-            return $this->insert(
-                'INSERT INTO announcements(admin_id,title,content,link,image,category,is_pinned,is_active) VALUES(?,?,?,?,?,?,?,?)',
-                [$userId,$d['title'],$d['content'],$d['link']??null,$d['image']??null,$d['category']??'general',$d['is_pinned']??0,$d['is_active']??1]
-            );
-        } catch (PDOException $e) { return '0'; }
+        return $this->insert(
+            'INSERT INTO announcements(admin_id,title,content,link,image,category,is_pinned,is_active) VALUES(?,?,?,?,?,?,?,?)',
+            [$userId,$d['title'],$d['content'],$d['link']??null,$d['image']??null,$d['category']??'general',$d['is_pinned']??0,$d['is_active']??1]
+        );
     }
     public function update(int $id, array $d): int {
-        try {
-            $f=['title=?','content=?','link=?','category=?','is_pinned=?','is_active=?','updated_at=NOW()'];
-            $p=[$d['title'],$d['content'],$d['link']??null,$d['category']??'general',$d['is_pinned']??0,$d['is_active']??1];
-            if(isset($d['image'])){$f[]='image=?';$p[]=$d['image'];}
-            $p[]=$id;
-            return $this->execute('UPDATE announcements SET '.implode(',',$f).' WHERE id=?',$p);
-        } catch (PDOException $e) { return 0; }
+        $f=['title=?','content=?','link=?','category=?','is_pinned=?','is_active=?','updated_at=NOW()'];
+        $p=[$d['title'],$d['content'],$d['link']??null,$d['category']??'general',$d['is_pinned']??0,$d['is_active']??1];
+        if(isset($d['image'])){$f[]='image=?';$p[]=$d['image'];}
+        $p[]=$id;
+        return $this->execute('UPDATE announcements SET '.implode(',',$f).' WHERE id=?',$p);
     }
-    public function delete(int $id): int {
-        try { return $this->execute('DELETE FROM announcements WHERE id=?',[$id]); }
-        catch (PDOException $e) { return 0; }
-    }
-    public function incrementViews(int $id): void {
-        try { $this->execute('UPDATE announcements SET views=views+1 WHERE id=?',[$id]); }
-        catch (PDOException $e) { /* silently skip */ }
-    }
+    public function delete(int $id): int { return $this->execute('DELETE FROM announcements WHERE id=?',[$id]); }
+    public function incrementViews(int $id): void { $this->execute('UPDATE announcements SET views=views+1 WHERE id=?',[$id]); }
     public function togglePin(int $id): void {
-        try { $this->execute('UPDATE announcements SET is_pinned=IF(is_pinned=1,0,1) WHERE id=?',[$id]); }
-        catch (PDOException $e) { /* silently skip */ }
+        $this->execute('UPDATE announcements SET is_pinned=IF(is_pinned=1,0,1) WHERE id=?',[$id]);
     }
     public function buildPagination(int $total, int $cur, int $perPage=ITEMS_PER_PAGE): array {
         $totalPages=(int)ceil($total/$perPage);

@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('members.edit'); $canDelete=AuthMiddleware::hasPermission('members.delete'); ?>
+<?php $canEdit=hasPerm('members.edit'); $canDelete=hasPerm('members.delete'); ?>
 
 <div style="margin-bottom:16px">
   <a href="<?= BASE_URL ?>/members" class="btn btn-ghost btn-sm"><i class="fas fa-arrow-left"></i> 목록으로</a>

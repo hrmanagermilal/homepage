@@ -36,21 +36,28 @@ class BulletinController extends BaseController {
         $this->assertPost(); AuthMiddleware::requirePermission('bulletins.create');
         $err=$this->validateRequired(['title'=>'제목'],$_POST); if($err) $this->error($err);
         $weekNum=trim($this->post('week_number',''));
-        $id=$this->model->create([
-            'title'=>trim($this->post('title')),
-            'week_number'=>$weekNum!==''?(int)$weekNum:null,
-            'year'=>(int)$this->post('year',date('Y')),
-        ]);
-        // 벌크 이미지 업로드 처리
+        $d=[
+            'title'       => trim($this->post('title')),
+            'week_number' => $weekNum!==''?(int)$weekNum:null,
+            'year'        => (int)$this->post('year',date('Y')),
+        ];
+        // PDF 업로드
+        if(!empty($_FILES['attachment'])&&$_FILES['attachment']['error']===UPLOAD_ERR_OK){
+            $up=$this->uploadPdf($_FILES['attachment'],'bulletins');
+            if(!$up['success']) $this->error($up['message']);
+            $d['attachment']=$up['path'];
+        }
+        $id=$this->model->create($d);
+        // 이미지: bulletins/{id}/ 폴더에 저장
         $uploaded=[];
-        if(!empty($_FILES['images']) && is_array($_FILES['images']['name'])) {
-            foreach($_FILES['images']['name'] as $i=>$name) {
+        if(!empty($_FILES['images'])&&is_array($_FILES['images']['name'])){
+            foreach($_FILES['images']['name'] as $i=>$name){
                 if(empty($name)||$_FILES['images']['error'][$i]!==UPLOAD_ERR_OK) continue;
                 $file=['name'=>$name,'type'=>$_FILES['images']['type'][$i],
                        'tmp_name'=>$_FILES['images']['tmp_name'][$i],
                        'error'=>$_FILES['images']['error'][$i],
                        'size'=>$_FILES['images']['size'][$i]];
-                $up=UploadHelper::uploadImage($file,'bulletins');
+                $up=UploadHelper::uploadImage($file,'bulletins/'.$id);
                 if($up['success']){
                     $this->model->addImage((int)$id,$up['path'],$i);
                     $uploaded[]=['url'=>$up['url'],'order'=>$i];
@@ -62,19 +69,35 @@ class BulletinController extends BaseController {
     public function update(): void {
         $this->assertPost(); AuthMiddleware::requirePermission('bulletins.edit');
         $id=$this->intPost('id');
-        if(!$this->model->findById($id)) $this->error('주보를 찾을 수 없습니다.',404);
+        $row=$this->model->findById($id);
+        if(!$row) $this->error('주보를 찾을 수 없습니다.',404);
         $weekNum=trim($this->post('week_number',''));
-        $this->model->update($id,[
-            'title'=>trim($this->post('title')),
-            'week_number'=>$weekNum!==''?(int)$weekNum:null,
-            'year'=>(int)$this->post('year',date('Y')),
-        ]);
+        $d=[
+            'title'       => trim($this->post('title')),
+            'week_number' => $weekNum!==''?(int)$weekNum:null,
+            'year'        => (int)$this->post('year',date('Y')),
+        ];
+        // PDF 교체
+        if(!empty($_FILES['attachment'])&&$_FILES['attachment']['error']===UPLOAD_ERR_OK){
+            $up=$this->uploadPdf($_FILES['attachment'],'bulletins');
+            if(!$up['success']) $this->error($up['message']);
+            if($row['attachment']) UploadHelper::deleteFile($row['attachment']);
+            $d['attachment']=$up['path'];
+        }
+        // PDF 삭제 요청
+        if($this->post('remove_attachment','')=='1'){
+            if($row['attachment']) UploadHelper::deleteFile($row['attachment']);
+            $d['attachment']=null;
+        }
+        $this->model->update($id,$d);
         $this->success([],'주보가 수정되었습니다.');
     }
     public function delete(): void {
         $this->assertPost(); AuthMiddleware::requirePermission('bulletins.delete');
         $id=$this->intPost('id');
-        if(!$this->model->findById($id)) $this->error('주보를 찾을 수 없습니다.',404);
+        $row=$this->model->findById($id);
+        if(!$row) $this->error('주보를 찾을 수 없습니다.',404);
+        if($row['attachment']) UploadHelper::deleteFile($row['attachment']);
         foreach($this->model->getImages($id) as $img) UploadHelper::deleteFile($img['image_url']);
         $this->model->delete($id);
         $this->success([],'주보가 삭제되었습니다.');
@@ -84,10 +107,32 @@ class BulletinController extends BaseController {
         $bulletinId=$this->intPost('bulletin_id');
         if(!$this->model->findById($bulletinId)) $this->error('주보를 찾을 수 없습니다.',404);
         if(empty($_FILES['image'])||$_FILES['image']['error']!==UPLOAD_ERR_OK) $this->error('이미지를 선택해주세요.');
-        $up=UploadHelper::uploadImage($_FILES['image'],'bulletins');
+        $up=UploadHelper::uploadImage($_FILES['image'],'bulletins/'.$bulletinId);
         if(!$up['success']) $this->error($up['message']);
         $imgId=$this->model->addImage($bulletinId,$up['path'],(int)$this->intPost('order',0));
-        $this->success(['id'=>$imgId,'image_url'=>$up['url']],'이미지가 추가되었습니다.');
+        $this->success(['id'=>$imgId,'image_url'=>$up['path'],'url'=>$up['url']],'이미지가 추가되었습니다.');
+    }
+    public function addImages(): void {
+        $this->assertPost(); AuthMiddleware::requirePermission('bulletins.edit');
+        $bulletinId=$this->intPost('bulletin_id');
+        if(!$this->model->findById($bulletinId)) $this->error('주보를 찾을 수 없습니다.',404);
+        $results=[];
+        if(!empty($_FILES['images'])&&is_array($_FILES['images']['name'])){
+            foreach($_FILES['images']['name'] as $i=>$name){
+                if(empty($name)||$_FILES['images']['error'][$i]!==UPLOAD_ERR_OK) continue;
+                $file=['name'=>$name,'type'=>$_FILES['images']['type'][$i],
+                       'tmp_name'=>$_FILES['images']['tmp_name'][$i],
+                       'error'=>$_FILES['images']['error'][$i],
+                       'size'=>$_FILES['images']['size'][$i]];
+                $up=UploadHelper::uploadImage($file,'bulletins/'.$bulletinId);
+                if($up['success']){
+                    $existingCount=count($this->model->getImages($bulletinId));
+                    $imgId=$this->model->addImage($bulletinId,$up['path'],$existingCount+$i);
+                    $results[]=['id'=>$imgId,'image_url'=>$up['path'],'url'=>$up['url']];
+                }
+            }
+        }
+        $this->success(['images'=>$results],count($results).'장 업로드 완료');
     }
     public function deleteImage(): void {
         $this->assertPost(); AuthMiddleware::requirePermission('bulletins.edit');
@@ -102,5 +147,24 @@ class BulletinController extends BaseController {
         if(empty($orders)) $this->error('순서 데이터가 올바르지 않습니다.');
         $this->model->reorderImages($orders);
         $this->success([],'순서가 업데이트되었습니다.');
+    }
+
+    // PDF 전용 업로드 헬퍼
+    private function uploadPdf(array $file, string $subDir): array {
+        if($file['error']!==UPLOAD_ERR_OK) return ['success'=>false,'message'=>'파일 업로드 오류'];
+        $allowedMimes=['application/pdf','application/x-pdf'];
+        $finfo=finfo_open(FILEINFO_MIME_TYPE);
+        $mime=finfo_file($finfo,$file['tmp_name']);
+        finfo_close($finfo);
+        if(!in_array($mime,$allowedMimes)&&!str_ends_with($file['name'],'.pdf'))
+            return ['success'=>false,'message'=>'PDF 파일만 업로드 가능합니다.'];
+        if($file['size']>20*1024*1024) return ['success'=>false,'message'=>'PDF는 최대 20MB까지 가능합니다.'];
+        $dir=UPLOAD_PATH.rtrim($subDir,'/').'/' ;
+        if(!is_dir($dir)) mkdir($dir,0755,true);
+        $filename=date('Ymd_His').'_'.bin2hex(random_bytes(4)).'.pdf';
+        $destPath=$dir.$filename;
+        if(!move_uploaded_file($file['tmp_name'],$destPath)) return ['success'=>false,'message'=>'파일 저장 실패'];
+        $relPath=rtrim($subDir,'/').'/'.$filename;
+        return ['success'=>true,'path'=>$relPath,'url'=>UPLOAD_URL.$relPath];
     }
 }

@@ -37,6 +37,7 @@ input:focus{outline:none;border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,22
   <button class="btn" id="btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i>로그인</button>
 </div>
 <script>
+const BASE_URL='<?= BASE_URL ?>';
 async function doLogin(){
   const btn=document.getElementById('btn');
   const u=document.getElementById('username').value.trim();
@@ -44,7 +45,7 @@ async function doLogin(){
   if(!u||!p){show('아이디와 비밀번호를 입력하세요.');return;}
   btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>로그인 중...';
   const fd=new FormData();fd.append('username',u);fd.append('password',p);
-  const r=await fetch('/auth/do-login',{method:'POST',body:fd}).then(r=>r.json()).catch(()=>({success:false,message:'서버 오류'}));
+  const r=await fetch(BASE_URL+'/auth/do-login',{method:'POST',body:fd}).then(r=>r.json()).catch(()=>({success:false,message:'서버 오류'}));
   if(r.success){location.href=r.data.redirect;}
   else{show(r.message);btn.disabled=false;btn.innerHTML='<i class="fas fa-sign-in-alt"></i>로그인';}
 }

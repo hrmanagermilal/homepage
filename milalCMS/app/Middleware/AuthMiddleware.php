@@ -23,6 +23,8 @@ class AuthMiddleware {
 
     public static function requirePermission(string $permSlug): void {
         self::requireLogin();
+        // super-admin(slug='admin')은 모든 권한 허용
+        if (self::isSuperAdmin()) return;
         $perms = $_SESSION['permissions'] ?? [];
         if (empty($perms[$permSlug])) {
             if (self::isAjax()) {
@@ -30,13 +32,17 @@ class AuthMiddleware {
                 echo json_encode(['success' => false, 'message' => '권한이 없습니다.']);
             } else {
                 http_response_code(403);
-                echo '<h1>403 Forbidden</h1><p>이 페이지에 접근할 권한이 없습니다.</p>';
+                echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>403</title></head><body style="font-family:sans-serif;padding:40px">';
+                echo '<h2>403 Forbidden</h2><p>이 페이지에 접근할 권한이 없습니다.</p>';
+                echo '<a href="' . BASE_URL . '/dashboard">← 대시보드로 돌아가기</a></body></html>';
             }
             exit;
         }
     }
 
     public static function hasPermission(string $permSlug): bool {
+        // super-admin은 항상 true
+        if (self::isSuperAdmin()) return true;
         $perms = $_SESSION['permissions'] ?? [];
         return !empty($perms[$permSlug]);
     }
@@ -60,8 +66,10 @@ class AuthMiddleware {
         session_regenerate_id(true);
     }
 
+    // slug가 'admin' 또는 'super-admin'이면 슈퍼어드민
     public static function isSuperAdmin(): bool {
-        return ($_SESSION['role_slug'] ?? '') === 'super-admin';
+        $slug = $_SESSION['role_slug'] ?? '';
+        return in_array($slug, ['admin', 'super-admin'], true);
     }
 
     private static function isAjax(): bool {

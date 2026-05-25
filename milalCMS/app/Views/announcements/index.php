@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('announcements.edit'); $canCreate=AuthMiddleware::hasPermission('announcements.create'); $canDelete=AuthMiddleware::hasPermission('announcements.delete'); ?>
+<?php $canEdit=hasPerm('announcements.edit'); $canCreate=hasPerm('announcements.create'); $canDelete=hasPerm('announcements.delete'); ?>
 
 <div class="card">
   <div class="card-header">
@@ -119,9 +119,32 @@ async function saveAnn(){
   fd.append('is_pinned',document.getElementById('ann-pin').checked?1:0);
   const img=document.getElementById('ann-img').files[0];if(img)fd.append('image',img);
   const btn=document.getElementById('ann-save-btn');btn.disabled=true;
+  showSpinner('공지사항 저장 중...');
   const d=await fetch(BASE_URL+(id?'/announcements/update':'/announcements/create'),{method:'POST',body:fd}).then(r=>r.json());
-  btn.disabled=false;
-  if(d.success){toast(d.message);closeModal('ann-modal');location.reload();}else toast(d.message,'error');
+  hideSpinner();btn.disabled=false;
+  if(d.success){
+    toast(d.message);
+    closeModal('ann-modal');
+    // 목록에서 해당 행 즉시 업데이트
+    const id2=document.getElementById('ann-id').value;
+    if(id2){
+      const tr=document.querySelector(`tr[data-id="${id2}"]`);
+      if(tr){
+        const titleEl=tr.querySelector('td:nth-child(3) a');
+        if(titleEl) titleEl.textContent=document.getElementById('ann-title').value;
+        const pinTd=tr.querySelector('td:nth-child(1)');
+        if(pinTd) pinTd.innerHTML=document.getElementById('ann-pin').checked?'<i class="fas fa-thumbtack" style="color:var(--danger)"></i>':'';
+        const catVal=document.getElementById('ann-cat').value;
+        const catMap={general:['badge-gray','일반'],event:['badge-blue','이벤트'],urgent:['badge-red','긴급']};
+        const [bc,bl]=catMap[catVal]||['badge-gray','기타'];
+        const catTd=tr.querySelector('td:nth-child(4) .badge');
+        if(catTd){catTd.className='badge '+bc;catTd.textContent=bl;}
+        const activeTd=tr.querySelector('td:nth-child(7) .badge');
+        const isActive=document.getElementById('ann-active').value==='1';
+        if(activeTd){activeTd.className='badge '+(isActive?'badge-green':'badge-gray');activeTd.textContent=isActive?'활성':'비활성';}
+      }
+    } else { location.reload(); }
+  } else toast(d.message,'error');
 }
 async function deleteRow(id){
   confirmAction('삭제하시겠습니까?',async()=>{

@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('users.edit'); $canCreate=AuthMiddleware::hasPermission('users.create'); $canDelete=AuthMiddleware::hasPermission('users.delete'); ?>
+<?php $canEdit=hasPerm('users.edit'); $canCreate=hasPerm('users.create'); $canDelete=hasPerm('users.delete'); ?>
 
 <div style="display:flex;gap:12px;margin-bottom:16px">
   <a href="<?= BASE_URL ?>/users" class="btn btn-ghost btn-sm"><i class="fas fa-user-cog"></i>사용자 목록</a>
@@ -46,7 +46,7 @@
 
 <script>
 const allPerms=<?= json_encode($permissions,JSON_UNESCAPED_UNICODE) ?>;
-const moduleLabels={'heroes':'히어로','members':'교인','announcements':'공지사항','news':'뉴스','sermons':'설교','bulletins':'주보','departments':'부서','cms':'페이지 CMS','users':'사용자/권한'};
+const moduleLabels={'heroes':'히어로 슬라이드','introduction':'소개(비전/목사/함께)','members':'섬기는 분들','departments':'다음세대','ministry':'사역','sermons':'설교','bulletins':'주보','worship':'예배','traffic':'교통','onlinegiving':'배너','notice':'공지','obituary':'부고','users':'사용자/권한'};
 const actionLabels={'view':'조회','create':'등록','edit':'수정','delete':'삭제'};
 let currentRoleId=null;
 

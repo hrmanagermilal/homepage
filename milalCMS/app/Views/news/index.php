@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('news.edit'); $canCreate=AuthMiddleware::hasPermission('news.create'); $canDelete=AuthMiddleware::hasPermission('news.delete'); ?>
+<?php $canEdit=hasPerm('news.edit'); $canCreate=hasPerm('news.create'); $canDelete=hasPerm('news.delete'); ?>
 
 <div class="card">
   <div class="card-header">
@@ -106,9 +106,27 @@ async function saveNews(){
   fd.append('tags',document.getElementById('n-tags').value);
   const img=document.getElementById('n-img').files[0];if(img)fd.append('image',img);
   const btn=document.getElementById('news-save-btn');btn.disabled=true;
+  showSpinner('뉴스 저장 중...');
   const d=await fetch(BASE_URL+(id?'/news/update':'/news/create'),{method:'POST',body:fd}).then(r=>r.json());
-  btn.disabled=false;
-  if(d.success){toast(d.message);closeModal('news-modal');location.reload();}else toast(d.message,'error');
+  hideSpinner();btn.disabled=false;
+  if(d.success){
+    toast(d.message);closeModal('news-modal');
+    const id2=document.getElementById('news-id').value;
+    if(id2){
+      const tr=document.querySelector(`tr[data-id="${id2}"]`);
+      if(tr){
+        const a=tr.querySelector('td:nth-child(2) a');
+        if(a) a.textContent=document.getElementById('n-title').value;
+        const catVal=document.getElementById('n-cat').value;
+        const catMap={news:['badge-blue','뉴스'],update:['badge-green','업데이트'],photo:['badge-purple','사진']};
+        const [bc,bl]=catMap[catVal]||['badge-gray','기타'];
+        const catBadge=tr.querySelector('td:nth-child(3) .badge');
+        if(catBadge){catBadge.className='badge '+bc;catBadge.textContent=bl;}
+        const authTd=tr.querySelector('td:nth-child(4)');
+        if(authTd) authTd.textContent=document.getElementById('n-author').value||'-';
+      }
+    } else { location.reload(); }
+  } else toast(d.message,'error');
 }
 async function deleteRow(id){
   confirmAction('이 뉴스를 삭제하시겠습니까?',async()=>{

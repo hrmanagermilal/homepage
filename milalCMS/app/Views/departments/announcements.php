@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('departments.edit'); $canCreate=AuthMiddleware::hasPermission('departments.create'); $canDelete=AuthMiddleware::hasPermission('departments.delete'); ?>
+<?php $canEdit=hasPerm('departments.edit'); $canCreate=hasPerm('departments.create'); $canDelete=hasPerm('departments.delete'); ?>
 
 <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
   <a href="<?= BASE_URL ?>/departments" class="btn btn-ghost btn-sm"><i class="fas fa-arrow-left"></i> 부서 목록</a>
@@ -22,7 +22,7 @@
       <?php endif; ?>
       <?php foreach($data['rows'] as $r): ?>
       <tr data-id="<?= $r['id'] ?>">
-        <td class="fw-500"><?= htmlspecialchars($r['title']) ?></td>
+        <td><a href="javascript:void(0)" onclick="viewAnn(<?= $r['id'] ?>)" style="color:var(--text);font-weight:500"><?= htmlspecialchars($r['title']) ?></a></td>
         <td><?php if($r['link']): ?><a href="<?= htmlspecialchars($r['link']) ?>" target="_blank" class="text-sm" style="color:var(--info)"><?= htmlspecialchars(mb_substr($r['link'],0,50)) ?>...</a><?php else: ?><span class="text-muted">-</span><?php endif; ?></td>
         <td class="text-sm text-muted"><?= date('Y-m-d',strtotime($r['created_at'])) ?></td>
         <td><div class="flex gap-8">
@@ -47,56 +47,116 @@
   <?php endif; ?>
 </div>
 
-<!-- Modal -->
+<!-- 공지 추가/수정/보기 통합 모달 -->
 <div class="modal-overlay hidden" id="da-modal">
   <div class="modal modal-md">
-    <div class="modal-header"><h3 id="da-modal-title">공지 추가</h3><button class="btn btn-ghost btn-icon" onclick="closeModal('da-modal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-header">
+      <h3 id="da-modal-title">공지 추가</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('da-modal')"><i class="fas fa-times"></i></button>
+    </div>
     <div class="modal-body">
       <input type="hidden" id="da-id">
       <input type="hidden" id="da-dept-id" value="<?= $dept['id'] ?>">
-      <div class="form-group"><label class="form-label">제목 <span class="req">*</span></label><input type="text" id="da-title" class="form-control"></div>
-      <div class="form-group"><label class="form-label">내용 <span class="req">*</span></label><textarea id="da-content" class="form-control" rows="6"></textarea></div>
-      <div class="form-group"><label class="form-label">링크</label><input type="url" id="da-link" class="form-control" placeholder="https://"></div>
+      <div class="form-group">
+        <label class="form-label">제목 <span class="req" id="da-req-mark">*</span></label>
+        <input type="text" id="da-title" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">내용 <span class="req" id="da-req-mark2">*</span></label>
+        <textarea id="da-content" class="form-control" rows="8"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">링크</label>
+        <input type="url" id="da-link" class="form-control" placeholder="https://">
+      </div>
+      <div id="da-link-btn-wrap" style="display:none;margin-top:4px"></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('da-modal')">취소</button><button class="btn btn-primary" id="da-save-btn" onclick="saveDa()">저장</button></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('da-modal')">닫기</button>
+      <button class="btn btn-primary" id="da-save-btn" onclick="saveDa()">저장</button>
+    </div>
   </div>
 </div>
 
 <script>
-function openCreate(){
-  document.getElementById('da-modal-title').textContent='공지 추가';
-  document.getElementById('da-id').value='';
-  ['da-title','da-content','da-link'].forEach(id=>document.getElementById(id).value='');
+// 읽기 전용 / 편집 모드 전환
+function setReadonly(readonly) {
+  ['da-title','da-content','da-link'].forEach(id => {
+    const el = document.getElementById(id);
+    if (readonly) el.setAttribute('readonly',''); else el.removeAttribute('readonly');
+  });
+  document.getElementById('da-save-btn').style.display = readonly ? 'none' : '';
+  document.getElementById('da-req-mark').style.display = readonly ? 'none' : '';
+  document.getElementById('da-req-mark2').style.display = readonly ? 'none' : '';
+}
+
+function openCreate() {
+  document.getElementById('da-modal-title').textContent = '공지 추가';
+  document.getElementById('da-id').value = '';
+  ['da-title','da-content','da-link'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('da-link-btn-wrap').style.display = 'none';
+  setReadonly(false);
   openModal('da-modal');
 }
-async function openEdit(id){
-  const d=await api('/departments/announcement-detail',{id});
-  if(!d.success){toast(d.message,'error');return;}
-  const r=d.data;
-  document.getElementById('da-modal-title').textContent='공지 수정';
-  document.getElementById('da-id').value=r.id;
-  document.getElementById('da-title').value=r.title;
-  document.getElementById('da-content').value=r.content;
-  document.getElementById('da-link').value=r.link||'';
+
+async function openEdit(id) {
+  const d = await api('/departments/announcement-detail', {id});
+  if (!d.success) { toast(d.message,'error'); return; }
+  const r = d.data;
+  document.getElementById('da-modal-title').textContent = '공지 수정';
+  document.getElementById('da-id').value = r.id;
+  document.getElementById('da-title').value = r.title;
+  document.getElementById('da-content').value = r.content;
+  document.getElementById('da-link').value = r.link || '';
+  document.getElementById('da-link-btn-wrap').style.display = 'none';
+  setReadonly(false);
   openModal('da-modal');
 }
-async function saveDa(){
-  const id=document.getElementById('da-id').value;
-  const fd=new FormData();
-  if(id)fd.append('id',id);
-  fd.append('dept_id',document.getElementById('da-dept-id').value);
-  fd.append('title',document.getElementById('da-title').value);
-  fd.append('content',document.getElementById('da-content').value);
-  fd.append('link',document.getElementById('da-link').value);
-  const btn=document.getElementById('da-save-btn');btn.disabled=true;
-  const d=await fetch(BASE_URL+(id?'/departments/announcement-update':'/departments/announcement-create'),{method:'POST',body:fd}).then(r=>r.json());
-  btn.disabled=false;
-  if(d.success){toast(d.message);closeModal('da-modal');location.reload();}else toast(d.message,'error');
+
+// 제목 클릭 → 읽기 전용 모달
+async function viewAnn(id) {
+  const d = await api('/departments/announcement-detail', {id});
+  if (!d.success) { toast(d.message,'error'); return; }
+  const r = d.data;
+  document.getElementById('da-modal-title').textContent = r.title;
+  document.getElementById('da-id').value = '';
+  document.getElementById('da-title').value = r.title;
+  document.getElementById('da-content').value = r.content;
+  document.getElementById('da-link').value = r.link || '';
+  // 링크 바로가기 버튼
+  const wrap = document.getElementById('da-link-btn-wrap');
+  if (r.link) {
+    wrap.style.display = 'block';
+    wrap.innerHTML = `<a href="${r.link}" target="_blank" class="btn btn-ghost btn-sm"><i class="fas fa-external-link-alt"></i> 링크 바로가기</a>`;
+  } else {
+    wrap.style.display = 'none';
+  }
+  setReadonly(true);
+  openModal('da-modal');
 }
-async function deleteRow(id){
-  confirmAction('삭제하시겠습니까?',async()=>{
-    const d=await api('/departments/announcement-delete',{id});
-    if(d.success){toast('삭제되었습니다.');document.querySelector(`tr[data-id="${id}"]`)?.remove();}else toast(d.message,'error');
+
+async function saveDa() {
+  const id = document.getElementById('da-id').value;
+  const fd = new FormData();
+  if (id) fd.append('id', id);
+  fd.append('dept_id', document.getElementById('da-dept-id').value);
+  fd.append('title',   document.getElementById('da-title').value);
+  fd.append('content', document.getElementById('da-content').value);
+  fd.append('link',    document.getElementById('da-link').value);
+  const btn = document.getElementById('da-save-btn'); btn.disabled = true;
+  showSpinner('저장 중...');
+  const d = await fetch(BASE_URL+(id?'/departments/announcement-update':'/departments/announcement-create'),
+    {method:'POST',body:fd}).then(r=>r.json());
+  hideSpinner();btn.disabled = false;
+  if (d.success) { toast(d.message); closeModal('da-modal'); location.reload(); }
+  else toast(d.message, 'error');
+}
+
+async function deleteRow(id) {
+  confirmAction('삭제하시겠습니까?', async () => {
+    const d = await api('/departments/announcement-delete', {id});
+    if (d.success) { toast('삭제되었습니다.'); document.querySelector(`tr[data-id="${id}"]`)?.remove(); }
+    else toast(d.message, 'error');
   });
 }
 </script>

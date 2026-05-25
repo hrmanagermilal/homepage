@@ -1,129 +1,281 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('departments.edit'); $canCreate=AuthMiddleware::hasPermission('departments.create'); $canDelete=AuthMiddleware::hasPermission('departments.delete'); ?>
+
+<div class="page-header-row">
+  <h1 class="page-title-main">
+    <i class="fas fa-sitemap"></i>
+    <?php $typeLabel=['nextgen'=>'다음세대','ministry'=>'사역부서',''=>'전체 부서'][$_GET['type']??'']??'부서 관리'; ?>
+    <?= $typeLabel ?>
+  </h1>
+  <div class="header-actions">
+    <div class="type-filter">
+      <a href="?type=" class="filter-btn <?= ($_GET['type']??'')=='' ?'active':'' ?>">전체</a>
+      <a href="?type=nextgen" class="filter-btn <?= ($_GET['type']??'')=='nextgen'?'active':'' ?>">다음세대</a>
+      <a href="?type=ministry" class="filter-btn <?= ($_GET['type']??'')=='ministry'?'active':'' ?>">사역부서</a>
+    </div>
+    <?php if(hasPerm('departments.create')): ?>
+    <button class="btn btn-primary" onclick="openDeptModal()"><i class="fas fa-plus"></i> 부서 추가</button>
+    <?php endif; ?>
+  </div>
+</div>
 
 <div class="card">
   <div class="card-header">
-    <div class="flex flex-center gap-12">
-      <h2><i class="fas fa-sitemap" style="color:var(--primary)"></i> 부서 관리</h2>
-      <div class="flex gap-8">
-        <a href="?type=" class="btn btn-sm <?= $type===''?'btn-primary':'btn-ghost' ?>">전체</a>
-        <a href="?type=nextgen" class="btn btn-sm <?= $type==='nextgen'?'btn-primary':'btn-ghost' ?>">다음세대</a>
-        <a href="?type=ministry" class="btn btn-sm <?= $type==='ministry'?'btn-primary':'btn-ghost' ?>">사역부서</a>
+    <h2><i class="fas fa-list"></i> 부서 목록</h2>
+    <span class="text-muted" style="font-size:12px"><i class="fas fa-info-circle"></i> 드래그로 순서 변경 가능</span>
+  </div>
+  <div id="dept-list" class="sortable-list">
+    <?php foreach($departments as $d): ?>
+    <div class="dept-item" data-id="<?= $d['id'] ?>">
+      <div class="dept-drag"><i class="fas fa-grip-vertical"></i></div>
+      <div class="dept-img">
+        <?php if($d['image']): ?><img src="<?= UPLOAD_URL.htmlspecialchars($d['image']) ?>" alt="<?= htmlspecialchars($d['name']) ?>" onerror="this.style.display='none'">
+        <?php else: ?><div class="dept-img-ph"><i class="fas fa-users"></i></div><?php endif; ?>
+      </div>
+      <div class="dept-info">
+        <div class="dept-name"><?= htmlspecialchars($d['name']) ?></div>
+        <div class="dept-meta">
+          <span class="badge <?= $d['department_type']==='nextgen'?'badge-blue':'badge-purple' ?>"><?= $d['department_type']==='nextgen'?'다음세대':'사역' ?></span>
+          <?php if($d['worship_time']): ?><span class="dept-time"><i class="fas fa-clock"></i> <?= htmlspecialchars($d['worship_day']??'') ?> <?= htmlspecialchars($d['worship_time']) ?></span><?php endif; ?>
+          <?php if($d['clergy_name']): ?><span class="dept-clergy"><i class="fas fa-user"></i> <?= htmlspecialchars($d['clergy_name']) ?></span><?php endif; ?>
+        </div>
+      </div>
+      <div class="dept-status"><span class="badge <?= $d['is_active']?'badge-green':'badge-gray' ?>"><?= $d['is_active']?'활성':'비활성' ?></span></div>
+      <div class="dept-actions">
+        <a href="<?= BASE_URL ?>/departments/view?id=<?= $d['id'] ?>" class="btn btn-ghost btn-sm"><i class="fas fa-eye"></i></a>
+        <?php if(hasPerm('departments.edit')): ?>
+        <button class="btn btn-ghost btn-sm" onclick="editDept(<?= $d['id'] ?>)"><i class="fas fa-edit"></i> 수정</button>
+        <?php endif; ?>
+        <?php if(hasPerm('departments.delete')): ?>
+        <button class="btn btn-danger btn-sm" onclick="deleteDept(<?= $d['id'] ?>)"><i class="fas fa-trash"></i></button>
+        <?php endif; ?>
       </div>
     </div>
-    <?php if($canCreate): ?><button class="btn btn-primary" onclick="openCreate()"><i class="fas fa-plus"></i>부서 추가</button><?php endif; ?>
-  </div>
-  <div class="card-body" style="padding:0">
-    <div class="table-wrap"><table>
-      <thead><tr><th>이미지</th><th>부서명</th><th>유형</th><th>예배</th><th>담당자</th><th>상태</th><th style="width:170px">관리</th></tr></thead>
-      <tbody>
-      <?php foreach($departments as $r): ?>
-      <tr data-id="<?= $r['id'] ?>">
-        <td><?php if($r['image']): ?><img src="<?= htmlspecialchars(UploadHelper::imageUrl($r['image'])) ?>" class="img-thumb" alt=""><?php else: ?><div style="width:40px;height:40px;background:var(--bg);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)"><i class="fas fa-sitemap"></i></div><?php endif; ?></td>
-        <td>
-          <a href="<?= BASE_URL ?>/departments/view?id=<?= $r['id'] ?>" style="color:var(--text);font-weight:500">
-            <?= htmlspecialchars($r['name']) ?>
-          </a>
-          <?php if($r['age_group']): ?><div class="text-sm text-muted"><?= htmlspecialchars($r['age_group']) ?></div><?php endif; ?>
-        </td>
-        <td><span class="badge <?= $r['department_type']==='nextgen'?'badge-blue':'badge-purple' ?>"><?= $r['department_type']==='nextgen'?'다음세대':'사역' ?></span></td>
-        <td class="text-sm"><?= htmlspecialchars(($r['worship_day']??'').($r['worship_time']?' '.$r['worship_time']:'')) ?></td>
-        <td class="text-sm"><?= htmlspecialchars($r['clergy_name']??'-') ?><?php if($r['clergy_position']): ?> <span class="text-muted">(<?= htmlspecialchars($r['clergy_position']) ?>)</span><?php endif; ?></td>
-        <td><span class="badge <?= $r['is_active']?'badge-green':'badge-gray' ?>"><?= $r['is_active']?'활성':'비활성' ?></span></td>
-        <td><div class="flex gap-8">
-          <a href="<?= BASE_URL ?>/departments/view?id=<?= $r['id'] ?>" class="btn btn-ghost btn-sm btn-icon" title="상세"><i class="fas fa-eye"></i></a>
-          <a href="<?= BASE_URL ?>/departments/announcements?dept_id=<?= $r['id'] ?>" class="btn btn-ghost btn-sm btn-icon" title="공지"><i class="fas fa-bullhorn"></i></a>
-          <?php if($canEdit): ?><button class="btn btn-warning btn-sm btn-icon" onclick="openEdit(<?= $r['id'] ?>)"><i class="fas fa-pen"></i></button><?php endif; ?>
-          <?php if($canDelete): ?><button class="btn btn-danger btn-sm btn-icon" onclick="deleteRow(<?= $r['id'] ?>)"><i class="fas fa-trash"></i></button><?php endif; ?>
-        </div></td>
-      </tr>
-      <?php endforeach; ?>
-      </tbody>
-    </table></div>
+    <?php endforeach; ?>
+    <?php if(empty($departments)): ?>
+    <div class="empty-state"><i class="fas fa-sitemap fa-2x"></i><p>등록된 부서가 없습니다.</p></div>
+    <?php endif; ?>
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal-overlay hidden" id="dept-modal">
-  <div class="modal modal-xl">
-    <div class="modal-header"><h3 id="dept-modal-title">부서 추가</h3><button class="btn btn-ghost btn-icon" onclick="closeModal('dept-modal')"><i class="fas fa-times"></i></button></div>
+<!-- 부서 모달 (큰 폼, 새 컬럼 포함) -->
+<div id="dept-modal" class="modal-overlay hidden">
+  <div class="modal" style="max-width:780px;max-height:90vh;overflow-y:auto">
+    <div class="modal-header">
+      <h3 id="dept-modal-title">부서 추가</h3>
+      <button class="modal-close" onclick="closeModal('dept-modal')"><i class="fas fa-times"></i></button>
+    </div>
     <div class="modal-body">
-      <input type="hidden" id="dept-id">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">부서명 <span class="req">*</span></label><input type="text" id="d-name" class="form-control"></div>
-        <div class="form-group"><label class="form-label">유형</label><select id="d-type" class="form-control"><option value="nextgen">다음세대</option><option value="ministry">사역부서</option></select></div>
-        <div class="form-group"><label class="form-label">연령대</label><input type="text" id="d-age" class="form-control" placeholder="예: 0-4세"></div>
+      <input type="hidden" id="dm-id">
+
+      <!-- 이미지 -->
+      <div class="form-group">
+        <label class="form-label">대표 이미지 (최대 1MB)</label>
+        <div id="dm-current-wrap" style="display:none;margin-bottom:8px">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px"><i class="fas fa-check-circle" style="color:#16a34a"></i> 현재 저장된 이미지</div>
+          <img id="dm-current-img" src="" style="max-height:80px;border-radius:4px;border:1px solid var(--border)">
+        </div>
+        <div class="img-preview-row">
+          <div class="img-thumb-box" id="dm-img-box" style="display:none;position:relative">
+            <span style="position:absolute;top:2px;left:2px;font-size:9px;background:#d97706;color:#fff;padding:1px 4px;border-radius:3px">NEW</span>
+            <img id="dm-img-preview" src="" style="max-height:80px;object-fit:contain;border-radius:4px;">
+          </div>
+          <input type="file" id="dm-image" accept="image/*" onchange="previewDeptImg(this)">
+        </div>
       </div>
-      <div class="form-group"><label class="form-label">설명</label><textarea id="d-desc" class="form-control" rows="3"></textarea></div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">예배 요일</label><input type="text" id="d-wday" class="form-control" placeholder="예: 주일"></div>
-        <div class="form-group"><label class="form-label">예배 시간</label><input type="text" id="d-wtime" class="form-control" placeholder="예: 오전 11:00"></div>
-        <div class="form-group"><label class="form-label">예배 장소</label><input type="text" id="d-wloc" class="form-control"></div>
+
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">부서 유형<span class="req">*</span></label>
+          <select class="form-control" id="dm-type">
+            <option value="nextgen">다음세대</option>
+            <option value="ministry">사역부서</option>
+          </select>
+        </div>
+        <div class="form-group col-span-2"><label class="form-label">부서명<span class="req">*</span></label>
+          <input class="form-control" id="dm-name" placeholder="청년부"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">담당자명</label><input type="text" id="d-cname" class="form-control"></div>
-        <div class="form-group"><label class="form-label">직책</label><input type="text" id="d-cpos" class="form-control"></div>
-        <div class="form-group"><label class="form-label">연락처</label><input type="tel" id="d-cphone" class="form-control"></div>
+
+      <div class="form-group"><label class="form-label">소개 (description)</label>
+        <textarea class="form-control" id="dm-desc" rows="3" placeholder="부서 소개를 입력하세요."></textarea></div>
+      <div class="form-group"><label class="form-label">헤딩 타이틀 (heading_title) — 페이지 상단 그라데이션 문구</label>
+        <textarea class="form-control" id="dm-heading" rows="2" placeholder="Milight, Time to Shine..."></textarea></div>
+
+      <div class="form-section-title">예배 정보</div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">연령대</label>
+          <input class="form-control" id="dm-age" placeholder="19-29세"></div>
+        <div class="form-group"><label class="form-label">예배 요일</label>
+          <input class="form-control" id="dm-day" placeholder="주일"></div>
+        <div class="form-group"><label class="form-label">예배 시간</label>
+          <input class="form-control" id="dm-time" placeholder="오후 2시"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">이미지</label><input type="file" id="d-img" class="form-control" accept="image/*"><div id="d-img-preview" style="margin-top:8px"></div></div>
-        <div class="form-group"><label class="form-label">정렬 순서</label><input type="number" id="d-order" class="form-control" value="0"></div>
-        <div class="form-group"><label class="form-label">상태</label><select id="d-active" class="form-control"><option value="1">활성</option><option value="0">비활성</option></select></div>
+      <div class="form-group"><label class="form-label">예배 장소</label>
+        <input class="form-control" id="dm-location" placeholder="밀알교회 1층 본당"></div>
+
+      <div class="form-section-title">담당자 정보</div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">담당자 이름</label>
+          <input class="form-control" id="dm-clergy-name" placeholder="신효성 목사"></div>
+        <div class="form-group"><label class="form-label">직책</label>
+          <input class="form-control" id="dm-clergy-pos" placeholder="담당 목사"></div>
+        <div class="form-group"><label class="form-label">이메일</label>
+          <input class="form-control" type="email" id="dm-pastor-email" placeholder="rev.shin@milalchurch.com"></div>
+      </div>
+
+      <div class="form-section-title">카카오톡 채널</div>
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label">카카오 링크</label>
+          <input class="form-control" id="dm-kakao-link" placeholder="https://pf.kakao.com/..."></div>
+        <div class="form-group"><label class="form-label">카카오 버튼 텍스트</label>
+          <input class="form-control" id="dm-kakao-label" placeholder="카카오톡 채널 추가하기"></div>
+      </div>
+
+      <div class="form-section-title">공지 박스</div>
+      <div class="form-group"><label class="form-label">공지 제목</label>
+        <input class="form-control" id="dm-notice-title" placeholder="부서 소식"></div>
+      <div class="form-group"><label class="form-label">공지 내용</label>
+        <textarea class="form-control" id="dm-notice-desc" rows="2" placeholder="공지 내용을 입력하세요."></textarea></div>
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label">버튼 텍스트</label>
+          <input class="form-control" id="dm-notice-btn-label" placeholder="공지사항 다운로드"></div>
+        <div class="form-group"><label class="form-label">버튼 링크</label>
+          <input class="form-control" id="dm-notice-btn-href" placeholder="#"></div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label">순서</label>
+          <input class="form-control" type="number" id="dm-order" value="0" min="0"></div>
+        <div class="form-group"><label class="form-label">상태</label>
+          <select class="form-control" id="dm-active"><option value="1">활성</option><option value="0">비활성</option></select></div>
       </div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('dept-modal')">취소</button><button class="btn btn-primary" id="dept-save-btn" onclick="saveDept()">저장</button></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('dept-modal')">취소</button>
+      <button class="btn btn-primary" onclick="saveDept()"><i class="fas fa-save"></i> 저장</button>
+    </div>
   </div>
 </div>
+
+<style>
+.page-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.page-title-main{font-size:20px;font-weight:700;}
+.header-actions{display:flex;gap:8px;align-items:center;}
+.type-filter{display:flex;gap:4px;}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);cursor:pointer;transition:all .15s;}
+.filter-btn.active,.filter-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+.dept-item{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);transition:background .1s;}
+.dept-item:hover{background:#fafafa;}
+.dept-drag{cursor:grab;color:var(--text-muted);font-size:16px;}
+.dept-img{width:56px;height:56px;flex-shrink:0;border-radius:8px;overflow:hidden;background:#f3f4f6;display:flex;align-items:center;justify-content:center;}
+.dept-img img{width:100%;height:100%;object-fit:cover;}
+.dept-img-ph{color:#d1d5db;font-size:20px;}
+.dept-info{flex:1;}
+.dept-name{font-weight:600;font-size:14px;margin-bottom:6px;}
+.dept-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.dept-time,.dept-clergy{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px;}
+.dept-status,.dept-actions{flex-shrink:0;}
+.dept-actions{display:flex;gap:4px;}
+.sortable-ghost{opacity:.4;background:#ede9fe;}
+.empty-state{padding:48px;text-align:center;color:var(--text-muted);}
+.empty-state i{display:block;margin-bottom:12px;opacity:.3;}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.col-span-2{grid-column:span 2;}
+.form-section-title{font-size:12px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.05em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.img-preview-row{display:flex;align-items:center;gap:12px;}
+.img-thumb-box{border:1px solid var(--border);border-radius:6px;width:90px;height:70px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa;}
+.img-ph-sm{color:var(--text-muted);font-size:20px;opacity:.4;}
+</style>
 
 <script>
-function openCreate(){
-  document.getElementById('dept-modal-title').textContent='부서 추가';
-  document.getElementById('dept-id').value='';
-  ['d-name','d-desc','d-age','d-wday','d-wtime','d-wloc','d-cname','d-cpos','d-cphone'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('d-type').value='ministry';
-  document.getElementById('d-order').value=0;
-  document.getElementById('d-active').value=1;
-  document.getElementById('d-img-preview').innerHTML='';
+let _deptPendingImg = null;
+
+function previewDeptImg(input) {
+  if(!input.files[0]) return;
+  _deptPendingImg = input.files[0];
+  const url = URL.createObjectURL(input.files[0]);
+  document.getElementById('dm-img-preview').src = url;
+  document.getElementById('dm-img-box').style.display = 'flex';
+}
+
+function openDeptModal(data={}) {
+  _deptPendingImg = null;
+  document.getElementById('dm-id').value           = data.id||'';
+  document.getElementById('dm-type').value         = data.department_type||'nextgen';
+  document.getElementById('dm-name').value         = data.name||'';
+  document.getElementById('dm-desc').value         = data.description||'';
+  document.getElementById('dm-heading').value      = data.heading_title||'';
+  document.getElementById('dm-age').value          = data.age_group||'';
+  document.getElementById('dm-day').value          = data.worship_day||'';
+  document.getElementById('dm-time').value         = data.worship_time||'';
+  document.getElementById('dm-location').value     = data.worship_location||'';
+  document.getElementById('dm-clergy-name').value  = data.clergy_name||'';
+  document.getElementById('dm-clergy-pos').value   = data.clergy_position||'';
+  document.getElementById('dm-pastor-email').value = data.pastor_email||'';
+  document.getElementById('dm-kakao-link').value   = data.kakao_link||'';
+  document.getElementById('dm-kakao-label').value  = data.kakao_label||'';
+  document.getElementById('dm-notice-title').value = data.notice_title||'';
+  document.getElementById('dm-notice-desc').value  = data.notice_description||'';
+  document.getElementById('dm-notice-btn-label').value = data.notice_button_label||'';
+  document.getElementById('dm-notice-btn-href').value  = data.notice_button_href||'';
+  document.getElementById('dm-order').value        = data.order||0;
+  document.getElementById('dm-active').value       = data.is_active??1;
+  const curWrap=document.getElementById('dm-current-wrap');
+  const curImg=document.getElementById('dm-current-img');
+  const newBox=document.getElementById('dm-img-box');
+  if(data.image){curImg.src='<?= UPLOAD_URL ?>'+data.image;curWrap.style.display='';}
+  else{curWrap.style.display='none';}
+  newBox.style.display='none';
+  document.getElementById('dm-img-preview').src='';
+  document.getElementById('dm-image').value='';
+  document.getElementById('dept-modal-title').textContent = data.id?'부서 수정':'부서 추가';
   openModal('dept-modal');
 }
-async function openEdit(id){
-  const d=await api('/departments/detail',{id});
-  if(!d.success){toast(d.message,'error');return;}
-  const r=d.data;
-  document.getElementById('dept-modal-title').textContent='부서 수정';
-  document.getElementById('dept-id').value=r.id;
-  document.getElementById('d-name').value=r.name;
-  document.getElementById('d-type').value=r.department_type;
-  document.getElementById('d-age').value=r.age_group||'';
-  document.getElementById('d-desc').value=r.description||'';
-  document.getElementById('d-wday').value=r.worship_day||'';
-  document.getElementById('d-wtime').value=r.worship_time||'';
-  document.getElementById('d-wloc').value=r.worship_location||'';
-  document.getElementById('d-cname').value=r.clergy_name||'';
-  document.getElementById('d-cpos').value=r.clergy_position||'';
-  document.getElementById('d-cphone').value=r.clergy_phone||'';
-  document.getElementById('d-order').value=r.order||0;
-  document.getElementById('d-active').value=r.is_active;
-  document.getElementById('d-img-preview').innerHTML=r.image?`<img src="${r.image.startsWith('/')?r.image:BASE_URL+'/uploads/'+r.image}" style="max-height:80px;border-radius:4px">`:'';
-  openModal('dept-modal');
+
+async function editDept(id) {
+  const d = await api('/departments/detail', {id});
+  if(d.success) openDeptModal(d.data);
 }
-async function saveDept(){
-  const id=document.getElementById('dept-id').value;
-  const fd=new FormData();
-  if(id)fd.append('id',id);
-  const fields={department_type:'d-type',name:'d-name',age_group:'d-age',description:'d-desc',worship_day:'d-wday',worship_time:'d-wtime',worship_location:'d-wloc',clergy_name:'d-cname',clergy_position:'d-cpos',clergy_phone:'d-cphone',order:'d-order',is_active:'d-active'};
-  for(const[k,eid]of Object.entries(fields))fd.append(k,document.getElementById(eid).value);
-  const img=document.getElementById('d-img').files[0];if(img)fd.append('image',img);
-  const btn=document.getElementById('dept-save-btn');btn.disabled=true;
-  const d=await fetch(BASE_URL+(id?'/departments/update':'/departments/create'),{method:'POST',body:fd}).then(r=>r.json());
-  btn.disabled=false;
-  if(d.success){toast(d.message);closeModal('dept-modal');location.reload();}else toast(d.message,'error');
+
+async function saveDept() {
+  const id = document.getElementById('dm-id').value;
+  const fd = new FormData();
+  const fields = {
+    id, department_type:'dm-type', name:'dm-name', description:'dm-desc', heading_title:'dm-heading',
+    age_group:'dm-age', worship_day:'dm-day', worship_time:'dm-time', worship_location:'dm-location',
+    clergy_name:'dm-clergy-name', clergy_position:'dm-clergy-pos', pastor_email:'dm-pastor-email',
+    kakao_link:'dm-kakao-link', kakao_label:'dm-kakao-label',
+    notice_title:'dm-notice-title', notice_description:'dm-notice-desc',
+    notice_button_label:'dm-notice-btn-label', notice_button_href:'dm-notice-btn-href',
+    order:'dm-order', is_active:'dm-active'
+  };
+  for(const[k,v] of Object.entries(fields)){
+    fd.append(k, typeof v==='string'&&v.startsWith('dm-') ? document.getElementById(v).value : v);
+  }
+  if(_deptPendingImg) fd.append('image', _deptPendingImg);
+  const d = await apiUpload('/departments/'+(id?'update':'create'), fd, '저장 중...');
+  if(!d.success) return toast(d.message,'error');
+  toast(d.message); closeModal('dept-modal'); location.reload();
 }
-async function deleteRow(id){
-  confirmAction('이 부서를 삭제하시겠습니까?',async()=>{
+
+async function deleteDept(id) {
+  confirmAction('이 부서를 삭제하시겠습니까?', async()=>{
     const d=await api('/departments/delete',{id});
-    if(d.success){toast('삭제되었습니다.');document.querySelector(`tr[data-id="${id}"]`)?.remove();}else toast(d.message,'error');
+    if(!d.success) return toast(d.message,'error');
+    toast(d.message); document.querySelector(`.dept-item[data-id="${id}"]`)?.remove();
   });
 }
+
+function pageInit() {
+  const list=document.getElementById('dept-list');
+  if(list && typeof Sortable!=='undefined') {
+    Sortable.create(list,{handle:'.dept-drag',animation:150,ghostClass:'sortable-ghost',
+      onEnd: async()=>{
+        const orders=[...list.querySelectorAll('.dept-item')].map((el,i)=>({id:el.dataset.id,order:i}));
+        await api('/departments/reorder',{orders:JSON.stringify(orders)});
+      }
+    });
+  }
+}
 </script>
+
 <?php include BASE_PATH.'/app/Views/layouts/footer.php'; ?>

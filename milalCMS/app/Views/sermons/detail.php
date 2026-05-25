@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('sermons.edit'); $canDelete=AuthMiddleware::hasPermission('sermons.delete'); ?>
+<?php $canEdit=hasPerm('sermons.edit'); $canDelete=hasPerm('sermons.delete'); ?>
 
 <div style="margin-bottom:16px">
   <a href="<?= BASE_URL ?>/sermons" class="btn btn-ghost btn-sm"><i class="fas fa-arrow-left"></i> 목록으로</a>

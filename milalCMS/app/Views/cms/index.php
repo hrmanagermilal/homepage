@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('cms.edit'); $canCreate=AuthMiddleware::hasPermission('cms.create'); $canDelete=AuthMiddleware::hasPermission('cms.delete'); ?>
+<?php $canEdit=hasPerm('cms.edit'); $canCreate=hasPerm('cms.create'); $canDelete=hasPerm('cms.delete'); ?>
 
 <div style="display:grid;grid-template-columns:260px 1fr 1fr;gap:20px;align-items:start">
 

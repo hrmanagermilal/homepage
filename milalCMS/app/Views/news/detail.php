@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canEdit=AuthMiddleware::hasPermission('news.edit'); $canDelete=AuthMiddleware::hasPermission('news.delete'); ?>
+<?php $canEdit=hasPerm('news.edit'); $canDelete=hasPerm('news.delete'); ?>
 <?php $catMap=['news'=>['badge-blue','뉴스'],'update'=>['badge-green','업데이트'],'photo'=>['badge-purple','사진']]; [$bc,$bl]=$catMap[$news['category']]??['badge-gray','기타']; ?>
 
 <div style="margin-bottom:16px">

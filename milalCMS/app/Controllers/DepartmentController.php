@@ -34,13 +34,7 @@ class DepartmentController extends BaseController {
     public function create(): void {
         $this->assertPost(); AuthMiddleware::requirePermission('departments.create');
         $err=$this->validateRequired(['name'=>'부서명'],$_POST); if($err) $this->error($err);
-        $data=['department_type'=>$this->post('department_type','ministry'),'name'=>trim($this->post('name')),
-               'description'=>$this->post('description',''),'age_group'=>trim($this->post('age_group','')),
-               'ministry_type'=>trim($this->post('ministry_type','')),'worship_day'=>trim($this->post('worship_day','')),
-               'worship_time'=>trim($this->post('worship_time','')),'worship_location'=>trim($this->post('worship_location','')),
-               'clergy_name'=>trim($this->post('clergy_name','')),'clergy_position'=>trim($this->post('clergy_position','')),
-               'clergy_phone'=>trim($this->post('clergy_phone','')),'order'=>$this->intPost('order',0),
-               'is_active'=>$this->intPost('is_active',1)];
+        $data=$this->buildData();
         if(!empty($_FILES['image'])&&$_FILES['image']['error']===UPLOAD_ERR_OK){
             $up=UploadHelper::uploadImage($_FILES['image'],'departments');
             if(!$up['success']) $this->error($up['message']);
@@ -54,13 +48,7 @@ class DepartmentController extends BaseController {
         $id=$this->intPost('id');
         $row=$this->model->findById($id);
         if(!$row) $this->error('부서를 찾을 수 없습니다.',404);
-        $data=['department_type'=>$this->post('department_type','ministry'),'name'=>trim($this->post('name')),
-               'description'=>$this->post('description',''),'age_group'=>trim($this->post('age_group','')),
-               'ministry_type'=>trim($this->post('ministry_type','')),'worship_day'=>trim($this->post('worship_day','')),
-               'worship_time'=>trim($this->post('worship_time','')),'worship_location'=>trim($this->post('worship_location','')),
-               'clergy_name'=>trim($this->post('clergy_name','')),'clergy_position'=>trim($this->post('clergy_position','')),
-               'clergy_phone'=>trim($this->post('clergy_phone','')),'order'=>$this->intPost('order',0),
-               'is_active'=>$this->intPost('is_active',1)];
+        $data=$this->buildData();
         if(!empty($_FILES['image'])&&$_FILES['image']['error']===UPLOAD_ERR_OK){
             $up=UploadHelper::uploadImage($_FILES['image'],'departments');
             if(!$up['success']) $this->error($up['message']);
@@ -127,6 +115,31 @@ class DepartmentController extends BaseController {
         if(!$this->model->findAnnouncement($this->intPost('id'))) $this->error('공지를 찾을 수 없습니다.',404);
         $this->model->deleteAnnouncement($this->intPost('id'));
         $this->success([],'부서 공지가 삭제되었습니다.');
+    }
+    private function buildData(): array {
+        return [
+            'department_type'     => $this->post('department_type','ministry'),
+            'name'                => trim($this->post('name')),
+            'description'         => $this->post('description',''),
+            'age_group'           => trim($this->post('age_group','')),
+            'ministry_type'       => trim($this->post('ministry_type','')),
+            'worship_day'         => trim($this->post('worship_day','')),
+            'worship_time'        => trim($this->post('worship_time','')),
+            'worship_location'    => trim($this->post('worship_location','')),
+            'clergy_name'         => trim($this->post('clergy_name','')),
+            'clergy_position'     => trim($this->post('clergy_position','')),
+            'clergy_phone'        => trim($this->post('clergy_phone','')),
+            'heading_title'       => $this->post('heading_title',''),
+            'pastor_email'        => trim($this->post('pastor_email','')),
+            'kakao_link'          => trim($this->post('kakao_link','')),
+            'kakao_label'         => trim($this->post('kakao_label','')),
+            'notice_title'        => trim($this->post('notice_title','')),
+            'notice_description'  => $this->post('notice_description',''),
+            'notice_button_label' => trim($this->post('notice_button_label','')),
+            'notice_button_href'  => trim($this->post('notice_button_href','')),
+            'order'               => $this->intPost('order',0),
+            'is_active'           => $this->intPost('is_active',1),
+        ];
     }
     private function paginateDept(int $total, int $cur): array {
         $perPage=ITEMS_PER_PAGE;
