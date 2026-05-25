@@ -100,3 +100,31 @@
   .news-card-modal__close {right: auto; left: 50%; top: auto; bottom: -20rem; transform: translate(-50%, 100%);}
   .news-card-modal__button {padding: 15rem;}
 }
+
+/* ══════════════════════════════════════
+ * urgent-popup 긴급 팝업
+ * ══════════════════════════════════════ */
+.urgent-popup {display: flex; justify-content: center; align-items: center; position: fixed; inset: 0; z-index: 1100; padding: 30rem; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.3s ease;}
+.urgent-popup.is-open {opacity: 1; pointer-events: auto;}
+.urgent-popup__overlay {position: absolute; inset: 0;}
+.urgent-popup__content {position: relative; z-index: 1; width: min(520rem, 100%); background: #fff; border-radius: 16rem; overflow: hidden; box-shadow: 0 24rem 64rem rgba(0,0,0,0.45);}
+.urgent-popup__badge {display: flex; align-items: center; gap: 8rem; padding: 14rem 20rem; background: #c0392b; color: #fff;}
+.urgent-popup__badge-icon {font-size: 18rem; line-height: 1; flex-shrink: 0;}
+.urgent-popup__badge-text {font-size: var(--font-sm, 14px); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;}
+.urgent-popup__image {display: block; width: 100%; aspect-ratio: 478 / 270; object-fit: cover;}
+.urgent-popup__body {padding: 24rem 24rem 20rem;}
+.urgent-popup__title {font-size: var(--font-lg, 18px); font-weight: 700; line-height: 1.45; color: #111; margin-bottom: 18rem; word-break: keep-all;}
+.urgent-popup__link {display: flex; align-items: center; justify-content: center; width: 100%; padding: 14rem; font-size: var(--font-sm, 14px); font-weight: 600; color: #fff; background: var(--c-primary, #3a472b); border-radius: 8rem; text-decoration: none; transition: opacity 0.2s ease;}
+.urgent-popup__footer {display: flex; align-items: center; justify-content: space-between; padding: 12rem 20rem; border-top: 1px solid #eee; background: #fafafa;}
+.urgent-popup__skip {font-size: var(--font-xs, 12px); color: #777; background: none; border: none; cursor: pointer; padding: 4rem 0; text-decoration: underline;}
+.urgent-popup__close {display: flex; align-items: center; justify-content: center; width: 36rem; height: 36rem; background: #eee; border: none; border-radius: 50%; cursor: pointer; transition: background 0.2s ease;}
+.urgent-popup__close svg {display: block; flex-shrink: 0;}
+@media (hover: hover) and (pointer: fine) {
+  .urgent-popup__link:hover {opacity: 0.85;}
+  .urgent-popup__close:hover {background: #ddd;}
+}
+@media (max-width: 500px) {
+  .urgent-popup {padding: 20rem;}
+  .urgent-popup__content {width: 100%; border-radius: 12rem;}
+  .urgent-popup__body {padding: 18rem 18rem 16rem;}
+}

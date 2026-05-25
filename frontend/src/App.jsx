@@ -107,12 +107,9 @@ export default function App() {
 
   useEffect(() => {
     let mounted = true;
-
-    async function load(silent = false) {
-      if (!silent) {
-        setLoading(true);
-        setError("");
-      }
+    async function load() {
+      setLoading(true);
+      setError("");
 
       // ── Phase 1: landing-page essentials (blocks the loading spinner) ──────
       try {
@@ -139,13 +136,11 @@ export default function App() {
         setLandingTitles(landingTitleResponse?.data || []);
         setSections(sectionsResponse?.data ?? []);
         setBannerImage(bannerImageResponse?.data ?? null);
-        if (!silent) setLoading(false);
+        setLoading(false); // release spinner — landing page is ready
       } catch (e) {
         if (!mounted) return;
-        if (!silent) {
-          setError(e.message || "Failed to connect backend API");
-          setLoading(false);
-        }
+        setError(e.message || "Failed to connect backend API");
+        setLoading(false);
         return;
       }
 
@@ -203,12 +198,9 @@ export default function App() {
       }
     }
 
-    load(false);
-    const intervalId = setInterval(() => load(true), 5000);
-
+    load();
     return () => {
       mounted = false;
-      clearInterval(intervalId);
     };
   }, []);
 
@@ -249,6 +241,22 @@ export default function App() {
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPath, loading, isTabHashPage]);
+
+  console.log("hero", hero);
+  console.log("quickLinks", quickLinks);
+  console.log("landingTitles", landingTitles);
+  console.log("members", members);
+  console.log("sections", sections);
+  console.log("visionStatements", visionStatements);
+  console.log("sermons", sermons);
+  console.log("togetherItems", togetherItems);
+  console.log("bulletins", bulletins);
+  console.log("departments", departments);
+  console.log("shuttleBusSchedule", shuttleBusSchedule);
+  console.log("parkingLot", parkingLot);
+  console.log("parkingMap", parkingMap);
+  console.log("bannerImage", bannerImage);
+  console.log("ministries", ministries);
 
   return (
     <Box>
