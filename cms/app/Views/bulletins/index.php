@@ -20,7 +20,7 @@
         <td><?= $r['year']??'-' ?></td>
         <td><?= $r['week_number'] ? $r['week_number'].'주차' : '-' ?></td>
         <td>
-          <?php if($r['attachment']): ?>
+          <?php if($r['attachment'] ?? null): ?>
           <a href="<?= BASE_URL.htmlspecialchars($r['attachment']) ?>" target="_blank" class="btn btn-ghost btn-sm" title="PDF 열기">
             <i class="fas fa-file-pdf" style="color:#dc2626"></i>
           </a>
@@ -71,7 +71,7 @@
 
       <!-- PDF (이미지보다 앞에 배치) -->
       <div class="form-group">
-        <label class="form-label"><i class="fas fa-file-pdf" style="color:#dc2626"></i> PDF 파일 (최대 20MB)</label>
+        <label class="form-label"><i class="fas fa-file-pdf" style="color:#dc2626"></i> PDF 파일 (최대 10MB)</label>
         <div id="bul-pdf-preview" style="display:none;padding:8px 12px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;margin-bottom:8px;font-size:12px">
           <i class="fas fa-file-pdf" style="color:#dc2626"></i>
           <span id="bul-pdf-name"></span>
@@ -207,10 +207,18 @@ async function saveBulletin() {
   for(const f of files) fd.append('images[]', f);
   const btn = document.getElementById('bul-save-btn'); btn.disabled = true;
   showSpinner('주보 저장 중...');
-  const d = await fetch(BASE_URL+'/bulletins/create',{method:'POST',body:fd}).then(r=>r.json());
+  let d;
+  try {
+    const res = await fetch(BASE_URL+'/bulletins/create',{method:'POST',body:fd});
+    d = await res.json();
+  } catch(e) {
+    hideSpinner(); btn.disabled = false;
+    toast('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.','error');
+    return;
+  }
   hideSpinner(); btn.disabled = false;
   if(d.success){toast(d.message);closeModal('bulletin-modal');location.reload();}
-  else toast(d.message,'error');
+  else toast(d.message||'저장에 실패했습니다.','error');
 }
 
 /* ── 수정 ── */
@@ -247,7 +255,15 @@ async function saveEdit() {
   fd.append('remove_attachment', document.getElementById('bul-remove-pdf').value);
   if(_editPendingPdf) fd.append('attachment', _editPendingPdf);
   const btn = document.getElementById('bul-edit-btn'); btn.disabled = true;
-  const d = await fetch(BASE_URL+'/bulletins/update',{method:'POST',body:fd}).then(r=>r.json());
+  let d;
+  try {
+    const res = await fetch(BASE_URL+'/bulletins/update',{method:'POST',body:fd});
+    d = await res.json();
+  } catch(e) {
+    btn.disabled = false;
+    toast('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.','error');
+    return;
+  }
   btn.disabled = false;
   if(d.success){
     toast(d.message); closeModal('bul-edit-modal');

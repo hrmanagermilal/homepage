@@ -42,8 +42,8 @@ if(file_exists(BASE_PATH.'/app/Models/CmsModel.php'))                require_onc
 if(file_exists(BASE_PATH.'/app/Controllers/CmsController.php'))      require_once BASE_PATH.'/app/Controllers/CmsController.php';
 
 // ── Router ─────────────────────────────────────────────────
-$uri  = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-$base = trim(parse_url(BASE_URL, PHP_URL_PATH), '/');
+$uri  = trim((string)(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? ''), '/');
+$base = trim((string)(parse_url(BASE_URL, PHP_URL_PATH) ?? ''), '/');
 if ($base && strpos($uri, $base) === 0) $uri = trim(substr($uri, strlen($base)), '/');
 $parts  = explode('/', $uri);
 $module = $parts[0] ?? '';

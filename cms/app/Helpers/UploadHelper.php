@@ -5,7 +5,7 @@ class UploadHelper {
     private const MAX_WIDTH  = 1920;
     private const MAX_HEIGHT = 1920;
     // 저장 전 용량 제한 (1MB)
-    private const MAX_BYTES  = 1 * 1024 * 1024;
+    private const MAX_BYTES  = 10 * 1024 * 1024;
     // JPEG/WEBP 압축 품질
     private const JPEG_QUALITY = 82;
     private const WEBP_QUALITY = 82;
@@ -17,7 +17,7 @@ class UploadHelper {
 
         // 1MB 초과 시 서버에서 즉시 거부
         if ($file['size'] > self::MAX_BYTES) {
-            return ['success' => false, 'message' => '파일 크기가 1MB를 초과합니다. 이미지를 압축하거나 작은 파일을 선택해 주세요.'];
+            return ['success' => false, 'message' => '파일 크기가 10MB를 초과합니다. 이미지를 압축하거나 작은 파일을 선택해 주세요.'];
         }
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -140,7 +140,7 @@ class UploadHelper {
             return ['success' => false, 'message' => self::uploadErrorMsg($file['error'])];
             
             if ($file['size'] > self::MAX_BYTES)
-                return ['success' => false, 'message' => '파일 크기가 1MB를 초과합니다.'];
+                return ['success' => false, 'message' => '파일 크기가 10MB를 초과합니다.'];
                 
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mime  = finfo_file($finfo, $file['tmp_name']);

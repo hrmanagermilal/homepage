@@ -87,10 +87,10 @@ async function saveProfile(){
 document.addEventListener('change', e=>{
   const input=e.target;
   if(input.type!=='file') return;
-  const limit=1*1024*1024;
+  const limit=10*1024*1024;
   for(const f of input.files){
     if(f.size>limit){
-      toast(`"${f.name}" 파일이 1MB를 초과합니다. 더 작은 파일을 선택해 주세요.`,'error');
+      toast(`"${f.name}" 파일이 10MB를 초과합니다. 더 작은 파일을 선택해 주세요.`,'error');
       input.value='';
       return;
     }
