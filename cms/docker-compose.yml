@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # ── milalCMS PHP/Apache application ────────────────────────────────────────
+  # ── CMS PHP/Apache application ────────────────────────────────────────
   cms:
     build:
       context: .
@@ -17,7 +17,8 @@ services:
       DB_PASS: milal_pass_2024
       APP_BASE_URL: "${APP_BASE_URL:-}"
     volumes:
-      - uploads_data:/var/www/html/public/uploads
+      - .:/var/www/html                                            # live source mount
+      - uploads_data:/var/www/html/public/uploads                 # user uploads (overlays above)
       - ../frontend/public/uploads:/var/www/html/public/images:ro
     restart: unless-stopped
     networks:

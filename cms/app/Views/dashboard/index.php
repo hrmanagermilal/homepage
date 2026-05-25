@@ -4,8 +4,8 @@
 .stat-card{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;transition:box-shadow .2s,transform .15s;}
 .stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
 .stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.stat-val{font-size:24px;font-weight:700;line-height:1;}
-.stat-label{font-size:12px;color:var(--text-muted);margin-top:4px;}
+.stat-val{font-size:14px;color:var(--text-muted);margin-top:3px;line-height:1;}
+.stat-label{font-size:16px;font-weight:700;color:var(--text);line-height:1;}
 .recent-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
 .text-sm{font-size:12px;}.text-muted{color:var(--text-muted);}
 .truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:inline-block;}
@@ -17,14 +17,14 @@
 <div class="stat-grid">
 <?php
 $cards = [
-  ['label'=>'공지',    'val'=>$stats['notice'],      'icon'=>'bullhorn',      'bg'=>'#ede9fe','color'=>'#7c3aed','url'=>'/notice'],
-  ['label'=>'설교',    'val'=>$stats['sermons'],     'icon'=>'video',         'bg'=>'#d1fae5','color'=>'#059669','url'=>'/sermons'],
-  ['label'=>'주보',    'val'=>$stats['bulletins'],   'icon'=>'book-open',     'bg'=>'#fef3c7','color'=>'#d97706','url'=>'/bulletins'],
-  ['label'=>'섬기는분들','val'=>$stats['members'],   'icon'=>'users',         'bg'=>'#fce7f3','color'=>'#db2777','url'=>'/members'],
-  ['label'=>'부서',    'val'=>$stats['departments'], 'icon'=>'sitemap',       'bg'=>'#e0f2fe','color'=>'#0284c7','url'=>'/departments'],
-  ['label'=>'사역',    'val'=>$stats['ministry'],    'icon'=>'hands-helping', 'bg'=>'#f0fdf4','color'=>'#16a34a','url'=>'/ministry'],
-  ['label'=>'부고',    'val'=>$stats['obituary'],    'icon'=>'dove',          'bg'=>'#f3f4f6','color'=>'#6b7280','url'=>'/obituary'],
-  ['label'=>'사용자',  'val'=>$stats['users'],       'icon'=>'user-cog',      'bg'=>'#f5f3ff','color'=>'#7c3aed','url'=>'/users'],
+  ['label'=>'공지',    'val'=>$stats['notice'],      'icon'=>'bullhorn',      'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/notice'],
+  ['label'=>'설교',    'val'=>$stats['sermons'],     'icon'=>'video',         'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/sermons'],
+  ['label'=>'주보',    'val'=>$stats['bulletins'],   'icon'=>'book-open',     'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/bulletins'],
+  ['label'=>'섬기는분들','val'=>$stats['members'],   'icon'=>'users',         'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/members'],
+  ['label'=>'부서',    'val'=>$stats['departments'], 'icon'=>'sitemap',       'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/departments'],
+  ['label'=>'사역',    'val'=>$stats['ministry'],    'icon'=>'hands-helping', 'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/ministry'],
+  ['label'=>'부고',    'val'=>$stats['obituary'],    'icon'=>'dove',          'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/obituary'],
+  ['label'=>'사용자',  'val'=>$stats['users'],       'icon'=>'user-cog',      'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/users'],
 ];
 foreach($cards as $c): ?>
 <a href="<?= BASE_URL . $c['url'] ?>" class="stat-card">
@@ -32,8 +32,8 @@ foreach($cards as $c): ?>
     <i class="fas fa-<?= $c['icon'] ?>"></i>
   </div>
   <div>
-    <div class="stat-val"><?= number_format($c['val']) ?></div>
     <div class="stat-label"><?= $c['label'] ?></div>
+    <div class="stat-val"><?= number_format($c['val']) ?></div>
   </div>
 </a>
 <?php endforeach; ?>
@@ -44,7 +44,7 @@ foreach($cards as $c): ?>
   <!-- 최근 공지 -->
   <div class="card">
     <div class="card-header">
-      <h2><i class="fas fa-bullhorn" style="color:#7c3aed"></i> 최근 공지</h2>
+      <h2><i class="fas fa-bullhorn" style="color:#374151"></i> 최근 공지</h2>
       <a href="<?= BASE_URL ?>/notice" class="btn btn-ghost btn-sm">전체 <i class="fas fa-arrow-right"></i></a>
     </div>
     <div class="card-body" style="padding:0">
@@ -68,7 +68,7 @@ foreach($cards as $c): ?>
   <!-- 최근 설교 -->
   <div class="card">
     <div class="card-header">
-      <h2><i class="fas fa-video" style="color:#059669"></i> 최근 설교</h2>
+      <h2><i class="fas fa-video" style="color:#374151"></i> 최근 설교</h2>
       <a href="<?= BASE_URL ?>/sermons" class="btn btn-ghost btn-sm">전체 <i class="fas fa-arrow-right"></i></a>
     </div>
     <div class="card-body" style="padding:0">
@@ -88,7 +88,7 @@ foreach($cards as $c): ?>
   <!-- 최근 부고 -->
   <div class="card">
     <div class="card-header">
-      <h2><i class="fas fa-dove" style="color:#6b7280"></i> 최근 부고</h2>
+      <h2><i class="fas fa-dove" style="color:#374151"></i> 최근 부고</h2>
       <a href="<?= BASE_URL ?>/obituary" class="btn btn-ghost btn-sm">전체 <i class="fas fa-arrow-right"></i></a>
     </div>
     <div class="card-body" style="padding:0">

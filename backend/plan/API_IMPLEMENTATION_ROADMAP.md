@@ -49,7 +49,7 @@
 - [x] 분석 대시보드 (`/api/analytics/*`)
 
 ### Phase 8 — 관리자 CMS ✅
-- [x] milalCMS PHP 8.2 + Apache 컨테이너 (포트 8090)
+- [x] CMS PHP 8.2 + Apache 컨테이너 (포트 8090)
 - [x] notice 테이블 연동 (AnnouncementController/Model)
 - [x] obituary 테이블 연동 (NewsModel → obituary)
 - [x] hero_background_images, hero_front_images, quick_links (HeroController/Model)
@@ -84,7 +84,7 @@
 | 언어 | Python (FastAPI) | 빠른 개발, 자동 OpenAPI 문서 |
 | 인증 | JWT (stateless) | 세션 서버 불필요, 수평 확장 용이 |
 | DB ORM | SQLAlchemy | Python 표준, 타입 안전성 |
-| Admin | PHP milalCMS (별도) | 기존 PHP 자산 재활용, 독립 배포 |
+| Admin | PHP CMS (별도) | 기존 PHP 자산 재활용, 독립 배포 |
 | 이미지 저장 | 로컬 파일 시스템 | S3 마이그레이션 시 경로만 변경 |
 | 컨테이너 | Docker Compose | 로컬/서버 환경 통일 |
 
@@ -99,7 +99,7 @@ Browser/Mobile
      │
      ├── :8080 → [API Nginx] → [FastAPI :8000] → [MySQL :3306]
      │
-     └── :8090 → [milalCMS Apache] → [MySQL :3306]
+     └── :8090 → [CMS Apache] → [MySQL :3306]
 
 Docker Network: milal-net (internal bridge)
 MySQL 호스트 포트: 3307

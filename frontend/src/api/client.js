@@ -140,6 +140,14 @@ export const api = {
   // Pastor introduction
   getPastorIntroduction: () => request('/api/pastor-introduction'),
 
+  // Site settings
+  getTheme: () => request('/api/settings/theme'),
+  setTheme: (theme) =>
+    request('/api/settings/theme', {
+      method: 'PUT',
+      body: JSON.stringify({ theme }),
+    }),
+
   // Existing write endpoint used in UI
   login: (username, password) =>
     request("/api/auth/login", {

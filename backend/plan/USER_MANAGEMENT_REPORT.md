@@ -2,7 +2,7 @@
 
 ## 개요
 
-밀알교회 홈페이지의 사용자 관리는 FastAPI 백엔드 API와 milalCMS PHP 관리자 패널이 공통 `users` 테이블을 공유한다.
+밀알교회 홈페이지의 사용자 관리는 FastAPI 백엔드 API와 CMS PHP 관리자 패널이 공통 `users` 테이블을 공유한다.
 
 ---
 
@@ -29,7 +29,7 @@ CREATE TABLE users (
 | 역할 | 설명 | API 접근 |
 |------|------|---------|
 | `manager` | 전체 관리 권한 | 모든 POST/PUT/DELETE 가능 |
-| `viewer` | 읽기 전용 | milalCMS 뷰만, API CUD 불가 |
+| `viewer` | 읽기 전용 | CMS 뷰만, API CUD 불가 |
 
 ---
 
@@ -99,7 +99,7 @@ CREATE TABLE users (
 
 ---
 
-## milalCMS 사용자 관리
+## CMS 사용자 관리
 
 milalCMS에서도 동일 `users` 테이블을 통해 사용자를 관리한다.
 

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { api } from "../api/client";
 
 const THEMES = [
   { id: "dark-green", label: "Green", swatch: "#3a472b" },
@@ -14,12 +15,34 @@ export function useTheme() {
     return localStorage.getItem(STORAGE_KEY) || DEFAULT_THEME;
   });
 
+  // Apply theme to DOM and persist locally
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  return [theme, setThemeState];
+  // On mount: load the DB-stored theme and apply it as the authoritative default
+  useEffect(() => {
+    api.getTheme()
+      .then((json) => {
+        console.log("Fetched theme from API:", json);
+        const remote = json?.data?.theme;
+        if (remote && remote !== (localStorage.getItem(STORAGE_KEY) || DEFAULT_THEME)) {
+          setThemeState(remote);
+        }
+      })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const setTheme = useCallback((newTheme) => {
+    setThemeState(newTheme);
+    api.setTheme(newTheme).catch(() => {});
+  }, []);
+
+  console.log("Current theme:", theme);
+
+  return [theme, setTheme];
 }
 
 export default function ThemeSwitcher({ theme, setTheme }) {

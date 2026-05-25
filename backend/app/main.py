@@ -9,6 +9,7 @@ from .routers import (
     analytics,
     auth_routes,
     banner_image,
+    settings,
     bulletins,
     departments,
     hero,
@@ -81,6 +82,7 @@ app.include_router(together.router, prefix=PREFIX)
 app.include_router(users.router, prefix=PREFIX)
 app.include_router(tracking.router, prefix=PREFIX)
 app.include_router(analytics.router, prefix=PREFIX)
+app.include_router(settings.router, prefix=PREFIX)
 
 # ── Nextgen / Ministry aliases (map to departments) ───────────────────────────
 from fastapi import Depends

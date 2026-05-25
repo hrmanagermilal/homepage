@@ -17,23 +17,35 @@ if (!function_exists('hasPerm')) {
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title><?= htmlspecialchars($pageTitle??'') ?> — <?= APP_NAME ?></title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<script>(function(){var t=localStorage.getItem('milal-theme');if(t&&t!=='dark-green')document.documentElement.setAttribute('data-theme',t);})();</script>
 <style>
-:root{--sidebar-w:240px;--header-h:56px;--primary:#4f46e5;--primary-dark:#4338ca;--bg:#f3f4f6;--surface:#fff;--text:#111827;--text-muted:#6b7280;--border:#e5e7eb;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;--radius:8px;--shadow:0 1px 3px rgba(0,0,0,.1);--shadow-md:0 4px 6px rgba(0,0,0,.1);}
+:root{--sidebar-w:240px;--header-h:56px;--primary:#5c7840;--primary-dark:#4a6530;--secondary:#e07b39;--bg:#f4f5f1;--surface:#fff;--text:#1e2818;--text-muted:#4a5c34;--border:#c8d5b0;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;--radius:12px;--shadow:0 1px 3px rgba(30,40,24,.08);--shadow-md:0 4px 12px rgba(30,40,24,.12);--sidebar-bg:#3a472b;--sidebar-text:#c5d4a8;--sidebar-accent:#9ab870;--sidebar-hover:rgba(92,120,64,.3);--focus-ring:rgba(92,120,64,.18);}
+html[data-theme="dark-blue"]{--primary:#2563eb;--primary-dark:#1d4ed8;--secondary:#f59e0b;--bg:#f0f4fc;--text:#0f172a;--text-muted:#475569;--border:#c7d7f5;--sidebar-bg:#1a2c4e;--sidebar-text:#93c5fd;--sidebar-accent:#60a5fa;--sidebar-hover:rgba(37,99,235,.3);--focus-ring:rgba(37,99,235,.18);}
+html[data-theme="dark-brown"]{--primary:#a0522d;--primary-dark:#8b3a1c;--secondary:#0d9488;--bg:#fdf5f0;--text:#1c0e08;--text-muted:#6b4228;--border:#e5d0bc;--sidebar-bg:#39221C;--sidebar-text:#d4b896;--sidebar-accent:#c87941;--sidebar-hover:rgba(160,82,45,.3);--focus-ring:rgba(160,82,45,.18);}
+.theme-bar{padding:12px 16px 16px;border-top:1px solid rgba(255,255,255,.1);margin-top:auto;display:flex;align-items:center;justify-content:space-between;}
+.theme-label{font-size:11px;font-weight:600;color:var(--sidebar-accent);letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px;}
+.theme-dots{display:flex;gap:8px;}
+.theme-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;padding:0;transition:transform .15s,border-color .15s;outline:none;}
+.theme-dot:hover{transform:scale(1.25);}
+.theme-dot.active{border-color:#fff;transform:scale(1.1);}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:"Pretendard","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
+body{font-family:"Manrope","Pretendard","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
 a{color:inherit;text-decoration:none;}
-#sidebar{width:var(--sidebar-w);background:#1e1b4b;color:#c7d2fe;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s;overflow-y:auto;}
+#sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);color:var(--sidebar-text);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s;overflow-y:auto;}
 #sidebar .logo{padding:18px 20px;font-size:15px;font-weight:700;color:#fff;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;}
-#sidebar .logo i{color:#818cf8;font-size:18px;}
-#sidebar .nav-section{padding:10px 12px 4px;font-size:10px;font-weight:600;color:#6366f1;letter-spacing:.08em;text-transform:uppercase;}
+#sidebar .logo i{color:var(--sidebar-accent);font-size:18px;}
+#sidebar .nav-section{padding:10px 12px 4px;font-size:10px;font-weight:600;color:var(--sidebar-accent);letter-spacing:.08em;text-transform:uppercase;}
 #sidebar .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:6px;margin:1px 8px;font-size:13px;transition:background .15s,color .15s;cursor:pointer;}
-#sidebar .nav-item:hover{background:rgba(99,102,241,.2);color:#fff;}
+#sidebar .nav-item:hover{background:var(--sidebar-hover);color:#fff;}
 #sidebar .nav-item.active{background:var(--primary);color:#fff;font-weight:500;}
 #sidebar .nav-item i{width:16px;font-size:14px;text-align:center;opacity:.75;}
 #sidebar .nav-item.active i{opacity:1;}
 #sidebar .nav-group{margin:1px 0;}
-#sidebar .nav-group-header{display:flex;align-items:center;gap:10px;padding:9px 16px;margin:1px 8px;border-radius:6px;font-size:13px;cursor:pointer;color:#c7d2fe;transition:background .15s,color .15s;}
-#sidebar .nav-group-header:hover{background:rgba(99,102,241,.2);color:#fff;}
+#sidebar .nav-group-header{display:flex;align-items:center;gap:10px;padding:9px 16px;margin:1px 8px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--sidebar-text);transition:background .15s,color .15s;}
+#sidebar .nav-group-header:hover{background:var(--sidebar-hover);color:#fff;}
 #sidebar .nav-group-header.open{color:#fff;}
 #sidebar .nav-group-header span{flex:1;}
 #sidebar .nav-group-header .toggle-icon{font-size:10px;transition:transform .2s;}
@@ -77,7 +89,7 @@ td{padding:10px 14px;vertical-align:middle;}
 .form-label .req{color:var(--danger);margin-left:2px;}
 .req{color:var(--danger);margin-left:2px;}
 .form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;transition:border .15s,box-shadow .15s;background:var(--surface);}
-.form-control:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.1);}
+.form-control:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--focus-ring);}
 textarea.form-control{resize:vertical;min-height:100px;}
 select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
 .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
@@ -100,7 +112,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 .pagination a,.pagination span{padding:5px 10px;border-radius:5px;font-size:13px;border:1px solid var(--border);}
 .pagination a{color:var(--text);transition:background .15s;}.pagination a:hover{background:var(--bg);}
 .pagination .active{background:var(--primary);color:#fff;border-color:var(--primary);}
-.sortable-ghost{opacity:.4;background:#e0e7ff!important;}
+.sortable-ghost{opacity:.4;background:#c8e6e8!important;}
 .drag-handle{cursor:grab;color:var(--text-muted);}
 .text-muted{color:var(--text-muted);}.text-sm{font-size:12px;}.fw-500{font-weight:500;}
 .flex{display:flex;}.flex-center{align-items:center;}.gap-8{gap:8px;}.gap-12{gap:12px;}
@@ -121,13 +133,11 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
   <div class="logo"><i class="fas fa-church"></i><?= APP_NAME ?></div>
 
   <!-- ── 대시보드 ── -->
-  <div class="nav-section">밀알교회</div>
   <a href="<?= BASE_URL ?>/dashboard" class="nav-item <?= ($currentPage??'')==='dashboard'?'active':'' ?>">
     <i class="fas fa-chart-pie"></i>대시보드
   </a>
 
   <!-- ── 메인 ── -->
-  <div class="nav-section">메인</div>
   <?php $mainActive=in_array($currentPage??'',['heroes','section-titles','sermons','bulletins','worship','traffic','banner']); ?>
   <div class="nav-group">
     <div class="nav-group-header <?= $mainActive?'open':'' ?>" onclick="toggleGroup(this)">
@@ -160,7 +170,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <!-- ── Introduction ── -->
   <?php $introActive=in_array($currentPage??'',['intro-vision','intro-pastor','intro-together','members']); ?>
-  <div class="nav-section">Introduction</div>
   <div class="nav-group">
     <div class="nav-group-header <?= $introActive?'open':'' ?>" onclick="toggleGroup(this)">
       <i class="fas fa-church"></i><span>Introduction</span><i class="fas fa-chevron-right toggle-icon"></i>
@@ -181,7 +190,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <!-- ── 다음세대 ── -->
   <?php $nextgenActive=($currentPage??'')==='departments-nextgen'; ?>
-  <div class="nav-section">다음세대</div>
   <div class="nav-group">
     <div class="nav-group-header <?= $nextgenActive?'open':'' ?>" onclick="toggleGroup(this)">
       <i class="fas fa-child"></i><span>다음세대</span><i class="fas fa-chevron-right toggle-icon"></i>
@@ -195,7 +203,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <!-- ── 사역 ── -->
   <?php $ministryActive=in_array($currentPage??'',['ministry']); ?>
-  <div class="nav-section">사역</div>
   <div class="nav-group">
     <div class="nav-group-header <?= $ministryActive?'open':'' ?>" onclick="toggleGroup(this)">
       <i class="fas fa-hands-helping"></i><span>사역</span><i class="fas fa-chevron-right toggle-icon"></i>
@@ -209,7 +216,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <!-- ── 소식 ── -->
   <?php $newsActive=in_array($currentPage??'',['bulletins-news','notice','obituary']); ?>
-  <div class="nav-section">소식</div>
   <div class="nav-group">
     <div class="nav-group-header <?= $newsActive?'open':'' ?>" onclick="toggleGroup(this)">
       <i class="fas fa-newspaper"></i><span>소식</span><i class="fas fa-chevron-right toggle-icon"></i>
@@ -229,7 +235,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <!-- ── 시스템 ── -->
   <?php if(hasPerm('users.view')): ?>
-  <div class="nav-section">시스템</div>
   <a href="<?= BASE_URL ?>/users" class="nav-item <?= ($currentPage??'')==='users'?'active':'' ?>">
     <i class="fas fa-user-cog"></i>사용자 관리
   </a>
@@ -238,12 +243,21 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
   </a>
   <?php endif; ?>
 
+  <!-- ── 테마 ── -->
+  <div class="theme-bar">
+    <span class="theme-label"><i class="fas fa-palette"></i> 테마</span>
+    <div class="theme-dots">
+      <button class="theme-dot" data-t="dark-green" title="그린" style="background:#3a472b"></button>
+      <button class="theme-dot" data-t="dark-blue" title="블루" style="background:#1a2c4e"></button>
+      <button class="theme-dot" data-t="dark-brown" title="브라운" style="background:#39221C"></button>
+    </div>
+  </div>
+
 </nav>
 
 <!-- Header -->
 <header id="header">
   <div style="display:flex;align-items:center;gap:12px;">
-    <button onclick="document.getElementById('sidebar').classList.toggle('open')" id="menu-btn" style="display:none;background:none;border:none;cursor:pointer;font-size:18px;"><i class="fas fa-bars"></i></button>
     <span class="page-title"><?= htmlspecialchars($pageTitle??'') ?></span>
   </div>
   <div class="header-right">

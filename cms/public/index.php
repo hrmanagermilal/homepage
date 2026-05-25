@@ -37,6 +37,7 @@ if(file_exists(BASE_PATH.'/app/Controllers/WorshipController.php'))  require_onc
 if(file_exists(BASE_PATH.'/app/Controllers/TrafficController.php'))  require_once BASE_PATH.'/app/Controllers/TrafficController.php';
 if(file_exists(BASE_PATH.'/app/Controllers/BannerController.php'))   require_once BASE_PATH.'/app/Controllers/BannerController.php';
 if(file_exists(BASE_PATH.'/app/Controllers/SectionTitleController.php')) require_once BASE_PATH.'/app/Controllers/SectionTitleController.php';
+if(file_exists(BASE_PATH.'/app/Controllers/SettingsController.php'))     require_once BASE_PATH.'/app/Controllers/SettingsController.php';
 if(file_exists(BASE_PATH.'/app/Models/CmsModel.php'))                require_once BASE_PATH.'/app/Models/CmsModel.php';
 if(file_exists(BASE_PATH.'/app/Controllers/CmsController.php'))      require_once BASE_PATH.'/app/Controllers/CmsController.php';
 
@@ -60,7 +61,11 @@ $routes = [
     // ── Dashboard ─────────────────────────────────────────
     'dashboard' => ['' => ['DashboardController','index']],
 
-    // ── Introduction ──────────────────────────────────────
+    // ── Settings (API for theme etc.) ─────────────────────
+    'settings' => [
+        'theme' => ['SettingsController','setTheme'],
+    ],
+
     'introduction' => [
         'vision'           => ['IntroductionController','vision'],
         'vision-list'      => ['IntroductionController','visionList'],

@@ -18,7 +18,7 @@ RUN docker-php-ext-configure gd --with-jpeg --with-webp \
 # ── Apache: enable mod_rewrite for .htaccess URL routing ─────────────────────
 RUN a2enmod rewrite
 
-# ── Apache: configure DocumentRoot to milalCMS/public/ ───────────────────────
+# ── Apache: configure DocumentRoot to CMS/public/ ───────────────────────
 RUN { \
     echo '<VirtualHost *:80>'; \
     echo '    ServerAdmin webmaster@localhost'; \

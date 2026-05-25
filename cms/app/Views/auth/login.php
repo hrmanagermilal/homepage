@@ -4,22 +4,29 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>로그인 — <?= APP_NAME ?></title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<script>(function(){var t=localStorage.getItem('milal-theme');if(t&&t!=='dark-green')document.documentElement.setAttribute('data-theme',t);})();</script>
 <style>
+:root{--primary:#5c7840;--primary-dark:#4a6530;--sidebar-bg:#3a472b;--focus-ring:rgba(92,120,64,.18);--text:#1e2818;}
+html[data-theme="dark-blue"]{--primary:#2563eb;--primary-dark:#1d4ed8;--sidebar-bg:#1a2c4e;--focus-ring:rgba(37,99,235,.18);--text:#0f172a;}
+html[data-theme="dark-brown"]{--primary:#a0522d;--primary-dark:#8b3a1c;--sidebar-bg:#39221C;--focus-ring:rgba(160,82,45,.18);--text:#1c0e08;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Pretendard","Apple SD Gothic Neo",sans-serif;background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4f46e5 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+body{font-family:"Manrope","Pretendard","Apple SD Gothic Neo",sans-serif;background:linear-gradient(135deg,var(--sidebar-bg) 0%,var(--primary-dark) 50%,var(--primary) 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .card{background:#fff;border-radius:16px;box-shadow:0 25px 50px rgba(0,0,0,.25);width:100%;max-width:400px;padding:40px}
 .logo{text-align:center;margin-bottom:32px}
-.logo i{font-size:40px;color:#4f46e5;margin-bottom:12px;display:block}
-.logo h1{font-size:22px;font-weight:700;color:#1e1b4b;margin-bottom:4px}
+.logo i{font-size:40px;color:var(--primary);margin-bottom:12px;display:block}
+.logo h1{font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px}
 .logo p{font-size:13px;color:#6b7280}
 .fg{margin-bottom:16px}
 label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#374151}
 .iw{position:relative}
 .iw i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:14px}
 input{width:100%;padding:10px 12px 10px 36px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;transition:border .15s,box-shadow .15s}
-input:focus{outline:none;border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.1)}
-.btn{width:100%;padding:12px;background:#4f46e5;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:hover{background:#4338ca}
+input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--focus-ring)}
+.btn{width:100%;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:var(--primary-dark)}
 .btn:disabled{background:#9ca3af;cursor:not-allowed}
 .err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 </style>

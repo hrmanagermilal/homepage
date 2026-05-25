@@ -104,13 +104,35 @@ function toggleGroup(header){
   if(body) body.style.display=body.style.display==="none"?"block":"none";
 }
 /* ── Mobile sidebar ─────────────────────────────── */
-const menuBtn=document.getElementById('menu-btn');
-if(menuBtn) menuBtn.style.display='block';
 document.querySelectorAll('.modal-overlay').forEach(o=>{
   o.addEventListener('click',e=>{if(e.target===o)o.classList.add('hidden');});
 });
 
 /* ── pageInit (Sortable 로드 후 실행) ────────────── */
 if(typeof pageInit==='function') pageInit();
+
+/* ── 테마 switcher ───────────────────────────────── */
+(function(){
+  function saveTheme(t){
+    fetch(BASE_URL+'/settings/theme',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({theme:t})
+    }).catch(function(){});
+  }
+  function applyTheme(t,persist){
+    if(t==='dark-green') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme',t);
+    localStorage.setItem('milal-theme',t);
+    document.querySelectorAll('.theme-dot').forEach(function(b){
+      b.classList.toggle('active',b.dataset.t===t);
+    });
+    if(persist) saveTheme(t);
+  }
+  applyTheme(localStorage.getItem('milal-theme')||'dark-green', false);
+  document.querySelectorAll('.theme-dot').forEach(function(b){
+    b.addEventListener('click',function(){applyTheme(this.dataset.t, true);});
+  });
+})();
 </script>
 </body></html>
