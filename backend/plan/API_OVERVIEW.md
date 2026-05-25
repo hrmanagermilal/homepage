@@ -2,7 +2,7 @@
 
 ## 프로젝트 개요
 
-밀알교회 홈페이지 백엔드 REST API. Docker 기반으로 배포되며 React 프론트엔드와 milalCMS 관리자 패널이 동일 MySQL DB를 공유한다.
+밀알교회 홈페이지 백엔드 REST API. Docker 기반으로 배포되며 React 프론트엔드와 CMS 관리자 패널이 동일 MySQL DB를 공유한다.
 
 ---
 
@@ -18,7 +18,7 @@
 | Server | Uvicorn |
 | Reverse Proxy | Nginx |
 | Container | Docker / Docker Compose |
-| Admin CMS | PHP 8.2 + Apache (milalCMS, 별도 컨테이너) |
+| Admin CMS | PHP 8.2 + Apache (CMS, 별도 컨테이너) |
 
 ---
 
@@ -28,7 +28,7 @@
 |--------|------|------|
 | Frontend (React) | :80 | Nginx → Vite 빌드 결과물 서빙 |
 | API (FastAPI) | :8080 | Nginx → Uvicorn(8000) |
-| milalCMS (PHP) | :8090 | Apache, 관리자 CMS |
+| CMS (PHP) | :8090 | Apache, 관리자 CMS |
 | MySQL | :3307 | 호스트 포트 (내부: 3306) |
 
 **네트워크**: 모든 컨테이너가 `milal-net` Docker 브리지 네트워크 사용

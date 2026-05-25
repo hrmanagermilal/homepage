@@ -9,7 +9,7 @@
 밀알교회 홈페이지를 위한 RESTful API를 제공한다.
 
 - 프론트엔드(React)가 소비하는 공개 데이터 API
-- milalCMS(PHP) 관리자 패널이 공유하는 동일 DB
+- CMS(PHP) 관리자 패널이 공유하는 동일 DB
 - 관리 작업은 JWT 인증으로 보호
 
 ---

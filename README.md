@@ -16,7 +16,7 @@
 homepage/
 ├── backend/          # REST API 백엔드 (Python FastAPI + MySQL)
 ├── frontend/         # 공개 홈페이지 (React 18 + MUI + Vite)
-├── milalCMS/         # 관리자 CMS (PHP 8.2 + Apache)
+├── CMS/         # 관리자 CMS (PHP 8.2 + Apache)
 ├── compose-all.sh    # 전체 서비스 일괄 시작 스크립트
 └── publish/          # 정적 HTML 참고 파일 (개발 참조용)
 ```
@@ -55,7 +55,7 @@ cd backend && docker compose up --build -d && cd ..
 cd frontend && docker compose up --build -d && cd ..
 
 # CMS (milal-net에 자동으로 합류)
-cd milalCMS && docker compose up --build -d && cd ..
+cd CMS && docker compose up --build -d && cd ..
 ```
 
 또는 스크립트로 한 번에:
@@ -107,7 +107,7 @@ bash compose-all.sh
 
 - **[backend/README.md](backend/README.md)** — FastAPI 엔드포인트 목록, DB 접속 정보
 - **[frontend/README.md](frontend/README.md)** — React 개발 서버, 빌드 방법
-- **milalCMS/** — PHP MVC 관리자 패널, 포트 8090
+- **CMS/** — PHP MVC 관리자 패널, 포트 8090
 
 ---
 

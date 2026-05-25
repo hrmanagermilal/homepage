@@ -29,8 +29,31 @@ export default function Announcement({ items = [], section = null }) {
   const sectionRef = useRef(null);
   const stateRef = useRef({ current: 0, total: cards.length, animating: false, timer: null, dragging: false, hasDragged: false, startX: 0, startSX: 0 });
   const [selectedCard, setSelectedCard] = useState(null);
+  const [urgentItem, setUrgentItem] = useState(null);
   const [dotIndex, setDotIndex] = useState(0);
   const setDotIndexRef = useRef(setDotIndex);
+  // Show urgent popup once per session for the first urgent item
+  useEffect(() => {
+    const first = items.find((item) => item?.emergency_level === "urgent");
+    if (!first) return;
+    const key = `urgent-dismissed-${first.id || first.title}`;
+    if (sessionStorage.getItem(key)) return;
+    const expires = Number(localStorage.getItem(key) || 0);
+    if (expires && Date.now() < expires) return;
+    setUrgentItem(first);
+  }, [items]);
+
+  const dismissUrgent = useCallback((skipToday) => {
+    if (!urgentItem) return;
+    const key = `urgent-dismissed-${urgentItem.id || urgentItem.title}`;
+    if (skipToday) {
+      const expires = Date.now() + 24 * 60 * 60 * 1000;
+      localStorage.setItem(key, String(expires));
+    }
+    sessionStorage.setItem(key, "1");
+    setUrgentItem(null);
+  }, [urgentItem]);
+
   // Keep a stable ref so the DOM event listener can access current values
   const cardsRef = useRef(cards);
   const setSelectedCardRef = useRef(setSelectedCard);
@@ -208,15 +231,20 @@ export default function Announcement({ items = [], section = null }) {
 
   // Lock body scroll and handle Escape key when modal is open
   useEffect(() => {
-    if (!selectedCard) return;
+    if (!selectedCard && !urgentItem) return;
     document.body.style.overflow = "hidden";
-    const onKey = (e) => { if (e.key === "Escape") setSelectedCard(null); };
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        if (urgentItem) dismissUrgent(false);
+        else setSelectedCard(null);
+      }
+    };
     document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       document.removeEventListener("keydown", onKey);
     };
-  }, [selectedCard]);
+  }, [selectedCard, urgentItem, dismissUrgent]);
 
   return (
     <>
@@ -277,6 +305,50 @@ export default function Announcement({ items = [], section = null }) {
         </div>
       </section>
     </div>
+
+    {/* 긴급 공지 팝업 */}
+    {urgentItem && (
+      <div className={`urgent-popup${urgentItem ? " is-open" : ""}`} role="alertdialog" aria-modal="true" aria-label="긴급 공지">
+        <div className="urgent-popup__overlay" onClick={() => dismissUrgent(false)} />
+        <div className="urgent-popup__content">
+          <div className="urgent-popup__badge">
+            <span className="urgent-popup__badge-icon" aria-hidden="true">🚨</span>
+            <span className="urgent-popup__badge-text">긴급 공지</span>
+          </div>
+          {(urgentItem.thumbnail || urgentItem.thumbnail_url || urgentItem.image || urgentItem.image_url) && (
+            <img
+              className="urgent-popup__image"
+              src={getNewsImage(urgentItem, 0)}
+              alt={urgentItem.title || "긴급 공지"}
+            />
+          )}
+          <div className="urgent-popup__body">
+            <p className="urgent-popup__title">{urgentItem.title}</p>
+            {urgentItem.link && urgentItem.link !== "#" && (
+              <a
+                className="urgent-popup__link"
+                href={urgentItem.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => dismissUrgent(false)}
+              >
+                {urgentItem.link_text || "자세히 보기"}
+              </a>
+            )}
+          </div>
+          <div className="urgent-popup__footer">
+            <button className="urgent-popup__skip" type="button" onClick={() => dismissUrgent(true)}>
+              오늘 하루 보지 않기
+            </button>
+            <button className="urgent-popup__close" type="button" aria-label="닫기" onClick={() => dismissUrgent(false)}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L13 13M13 1L1 13" stroke="#333" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
 
     {/* 뉴스카드 팝업 */}
     {selectedCard && (

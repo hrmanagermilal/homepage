@@ -66,25 +66,6 @@ async def upload_pdf(
     return await bulletin_pdf_to_image(
         pdf_bytes, title, year, week_number, db
     )
-
-@router.post("/transform-pdf")
-async def transform_pdf(
-    file_path: str = Form(...),
-    title: str = Form(...),
-    year: int = Form(...),
-    week_number: int = Form(...),
-    db: Connection = Depends(get_db),
-):
-    if not (file_path or "").lower().endswith(".pdf"):
-        return error("Only PDF files are accepted", "INVALID_FILE_TYPE", 400)
-
-    try:
-        with open(file_path, "rb") as f:
-            pdf_bytes = f.read()
-    except Exception:
-        return error("Failed to read PDF file", "INVALID_FILE_PATH", 400)
-    return await bulletin_pdf_to_image(pdf_bytes, title, year, week_number, db)
-
 BULLETIN_UPLOAD_DIR = "uploads/bulletin"
 # Per-page section boundaries as fractions of page width [left_edge, ..., right_edge]
 # Index 0 = page 1, index 1 = page 2, etc. Last entry is reused for any extra pages.
@@ -95,6 +76,71 @@ COLUMN_SPLITS: list[list[float]] = [
 RENDER_SCALE = 2.0  # ~144 DPI
 CONTRAST_FACTOR = 1.2  # subtle contrast boost (1.0 = original)
 
+@router.post("/transform-pdf")
+async def transform_pdf(
+    file_path: str = Form(...),
+    bulletin_id: int | None = Form(None),
+    db: Connection = Depends(get_db),
+):
+    if not (file_path or "").lower().endswith(".pdf"):
+        return error("Only PDF files are accepted", "INVALID_FILE_TYPE", 400)
+
+    uploads_base = os.getenv("UPLOADS_PATH", "./uploads")
+    rel = file_path.lstrip("/")
+    if rel.startswith("uploads/"):
+        rel = rel[len("uploads/"):]
+    resolved = os.path.join(uploads_base, rel)
+    if not os.path.isfile(resolved):
+        return error(f"PDF file not found: {resolved}", "FILE_NOT_FOUND", 404)
+
+    try:
+        import fitz  # PyMuPDF
+        from PIL import Image, ImageEnhance
+
+        with open(resolved, "rb") as f:
+            pdf_bytes = f.read()
+        order = [5,4,0,1,2,3]
+        os.makedirs(BULLETIN_UPLOAD_DIR, exist_ok=True)
+        saved: list[dict] = []
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        total_order = 0
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            rect = page.rect
+            mat = fitz.Matrix(RENDER_SCALE, RENDER_SCALE)
+            splits = COLUMN_SPLITS[min(page_num, len(COLUMN_SPLITS) - 1)]
+
+            for col, (pct_start, pct_end) in enumerate(zip(splits, splits[1:])):
+                clip = fitz.Rect(
+                    rect.x0 + pct_start * rect.width, rect.y0,
+                    rect.x0 + pct_end * rect.width, rect.y1,
+                )
+                pix = page.get_pixmap(matrix=mat, clip=clip)
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                img = ImageEnhance.Contrast(img).enhance(CONTRAST_FACTOR)
+                filename = f"{uuid.uuid4().hex}.png"
+                filepath = os.path.join(BULLETIN_UPLOAD_DIR, filename)
+                img.save(filepath, "PNG")
+
+                saved.append({
+                    "image_url": f"uploads/bulletin/{filename}",
+                    "order": order[total_order % len(order)],
+                })
+                total_order += 1
+    finally:
+        doc.close()
+
+    if bulletin_id is not None:
+        with db.cursor() as cur:
+            cur.execute("DELETE FROM bulletin_images WHERE bulletin_id = %s", (bulletin_id,))
+            for img in saved:
+                cur.execute(
+                    "INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES (%s, %s, %s)",
+                    (bulletin_id, img["image_url"], img["order"]),
+                )
+        db.commit()
+
+    return success({"saved_images": saved})
 
 async def bulletin_pdf_to_image(
     pdf_bytes: bytes,

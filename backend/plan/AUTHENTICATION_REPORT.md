@@ -138,13 +138,13 @@ Payload: {"sub": "1", "exp": 1234567890}
 | Manager | `manager` | 모든 관리 작업 가능 |
 | Viewer | `viewer` | 읽기 전용 (관리자 패널 뷰만) |
 
-현재 API 레벨에서는 `is_active` 확인만 수행하며, 역할 기반 세분화는 milalCMS 레이어에서 처리한다.
+현재 API 레벨에서는 `is_active` 확인만 수행하며, 역할 기반 세분화는 CMS 레이어에서 처리한다.
 
 ---
 
-## milalCMS 인증
+## CMS 인증
 
-milalCMS(PHP 8.2)는 별도의 세션 기반 인증을 사용한다.
+CMS(PHP 8.2)는 별도의 세션 기반 인증을 사용한다.
 
 - `$_SESSION['user_id']` 로 로그인 상태 유지
 - `Middleware/AuthMiddleware.php` 에서 접근 제어

@@ -27,7 +27,7 @@ docker compose up --build -d
 ### 관리자 CMS 시작
 
 ```bash
-cd milalCMS
+cd CMS
 docker compose up --build -d
 ```
 
@@ -166,15 +166,15 @@ async def create_with_image(image: UploadFile = File(...)):
 
 ---
 
-## 6. milalCMS (PHP 관리자 패널)
+## 6. CMS (PHP 관리자 패널)
 
-- **경로**: `milalCMS/`
+- **경로**: `CMS/`
 - **포트**: 8090
 - **언어**: PHP 8.2 + Apache
 - **DB**: 동일 `milal_homepage` DB에 접근
 
 ```
-milalCMS/
+CMS/
 ├── app/
 │   ├── Controllers/         # AnnouncementController, HeroController, ...
 │   ├── Models/              # AnnouncementModel, NewsModel(=obituary), ...
@@ -189,7 +189,7 @@ milalCMS/
 └── docker-compose.yml
 ```
 
-### milalCMS 환경 변수
+### CMS 환경 변수
 
 ```yaml
 environment:

@@ -610,5 +610,17 @@ DELIMITER ;
 CALL _migrate_departments();
 DROP PROCEDURE IF EXISTS _migrate_departments;
 
+-- ===============================================
+-- Site Settings (key-value store)
+-- ===============================================
+CREATE TABLE IF NOT EXISTS site_settings (
+  `key`      VARCHAR(100) PRIMARY KEY,
+  value      VARCHAR(500) NOT NULL DEFAULT '',
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Default theme
+INSERT IGNORE INTO site_settings (`key`, value) VALUES ('theme', 'dark-green');
+
 -- 테이블 조회
 SHOW TABLES;
