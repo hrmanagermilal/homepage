@@ -100,7 +100,7 @@ export default function Contacts({ shuttleBusSchedule = [], parkingLot = [], par
                 <li>
                   <a className="main-direction__quick-btn" href="https://youtube.com/@milalchurch?si=j7abaAQkcDaHUn5Q" target="_blank" rel="noopener noreferrer">
                     <div className="main-direction__quick-icon main-direction__quick-icon--youtube"><img src="/images/main/ic-map02.svg" alt="" aria-hidden="true" /></div>
-                    <span data-text="xsm-sb">실시간 예배</span>
+                    <span data-text="xsm-sb">예배 영상</span>
                   </a>
                 </li>
                 <li>

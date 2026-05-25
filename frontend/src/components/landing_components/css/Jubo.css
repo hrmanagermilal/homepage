@@ -8,10 +8,10 @@
 .main-weekly__bg {position: absolute; inset: 0;}
 .main-weekly__bg img {position: absolute; opacity: 0.2; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; pointer-events: none;}
 .main-weekly__inr > .wrap-narrow {position: relative; z-index: 1; height: 100%;}
-.main-weekly__layout {display: flex; align-items: flex-end; height: 100%; padding: 60rem 0; gap: 100rem;}
+.main-weekly__layout {display: flex; align-items: center; height: 100%; padding: 60rem 0; gap: 100rem;}
 .main-weekly__thumb-area {flex-shrink: 0;}
 .main-weekly__thumb-wrap {display: inline-flex; align-items: center; position: relative; padding: 40rem; background: rgba(255,255,255,0.05); border-radius: 20rem; cursor: pointer;}
-.main-weekly__card {position: relative; overflow: hidden; flex-shrink: 0; width: 520rem; height: 780rem; background: #f0ece7; border-radius: 10rem; box-shadow: 0 10rem 20rem rgba(0,0,0,0.15);}
+.main-weekly__card {position: relative; overflow: hidden; flex-shrink: 0; width: 520rem; height: 980rem; background: #f0ece7; border-radius: 10rem; box-shadow: 0 10rem 20rem rgba(0,0,0,0.15);}
 .main-weekly__card img {position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; animation: jubo-card-fadein 0.35s ease;}
 @keyframes jubo-card-fadein {
   from {opacity: 0; transform: scale(1.03);}

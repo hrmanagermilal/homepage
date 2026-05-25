@@ -71,10 +71,12 @@ export default function NextGenDepartment({
                 <span>{pastorEmail}</span>
               </a>
             </div>
-            <a className="next-gen__kakao-btn" href={kakaoLink} target="_blank" rel="noopener noreferrer">
-              <img src="/images/sub/02-next-generation/icon-kakao.svg" alt="" />
-              <span>{kakaoLabel}</span>
-            </a>
+            {kakaoLink && kakaoLabel && (
+              <a className="next-gen__kakao-btn" href={kakaoLink} target="_blank" rel="noopener noreferrer">
+                <img src="/images/sub/02-next-generation/icon-kakao.svg" alt="" />
+                <span>{kakaoLabel}</span>
+              </a>
+            )}
           </div>
           <div className="next-gen__pastor-watermark" aria-hidden="true">
             <img src="/images/sub/02-next-generation/icon-watermark.png" alt="" />
