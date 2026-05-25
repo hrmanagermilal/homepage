@@ -103,22 +103,22 @@ INSERT INTO `role_permissions`(`role_id`,`permission_id`) SELECT @role_viewer,id
 -- ===============================================
 
 INSERT INTO hero_background_images (image_url, `order`, alt_text) VALUES 
-('heroes/main-visual-slide-07.jpg', 1, 'Community Service'),
-('heroes/main-visual-slide-02.jpg', 2, 'Worship Service'),
-('heroes/main-visual-slide-01.jpg', 3, 'Church Building'),
-('heroes/main-visual-slide-04.jpg', 4, 'Community Service'),
-('heroes/main-visual-slide-06.jpg', 6, 'Worship Service');
+('/uploads/heroes/main-visual-slide-07.jpg', 1, 'Community Service'),
+('/uploads/heroes/main-visual-slide-02.jpg', 2, 'Worship Service'),
+('/uploads/heroes/main-visual-slide-01.jpg', 3, 'Church Building'),
+('/uploads/heroes/main-visual-slide-04.jpg', 4, 'Community Service'),
+('/uploads/heroes/main-visual-slide-06.jpg', 6, 'Worship Service');
 
 
 
 -- 프론트 이미지
 INSERT INTO hero_front_images (image_url, alt_text) VALUES 
-('heroes/main-visual-text.png', '밀알교회는 하나님의 사람을 세웁니다.\n모퉁이돌 되신 예수 안에 함께 지어져 가는 공동체입니다.');
+('/uploads/heroes/main-visual-text.png', '밀알교회는 하나님의 사람을 세웁니다.\n모퉁이돌 되신 예수 안에 함께 지어져 가는 공동체입니다.');
 
 -- 퀵 링크
 INSERT INTO quick_links (title, link, image, `desc`) VALUES
-('예배 시간 안내', '#worship', 'heroes/icons/icon-quick-worship.svg', '밀알교회의 예배시간을 알려드립니다.'),
-('주보', '#weekly', 'heroes/icons/icon-quick-bulletin.svg', '예배와 소식 내용을 확인해 보세요.');
+('예배 시간 안내', '#worship', '/uploads/heroes/icons/icon-quick-worship.svg', '밀알교회의 예배시간을 알려드립니다.'),
+('주보', '#weekly', '/uploads/heroes/icons/icon-quick-bulletin.svg', '예배와 소식 내용을 확인해 보세요.');
 
 -- ===============================================
 -- 1-1. 섹션 테스트 데이터
@@ -156,9 +156,9 @@ INSERT INTO vision_statements (title, title_en, points, points_en, `order`, is_a
 -- ===============================================
 
 INSERT INTO sermon_categories (title, image) VALUES
-('주일예배', 'sermons/categories/sunday-worship.jpg'),
-('시리즈설교', 'sermons/categories/series-sermon.jpg'),
-('강해설교', 'sermons/categories/expository-sermon.jpg');
+('주일예배', '/uploads/sermons/categories/sunday-worship.jpg'),
+('시리즈설교', '/uploads/sermons/categories/series-sermon.jpg'),
+('강해설교', '/uploads/sermons/categories/expository-sermon.jpg');
 
 SET @cat_sunday = (SELECT id FROM sermon_categories WHERE title = '주일예배' LIMIT 1);
 
@@ -214,40 +214,40 @@ INSERT INTO bulletins (title, week_number, `year`) VALUES
 
 -- 주보 이미지 (테스트용)
 INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
-(1, 'bulletins/1/weekly-bulletin-01.png', 1),
-(1, 'bulletins/1/weekly-bulletin-02.png', 2),
-(1, 'bulletins/1/weekly-bulletin-03.png', 3),
-(1, 'bulletins/1/weekly-bulletin-04.png', 4),
-(1, 'bulletins/1/weekly-bulletin-05.png', 5),
-(1, 'bulletins/1/weekly-bulletin-06.png', 6);
+(1, '/uploads/bulletins/1/weekly-bulletin-01.png', 1),
+(1, '/uploads/bulletins/1/weekly-bulletin-02.png', 2),
+(1, '/uploads/bulletins/1/weekly-bulletin-03.png', 3),
+(1, '/uploads/bulletins/1/weekly-bulletin-04.png', 4),
+(1, '/uploads/bulletins/1/weekly-bulletin-05.png', 5),
+(1, '/uploads/bulletins/1/weekly-bulletin-06.png', 6);
 INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
-(2, 'bulletins/2/weekly-bulletin-01.png', 1),
-(2, 'bulletins/2/weekly-bulletin-02.png', 2),
-(2, 'bulletins/2/weekly-bulletin-03.png', 3),
-(2, 'bulletins/2/weekly-bulletin-04.png', 4),
-(2, 'bulletins/2/weekly-bulletin-05.png', 5),
-(2, 'bulletins/2/weekly-bulletin-06.png', 6);
+(2, '/uploads/bulletins/2/weekly-bulletin-01.png', 1),
+(2, '/uploads/bulletins/2/weekly-bulletin-02.png', 2),
+(2, '/uploads/bulletins/2/weekly-bulletin-03.png', 3),
+(2, '/uploads/bulletins/2/weekly-bulletin-04.png', 4),
+(2, '/uploads/bulletins/2/weekly-bulletin-05.png', 5),
+(2, '/uploads/bulletins/2/weekly-bulletin-06.png', 6);
 INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
-(3, 'bulletins/3/weekly-bulletin-01.png', 1),
-(3, 'bulletins/3/weekly-bulletin-02.png', 2),
-(3, 'bulletins/3/weekly-bulletin-03.png', 3),
-(3, 'bulletins/3/weekly-bulletin-04.png', 4),
-(3, 'bulletins/3/weekly-bulletin-05.png', 5),
-(3, 'bulletins/3/weekly-bulletin-06.png', 6);
+(3, '/uploads/bulletins/3/weekly-bulletin-01.png', 1),
+(3, '/uploads/bulletins/3/weekly-bulletin-02.png', 2),
+(3, '/uploads/bulletins/3/weekly-bulletin-03.png', 3),
+(3, '/uploads/bulletins/3/weekly-bulletin-04.png', 4),
+(3, '/uploads/bulletins/3/weekly-bulletin-05.png', 5),
+(3, '/uploads/bulletins/3/weekly-bulletin-06.png', 6);
 INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
-(4, 'bulletins/4/weekly-bulletin-01.png', 1),
-(4, 'bulletins/4/weekly-bulletin-02.png', 2),
-(4, 'bulletins/4/weekly-bulletin-03.png', 3),
-(4, 'bulletins/4/weekly-bulletin-04.png', 4),
-(4, 'bulletins/4/weekly-bulletin-05.png', 5),
-(4, 'bulletins/4/weekly-bulletin-06.png', 6);
+(4, '/uploads/bulletins/4/weekly-bulletin-01.png', 1),
+(4, '/uploads/bulletins/4/weekly-bulletin-02.png', 2),
+(4, '/uploads/bulletins/4/weekly-bulletin-03.png', 3),
+(4, '/uploads/bulletins/4/weekly-bulletin-04.png', 4),
+(4, '/uploads/bulletins/4/weekly-bulletin-05.png', 5),
+(4, '/uploads/bulletins/4/weekly-bulletin-06.png', 6);
 INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES 
-(5, 'bulletins/5/weekly-bulletin-01.png', 1),
-(5, 'bulletins/5/weekly-bulletin-02.png', 2),
-(5, 'bulletins/5/weekly-bulletin-03.png', 3),
-(5, 'bulletins/5/weekly-bulletin-04.png', 4),
-(5, 'bulletins/5/weekly-bulletin-05.png', 5),
-(5, 'bulletins/5/weekly-bulletin-06.png', 6);
+(5, '/uploads/bulletins/5/weekly-bulletin-01.png', 1),
+(5, '/uploads/bulletins/5/weekly-bulletin-02.png', 2),
+(5, '/uploads/bulletins/5/weekly-bulletin-03.png', 3),
+(5, '/uploads/bulletins/5/weekly-bulletin-04.png', 4),
+(5, '/uploads/bulletins/5/weekly-bulletin-05.png', 5),
+(5, '/uploads/bulletins/5/weekly-bulletin-06.png', 6);
 
 
 -- ===============================================
@@ -255,9 +255,9 @@ INSERT INTO bulletin_images (bulletin_id, image_url, `order`) VALUES
 -- ===============================================
 
 INSERT INTO together_items (title, description, image, link, `order`, is_active) VALUES 
-('하늘씨앗 교회', '복음 안에서 함께하는 파트너 교회', 'together/partner-logo-01.png', 'https://www.hsctoronto.com/', 1, TRUE),
-('Bridgeway Church', '복음 안에서 함께하는 파트너 교회', 'together/partner-logo-02.png', 'https://bridgewaychurch.ca/', 2, TRUE),
-('순례길교회', '복음 안에서 함께하는 파트너 교회', 'together/partner-logo-03.png', 'https://jcchurch.ca/', 3, TRUE);
+('하늘씨앗 교회', '복음 안에서 함께하는 파트너 교회', '/uploads/together/partner-logo-01.png', 'https://www.hsctoronto.com/', 1, TRUE),
+('Bridgeway Church', '복음 안에서 함께하는 파트너 교회', '/uploads/together/partner-logo-02.png', 'https://bridgewaychurch.ca/', 2, TRUE),
+('순례길교회', '복음 안에서 함께하는 파트너 교회', '/uploads/together/partner-logo-03.png', 'https://jcchurch.ca/', 3, TRUE);
 
 -- ===============================================
 -- 6. 다음세대 부서 테스트 데이터
@@ -311,11 +311,11 @@ INSERT INTO obituary (title, description, content, date) VALUES
 
 INSERT INTO notice (title, content, writer_name, emergency_level, created_date, views, image, link, link_text) VALUES
 ('폭설로 인한 대면예배 취소안내',   '금일 폭설로 인해 대면예배가 취소되었습니다. 온라인 예배로 대체하오니 양해 부탁드립니다.', '행정부', 'urgent', '2026-05-18', 0, NULL, NULL, NULL),
-('제3회 가스펠오락관 - 암송축제편', '제3회 가스펠오락관 암송축제편 행사를 안내드립니다. 많은 참여 바랍니다.', '교육부', 'normal', '2026-05-01', 245, 'notice/news-thumb-01.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
-('BAPTISM',                         '세례 예식 안내드립니다. 세례를 원하시는 분들은 교역자에게 문의해 주시기 바랍니다.', '행정부', 'normal', '2026-04-20', 312, 'notice/news-thumb-02.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', NULL),
-('워크톤 페스티벌',                 '워크톤 페스티벌에 초대합니다. 즐거운 시간이 될 것입니다.', '청년부', 'normal', '2026-04-10', 189, 'notice/news-thumb-03.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
-('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '성전관리', 'normal', '2026-03-25', 156, 'notice/news-thumb-04.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
-('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '행정부', 'normal', '2026-03-10', 421, 'notice/news-thumb-05.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기');
+('제3회 가스펠오락관 - 암송축제편', '제3회 가스펠오락관 암송축제편 행사를 안내드립니다. 많은 참여 바랍니다.', '교육부', 'normal', '2026-05-01', 245, '/uploads/notice/news-thumb-01.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('BAPTISM',                         '세례 예식 안내드립니다. 세례를 원하시는 분들은 교역자에게 문의해 주시기 바랍니다.', '행정부', 'normal', '2026-04-20', 312, '/uploads/notice/news-thumb-02.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', NULL),
+('워크톤 페스티벌',                 '워크톤 페스티벌에 초대합니다. 즐거운 시간이 될 것입니다.', '청년부', 'normal', '2026-04-10', 189, '/uploads/notice/news-thumb-03.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '성전관리', 'normal', '2026-03-25', 156, '/uploads/notice/news-thumb-04.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기'),
+('새로운 소식',                     '교회의 새로운 소식을 전해드립니다. 자세한 내용은 주보를 참고해 주세요.', '행정부', 'normal', '2026-03-10', 421, '/uploads/notice/news-thumb-05.jpg', 'https://forms.gle/vSSEWRWqUdw3eYvS8', '신청하러 가기');
 
 -- ===============================================
 -- 9. 멤버 관리 테스트 데이터
@@ -324,31 +324,31 @@ INSERT INTO notice (title, content, writer_name, emergency_level, created_date, 
 -- 기존 DB에 name_en, tags, tags_en 컬럼 추가 (이미 존재하면 건너뜀)
 
 INSERT INTO members (name, name_en, email, title, category, role, picture, position, tags, tags_en, sort_order, is_active) VALUES
-('박형일',      'Hyung Il Park',  'hyungilpark@milalchurch.com',    '담임목사',   '목회자', '담임목사',   'members/minister-01.jpg', '담임목사 / Senior Pastor', NULL,                                                                                                   NULL,                                                                                                                                                             1,  TRUE),
-('이기쁨',      'Kippeum Lee',    'kippeumlee@milalchurch.com',     '부목사',   '목회자', '부목사',   'members/minister-02.jpg', '목사',                     '목회행정(선임)\n목회부\n공동체(생명, 충성)\n공간기획',                                             'Senior Admin\nMinistry Dept.\nCommunity (Life, Faithfulness)\nSpace Planning',                                                                                 2,  TRUE),
-('김준영',      'Junyoung Kim',   'junyoungkim@milalchurch.com',    '부목사',   '목회자', '부목사',   'members/minister-03.jpg', '목사',                     '예배부(1부/2부 찬양인도)\n봉사부(건물관리/주차/경조)\n공동체(기쁨,진리)',                       'Worship Dept. (1st/2nd service praise leading)\nService Dept. (building/parking/condolence)\nCommunity (Joy, Truth)',                                          3,  TRUE),
-('신효성',      'Hyosung Shin',   'rev.shin@milalchurch.com',       '부목사',   '목회자', '부목사',   'members/minister-04.jpg', '목사',                     '청년부\n선교부\n장학',                                                                         'Youth Dept.\nMission Dept.\nScholarship',                                                                                                                       4,  TRUE),
-('차승현',      'Seunghyun Cha',  'seunghyuncha@milalchurch.com',   '부목사',   '목회자', '부목사',   'members/minister-05.jpg', '목사',                     '청소년부(KM 해세드)\n캠퍼스 신입생 심방\n청소년부 선교 및 통합훈련',                          'Youth Dept. (KM Hesed)\nCampus Freshman Visitation\nYouth Mission & Integrated Training',                                                                        5,  TRUE),
-('이웅',        'Ung Lee',        'unglee@milalchurch.com',          '부목사',   '목회자', '부목사',   'members/minister-06.jpg', '목사',                     '교육총괄\n가스펠프로젝트\n목회기획\n공동체(은혜,영광)',                                       'Education Oversight\nGospel Project\nMinistry Planning\nCommunity (Grace, Glory)',                                                                               6,  TRUE),
-('오성요',      'Sung Yo Oh',     'osungyo@milalchurch.com',         '부목사',   '목회자', '부목사',   'members/minister-07.jpg', '목사',                     '목양(소그룹)\n찬양인도(주일3부, 금요찬양집회)\n친교부 공동체(믿음,온유)',                    'Shepherding (Small Groups)\nPraise Leading (3rd service, Friday Praise)\nFellowship Community (Faith, Meekness)',                                               7,  TRUE),
-('배상진',      'Sangjin Bae',    'sangjinbae@milalchurch.com',     '부목사',   '목회자', '부목사',   'members/minister-08.jpg', '목사',                     '훈련사역부\n청장년부\n다니엘한글문화학교\nChild Care\n공동체(감사)',                          'Training Ministry Dept.\nYoung Adult Dept.\nDaniel Korean Culture School\nChild Care\nCommunity (Gratitude)',                                                    8,  TRUE),
-('김조나단','Jonathan Kim',   'jonathankim@milalchurch.com',    '부목사',   '목회자', '부목사',   'members/minister-09.jpg', '목사',                     '청소년부(EM 오하나)',                                                                           'Youth Dept. (EM Ohana)',                                                                                                                                         9,  TRUE),
-('최수라',      'Soora Choi',     'soorachoi@milalchurch.com',       '전도사', '목회자', '전도사', 'members/minister-10.jpg', '전도사',                   '새가족\n가정사역부(마더/파더 와이즈)\n공동체(지혜 A,B)',                                      'New Members\nFamily Ministry (Mother/Father Wise)\nCommunity (Wisdom A,B)',                                                                                     10, TRUE),
-('최정수',      'Jeongsu Choi',   'jeongsuchoi@milalchurch.com',    '전도사', '목회자', '전도사', 'members/minister-11.jpg', '전도사',                   '시니어 사역 (다윗/여호수아/모세회)',                                                            'Senior Ministry (David/Joshua/Moses Group)',                                                                                                                     11, TRUE),
-('김비치',      'Bichi Kim',      'bichi.kim@milalchurch.com',      '전도사', '목회자', '전도사', 'members/minister-12.jpg', '전도사',                   '유치부',                                                                                         'Preschool Dept.',                                                                                                                                                12, TRUE),
-('김진아',      'Jina Kim',       'jina.kim@milalchurch.com',       '전도사', '목회자', '전도사', 'members/minister-13.jpg', '전도사',                   '아동부',                                                                                         'Children\'s Dept.',                                                                                                                                              13, TRUE),
-('주은지',      'Eunji Ju',       'eunji.ju@milalchurch.com',       '전도사', '목회자', '전도사', 'members/minister-14.jpg', '전도사',                   '영유아부',                                                                                       'Infant/Toddler Dept.',                                                                                                                                           14, TRUE),
-('목상수',      'Sangsoo Mok',  NULL, '장로', '장로', '장로', 'members/elder-01.jpg', '시무장로', NULL, NULL, 15, TRUE),
-('김준덕',      'Jundeok Kim',  NULL, '장로', '장로', '장로', 'members/elder-02.jpg', '시무장로', NULL, NULL, 16, TRUE),
-('이강식',      'Kangsik Lee',  NULL, '장로', '장로', '장로', 'members/elder-03.jpg', '시무장로', NULL, NULL, 17, TRUE),
-('노명신',      'Myungshin Noh',NULL, '장로', '장로', '장로', 'members/elder-04.jpg', '시무장로', NULL, NULL, 18, TRUE),
-('정진관',      'Jingwan Jung', NULL, '장로', '장로', '장로', 'members/elder-05.jpg', '시무장로', NULL, NULL, 19, TRUE),
-('김형렬',      'Hyungryul Kim',NULL, '장로', '장로', '장로', 'members/elder-06.jpg', '시무장로', NULL, NULL, 20, TRUE),
-('권규찬',      'Gyuchan Kwon', NULL, '장로', '장로', '장로', 'members/elder-07.jpg', '시무장로', NULL, NULL, 21, TRUE),
-('김태우',      'Taewoo Kim',   NULL, '장로', '장로', '장로', 'members/elder-08.jpg', '시무장로', NULL, NULL, 22, TRUE),
-('김선덕',      'Sundeok Kim',  NULL, '사무간사',   '간사', '사무간사',   'members/deacon-01.jpg', '사무간사',   NULL, NULL, 23, TRUE),
-('조영범',      'Youngbeom Jo', NULL, '음향간사',   '간사', '음향간사',   'members/deacon-02.jpg', '음향간사',   NULL, NULL, 24, TRUE),
-('서초희',      'Chohee Seo',   NULL, '미디어간사', '간사', '미디어간사', 'members/deacon-03.jpg', '미디어간사', NULL, NULL, 25, TRUE);
+('박형일',      'Hyung Il Park',  'hyungilpark@milalchurch.com',    '담임목사',   '목회자', '담임목사',   '/uploads/members/minister-01.jpg', '담임목사 / Senior Pastor', NULL,                                                                                                   NULL,                                                                                                                                                             1,  TRUE),
+('이기쁨',      'Kippeum Lee',    'kippeumlee@milalchurch.com',     '부목사',   '목회자', '부목사',   '/uploads/members/minister-02.jpg', '목사',                     '목회행정(선임)\n목회부\n공동체(생명, 충성)\n공간기획',                                             'Senior Admin\nMinistry Dept.\nCommunity (Life, Faithfulness)\nSpace Planning',                                                                                 2,  TRUE),
+('김준영',      'Junyoung Kim',   'junyoungkim@milalchurch.com',    '부목사',   '목회자', '부목사',   '/uploads/members/minister-03.jpg', '목사',                     '예배부(1부/2부 찬양인도)\n봉사부(건물관리/주차/경조)\n공동체(기쁨,진리)',                       'Worship Dept. (1st/2nd service praise leading)\nService Dept. (building/parking/condolence)\nCommunity (Joy, Truth)',                                          3,  TRUE),
+('신효성',      'Hyosung Shin',   'rev.shin@milalchurch.com',       '부목사',   '목회자', '부목사',   '/uploads/members/minister-04.jpg', '목사',                     '청년부\n선교부\n장학',                                                                         'Youth Dept.\nMission Dept.\nScholarship',                                                                                                                       4,  TRUE),
+('차승현',      'Seunghyun Cha',  'seunghyuncha@milalchurch.com',   '부목사',   '목회자', '부목사',   '/uploads/members/minister-05.jpg', '목사',                     '청소년부(KM 해세드)\n캠퍼스 신입생 심방\n청소년부 선교 및 통합훈련',                          'Youth Dept. (KM Hesed)\nCampus Freshman Visitation\nYouth Mission & Integrated Training',                                                                        5,  TRUE),
+('이웅',        'Ung Lee',        'unglee@milalchurch.com',          '부목사',   '목회자', '부목사',   '/uploads/members/minister-06.jpg', '목사',                     '교육총괄\n가스펠프로젝트\n목회기획\n공동체(은혜,영광)',                                       'Education Oversight\nGospel Project\nMinistry Planning\nCommunity (Grace, Glory)',                                                                               6,  TRUE),
+('오성요',      'Sung Yo Oh',     'osungyo@milalchurch.com',         '부목사',   '목회자', '부목사',   '/uploads/members/minister-07.jpg', '목사',                     '목양(소그룹)\n찬양인도(주일3부, 금요찬양집회)\n친교부 공동체(믿음,온유)',                    'Shepherding (Small Groups)\nPraise Leading (3rd service, Friday Praise)\nFellowship Community (Faith, Meekness)',                                               7,  TRUE),
+('배상진',      'Sangjin Bae',    'sangjinbae@milalchurch.com',     '부목사',   '목회자', '부목사',   '/uploads/members/minister-08.jpg', '목사',                     '훈련사역부\n청장년부\n다니엘한글문화학교\nChild Care\n공동체(감사)',                          'Training Ministry Dept.\nYoung Adult Dept.\nDaniel Korean Culture School\nChild Care\nCommunity (Gratitude)',                                                    8,  TRUE),
+('김조나단','Jonathan Kim',   'jonathankim@milalchurch.com',    '부목사',   '목회자', '부목사',   '/uploads/members/minister-09.jpg', '목사',                     '청소년부(EM 오하나)',                                                                           'Youth Dept. (EM Ohana)',                                                                                                                                         9,  TRUE),
+('최수라',      'Soora Choi',     'soorachoi@milalchurch.com',       '전도사', '목회자', '전도사', '/uploads/members/minister-10.jpg', '전도사',                   '새가족\n가정사역부(마더/파더 와이즈)\n공동체(지혜 A,B)',                                      'New Members\nFamily Ministry (Mother/Father Wise)\nCommunity (Wisdom A,B)',                                                                                     10, TRUE),
+('최정수',      'Jeongsu Choi',   'jeongsuchoi@milalchurch.com',    '전도사', '목회자', '전도사', '/uploads/members/minister-11.jpg', '전도사',                   '시니어 사역 (다윗/여호수아/모세회)',                                                            'Senior Ministry (David/Joshua/Moses Group)',                                                                                                                     11, TRUE),
+('김비치',      'Bichi Kim',      'bichi.kim@milalchurch.com',      '전도사', '목회자', '전도사', '/uploads/members/minister-12.jpg', '전도사',                   '유치부',                                                                                         'Preschool Dept.',                                                                                                                                                12, TRUE),
+('김진아',      'Jina Kim',       'jina.kim@milalchurch.com',       '전도사', '목회자', '전도사', '/uploads/members/minister-13.jpg', '전도사',                   '아동부',                                                                                         'Children\'s Dept.',                                                                                                                                              13, TRUE),
+('주은지',      'Eunji Ju',       'eunji.ju@milalchurch.com',       '전도사', '목회자', '전도사', '/uploads/members/minister-14.jpg', '전도사',                   '영유아부',                                                                                       'Infant/Toddler Dept.',                                                                                                                                           14, TRUE),
+('목상수',      'Sangsoo Mok',  NULL, '장로', '장로', '장로', '/uploads/members/elder-01.jpg', '시무장로', NULL, NULL, 15, TRUE),
+('김준덕',      'Jundeok Kim',  NULL, '장로', '장로', '장로', '/uploads/members/elder-02.jpg', '시무장로', NULL, NULL, 16, TRUE),
+('이강식',      'Kangsik Lee',  NULL, '장로', '장로', '장로', '/uploads/members/elder-03.jpg', '시무장로', NULL, NULL, 17, TRUE),
+('노명신',      'Myungshin Noh',NULL, '장로', '장로', '장로', '/uploads/members/elder-04.jpg', '시무장로', NULL, NULL, 18, TRUE),
+('정진관',      'Jingwan Jung', NULL, '장로', '장로', '장로', '/uploads/members/elder-05.jpg', '시무장로', NULL, NULL, 19, TRUE),
+('김형렬',      'Hyungryul Kim',NULL, '장로', '장로', '장로', '/uploads/members/elder-06.jpg', '시무장로', NULL, NULL, 20, TRUE),
+('권규찬',      'Gyuchan Kwon', NULL, '장로', '장로', '장로', '/uploads/members/elder-07.jpg', '시무장로', NULL, NULL, 21, TRUE),
+('김태우',      'Taewoo Kim',   NULL, '장로', '장로', '장로', '/uploads/members/elder-08.jpg', '시무장로', NULL, NULL, 22, TRUE),
+('김선덕',      'Sundeok Kim',  NULL, '사무간사',   '간사', '사무간사',   '/uploads/members/deacon-01.jpg', '사무간사',   NULL, NULL, 23, TRUE),
+('조영범',      'Youngbeom Jo', NULL, '음향간사',   '간사', '음향간사',   '/uploads/members/deacon-02.jpg', '음향간사',   NULL, NULL, 24, TRUE),
+('서초희',      'Chohee Seo',   NULL, '미디어간사', '간사', '미디어간사', '/uploads/members/deacon-03.jpg', '미디어간사', NULL, NULL, 25, TRUE);
 
 
 -- ===============================================
@@ -401,14 +401,14 @@ INSERT INTO parking_lot (content, sort_order) VALUES
 -- ===============================================
 
 INSERT INTO parking_map (image_url, alt_text) VALUES
-('parking/parking-map.jpg', '밀알교회 주차장 안내 지도');
+('/uploads/parking/parking-map.jpg', '밀알교회 주차장 안내 지도');
 
 -- ===============================================
 -- 14. 배너 이미지 테스트 데이터
 -- ===============================================
 
 INSERT INTO banner_image (image_url, alt_text) VALUES
-('banner/banner-bg.png', '교회같은 가정, 가정같은 교회');
+('/uploads/banner/banner-bg.png', '교회같은 가정, 가정같은 교회');
 
 -- ===============================================
 -- 15. 담임목사 소개 테스트 데이터
