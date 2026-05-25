@@ -37,7 +37,7 @@
     <div id="img-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px">
       <?php foreach($images as $img): ?>
       <div data-id="<?= $img['id'] ?>" style="position:relative;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg)">
-        <img src="<?= BASE_URL.htmlspecialchars($img['image_url']) ?>" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" alt="">
+        <img src="<?= rtrim(BASE_URL,'/').'/'.ltrim(htmlspecialchars($img['image_url']),'/') ?>" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" alt="">
         <?php if($canEdit): ?>
         <div style="position:absolute;top:6px;right:6px;display:flex;gap:4px">
           <span class="drag-handle" style="background:rgba(0,0,0,.5);color:#fff;border-radius:4px;padding:4px 6px;cursor:grab;font-size:12px"><i class="fas fa-grip-vertical"></i></span>

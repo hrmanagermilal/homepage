@@ -64,7 +64,7 @@ class BulletinController extends BaseController {
                 }
             }
         }
-        $this->success(['id'=>$id,'uploaded'=>$uploaded],'주보가 등록되었습니다.');
+        $this->success(['id'=>$id,'uploaded'=>$uploaded,'stored_pdf_filename'=>$d['attachment']??null],'주보가 등록되었습니다.');
     }
     public function update(): void {
         $this->assertPost(); AuthMiddleware::requirePermission('bulletins.edit');

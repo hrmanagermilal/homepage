@@ -211,6 +211,31 @@ async function saveBulletin() {
   try {
     const res = await fetch(BASE_URL+'/bulletins/create',{method:'POST',body:fd});
     d = await res.json();
+
+    // call convert API if PDF was uploaded
+    if(d.success && _pendingPdf){
+      showSpinner('PDF 이미지 변환 중...');
+      try{
+        const fd2 = new URLSearchParams();
+        fd2.append('file_path', d.data.stored_pdf_filename);
+        fd2.append('bulletin_id', d.data.id);
+        console.log('[transform-pdf] file_path:', d.data.stored_pdf_filename, 'bulletin_id:', d.data.id);
+        const cr = await fetch('<?= rtrim(getenv("BACKEND_API_URL") ?: "http://localhost:8080", "/") ?>/api/bulletins/transform-pdf',
+          {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd2});
+        const cd = await cr.json();
+        if(cd.success){
+          toast(`PDF 이미지 ${cd.data.saved_images?.length||0}장 변환 완료`);
+          console.log('[transform-pdf] saved images:', cd.data.saved_images?.map(i=>i.image_url));
+        } else {
+          toast('PDF 변환 실패: '+(cd.message||''), 'warning');
+        }
+      }catch(e){
+        console.error('[transform-pdf] error:', e);
+        toast('PDF 변환 중 오류가 발생했습니다.','warning');
+      }finally{
+        hideSpinner();
+      }
+    }
   } catch(e) {
     hideSpinner(); btn.disabled = false;
     toast('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.','error');
