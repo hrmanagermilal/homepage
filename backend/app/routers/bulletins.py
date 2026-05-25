@@ -99,7 +99,7 @@ async def transform_pdf(
 
         with open(resolved, "rb") as f:
             pdf_bytes = f.read()
-
+        order = [5,4,0,1,2,3]
         os.makedirs(BULLETIN_UPLOAD_DIR, exist_ok=True)
         saved: list[dict] = []
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
@@ -121,12 +121,10 @@ async def transform_pdf(
                 filename = f"{uuid.uuid4().hex}.png"
                 filepath = os.path.join(BULLETIN_UPLOAD_DIR, filename)
                 img.save(filepath, "PNG")
-                order =  4 + total_order
-                if(order >= 6):
-                    order = order - 6
+
                 saved.append({
                     "image_url": f"uploads/bulletin/{filename}",
-                    "order": order,
+                    "order": order[total_order % len(order)],
                 })
                 total_order += 1
     finally:
