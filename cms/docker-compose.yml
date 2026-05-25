@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: milal-cms
     ports:
-      - "8090:80"
+      - "8091:80"
     environment:
       DB_HOST: milal-db          # backend's MySQL container on milal-net
       DB_PORT: 3306
