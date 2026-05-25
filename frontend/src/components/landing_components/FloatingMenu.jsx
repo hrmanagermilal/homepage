@@ -5,7 +5,7 @@ export default function FloatingMenu() {
         <li>
           <a className="quick-menu__btn quick-menu__btn--live" href="https://youtube.com/@milalchurch?si=xbmgxeIMCL6XbyAv" target="_blank" rel="noopener noreferrer" aria-label="온라인 예배 바로가기">
             <i><img src="/images/common/icon-live-stream.svg" alt="" /></i>
-            <span>실시간 예배보기</span>
+            <span>예배 영상</span>
           </a>
         </li>        
         <li>

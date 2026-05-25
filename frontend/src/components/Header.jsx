@@ -348,7 +348,7 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
                       <span className="full-menu__shortcut-icon">
                         <img src="/images/common/ic-fullmenu01.svg" alt="" aria-hidden="true" />
                       </span>
-                      <span className="full-menu__shortcut-label">실시간 예배 보러가기</span>
+                      <span className="full-menu__shortcut-label">예배 영상 보러가기</span>
                     </a>
                   </li>
                   <li>
