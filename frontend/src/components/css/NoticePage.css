@@ -1,9 +1,12 @@
 /* ══════════════════════════════════════
  * Notice Page
  * ══════════════════════════════════════ */
+.sub-visual__bg-img.bulletin-bg {
+  background-image: url(/images/sub/visual/sub-visual0304.jpg);
+}
 
 .sub-visual__bg-img.notice-bg {
-  background-image: url(/images/sub/visual/sub-visual0304.jpg);
+  background-image: url(/images/sub/visual/notice01.jpg);
 }
 
 .notice {
