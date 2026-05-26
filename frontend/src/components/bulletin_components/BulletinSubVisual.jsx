@@ -2,7 +2,7 @@ export default function BulletinSubVisual() {
   return (
     <section className="sub-visual" aria-label="주보 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        <figure className="sub-visual__bg-img notice-bg" />
+        <figure className="sub-visual__bg-img bulletin-bg" />
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />

@@ -171,6 +171,11 @@
   object-fit: contain;
 }
 
+.next-gen__insta-btn {display: inline-flex; align-items: center; gap: 6rem; height: 52rem; padding: 0 25rem; background:linear-gradient(88deg, #FEBD30 0.29%, #ED2C79 50%, #913AB3 99.71%);; border: none; border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-weight: 600; font-size: var(--font-xsm); line-height: 1.467; color: rgba(0,0,0,0.8); white-space: nowrap; text-decoration: none; cursor: pointer; transition: background .3s ease;}
+.next-gen__insta-btn span {color: var(--w);}
+.next-gen__insta-btn img {display: block; flex-shrink: 0; width: 18rem; height: 18rem; object-fit: contain;}
+  
+
 .next-gen__pastor-watermark {
   position: absolute;
   overflow: hidden;

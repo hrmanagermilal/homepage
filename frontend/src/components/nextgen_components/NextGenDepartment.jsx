@@ -72,8 +72,8 @@ export default function NextGenDepartment({
               </a>
             </div>
             {kakaoLink && kakaoLabel && (
-              <a className="next-gen__kakao-btn" href={kakaoLink} target="_blank" rel="noopener noreferrer">
-                <img src="/images/sub/02-next-generation/icon-kakao.svg" alt="" />
+              <a className="next-gen__insta-btn" href={kakaoLink} target="_blank" rel="noopener noreferrer">
+                <img src="/images/common/ic-instagram.svg" alt="" />
                 <span>{kakaoLabel}</span>
               </a>
             )}
