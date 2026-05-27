@@ -315,14 +315,19 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
             <div className="full-menu__info">
               <div className="full-menu__info-section">
                 <h2 className="full-menu__info-title">공지사항</h2>
-                <a className="full-menu__info-card" href="/news#notice">
-                  <span className="full-menu__info-card-text">밀알교회 홈페이지가 새롭게 리뉴얼 되었습니다.</span>
-                  <span className="full-menu__info-arrow">
-                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
-                      <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                </a>
+                {(() => {
+                  const n = notice.find((item) => !item.image);
+                  return (
+                    <a className="full-menu__info-card" href={n ? `/news/notice/${n.id}` : "/news#notice"}>
+                      <span className="full-menu__info-card-text">{n ? n.title : "공지사항을 확인해 주세요."}</span>
+                      <span className="full-menu__info-arrow">
+                        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                          <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                    </a>
+                  );
+                })()}
               </div>
 
               <div className="full-menu__info-section">
@@ -382,6 +387,20 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
             </div>
           </div>
         </div>
+        <button
+          type="button"
+          aria-label="관리자 페이지"
+          style={{ position: 'absolute', bottom: '24px', right: '32px', zIndex: 10, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', padding: '8px', lineHeight: 0 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(`${window.location.protocol}//${window.location.hostname}:81`, '_blank', 'noopener,noreferrer');
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
       </div>
     </div>
   );
