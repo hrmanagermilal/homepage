@@ -130,7 +130,7 @@ FastAPI 기본 오류 형식:
 | `DB_PORT` | DB 포트 | `3306` |
 | `DB_NAME` | DB 이름 | `milal_homepage` |
 | `DB_USER` | DB 사용자 | `milal_user` |
-| `DB_PASSWORD` | DB 비밀번호 | `` |
+| `DB_PASSWORD` | DB 비밀번호 | `milal_pass_2024` |
 | `JWT_SECRET` | JWT 서명 키 | (강력한 난수) |
 | `JWT_EXPIRE_MINUTES` | 토큰 만료 시간 (분) | `60` |
 

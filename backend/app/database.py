@@ -11,7 +11,7 @@ def init_db() -> None:
         creator=pymysql,
         host=os.getenv("DB_HOST", "db"),
         user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "milal_root_2024"),
+        password=os.getenv("DB_PASSWORD", ""),
         database=os.getenv("DB_NAME", "milal_homepage"),
         port=int(os.getenv("DB_PORT", "3306")),
         charset="utf8mb4",
