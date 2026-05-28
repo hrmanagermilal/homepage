@@ -135,20 +135,20 @@ INSERT INTO section_titles (category, title, subtitle) VALUES
 -- 비전 선언문 (한국어 + 영어)
 INSERT INTO vision_statements (title, title_en, points, points_en, `order`, is_active) VALUES
 ('예배 공동체', 'Worship Community',
- '찬양과 설교, 설교후 찬양, 결단의 흐름이 되는 역동적 예배\n각 예배의 차별화를 통한 영적 필요충족\n예배팀을 세우는 훈련과 예배 중보기도 활성화\n가정, 전세대가 같이 드리는 예배',
- 'Dynamic worship that flows through praise, the sermon, post-sermon praise, and a call to commitment\nMeeting spiritual needs through distinct and differentiated worship services\nEquipping worship teams and fostering intercessory prayer during worship\nWorship where families and all generations come together',
+ '찬양과 설교, 설교후 찬양, 결단의 흐름이 되는 역동적 예배 \n각 예배의 차별화를 통한 영적 필요충족 \n예배팀을 세우는 훈련과 예배 중보기도 활성화 \n가정, 전세대가 같이 드리는 예배',
+ 'Dynamic worship that flows through praise, the sermon, post-sermon praise, and a call to commitment \nMeeting spiritual needs through distinct and differentiated worship services\nEquipping worship teams and fostering intercessory prayer during worship\nWorship where families and all generations come together',
  1, TRUE),
 ('목양 공동체', 'Shepherding Community',
  '담임목사와 순장들의 깊은관계 속 동역자화\n''한 사람'' 철학을 통한 깊은 성도 목양\n간증과 기쁨의 스토리가 흐르는 교회\n공동체 내에서의 치유와 성장 중점',
- 'Becoming co-laborers through deep relationships between the senior pastor and small group leaders\nProviding intentional and personal pastoral care through the “one person” philosophy\nA church filled with testimonies and stories of joy\nA community that prioritizes healing and growth',
+ 'Becoming co-laborers through deep relationships between the senior pastor and small group leaders \nProviding intentional and personal pastoral care through the “one person” philosophy\nA church filled with testimonies and stories of joy \nA community that prioritizes healing and growth',
  2, TRUE),
 ('훈련 공동체', 'Training Community',
- '말씀으로 사람을 세우는 교회\n다음세대를 위한 체계적 지속적 훈련\n교회같은 가정을 이루는 가정 제자훈련 (Gospel Project / Family talk)',
- 'A church that raises and equips people through the Word\nSystematic and ongoing training for the next generation\nFamily discipleship that cultivates Christ-centered homes (Gospel Project / Family Talk)',
+ '말씀으로 사람을 세우는 교회 \n다음세대를 위한 체계적 지속적 훈련 \n교회같은 가정을 이루는 가정 제자훈련 (Gospel Project / Family talk)',
+ 'A church that raises and equips people through the Word \nSystematic and ongoing training for the next generation \nFamily discipleship that cultivates Christ-centered homes (Gospel Project / Family Talk)',
  3, TRUE),
 ('미셔널 공동체', 'Missional Community',
- 'Glocal (Global + Local) 섬김과 지속적 선교\n전략 선교지역에 대한 지속적 선교\n가족선교 및 다음세대 선교를 통한 선교적 교회',
- 'Glocal (Global + Local) service and ongoing mission work\nOngoing mission engagement in strategic regions\nA missional church shaped by family missions and next-generation missions',
+ 'Glocal (Global + Local) 섬김과 지속적 선교 \n전략 선교지역에 대한 지속적 선교 \n가족선교 및 다음세대 선교를 통한 선교적 교회',
+ 'Glocal (Global + Local) service and ongoing mission work \nOngoing mission engagement in strategic regions \nA missional church shaped by family missions and next-generation missions',
  4, TRUE);
 
 -- ===============================================
@@ -426,13 +426,13 @@ VALUES (
   '담임목사 사진', 'Senior Pastor portrait',
   '복음으로 하나 되어,', '세상으로 나아가는 교회',
   'United in the Gospel,', 'Sent into the World',
-  '밀알교회에 오신 것을 환영합니다.\n\n밀알교회는 캐나다 토론토에 위치한 해외한인장로회(KPCA) 소속\n장로교회입니다. 저희 교회는 교회같은 가정, 가정같은 교회를 꿈꾸며\n하늘의 복을 받아 세상의 복을 나누는 교회가 되길 꿈꾸는 교회입니다.\n\n예배, 목양, 훈련, 미셔널 공동체를 이루며 제자의 삶을 통해\n복음을 증거하고 세상을 변화시키며 훈련된 증인으로 파송되어\n세상과 삶의 현장에 하나님 나라를 확장해가는 미셔널 공동체인 교회입니다.\n\n공동체 안에 있을 때 사람은 성장합니다.\n성장하는 귀한 공동체로 여러분을 초대합니다.',
-  'Welcome to Milal Church.\n\nMilal Church is a Presbyterian church in Toronto, Canada, affiliated with KPCA.\nWe dream of homes like churches and a church like home,\nreceiving heaven\'s blessing to share blessing with the world.\n\nAs a worshiping, shepherding, training, and missional community,\nwe proclaim the Gospel through a disciple\'s life, transform the world,\nand are sent as trained witnesses to expand God\'s Kingdom in daily life.\n\nPeople grow when they belong to a community.\nWe invite you to be part of this growing and life-giving community.',
+  '밀알교회에 오신 것을 환영합니다. \n\n밀알교회는 캐나다 토론토에 위치한 해외한인장로회(KPCA) 소속 \n장로교회입니다. 저희 교회는 교회같은 가정, 가정같은 교회를 꿈꾸며 \n하늘의 복을 받아 세상의 복을 나누는 교회가 되길 꿈꾸는 교회입니다. \n\n예배, 목양, 훈련, 미셔널 공동체를 이루며 제자의 삶을 통해 \n복음을 증거하고 세상을 변화시키며 훈련된 증인으로 파송되어 \n세상과 삶의 현장에 하나님 나라를 확장해가는 미셔널 공동체인 교회입니다. \n\n공동체 안에 있을 때 사람은 성장합니다. \n성장하는 귀한 공동체로 여러분을 초대합니다.',
+  'Welcome to Milal Church. \n\nMilal Church is a Presbyterian church in Toronto, Canada, affiliated with KPCA. \nWe dream of homes like churches and a church like home,\nreceiving heaven\'s blessing to share blessing with the world. \n\nAs a worshiping, shepherding, training, and missional community, \nwe proclaim the Gospel through a disciple\'s life, transform the world, \nand are sent as trained witnesses to expand God\'s Kingdom in daily life. \n\nPeople grow when they belong to a community. \nWe invite you to be part of this growing and life-giving community.',
   '담임목사', 'Senior Pastor',
   '박형일', 'Hyung Il Park',
   '약력', 'Career',
-  '서강대학교 경영학과 졸업\n총신대학교 신학대학원 졸업\nSouthern Baptist Theological Seminary 목회학 박사\n현) Toronto KOSTA 이사\n현) Love Toronto 이사장',
-  'B.B.A., Sogang University\nM.Div., Chongshin Theological Seminary\nD.Min., The Southern Baptist Theological Seminary\nBoard Member, Toronto KOSTA (Current)\nChairman, Love Toronto (Current)'
+  '서강대학교 경영학과 졸업 \n총신대학교 신학대학원 졸업 \nSouthern Baptist Theological Seminary 목회학 박사 \n현) Toronto KOSTA 이사 \n현) Love Toronto 이사장',
+  'B.B.A., Sogang University \nM.Div., Chongshin Theological Seminary \nD.Min., The Southern Baptist Theological Seminary \nBoard Member, Toronto KOSTA (Current) \nChairman, Love Toronto (Current)'
 );
 
 -- ===============================================

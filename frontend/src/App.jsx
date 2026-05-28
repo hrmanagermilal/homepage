@@ -11,7 +11,7 @@ import IntroductionPage from "./components/IntroductionPage";
 import NextGenPage from "./components/NextGenPage";
 import MinistryPage from "./components/MinistryPage";
 import OnlineGivingPage from "./components/OnlineGivingPage";
-import NewsPage from "./components/NewsPage";
+import JuboPage from "./components/JuboPage";
 import NoticeViewPage from "./components/NoticeViewPage";
 import ObituaryViewPage from "./components/ObituaryViewPage";
 import BulletinViewPage from "./components/BulletinViewPage";
@@ -28,7 +28,7 @@ export default function App() {
   const isNoticeViewPage = /^\/news\/notice\/\d+$/.test(currentPath);
   const isObituaryViewPage = /^\/news\/obituary\/\d+$/.test(currentPath);
   const isBulletinViewPage = /^\/news\/bulletin\/\d+$/.test(currentPath);
-  const isNewsPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage && !isBulletinViewPage;
+  const isJuboPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage && !isBulletinViewPage;
   const isNextGenSubmenuPage = currentPath.startsWith("/nextgen");
   const [hero, setHero] = useState(null);
   const [quickLinks, setQuickLinks] = useState([]);
@@ -274,8 +274,8 @@ export default function App() {
         <ObituaryViewPage obituaries={obituaries} />
       ) : isBulletinViewPage ? (
         <BulletinViewPage />
-      ) : isNewsPage ? (
-        <NewsPage notices={notices} obituaries={obituaries} bulletins={bulletins} />
+      ) : isJuboPage ? (
+        <JuboPage notices={notices} obituaries={obituaries} bulletins={bulletins} />
       ) : isNextGenSubmenuPage ? (
         <NextGenPage departments={departments.filter(d => d.department_type === 'nextgen')} />
       ) : (
@@ -296,7 +296,7 @@ export default function App() {
         />
       )}
       <Footer landingTitles={landingTitles} />
-      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isBulletinViewPage || isNewsPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isBulletinViewPage || isJuboPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }
