@@ -77,7 +77,7 @@ bash compose-all.sh
 
 ## 5. 데이터베이스
 
-**DB**: `milal_homepage` | **User**: `milal_user` | **Pass**: `milal_pass_2024`
+**DB**: `milal_homepage` | **User**: `milal_user` | **Pass**: ``
 
 ### 주요 테이블
 

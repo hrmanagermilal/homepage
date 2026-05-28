@@ -140,7 +140,7 @@ environment:
   DB_PORT: 3306
   DB_NAME: milal_homepage
   DB_USER: milal_user
-  DB_PASSWORD: milal_pass_2024
+  DB_PASSWORD: 
   JWT_SECRET: <secret>
 ```
 
@@ -196,7 +196,7 @@ environment:
   DB_HOST: db
   DB_NAME: milal_homepage
   DB_USER: milal_user
-  DB_PASSWORD: milal_pass_2024
+  DB_PASSWORD: 
 ```
 
 ---

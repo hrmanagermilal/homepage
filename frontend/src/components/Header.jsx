@@ -393,7 +393,7 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
           style={{ position: 'absolute', bottom: '24px', right: '32px', zIndex: 10, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', padding: '8px', lineHeight: 0 }}
           onClick={(e) => {
             e.stopPropagation();
-            window.open(`${window.location.protocol}//${window.location.hostname}:81`, '_blank', 'noopener,noreferrer');
+            window.open(`http://${window.location.hostname}:81`, '_blank', 'noopener,noreferrer');
           }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

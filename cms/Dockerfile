@@ -40,8 +40,10 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/milal-cms.ini
 COPY . /var/www/html/
 
 # ── Stage static uploads separately so the volume mount doesn't hide them ────
+# Stored OUTSIDE /var/www/html/ so the ".:/var/www/html" bind mount in
+# docker-compose.yml cannot shadow this directory at runtime.
 # The entrypoint seeds these into the volume with `cp -rn` (no-overwrite).
-COPY public/uploads/ /var/www/html/static-uploads/
+COPY public/uploads/ /var/www/static-uploads/
 
 # ── Uploads directory: writable by Apache ────────────────────────────────────
 RUN mkdir -p /var/www/html/public/uploads \

@@ -38,8 +38,8 @@ API: **http://localhost:8080/api/**
 | Host (호스트에서) | `localhost:3307` |
 | Database | `milal_homepage` |
 | User | `milal_user` |
-| Password | `milal_pass_2024` |
-| Root Password | `milal_root_2024` |
+| Password | `` |
+| Root Password | `` |
 
 ## 디렉토리 구조
 
@@ -138,7 +138,7 @@ backend/
 | `DB_HOST` | `db` |
 | `DB_NAME` | `milal_homepage` |
 | `DB_USER` | `milal_user` |
-| `DB_PASSWORD` | `milal_pass_2024` |
+| `DB_PASSWORD` | `` |
 | `JWT_SECRET` | `change-this-to-a-secure-random-string` |
 | `JWT_EXPIRY` | `604800` (7일) |
 | `CORS_ORIGIN` | `*` |
