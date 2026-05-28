@@ -1,11 +1,12 @@
-# Milal Church Homepage
+# 밀알교회 홈페이지 (Milal Church Homepage)
 
 밀알교회 공식 웹사이트 / Official Website of Milal Church
 
 ## 1. 프로젝트 개요
 
-- **기존 홈페이지 개편** — UI/UX 현대화 및 사용자 경험 개선
-- **반응형 디자인** — 모바일/태블릿/PC 모든 환경 지원
+- **반응형 공개 홈페이지** — React 18 + MUI, 모바일/태블릿/PC 모든 환경 지원
+- **REST API 백엔드** — Python FastAPI + MySQL 8.0
+- **관리자 CMS** — PHP 8.2 + Apache, 콘텐츠 관리 전용
 - **Docker 기반 배포** — 컨테이너화된 일관된 개발/운영 환경
 
 ---
@@ -15,10 +16,42 @@
 ```
 homepage/
 ├── backend/          # REST API 백엔드 (Python FastAPI + MySQL)
+│   ├── app/          # FastAPI 애플리케이션 소스
+│   │   ├── routers/  # API 라우터 (hero, sermons, bulletins 등)
+│   │   ├── main.py   # 앱 진입점 및 라우터 등록
+│   │   ├── database.py  # DB 연결 풀 (PyMySQL + DBUtils)
+│   │   ├── auth.py   # JWT 인증
+│   │   └── response.py  # 공통 응답 포맷
+│   ├── nginx/        # Nginx 리버스 프록시 설정
+│   ├── sql/          # DB 스키마 및 초기 데이터
+│   ├── uploads/      # 업로드 파일 (Docker 볼륨으로 마운트)
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── init-ssl.sh   # Let's Encrypt SSL 초기화
 ├── frontend/         # 공개 홈페이지 (React 18 + MUI + Vite)
-├── CMS/         # 관리자 CMS (PHP 8.2 + Apache)
+│   ├── src/
+│   │   ├── components/  # 페이지 및 UI 컴포넌트
+│   │   ├── api/         # API 클라이언트
+│   │   ├── hooks/       # 커스텀 훅
+│   │   └── utils/       # 유틸리티
+│   ├── public/          # 정적 에셋 (이미지, 폰트 등)
+│   ├── nginx.conf        # 프로덕션 Nginx 설정 (SPA + /api 프록시)
+│   ├── Dockerfile
+│   └── docker-compose.yml
+├── cms/              # 관리자 CMS (PHP 8.2 + Apache)
+│   ├── app/
+│   │   ├── Controllers/  # MVC 컨트롤러
+│   │   ├── Models/       # DB 모델
+│   │   ├── Views/        # PHP 템플릿
+│   │   ├── Helpers/      # 업로드, 유틸리티
+│   │   └── Middleware/   # 인증 미들웨어
+│   ├── config/           # DB, 앱 설정
+│   ├── public/           # DocumentRoot (index.php + uploads/)
+│   ├── docker/           # entrypoint.sh, php.ini
+│   ├── Dockerfile
+│   └── docker-compose.yml
 ├── compose-all.sh    # 전체 서비스 일괄 시작 스크립트
-└── publish/          # 정적 HTML 참고 파일 (개발 참조용)
+└── README.md
 ```
 
 ---
@@ -26,16 +59,229 @@ homepage/
 ## 3. 서비스 구성
 
 | 서비스 | 컨테이너 | 외부 포트 | 역할 |
-|-------|---------|-----------|------|
-| 백엔드 Nginx | milal-nginx | **8080** | API 리버스 프록시 |
-| 백엔드 App | milal-backend | - (내부) | FastAPI REST API |
-| 데이터베이스 | milal-db | **3307** | MySQL 8.0 |
-| 프론트엔드 | milal-frontend | **80** | React 공개 홈페이지 |
-| CMS 관리자 | milal-cms | **8090** | PHP 관리자 패널 |
+|--------|---------|-----------|------|
+| 프론트엔드 | `milal-frontend` | **80**, 443 | React 공개 홈페이지 |
+| 백엔드 Nginx | `milal-nginx` | **8080** (HTTP), 8443 (HTTPS), **81** (CMS), 8090 | API / CMS 리버스 프록시 |
+| 백엔드 App | `milal-backend` | - (내부 8000) | FastAPI REST API |
+| 데이터베이스 | `milal-db` | **3307** | MySQL 8.0 |
+| CMS | `milal-cms` | **8091** (직접), **81** (nginx 경유) | PHP 관리자 패널 |
 
-> 프론트엔드 컨테이너는 `/api/` 요청을 내부적으로 `milal-nginx`로 프록시합니다.
+**요청 흐름:**
+```
+브라우저
+  → milal-frontend:80  (React SPA)
+  → /api/* 요청 → milal-nginx:80 → milal-backend:8000 (FastAPI)
+  → /uploads/* 요청 → milal-nginx:8090 (정적 파일 서버)
+  → CMS → milal-nginx:81 → milal-cms:80 (PHP/Apache)
+```
 
-모든 컨테이너는 `milal-net` 브리지 네트워크를 공유합니다.
+모든 컨테이너는 `milal-net` 브리지 네트워크를 공유합니다.  
+업로드 파일은 `milal_uploads_data` Docker 볼륨을 통해 backend, frontend, cms가 공유합니다.
+
+---
+
+## 4. 빠른 시작
+
+### 사전 요구사항
+- Docker Desktop
+- Git
+
+### 전체 서비스 한 번에 시작
+
+```bash
+# 1. 저장소 클론
+git clone <repository-url>
+cd homepage
+
+# 2. 전체 서비스 빌드 및 시작 (백엔드 먼저 — milal-net 네트워크 생성)
+bash compose-all.sh
+```
+
+또는 개별 시작:
+
+```bash
+# 백엔드 먼저 시작 (네트워크 및 볼륨 생성)
+cd backend && docker compose up --build -d && cd ..
+
+# 프론트엔드
+cd frontend && docker compose up --build -d && cd ..
+
+# CMS
+cd cms && docker compose up --build -d && cd ..
+```
+
+### 접속 주소
+
+| 서비스 | URL |
+|--------|-----|
+| 공개 홈페이지 | http://localhost |
+| REST API | http://localhost:8080/api/ |
+| CMS 관리자 (nginx 경유) | http://localhost:81 |
+| CMS 관리자 (직접) | http://localhost:8091 |
+| MySQL (직접) | localhost:3307 |
+
+---
+
+## 5. 데이터베이스
+
+- **DB 이름**: `milal_homepage`
+- **유저**: `milal_user`
+- **비밀번호**: `milal_root_2024`
+- **포트**: 3307 (외부), 3306 (내부)
+- **문자셋**: `utf8mb4` / `utf8mb4_unicode_ci`
+- **스키마**: [`backend/sql/create_tables.sql`](backend/sql/create_tables.sql)
+
+### 주요 테이블
+
+| 테이블 | 설명 |
+|--------|------|
+| `quick_links` | 히어로 빠른링크 아이콘 |
+| `hero_background_images` | 히어로 배경 슬라이드 이미지 |
+| `hero_front_images` | 히어로 전면 이미지 |
+| `landing_titles` | 랜딩 페이지 섹션 제목 |
+| `sections` | 랜딩 페이지 섹션 콘텐츠 |
+| `vision_statements` | 비전 문구 |
+| `sermons` | 설교 (YouTube 연동) |
+| `bulletins` + `bulletin_images` | 주보 및 이미지 |
+| `notice` | 공지사항 (`emergency_level`: normal / important / urgent) |
+| `obituary` | 부고 |
+| `departments` | 부서 (nextgen / ministry) |
+| `members` | 교역자 / 간사 |
+| `together_items` | 함께하는 교회 |
+| `service_times` | 예배 시간표 |
+| `shuttle_bus_schedule` | 셔틀버스 시간표 |
+| `parking_lot` | 주차 안내 |
+| `parking_map` | 주차 지도 |
+| `banner_image` | 배너 이미지 |
+| `pastor_introduction` | 목사 소개 |
+| `users` | 관리자 계정 |
+| `page_views` | 페이지뷰 분석 |
+
+> **참고:** MySQL은 `db_data` 볼륨이 이미 존재하면 `MYSQL_USER` / `MYSQL_PASSWORD` 환경변수를 무시합니다.  
+> 비밀번호 변경이 필요할 경우 MySQL 컨테이너에 직접 접속하여 `ALTER USER` 를 실행하세요.
+
+---
+
+## 6. API 엔드포인트
+
+모든 엔드포인트는 `/api` 접두사를 사용합니다.
+
+| 경로 | 설명 |
+|------|------|
+| `GET /api/health` | 헬스 체크 |
+| `GET /api/hero` | 히어로 이미지 전체 |
+| `GET /api/quick-links` | 빠른링크 목록 |
+| `GET /api/landing-titles` | 랜딩 제목 목록 |
+| `GET /api/sections` | 섹션 목록 |
+| `GET /api/vision-statements` | 비전 문구 목록 |
+| `GET /api/sermons` | 설교 목록 |
+| `GET /api/bulletins` | 주보 목록 |
+| `GET /api/notice` | 공지사항 목록 |
+| `GET /api/obituary` | 부고 목록 |
+| `GET /api/members` | 교역자/간사 목록 |
+| `GET /api/departments` | 부서 목록 |
+| `GET /api/ministry` | 사역 목록 |
+| `GET /api/service-times` | 예배 시간표 |
+| `GET /api/shuttle-bus` | 셔틀버스 시간표 |
+| `GET /api/parking-lot` | 주차 안내 |
+| `GET /api/parking-map` | 주차 지도 |
+| `GET /api/banner-image` | 배너 이미지 |
+| `GET /api/pastor-introduction` | 목사 소개 |
+| `GET /api/together` | 함께하는 교회 목록 |
+| `POST /api/auth/login` | 로그인 (JWT 발급) |
+| `GET /api/analytics/*` | 페이지뷰 통계 (관리자 전용) |
+| `POST /api/tracking/pageview` | 페이지뷰 기록 |
+
+자세한 API 문서: [`backend/plan/`](backend/plan/)
+
+---
+
+## 7. 업로드 파일
+
+업로드 파일은 `milal_uploads_data` Docker 볼륨에 저장되며, 세 서비스가 공유합니다.
+
+| 경로 | 내용 |
+|------|------|
+| `heroes/` | 히어로 슬라이드 / 전면 이미지 |
+| `heroes/icons/` | 빠른링크 아이콘 |
+| `bulletin/` | 주보 이미지 |
+| `announcement/` | 공지 이미지 |
+| `together/` | 함께하는 교회 이미지 |
+| `departments/` | 부서 이미지 |
+| `members/` | 교역자 사진 |
+| `news/` | 뉴스 이미지 |
+
+**접근 URL:**
+- 프론트엔드에서: `/uploads/<경로>` (nginx가 볼륨 직접 서빙)
+- 직접: `http://<서버>:8090/uploads/<경로>`
+
+**CMS 업로드 시딩:**  
+CMS Dockerfile은 `cms/public/uploads/` 를 이미지 빌드 시 `/var/www/static-uploads/` 에 복사합니다. 컨테이너 시작 시 `entrypoint.sh` 가 해당 파일들을 볼륨으로 복사합니다 (기존 파일 덮어쓰지 않음).
+
+---
+
+## 8. Docker 주요 명령어
+
+```bash
+# 전체 서비스 상태 확인
+docker ps
+
+# 백엔드 앱 로그
+docker logs milal-backend --tail 50 -f
+
+# 데이터베이스 접속
+docker exec -it milal-db mysql -u milal_user -pmilal_root_2024 milal_homepage
+
+# DB 비밀번호 재설정 (볼륨 재사용 시 필요)
+docker exec -it milal-db mysql -u root -pmilal_root_2024 \
+  -e "ALTER USER 'milal_user'@'%' IDENTIFIED BY 'milal_root_2024'; FLUSH PRIVILEGES;"
+
+# 서비스 재시작
+docker compose -f backend/docker-compose.yml restart app
+
+# 전체 재빌드
+bash compose-all.sh
+```
+
+---
+
+## 9. SSL 설정 (프로덕션)
+
+```bash
+cd backend
+nano init-ssl.sh   # 도메인 수정 (api.milalchurch.com)
+chmod +x init-ssl.sh
+./init-ssl.sh
+```
+
+---
+
+## 10. 보안
+
+- **HTTPS/TLS** — Let's Encrypt SSL (프로덕션), 자체 서명 인증서 (개발)
+- **JWT 인증** — 토큰 기반 API 인증, 만료시간 설정 가능 (`JWT_EXPIRY`)
+- **CORS** — `CORS_ORIGIN` 환경변수로 제어
+- **입력 검증** — SQL Injection 방지 (파라미터 바인딩)
+- **보안 헤더** — X-Frame-Options, X-Content-Type-Options, HSTS (nginx)
+
+---
+
+## 11. 라이선스
+
+이 프로젝트는 **Milal License v1.0** 으로 배포됩니다. 상세 내용: [LICENSE](LICENSE)
+
+---
+
+## 12. 문의
+
+- **웹사이트**: www.milalchurch.com
+- **이메일**: hr.manager.milal@gmail.com
+- **GitHub**: [hrmanagermilal](https://github.com/hrmanagermilal)
+
+---
+
+**Last Updated**: May 28, 2026
+
 
 ---
 
@@ -77,7 +323,7 @@ bash compose-all.sh
 
 ## 5. 데이터베이스
 
-**DB**: `milal_homepage` | **User**: `milal_user` | **Pass**: ``
+**DB**: `milal_homepage` | **User**: `milal_user` | **Pass**: `milal_pass_2024`
 
 ### 주요 테이블
 
