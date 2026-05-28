@@ -48,7 +48,7 @@ function SubLnb({ activeKey }) {
   );
 }
 
-export default function JuboPage({ notices = [], obituaries = [], bulletins = [] }) {
+export default function NewsPage({ notices = [], obituaries = [], bulletins = [] }) {
   const containerRef = useRef(null);
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
 

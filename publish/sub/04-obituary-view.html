@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
+  <title>부고 — 밀알교회</title>
+  <meta property="og:image" content="../images/og-img.jpg">
+  <link rel="shortcut icon" href="../images/favicon.png"/>
+  <link rel="stylesheet" href="../css/common.css" />
+  <script src="js/motion.js"></script>
+  <style>
+    /* ══════════════════════════════════════
+     * Obituary 부고
+     * ══════════════════════════════════════ */
+    .sub-visual__bg-img {background-image: url(../images/sub/visual/sub-visual04.jpg);}
+
+    /* 게시판 목록 공통 */
+    /* board check */
+    .selec_chk {position:absolute;top:0;left:0;width:0;height:0;opacity:0;outline:0;z-index:-1;overflow:hidden}
+    .chk_box {position:relative; margin-bottom:21rem;}
+    .chk_box input[type="checkbox"] + label{position:relative;padding-top: 4rem;padding-left:33rem !important;font-weight:500;font-size: var(--font-default);vertical-align:baseline;font-weight: 400;color: var(--b-default);}
+    .chk_box input[type="checkbox"] + label span{position:absolute;left: 0;width: 23rem !important;height: 23rem !important;top: 1rem;}
+    .chk_box input[type="checkbox"] + label span,
+    .chk_box input[type="checkbox"] + label span {position:absolute;top:2px;left:0;width:15px;height:15px;display:block;margin:0;background:#fff;border:1px solid #d0d4df;border-radius:3px}
+    .chk_box input[type="checkbox"]:checked + label span {background:url(../images/board/chk.png) no-repeat 50% 50% #3a8afd;/* border-color:#1471f6; */background-color:#515151; border-color:#2d2d2d; border-radius:3px;}
+    .chk_box input[type="checkbox"] + label:hover{color:#8f8f8f;}
+
+    .board-write {padding-bottom: 120rem;}
+    .board-write .chk_box:has(.selec_chk) input[type="checkbox"] + label {font-weight: 600; color: var(--b-title);}
+
+    .board-view {padding-bottom: 120rem;}
+    .board-view__inr h3 {padding-bottom: 30rem; text-align: center; border-bottom: 1px solid var(--op-b10);}
+    .board-view__con {min-height: 400rem; padding: 60rem 0;}
+
+    .form-item label {display: flex; margin-bottom: 8rem; font-weight: 600; color: var(--b-title);}
+    .form-item label strong {margin-left: 3rem; font-size: 0; text-indent: -9999;}
+    .form-item label strong::before {content:'*'; font-size: 14rem; font-weight: 400; color: var(--c-secondary);}
+
+    .frm_input {width: 100%; height: 52rem; padding-left: 15rem; font-family: var(--lang-ko); font-size: var(--font-xsm); border-radius: 5rem; border: 1px solid #ddd;}
+    .frm_textarea {width: 100%; height: 200rem; padding: 15rem; font-family: var(--lang-ko); font-size: var(--font-xsm); border-radius: 5rem; border: 1px solid #ddd;}
+    .form-item {margin-bottom: 25rem;}
+    .frm_link {position: relative;}
+    .frm_link::before {opacity: .2; position: absolute; left: 12rem; top: 50%; content:''; width: 22rem; height: 22rem; background: url(../images/board/ic-link.svg) no-repeat center / contain; transform: translateY(-50%);}
+    .frm_link .frm_input {padding-left: 45rem;}
+    .frm_file{position: relative; width: 100%; padding: 12rem; border-radius: 5rem; border: 1px solid #ddd; background: var(--w);}
+
+    /* board btn */
+    .view-btn-wrap {width: 100%; display: flex; justify-content: space-between; margin-top: 60rem;}
+    .write-btn-wrap {display: flex; align-items: center; justify-content: center; gap: 5rem; margin-top: 50rem;}
+    .btn-cancel {min-width: 120rem; color: var(--w); background: #ccc; transition: background .3s ease;} 
+    .btn-submit {min-width: 120rem; color: var(--w); background: var(--c-primary); transition: background .3s ease;} 
+    .btn-navigation {display: inline-flex; align-items: center; font-weight: 600; color: var(--b-title);}
+    .btn-navigation::before {content:""; width: 17rem; height: 17rem; background: url(../images/board/btn-navigation.svg) no-repeat center / contain;}
+    .btn-navigation.btn-prev::before {margin-right: 8rem; transform: scaleX(-1);}
+    .btn-navigation.btn-next {flex-direction: row-reverse;}
+    .btn-navigation.btn-next::before {margin-left: 8rem;}
+    .btn-list {display: inline-flex; padding: 15rem 30rem; font-size: 18rem; font-weight: 600; color: var(--b-title); border-radius: 100rem; border: 1px solid var(--b-title);}
+    .btn-list::before {content:''; width: 18rem; height: 18rem; margin-right: 15rem; background: url(../images/board/ic-list.svg) no-repeat center / contain;} 
+
+    @media (max-width: 860px) {
+      .board-view__inr h3 {font-size: 32rem;}
+      .board-view__con {padding: 40rem 0;}
+      .btn-list {height: auto; padding: 15rem 25rem;}
+      .btn-list::before {width: 16rem; height: 16rem; margin-right: 12rem;}
+    }
+
+     @media (max-width: 540px) {
+      .write-btn-wrap {margin-top: 40rem;}
+      .view-btn-wrap {margin-top: 0;}
+      .board-write,
+      .board-view {padding-bottom: 60rem;}
+
+
+      .board-view__inr h3 {padding-bottom: 20rem; font-size: var(--font-27);}
+      .board-view__con {padding: 20rem 0;}
+
+      .btn-list {padding: 12rem 20rem; font-size: var(--font-default);}
+      .btn-list::before {width: 12rem; height: 12rem; margin-right: 10rem;}
+      .btn-navigation::before {width: 12rem; height: 12rem;}
+
+      .chk_box input[type="checkbox"] + label {padding-left: 30rem;}
+      .chk_box input[type="checkbox"] + label span {top: 5rem; idth: 20rem !important; height: 20rem !important;}
+
+      .form-item {margin-bottom: 20rem;}
+      .form-item label {margin-bottom: 6rem;}
+      .frm_input {padding-left: 12rem;}
+     }
+
+  </style>
+</head>
+
+<body>
+
+<div data-include="../inc/head.html" data-root="../"></div>
+
+<div data-include="../inc/sub-visual.html" data-root="../" data-title="부고" data-label="부고" data-bg="../images/sub/01-introduction/sub-visual-bg.jpg" data-front="../images/sub/01-introduction/sub-visual-bg-front.png"></div>
+
+  <div class="sub-content" id="content">
+
+    <!-- ── Obituary 부고 ── -->
+    <section class="obituary board-view">
+      <div class="wrap-narrow">
+        <div class="board-view__inr">
+          <h3 data-heading="5xl">박주희 집사(김주환 집사) 모친 소천(영광 2순)</h3>
+          <div class="board-view__con">
+            <p>강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로 소천하셨습니다. <br>
+            유가족들께 하나님의 위로와 평강이 함께하시길 기도합니다.</p>
+          </div>
+        </div>
+
+        <div class="view-btn-wrap">
+          <a href="#" class="btn-navigation btn-prev">이전글</a>
+          <a href="04-obituary.html#content" class="btn-basic-big btn-list">목록으로</a>
+          <a href="#" class="btn-navigation btn-next">다음글</a>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+<div data-include="../inc/footer.html" data-root="../"></div>
+
+<script src="../js/common.js"></script>
+<script>
+window.MilalIncludes.ready.then(function () {
+(function () {
+/* 콘텐츠 탭 (role="tablist" — 페이지 내 패널 전환) */
+  document.querySelectorAll('[role="tablist"]').forEach(function (tablist) {
+    var tabs = tablist.querySelectorAll('[role="tab"]');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var targetPanel = document.getElementById(tab.getAttribute('aria-controls'));
+        if (!targetPanel) return;
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+          var p = document.getElementById(t.getAttribute('aria-controls'));
+          if (p) p.classList.remove('is-active');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        targetPanel.classList.add('is-active');
+      });
+    });
+  });
+
+  if (window.location.hash === '#content') {
+    var el = document.getElementById('content');
+    if (el) {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, el.offsetTop);
+      document.documentElement.style.scrollBehavior = '';
+    }
+  }
+})();
+});
+</script>
+
+</body>
+</html>
+

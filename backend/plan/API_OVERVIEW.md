@@ -104,7 +104,7 @@ backend/
 | Host | `db` (Docker 내부), `localhost:3307` (호스트) |
 | Database | `milal_homepage` |
 | User | `milal_user` |
-| Password | `` |
+| Password | `milal_pass_2024` |
 
 ---
 

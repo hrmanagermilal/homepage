@@ -49,17 +49,3 @@ Docker 서비스: **http://localhost** (포트 80)
 | `GET /api/members` | 교역자/간사 목록 |
 | `GET /api/hero` | 히어로 이미지 + 빠른링크 |
 | `POST /api/auth/login` | 관리자 로그인 |
-
-
-### Reset schema (drop & recreate all tables)
-sudo docker exec -i milal-db mysql -u root -pmilal_root_2024 milal_homepage < ./sql/create_tables.sql
-
-### Insert seed data
-sudo docker exec -i milal-db mysql -u root -pmilal_root_2024 milal_homepage < ./sql/insert_test_data.sql
-
-### to restart docker containers ##
-sudo docker stop $(sudo docker ps -aq)
-sudo docker rm $(sudo docker ps -aq)
-sudo docker rmi -f $(sudo docker images -aq)
-sudo docker volume rm $(sudo docker volume ls -q)
-sudo docker network rm $(sudo docker network ls -q)

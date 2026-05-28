@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
+  <title>다음세대 — 밀알교회</title>
+  <meta property="og:image" content="../images/og-img.jpg">
+  <link rel="shortcut icon" href="../images/favicon.png"/>
+  <link rel="stylesheet" href="../css/common.css" />
+  <script src="../js/motion.js"></script>
+  <style>
+    /* ══════════════════════════════════════
+     * next-gen 다음세대
+     * ══════════════════════════════════════ */
+    .sub-visual__bg-img {background-image: url(../images/sub/visual/sub-visual0201.jpg);}
+    .next-gen {padding: 0 0 120rem;}
+
+    .next-gen__head {margin-bottom: 52rem; text-align: center;}
+    .next-gen__head-title {margin-bottom: 17rem; letter-spacing: -0.27rem;}
+    .next-gen__head-sub {color: var(--b-default);}
+
+    .next-gen__divider {max-width: 670rem; height: 1px; margin: 0 auto 30rem; background: rgba(0,0,0,0.1);}
+
+    .next-gen__worship {display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10rem; height: 100rem; margin-bottom: 43rem;}
+    .next-gen__worship-info {display: flex; align-items: center;}
+    .next-gen__worship-item {display: flex; align-items: center; gap: 7rem;}
+    .next-gen__worship-item img {display: block; flex-shrink: 0; width: auto; height: 16rem; object-fit: contain;}
+    .next-gen__worship-info > li {position: relative; color: var(--b-title);}
+    .next-gen__worship-info > li + li {margin-left: 15rem; padding-left: 15rem;}
+    .next-gen__worship-info > li + li::before {content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 17rem; background: rgba(0,0,0,0.1);}
+
+    .next-gen__pastor {display: flex; align-items: center; gap: 50rem; position: relative; overflow: hidden; max-width: 1000rem; margin: 0 auto; padding: 40rem; background: var(--w); border-radius: 20rem; box-shadow: 0 10rem 7.5rem rgba(66,55,37,0.03);}
+    .next-gen__pastor-photo {flex-shrink: 0; position: relative; overflow: hidden; width: 220rem; height: 260rem; border: 1px solid rgba(0,0,0,0.05); border-radius: 10rem;}
+    .next-gen__pastor-photo img {position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;}
+    .next-gen__pastor-cont {display: flex; flex-direction: column; gap: 40rem;}
+    .next-gen__pastor-info {display: flex; flex-direction: column; gap: 7rem;}
+    .next-gen__pastor-email {display: flex; align-items: center; gap: 7rem; color: var(--b-default);}
+    .next-gen__pastor-email:hover span {text-decoration: underline;}
+    .next-gen__pastor-email-icon {display: block; flex-shrink: 0; width: 16rem; height: 16rem; object-fit: contain;}
+    .next-gen__kakao-btn {display: inline-flex; align-items: center; gap: 6rem; height: 52rem; padding: 0 25rem; background:linear-gradient(88deg, #FEBD30 0.29%, #ED2C79 50%, #913AB3 99.71%);; border: none; border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-weight: 600; font-size: var(--font-xsm); line-height: 1.467; color: rgba(0,0,0,0.8); white-space: nowrap; text-decoration: none; cursor: pointer; transition: background .3s ease;}
+    .next-gen__kakao-btn span {color: var(--w);}
+    .next-gen__kakao-btn img {display: block; flex-shrink: 0; width: 18rem; height: 18rem; object-fit: contain;}
+    .next-gen__pastor-watermark {position: absolute; overflow: hidden; opacity: 0.12; bottom: 72rem; right: 61rem; width: 109rem; height: 197rem; mix-blend-mode: luminosity; pointer-events: none;}
+    .next-gen__pastor-watermark img {position: absolute; top: -3.68%; left: -4.95%; width: 415.38%; max-width: none; height: 107.35%;}
+
+    @media (max-width: 1023px) {
+    	.next-gen {padding: 0 0 100rem;}
+    	.next-gen__head {margin-bottom: 40rem;}
+    	.next-gen__pastor-cont {padding-right: 0;}
+    	.next-gen__pastor-watermark {bottom: 30rem;}
+    }
+    @media (max-width: 540px) {
+    	.next-gen {padding: 0 0 60rem;}
+    	.next-gen__head {margin-bottom: 28rem;}
+      .next-gen__head-title br {display: none;}
+      .next-gen__divider {max-width: none; width: 100%;}
+    	.next-gen__worship {height: auto; margin-bottom: 30rem;}
+      .next-gen__worship-item img {height: 13rem;}
+    	.next-gen__pastor {flex-direction: column; align-items: flex-start; padding: 20rem; border-radius: 10rem; gap: 20rem;}
+      .next-gen__pastor-cont {width: 100%;}
+      .next-gen__pastor-info {width: 100%;}
+    	.next-gen__pastor-photo {width: 100%; height: auto; border-radius: 5rem;}
+      .next-gen__pastor-photo img {position: relative;}
+      .next-gen__kakao-btn {width: 100%; justify-content: center;}
+      .next-gen__kakao-btn img {width: 16rem; height: 16rem;}
+    	.next-gen__pastor-watermark {display: none;}
+    }
+  </style>
+</head>
+<body>
+
+<div data-include="../inc/head.html" data-root="../"></div>
+
+<div data-include="../inc/sub-visual.html" data-root="../" data-title="다음세대" data-label="다음세대" data-bg="../images/sub/02-next-generation/sub-visual-bg.jpg"></div>
+
+  <div class="sub-content" id="content">
+
+    <!-- ── next-gen 다음세대 ── -->
+    <section class="next-gen">
+      <div class="wrap-narrow">
+
+        <div class="next-gen__head" data-ani="top">
+          <h3 class="next-gen__head-title" data-heading="3xl">Milight, Time to Shine. 하나님이여 우리를 돌이키시고<br>주의 얼굴빛을 비추사 우리가 구원을 얻게 하소서 (시편 80:3)</h3>
+          <p class="next-gen__head-sub">토론토의 새벽이슬 같은 청년들이 모이면 예배하고,<br>흩어지면 빛을 발하는 공동체입니다.</p>
+        </div>
+
+        <div class="next-gen__divider" role="separator" data-ani="top"></div>
+
+        <div class="next-gen__worship" data-ani="top">
+          <h4 class="next-gen__worship-label" data-heading="lg">예배 안내</h4>
+          <ul class="next-gen__worship-info">
+            <li class="next-gen__worship-item">
+              <img src="../images/sub/02-next-generation/icon-time.svg" alt="" aria-hidden="true" />
+              <span>주일 오후 2시</span>
+            </li>
+            <li class="next-gen__worship-item">
+              <img src="../images/sub/02-next-generation/icon-location.svg" alt="" aria-hidden="true" />
+              <span>밀알교회 1층 본당</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="next-gen__pastor" data-ani="top">
+          <div class="next-gen__pastor-photo">
+            <img src="../images/sub/02-next-generation/pastor-photo.jpg" alt="신효성 목사 사진" />
+          </div>
+          <div class="next-gen__pastor-cont">
+            <div class="next-gen__pastor-info">
+              <h4 class="next-gen__pastor-name" data-heading="xl">신효성 목사</h4>
+              <a href="mailto:rev.shin@milalchurch.com" class="next-gen__pastor-email">
+                <img class="next-gen__pastor-email-icon" src="../images/sub/02-next-generation/icon-mail.svg" alt="" />
+                <span>rev.shin@milalchurch.com</span>
+              </a>
+            </div>
+            <a class="next-gen__kakao-btn" href="https://pf.kakao.com/_xdqzRK" target="_blank">
+              <img src="../images/common/ic-instagram.svg" alt="" />
+              <span>청년부 인스타그램 바로가기</span>
+            </a>
+          </div>
+          <div class="next-gen__pastor-watermark" aria-hidden="true">
+            <img src="../images/sub/02-next-generation/icon-watermark.png" alt="" />
+          </div>
+      </div>
+    </section>
+
+  </div><!-- /sub-content -->
+
+<div data-include="../inc/footer.html" data-root="../"></div>
+
+<script src="../js/common.js"></script>
+
+</body>
+</html>
+

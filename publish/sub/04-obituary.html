@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="밀알교회는 캐나다 토론토에 위치한 한인교회입니다." />
+  <title>부고 — 밀알교회</title>
+  <meta property="og:image" content="../images/og-img.jpg">
+  <link rel="shortcut icon" href="../images/favicon.png"/>
+  <link rel="stylesheet" href="../css/common.css" />
+  <script src="../js/motion.js"></script>
+  <style>
+    /* ══════════════════════════════════════
+     * Obituary 부고
+     * ══════════════════════════════════════ */
+    .sub-visual__bg-img {background-image: url(../images/sub/visual/sub-visual04.jpg);}
+
+    .obituary {padding:0 0 120rem;}
+    .obituary-heading {text-align: center; margin-bottom: 12rem;}
+    .obituary-top {display: flex; justify-content: space-between; align-items: center; margin-bottom: 40rem;}
+    .obituary-count {font-size: 14rem; line-height: 20rem; color: var(--b-default);}
+    .obituary-count strong {font-weight: 700; color: var(--b-title);}
+
+    /* 검색 폼 */
+    .obituary-search {display: flex; gap: 5rem;}
+    .obituary-search__select-wrap {position: relative; width: 164rem; height: 68rem;}
+    .obituary-search__select {appearance: none; -webkit-appearance: none; width: 100%; height: 100%; padding: 0 40rem 0 23rem; background: var(--op-w20); border: 1px solid var(--op-b05); border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-size: 15rem; color: var(--b-title); cursor: pointer; outline: none;}
+    .obituary-search__arrow {position: absolute; right: 17rem; top: 50%; transform: translateY(-50%); width: 11rem; height: 7rem; pointer-events: none;}
+    .obituary-search__arrow img {display: block; width: 100%; height: 100%;}
+    .obituary-search__field-wrap {position: relative; width: 445rem; height: 68rem;}
+    .obituary-search__input {width: 100%; height: 100%; padding: 0 50rem 0 29rem; background: var(--op-w20); border: 1px solid var(--op-b05); border-radius: 5rem; font-family: 'Pretendard', sans-serif; font-size: 15rem; color: var(--b-title); outline: none;}
+    .obituary-search__input::placeholder {color: var(--op-b40) !important; font-weight: 400 !important;}
+    .obituary-search__btn {position: absolute; right: 17rem; top: 50%; transform: translateY(-50%); width: 18rem; height: 18rem; background: none; border: none; padding: 0; cursor: pointer;}
+    .obituary-search__btn img {display: block; width: 100%; height: 100%;}
+
+    /* 카드 리스트 */
+    .obituary-list {list-style: none; padding: 0; margin: 0;}
+    .obituary-card {display: flex;flex-direction: column;gap: 60rem;background: var(--w);border-radius: 10rem;box-shadow: 0 10rem 7.5rem var(--op-b03);padding: 50rem 30rem;cursor: pointer;text-decoration: none;transition: background 0.25s ease;}
+    .obituary-card__top {display: flex; flex-direction: column; gap: 20rem; padding-top: 10rem;}
+    .obituary-card__head {display: flex; flex-direction: column; gap: 15rem; align-items: center; padding-bottom: 6rem;}
+    .obituary-card__icon {display: block; width: 24rem; height: 35rem; background-repeat: no-repeat; background-size: contain; background-position: center; background-image: url(../images/common/ic-mourning.svg);}
+    .obituary-card__icon img {display: block; width: 100%; height: 100%; object-fit: contain; transition: filter 0.25s ease;}
+    .obituary-card__title {display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis; text-align: center; min-height: 64rem; width: 100%; transition: color 0.25s ease;}
+    .obituary-card__line {border: none; border-top: 1px solid var(--op-b10); margin: 0; transition: border-top-color 0.25s ease;}
+    .obituary-card__desc {display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis; font-size: var(--font-default); line-height: 1.53; color: var(--b-default); text-align: center; transition: color 0.25s ease;}
+    .obituary-card__date {font-size: var(--font-xsm); line-height: 1.47; color: var(--op-b30); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 0.25s ease;}
+
+    .user-btn-wrap {position: absolute; right: 0; bottom: 0;}
+    .btn-write {min-width: 120rem; color: var(--w); background: var(--c-primary); transition: background .3s ease;} 
+
+    @media (hover: hover) and (pointer: fine) {
+    	.obituary-card:hover {background: var(--c-primary);}
+    	.obituary-card:hover .obituary-card__title {color: var(--w);}
+    	.obituary-card:hover .obituary-card__line {border-top-color: rgba(255,255,255,0.2);}
+    	.obituary-card:hover .obituary-card__desc {color: rgba(255,255,255,0.6);}
+    	.obituary-card:hover .obituary-card__date {color: rgba(255,255,255,0.3);}
+    	.obituary-card:hover .obituary-card__icon {background-image: url(../images/common/ic-mourning_w.svg);}
+       .btn-write:hover {background: var(--bg-dark);}
+    }
+
+    /* 페이지네이션 */
+    .obituary-pagination {display: flex; justify-content: center; align-items: center; gap: 15rem; margin-top: 60rem;}
+    .obituary-pagination__nums {display: flex; align-items: center; gap: 3rem;}
+    .obituary-pagination__btn {display: flex; align-items: center; justify-content: center; width: 36rem; height: 36rem; border-radius: 60rem; background: transparent; border: none; font-family: 'Pretendard', sans-serif; font-size: var(--font-default); font-weight: 700; color: rgba(0,0,0,0.2); cursor: pointer; text-decoration: none; transition: background 0.2s ease, color 0.2s ease;}
+    .obituary-pagination__btn.is-active {background: var(--c-primary); color: var(--w);}
+    .obituary-pagination__next {display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 5rem; text-decoration: none; transition: opacity 0.2s ease;}
+    @media (hover: hover) and (pointer: fine) {
+    	.obituary-pagination__btn:not(.is-active):hover {background: var(--bg-table); color: var(--b-title);}
+    	.obituary-pagination__next:hover {opacity: 0.5;}
+    }
+
+    @media (max-width: 1023px) {
+    	.obituary {padding: 20rem 0 100rem;}
+    	.obituary-heading {margin-bottom: 30rem;}
+    	.obituary-card {padding: 30rem 20rem; gap: 40rem;}
+    	.obituary-card__title {min-height: 56rem;}
+    	.obituary-search__select-wrap {width: 130rem;}
+    	.obituary-search__field-wrap {width: 300rem;}
+    }
+    @media (max-width: 860px) {
+    	.obituary-top {flex-direction: column; align-items: flex-start; gap: 16rem;}
+    	.obituary-search {width: 100%;}
+    	.obituary-search__select-wrap {flex-shrink: 0;}
+    	.obituary-search__field-wrap {width: 100%;}
+    	.obituary-pagination {margin-top: 40rem;}
+    	.obituary-card {padding: 24rem 16rem; gap: 30rem;}
+    	.obituary-card__title {font-size: var(--font-20);}
+    }
+    @media (max-width: 540px) {
+    	.obituary {padding: 0 0 60rem;}
+    	.obituary-heading {margin-bottom: 15rem;}
+    	.obituary-top {gap: 12rem; margin-bottom: 30rem;}
+    	.obituary-card {padding: 20rem 14rem; gap: 24rem;}
+    	.obituary-card__title {min-height: auto; font-size: var(--font-default);}
+    	.obituary-card__head {gap: 10rem; padding-bottom: 0;}
+    	.obituary-card__icon {width: 18rem; height: 26rem;}
+    	.obituary-search__select-wrap {width: 100rem; height: 60rem;}
+    	.obituary-search__select {padding-left: 12rem;}
+    	.obituary-search__field-wrap {height: 60rem;}
+    	.obituary-search__input {padding-left: 12rem; font-size: 14rem;}
+    	.obituary-pagination {margin-top: 30rem;}
+    	.obituary-pagination__btn {width: 30rem; height: 30rem;}
+    }
+  </style>
+</head>
+
+<body>
+
+<div data-include="../inc/head.html" data-root="../"></div>
+
+<div data-include="../inc/sub-visual.html" data-root="../" data-title="부고" data-label="부고" data-bg="../images/sub/01-introduction/sub-visual-bg.jpg" data-front="../images/sub/01-introduction/sub-visual-bg-front.png"></div>
+
+  <div class="sub-content" id="content">
+
+    <!-- ── Obituary 부고 ── -->
+    <section class="obituary">
+      <div class="wrap">
+
+        <h3 class="obituary-heading" data-heading="5xl" data-ani="top">부고</h3>
+
+        <div class="obituary-top" data-ani="top">
+          <p class="obituary-count">총 <strong>6</strong>건</p>
+          <form class="obituary-search" role="search" action="#" method="get">
+            <div class="obituary-search__select-wrap">
+              <select class="obituary-search__select" name="field" aria-label="검색 기준">
+                <option value="title">제목</option>
+              </select>
+              <span class="obituary-search__arrow" aria-hidden="true">
+                <img src="../images/sub/04-obituary/ic-arrow-select.svg" alt="" />
+              </span>
+            </div>
+            <div class="obituary-search__field-wrap">
+              <input class="obituary-search__input" type="search" name="q" placeholder="검색어를 입력해주세요" aria-label="검색어 입력" />
+              <button class="obituary-search__btn" type="submit" aria-label="검색">
+                <img src="../images/sub/04-obituary/ic-search.svg" alt="" />
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <ul class="obituary-list" data-grid="4">
+
+          <li data-ani="top">
+            <a class="obituary-card" href="04-obituary-view.html#content">
+              <div class="obituary-card__top">
+                <div class="obituary-card__head">
+                  <i class="obituary-card__icon" aria-hidden="true"></i>
+                  <h4 class="obituary-card__title" data-heading="xl">박주희 집사(김주환 집사)<br>모친 소천(영광 2순)</h4>
+                </div>
+                <hr class="obituary-card__line" />
+                <p class="obituary-card__desc">강혜숙 권사님(딸: 박주희 집사, 사위: 김주환 집사) 께서 2026년 4월 17일(금) 향년 84세로</p>
+              </div>
+              <p class="obituary-card__date">2026. 04. 17</p>
+            </a>
+          </li>
+
+          <li data-ani="top">
+            <a class="obituary-card" href="04-obituary-view.html#content">
+              <div class="obituary-card__top">
+                <div class="obituary-card__head">
+                  <i class="obituary-card__icon" aria-hidden="true"></i>
+                  <h4 class="obituary-card__title" data-heading="xl">이효숙 성도 부친 소천<br>(청장년 1순)</h4>
+                </div>
+                <hr class="obituary-card__line" />
+                <p class="obituary-card__desc">이무남 성도님(딸: 이효숙 성도)께서 2026년 4월 12일(주일), 향년 82세로 하나님의 부르심을 받으셨습니다.</p>
+              </div>
+              <p class="obituary-card__date">2026. 04. 01</p>
+            </a>
+          </li>
+
+          <li data-ani="top">
+            <a class="obituary-card" href="04-obituary-view.html#content">
+              <div class="obituary-card__top">
+                <div class="obituary-card__head">
+                  <i class="obituary-card__icon" aria-hidden="true"></i>
+                  <h4 class="obituary-card__title" data-heading="xl">이진아(윤석원)집사 부친 소천<br>(온유 4순)</h4>
+                </div>
+                <hr class="obituary-card__line" />
+                <p class="obituary-card__desc">이건대 장로님(딸: 이진아 집사, 사위: 윤석원 집사)께서 2026년 2월 19일(목), 향년 81세로 하나님의 부르심을 받으셨습니다.</p>
+              </div>
+              <p class="obituary-card__date">2026. 03. 08</p>
+            </a>
+          </li>
+
+          <li data-ani="top">
+            <a class="obituary-card" href="04-obituary-view.html#content">
+              <div class="obituary-card__top">
+                <div class="obituary-card__head">
+                  <i class="obituary-card__icon" aria-hidden="true"></i>
+                  <h4 class="obituary-card__title" data-heading="xl">김일환(이순녀)집사 소천(모세회)</h4>
+                </div>
+                <hr class="obituary-card__line" />
+                <p class="obituary-card__desc">김일환 집사님(이순녀 명예권사)께서 2026년 3월 2일(월) 오후 1시, 향년 98세로 하나님의 부름을 받으셨습니다.</p>
+              </div>
+              <p class="obituary-card__date">2026. 03. 03</p>
+            </a>
+          </li>
+
+          <li data-ani="top">
+            <a class="obituary-card" href="04-obituary-view.html#content">
+              <div class="obituary-card__top">
+                <div class="obituary-card__head">
+                  <i class="obituary-card__icon" aria-hidden="true"></i>
+                  <h4 class="obituary-card__title" data-heading="xl">서예원 집사 부친 소천(충성 5순)</h4>
+                </div>
+                <hr class="obituary-card__line" />
+                <p class="obituary-card__desc">서재호 성도님(딸: 서예원 집사)께서 2026년 2월 19(목) 오전 6시 20분, 향년 84세로 하나님의 부르심을 받으셨습니다.</p>
+              </div>
+              <p class="obituary-card__date">2026. 02. 18</p>
+            </a>
+          </li>
+
+          <li data-ani="top">
+            <a class="obituary-card" href="04-obituary-view.html#content">
+              <div class="obituary-card__top">
+                <div class="obituary-card__head">
+                  <i class="obituary-card__icon" aria-hidden="true"></i>
+                  <h4 class="obituary-card__title" data-heading="xl">조양임 집사(심택)모친 소천<br>(기쁨 4순)</h4>
+                </div>
+                <hr class="obituary-card__line" />
+                <p class="obituary-card__desc">유명자 집사님(딸: 조양임 집사, 사위: 심택 집사)께서 2026년 2월 15일(주일), 향년 85세로 하나님의 부르심을 받으셨습니다.</p>
+              </div>
+              <p class="obituary-card__date">2026. 02. 15</p>
+            </a>
+          </li>
+
+        </ul>
+
+        <nav class="obituary-pagination" aria-label="페이지 네비게이션" data-ani="top">
+          <div class="obituary-pagination__nums">
+            <a class="obituary-pagination__btn is-active" href="#" aria-current="page">1</a>
+            <a class="obituary-pagination__btn" href="#">2</a>
+            <a class="obituary-pagination__btn" href="#">3</a>
+            <a class="obituary-pagination__btn" href="#">4</a>
+          </div>
+          <a class="obituary-pagination__next" href="#" aria-label="다음 페이지">
+            <svg width="5" height="10" viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 1L4.5 5L1 9" stroke="#252820" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </nav>
+        
+        <!-- <div class="user-btn-wrap">
+          <a href="04-obituary-write.html#content" class="btn-basic-big btn-write">글쓰기</a>
+        </div> -->
+
+      </div>
+    </section>
+
+  </div>
+
+<div data-include="../inc/footer.html" data-root="../"></div>
+
+<script src="../js/common.js"></script>
+<script>
+window.MilalIncludes.ready.then(function () {
+(function () {
+/* 콘텐츠 탭 (role="tablist" — 페이지 내 패널 전환) */
+  document.querySelectorAll('[role="tablist"]').forEach(function (tablist) {
+    var tabs = tablist.querySelectorAll('[role="tab"]');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var targetPanel = document.getElementById(tab.getAttribute('aria-controls'));
+        if (!targetPanel) return;
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+          var p = document.getElementById(t.getAttribute('aria-controls'));
+          if (p) p.classList.remove('is-active');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        targetPanel.classList.add('is-active');
+      });
+    });
+  });
+
+  if (window.location.hash === '#content') {
+    var el = document.getElementById('content');
+    if (el) {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, el.offsetTop);
+      document.documentElement.style.scrollBehavior = '';
+    }
+  }
+})();
+});
+</script>
+
+</body>
+</html>
+
