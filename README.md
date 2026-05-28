@@ -1,11 +1,12 @@
-# Milal Church Homepage
+# 밀알교회 홈페이지 (Milal Church Homepage)
 
 밀알교회 공식 웹사이트 / Official Website of Milal Church
 
 ## 1. 프로젝트 개요
 
-- **기존 홈페이지 개편** — UI/UX 현대화 및 사용자 경험 개선
-- **반응형 디자인** — 모바일/태블릿/PC 모든 환경 지원
+- **반응형 공개 홈페이지** — React 18 + MUI, 모바일/태블릿/PC 모든 환경 지원
+- **REST API 백엔드** — Python FastAPI + MySQL 8.0
+- **관리자 CMS** — PHP 8.2 + Apache, 콘텐츠 관리 전용
 - **Docker 기반 배포** — 컨테이너화된 일관된 개발/운영 환경
 
 ---
