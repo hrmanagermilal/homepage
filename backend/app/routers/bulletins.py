@@ -39,6 +39,18 @@ def get_all(
     return paginated(data, total, page, limit)
 
 
+@router.get("/last")
+def get_last(db: Connection = Depends(get_db)):
+    with db.cursor() as cur:
+        cur.execute(
+            "SELECT * FROM bulletins ORDER BY year DESC, week_number DESC LIMIT 1"
+        )
+        row = cur.fetchone()
+    if not row:
+        return error("Not found", "NOT_FOUND", 404)
+    return success(_attach_images(serialize(row), db))
+
+
 @router.get("/{item_id}")
 def get_one(item_id: int, db: Connection = Depends(get_db)):
     with db.cursor() as cur:

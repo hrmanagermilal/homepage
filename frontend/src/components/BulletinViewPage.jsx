@@ -6,7 +6,7 @@ import "./landing_components/css/Jubo.css";
 import BulletinSubVisual from "./bulletin_components/BulletinSubVisual";
 
 function getBulletinIdFromPath() {
-  const match = window.location.pathname.match(/\/news\/bulletin\/(\d+)/);
+  const match = window.location.pathname.match(/\/(\d+)/);
   return match ? Number(match[1]) : null;
 }
 

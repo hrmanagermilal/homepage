@@ -39,6 +39,7 @@ export default function App() {
   const [sermons, setSermons] = useState([]);
   const [togetherItems, setTogetherItems] = useState([]);
   const [bulletins, setBulletins] = useState([]);
+  const [latestBulletin, setLatestBulletin] = useState(null);
   const [notices, setNotices] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [ministries, setMinistries] = useState([]);
@@ -148,6 +149,7 @@ export default function App() {
       try {
         const [
           sermonsResponse,
+          latestBulletinResponse,
           bulletinsResponse,
           noticesResponse,
           togetherResponse,
@@ -163,6 +165,7 @@ export default function App() {
           pastorIntroductionResponse,
         ] = await Promise.all([
           api.getSermons({ page: 1, limit: 100 }),
+          api.getLastBulletin(),
           api.getBulletins({ page: 1, limit: 50 }),
           api.getNotice({ page: 1, limit: 50 }),
           api.getTogether(),
@@ -180,6 +183,7 @@ export default function App() {
 
         if (!mounted) return;
         setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
+        setLatestBulletin(latestBulletinResponse?.data ?? null);
         setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
         setNotices(noticesResponse?.data?.data ?? noticesResponse?.data ?? []);
         setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
@@ -250,6 +254,7 @@ export default function App() {
   console.log("visionStatements", visionStatements);
   console.log("sermons", sermons);
   console.log("togetherItems", togetherItems);
+  console.log("latestBulletin", latestBulletin);
   console.log("bulletins", bulletins);
   console.log("departments", departments);
   console.log("shuttleBusSchedule", shuttleBusSchedule);
@@ -285,7 +290,7 @@ export default function App() {
           sermons={sermons}
           departments={departments}
           serviceTimes={serviceTimes}
-          bulletins={bulletins}
+          latestBulletin={latestBulletin}
           notices={notices}
           shuttleBusSchedule={shuttleBusSchedule}
           parkingLot={parkingLot}

@@ -73,6 +73,7 @@ export const api = {
   // Bulletins
   getBulletins: (params = {}) => request(`/api/bulletins${toQueryString(params)}`),
   getBulletinById: (id) => request(`/api/bulletins/${id}`),
+  getLastBulletin: () => request("/api/bulletins/last"),
 
 
   // Together

@@ -15,7 +15,7 @@ export default function LandingPage({
   sermons,
   departments,
   serviceTimes,
-  bulletins,
+  latestBulletin,
   notices,
   shuttleBusSchedule,
   parkingLot,
@@ -139,7 +139,7 @@ export default function LandingPage({
         <Sermon items={sermons} section={sections.find((s) => s.category === "Sermon")} />
       </div>
       <div data-snap-section="true">
-        <Jubo items={bulletins} section={sections.find((s) => s.category === "Jubo")} />
+        <Jubo items={latestBulletin ? [latestBulletin] : []} section={sections.find((s) => s.category === "Jubo")} />
       </div>
       <div data-snap-section="true">
         <ServiceTime serviceTimes={serviceTimes} section={sections.find((s) => s.category === "Worship")} />
