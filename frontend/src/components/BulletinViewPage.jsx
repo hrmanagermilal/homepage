@@ -6,7 +6,7 @@ import "./landing_components/css/Jubo.css";
 import BulletinSubVisual from "./bulletin_components/BulletinSubVisual";
 
 function getBulletinIdFromPath() {
-  const match = window.location.pathname.match(/\/news\/bulletin\/(\d+)/);
+  const match = window.location.pathname.match(/\/(\d+)/);
   return match ? Number(match[1]) : null;
 }
 
@@ -39,6 +39,14 @@ function BulletinImageViewer({ bulletin }) {
     return <p className="bulletin-view__no-images">등록된 이미지가 없습니다.</p>;
   }
 
+  const checkImageUrl = (url) => {
+    // if url's first character is not /, prepend /
+    if (url && !url.startsWith("/")) {
+      return "/" + url;
+    }
+    return url;
+  }
+
   return (
     <>
       <div className="bulletin-viewer">
@@ -53,7 +61,7 @@ function BulletinImageViewer({ bulletin }) {
             aria-label="크게 보기"
           >
             <div className="bulletin-viewer__card">
-              <img key={activeIndex} src={currentImg.image_url} alt={`${bulletin.title} ${activeIndex + 1}페이지`} />
+              <img key={activeIndex} src={checkImageUrl(currentImg.image_url)} alt={`${bulletin.title} ${activeIndex + 1}페이지`} />
             </div>
             <div className="main-weekly__hover-btn">
               <img src="/images/main/icon-zoom.svg" alt="" />
@@ -75,7 +83,7 @@ function BulletinImageViewer({ bulletin }) {
                   onKeyDown={(e) => e.key === "Enter" && goTo(idx)}
                   aria-label={`${idx + 1}페이지`}
                 >
-                  <img src={img.image_url} alt={`주보 ${idx + 1}페이지`} />
+                  <img src={checkImageUrl(img.image_url)} alt={`주보 ${idx + 1}페이지`} />
                 </li>
               ))}
             </ul>
@@ -103,7 +111,7 @@ function BulletinImageViewer({ bulletin }) {
         </button>
         <img
           className="weekly-popup__img"
-          src={currentImg?.image_url}
+          src={checkImageUrl(currentImg?.image_url)}
           alt={`${bulletin.title} ${activeIndex + 1}페이지`}
           onClick={(e) => e.stopPropagation()}
         />

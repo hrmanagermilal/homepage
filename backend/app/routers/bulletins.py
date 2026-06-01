@@ -39,6 +39,18 @@ def get_all(
     return paginated(data, total, page, limit)
 
 
+@router.get("/last")
+def get_last(db: Connection = Depends(get_db)):
+    with db.cursor() as cur:
+        cur.execute(
+            "SELECT * FROM bulletins ORDER BY year DESC, week_number DESC LIMIT 1"
+        )
+        row = cur.fetchone()
+    if not row:
+        return error("Not found", "NOT_FOUND", 404)
+    return success(_attach_images(serialize(row), db))
+
+
 @router.get("/{item_id}")
 def get_one(item_id: int, db: Connection = Depends(get_db)):
     with db.cursor() as cur:
@@ -123,7 +135,7 @@ async def transform_pdf(
                 img.save(filepath, "PNG")
 
                 saved.append({
-                    "image_url": f"uploads/bulletin/{filename}",
+                    "image_url": f"/uploads/bulletin/{filename}",
                     "order": order[total_order % len(order)],
                 })
                 total_order += 1
@@ -184,7 +196,7 @@ async def bulletin_pdf_to_image(
                 filepath = os.path.join(BULLETIN_UPLOAD_DIR, filename)
                 img.save(filepath, "PNG")
                 saved.append({
-                    "image_url": f"uploads/bulletin/{filename}",
+                    "image_url": f"/uploads/bulletin/{filename}",
                     "order": total_order,
                 })
                 total_order += 1

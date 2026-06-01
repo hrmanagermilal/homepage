@@ -18,7 +18,7 @@ COPY app/ ./app/
 # Create upload directories
 RUN mkdir -p uploads/hero/background uploads/hero/front \
     uploads/bulletin uploads/announcement uploads/together \
-    uploads/departments uploads/news uploads/members
+    uploads/departments  uploads/members
 
 EXPOSE 8000
 

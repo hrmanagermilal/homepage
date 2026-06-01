@@ -14,6 +14,7 @@ import ObituaryPagination from "./obituary_components/ObituaryPagination";
 import BulletinSubVisual from "./bulletin_components/BulletinSubVisual";
 import BulletinTable from "./bulletin_components/BulletinTable";
 import BulletinPagination from "./bulletin_components/BulletinPagination";
+import {api} from "../api/client";
 
 const NEWS_LNB_ITEMS = [
   { label: "온라인 주보", key: "bulletin", href: "/news#bulletin" },
@@ -60,11 +61,13 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   // Obituary state
   const [obituarySearch, setObituarySearch] = useState("");
   const [obituaryCurrentPage, setObituaryCurrentPage] = useState(1);
+  const [obituaryData, setObituaryData] = useState(obituaries);
 
   // Bulletin state
   const [bulletinSearch, setBulletinSearch] = useState("");
   const [bulletinSortOrder, setBulletinSortOrder] = useState("newest");
   const [bulletinCurrentPage, setBulletinCurrentPage] = useState(1);
+  const [bulletinData, setBulletinData] = useState(bulletins);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -73,6 +76,27 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
+
+  useEffect(() => {
+    if (bulletins.length <= 0) {
+      api.getBulletins({ page: 1, limit: 50 }).then((response) => {
+        const data = response?.data?.data ?? response?.data ?? [];
+        console.log("Fetched bulletins:", data);
+        setBulletinData(data);
+      });
+    }
+  }, [bulletins]);
+
+  useEffect(() => {
+    console.log("Obituaries prop changed:", obituaries);
+    if (obituaries.length <= 0) {
+      api.getObituary({ page: 1, limit: 200 }).then((response) => {
+        const data = response?.data?.data ?? response?.data ?? [];
+        console.log("Fetched obituaries:", data);
+        setObituaryData(data);
+      });
+    }
+  }, [obituaries]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -176,13 +200,13 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
 
   // Obituary computed
   const obituaryFiltered = useMemo(() => {
-    if (!obituarySearch) return obituaries;
-    return obituaries.filter(
+    if (!obituarySearch) return obituaryData;
+    return obituaryData.filter(
       (item) =>
         item.title.toLowerCase().includes(obituarySearch.toLowerCase()) ||
         (item.description ?? "").toLowerCase().includes(obituarySearch.toLowerCase())
     );
-  }, [obituaries, obituarySearch]);
+  }, [obituaryData, obituarySearch]);
 
   const obituaryTotalPages = Math.ceil(obituaryFiltered.length / ITEMS_PER_PAGE);
   const obituaryPaginated = useMemo(() => {
@@ -198,10 +222,10 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
 
   // Bulletin computed
   const bulletinFiltered = useMemo(() => {
-    return bulletins.filter((item) =>
+    return bulletinData.filter((item) =>
       item.title.toLowerCase().includes(bulletinSearch.toLowerCase())
     );
-  }, [bulletins, bulletinSearch]);
+  }, [bulletinData, bulletinSearch]);
 
   const bulletinSorted = useMemo(() => {
     const data = [...bulletinFiltered];
@@ -295,7 +319,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
                     key={item.id}
                     id={item.id}
                     title={item.title}
-                    description={item.description}
+                    description={item.description?item.description:item.content}
                     date={item.date}
                   />
                 ))}

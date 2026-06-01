@@ -39,6 +39,7 @@ export default function App() {
   const [sermons, setSermons] = useState([]);
   const [togetherItems, setTogetherItems] = useState([]);
   const [bulletins, setBulletins] = useState([]);
+  const [latestBulletin, setLatestBulletin] = useState(null);
   const [notices, setNotices] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [ministries, setMinistries] = useState([]);
@@ -148,7 +149,7 @@ export default function App() {
       try {
         const [
           sermonsResponse,
-          bulletinsResponse,
+          latestBulletinResponse,
           noticesResponse,
           togetherResponse,
           departmentsResponse,
@@ -159,11 +160,10 @@ export default function App() {
           memberResponse,
           visionStatementsResponse,
           ministriesResponse,
-          obituariesResponse,
           pastorIntroductionResponse,
         ] = await Promise.all([
           api.getSermons({ page: 1, limit: 100 }),
-          api.getBulletins({ page: 1, limit: 50 }),
+          api.getLastBulletin(),
           api.getNotice({ page: 1, limit: 50 }),
           api.getTogether(),
           api.getDepartments(),
@@ -174,13 +174,12 @@ export default function App() {
           api.getMembers(),
           api.getVisionStatements(),
           api.getMinistry(),
-          api.getObituary(),
           api.getPastorIntroduction(),
         ]);
 
         if (!mounted) return;
         setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
-        setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
+        setLatestBulletin(latestBulletinResponse?.data ?? null);
         setNotices(noticesResponse?.data?.data ?? noticesResponse?.data ?? []);
         setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
         setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
@@ -191,7 +190,6 @@ export default function App() {
         setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
         setVisionStatements(visionStatementsResponse?.data ?? []);
         setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
-        setObituaries(obituariesResponse?.data?.data ?? obituariesResponse?.data ?? []);
         setPastorIntroduction(pastorIntroductionResponse?.data ?? null);
       } catch (_) {
         // Secondary content failures are non-fatal
@@ -250,7 +248,7 @@ export default function App() {
   console.log("visionStatements", visionStatements);
   console.log("sermons", sermons);
   console.log("togetherItems", togetherItems);
-  console.log("bulletins", bulletins);
+  console.log("latestBulletin", latestBulletin);
   console.log("departments", departments);
   console.log("shuttleBusSchedule", shuttleBusSchedule);
   console.log("parkingLot", parkingLot);
@@ -285,7 +283,7 @@ export default function App() {
           sermons={sermons}
           departments={departments}
           serviceTimes={serviceTimes}
-          bulletins={bulletins}
+          latestBulletin={latestBulletin}
           notices={notices}
           shuttleBusSchedule={shuttleBusSchedule}
           parkingLot={parkingLot}
