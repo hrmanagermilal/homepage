@@ -307,7 +307,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
                     key={item.id}
                     id={item.id}
                     title={item.title}
-                    description={item.description}
+                    description={item.description?item.description:item.content}
                     date={item.date}
                   />
                 ))}
