@@ -160,7 +160,6 @@ export default function App() {
           memberResponse,
           visionStatementsResponse,
           ministriesResponse,
-          obituariesResponse,
           pastorIntroductionResponse,
         ] = await Promise.all([
           api.getSermons({ page: 1, limit: 100 }),
@@ -175,7 +174,6 @@ export default function App() {
           api.getMembers(),
           api.getVisionStatements(),
           api.getMinistry(),
-          api.getObituary(),
           api.getPastorIntroduction(),
         ]);
 
@@ -192,7 +190,6 @@ export default function App() {
         setMembers(memberResponse?.data?.data ?? memberResponse?.data ?? []);
         setVisionStatements(visionStatementsResponse?.data ?? []);
         setMinistries(ministriesResponse?.data?.data ?? ministriesResponse?.data ?? []);
-        setObituaries(obituariesResponse?.data?.data ?? obituariesResponse?.data ?? []);
         setPastorIntroduction(pastorIntroductionResponse?.data ?? null);
       } catch (_) {
         // Secondary content failures are non-fatal

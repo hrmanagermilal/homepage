@@ -19,6 +19,7 @@ export default function ObituaryViewSubVisual() {
           </span>
           <span className="sub-visual__lnb-text">소식</span>
         </nav>
+        <h2 className="sub-visual__title">부고</h2>
       </div>
       <div className="sub-visual__scroll-down" aria-hidden="true">
         <i />

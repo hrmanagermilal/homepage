@@ -61,6 +61,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   // Obituary state
   const [obituarySearch, setObituarySearch] = useState("");
   const [obituaryCurrentPage, setObituaryCurrentPage] = useState(1);
+  const [obituaryData, setObituaryData] = useState(obituaries);
 
   // Bulletin state
   const [bulletinSearch, setBulletinSearch] = useState("");
@@ -85,6 +86,17 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
       });
     }
   }, [bulletins]);
+
+  useEffect(() => {
+    console.log("Obituaries prop changed:", obituaries);
+    if (obituaries.length <= 0) {
+      api.getObituary({ page: 1, limit: 200 }).then((response) => {
+        const data = response?.data?.data ?? response?.data ?? [];
+        console.log("Fetched obituaries:", data);
+        setObituaryData(data);
+      });
+    }
+  }, [obituaries]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -188,13 +200,13 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
 
   // Obituary computed
   const obituaryFiltered = useMemo(() => {
-    if (!obituarySearch) return obituaries;
-    return obituaries.filter(
+    if (!obituarySearch) return obituaryData;
+    return obituaryData.filter(
       (item) =>
         item.title.toLowerCase().includes(obituarySearch.toLowerCase()) ||
         (item.description ?? "").toLowerCase().includes(obituarySearch.toLowerCase())
     );
-  }, [obituaries, obituarySearch]);
+  }, [obituaryData, obituarySearch]);
 
   const obituaryTotalPages = Math.ceil(obituaryFiltered.length / ITEMS_PER_PAGE);
   const obituaryPaginated = useMemo(() => {
