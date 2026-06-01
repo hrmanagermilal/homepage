@@ -135,7 +135,7 @@ async def transform_pdf(
                 img.save(filepath, "PNG")
 
                 saved.append({
-                    "image_url": f"uploads/bulletin/{filename}",
+                    "image_url": f"/uploads/bulletin/{filename}",
                     "order": order[total_order % len(order)],
                 })
                 total_order += 1
@@ -196,7 +196,7 @@ async def bulletin_pdf_to_image(
                 filepath = os.path.join(BULLETIN_UPLOAD_DIR, filename)
                 img.save(filepath, "PNG")
                 saved.append({
-                    "image_url": f"uploads/bulletin/{filename}",
+                    "image_url": f"/uploads/bulletin/{filename}",
                     "order": total_order,
                 })
                 total_order += 1
