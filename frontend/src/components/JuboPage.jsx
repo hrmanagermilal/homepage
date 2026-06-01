@@ -14,6 +14,7 @@ import ObituaryPagination from "./obituary_components/ObituaryPagination";
 import BulletinSubVisual from "./bulletin_components/BulletinSubVisual";
 import BulletinTable from "./bulletin_components/BulletinTable";
 import BulletinPagination from "./bulletin_components/BulletinPagination";
+import {api} from "../api/client";
 
 const NEWS_LNB_ITEMS = [
   { label: "온라인 주보", key: "bulletin", href: "/news#bulletin" },
@@ -65,6 +66,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   const [bulletinSearch, setBulletinSearch] = useState("");
   const [bulletinSortOrder, setBulletinSortOrder] = useState("newest");
   const [bulletinCurrentPage, setBulletinCurrentPage] = useState(1);
+  const [bulletinData, setBulletinData] = useState(bulletins);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -73,6 +75,16 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
+
+  useEffect(() => {
+    if (bulletins.length <= 0) {
+      api.getBulletins({ page: 1, limit: 50 }).then((response) => {
+        const data = response?.data?.data ?? response?.data ?? [];
+        console.log("Fetched bulletins:", data);
+        setBulletinData(data);
+      });
+    }
+  }, [bulletins]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -198,10 +210,10 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
 
   // Bulletin computed
   const bulletinFiltered = useMemo(() => {
-    return bulletins.filter((item) =>
+    return bulletinData.filter((item) =>
       item.title.toLowerCase().includes(bulletinSearch.toLowerCase())
     );
-  }, [bulletins, bulletinSearch]);
+  }, [bulletinData, bulletinSearch]);
 
   const bulletinSorted = useMemo(() => {
     const data = [...bulletinFiltered];

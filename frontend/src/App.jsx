@@ -150,7 +150,6 @@ export default function App() {
         const [
           sermonsResponse,
           latestBulletinResponse,
-          bulletinsResponse,
           noticesResponse,
           togetherResponse,
           departmentsResponse,
@@ -166,7 +165,6 @@ export default function App() {
         ] = await Promise.all([
           api.getSermons({ page: 1, limit: 100 }),
           api.getLastBulletin(),
-          api.getBulletins({ page: 1, limit: 50 }),
           api.getNotice({ page: 1, limit: 50 }),
           api.getTogether(),
           api.getDepartments(),
@@ -184,7 +182,6 @@ export default function App() {
         if (!mounted) return;
         setSermons(sermonsResponse?.data?.data ?? sermonsResponse?.data ?? []);
         setLatestBulletin(latestBulletinResponse?.data ?? null);
-        setBulletins(bulletinsResponse?.data?.data ?? bulletinsResponse?.data ?? []);
         setNotices(noticesResponse?.data?.data ?? noticesResponse?.data ?? []);
         setTogetherItems(togetherResponse?.data?.data ?? togetherResponse?.data ?? []);
         setDepartments(departmentsResponse?.data?.data ?? departmentsResponse?.data ?? []);
@@ -255,7 +252,6 @@ export default function App() {
   console.log("sermons", sermons);
   console.log("togetherItems", togetherItems);
   console.log("latestBulletin", latestBulletin);
-  console.log("bulletins", bulletins);
   console.log("departments", departments);
   console.log("shuttleBusSchedule", shuttleBusSchedule);
   console.log("parkingLot", parkingLot);
