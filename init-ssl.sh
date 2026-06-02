@@ -50,7 +50,7 @@ setup_ssl() {
     
     # Wait for nginx to be ready (max 30 seconds)
     echo ">> Waiting for nginx to be ready..."
-    max_attempts=30
+    max_attempts=60
     attempt=0
     while [ $attempt -lt $max_attempts ]; do
         if docker compose exec -T milal-frontend nginx -t 2>/dev/null || docker compose exec -T milal-nginx nginx -t 2>/dev/null; then
@@ -75,12 +75,15 @@ setup_ssl() {
     fi
     
     # Clean up any broken renewal config (for fresh certificate request)
-    # Using separate docker compose run commands to avoid syntax issues
-    docker compose run --rm certbot rm -f /etc/letsencrypt/renewal/$DOMAIN.conf 2>/dev/null || true
+    docker compose run --rm certbot sh -c "rm -f /etc/letsencrypt/renewal/$DOMAIN*.conf" 2>/dev/null || true
     
     # Verify certbot can access the webroot
     echo ">> Verifying webroot accessibility..."
-    docker compose run --rm certbot test -d /var/www/certbot && echo ">> Webroot is accessible" || echo ">> WARNING: Webroot may not be accessible"
+    if docker compose run --rm certbot sh -c "test -d /var/www/certbot && test -w /var/www/certbot"; then
+        echo ">> Webroot is accessible and writable"
+    else
+        echo ">> WARNING: Webroot may not be accessible"
+    fi
     
     # Request real certificate (with wildcard for all subdomains)
     # NOTE: Don't use --force-renewal by default (causes rate limit issues)
