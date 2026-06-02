@@ -4,6 +4,7 @@ import "./css/NoticeViewPage.css";
 import NoticeViewSubVisual from "./notice_components/NoticeViewSubVisual";
 import NoticeViewContent from "./notice_components/NoticeViewContent";
 import NoticeViewNavigation from "./notice_components/NoticeViewNavigation";
+import { api } from "../api/client";
 
 function getNoticeIdFromPath() {
   const match = window.location.pathname.match(/\/news\/notice\/(\d+)/);
@@ -17,6 +18,32 @@ function getNoticeIndexById(notices, id) {
 
 export default function NoticeViewPage({ notices = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [detailedNotice, setDetailedNotice] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch detailed notice from backend to increment views
+  useEffect(() => {
+    const fetchNotice = () => {
+      const noticeId = getNoticeIdFromPath();
+      if (noticeId) {
+        setLoading(true);
+        setDetailedNotice(null);
+        api.getNoticeById(noticeId)
+          .then((response) => {
+            if (response?.data) {
+              setDetailedNotice(response.data);
+            }
+          })
+          .catch((err) => console.error("Failed to fetch notice:", err))
+          .finally(() => setLoading(false));
+      }
+    };
+
+    fetchNotice();
+
+    window.addEventListener("locationchange", fetchNotice);
+    return () => window.removeEventListener("locationchange", fetchNotice);
+  }, []);
 
   useEffect(() => {
     if (notices.length > 0) {
@@ -45,7 +72,7 @@ export default function NoticeViewPage({ notices = [] }) {
     }
   }, [currentIndex]);
 
-  const currentNotice = notices[currentIndex];
+  const currentNotice = detailedNotice || notices[currentIndex];
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < notices.length - 1;
 

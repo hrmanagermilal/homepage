@@ -273,7 +273,7 @@ export default function App() {
       ) : isBulletinViewPage ? (
         <BulletinViewPage />
       ) : isJuboPage ? (
-        <JuboPage notices={notices} obituaries={obituaries} bulletins={bulletins} />
+        <JuboPage notices={} obituaries={obituaries} bulletins={bulletins} />
       ) : isNextGenSubmenuPage ? (
         <NextGenPage departments={departments.filter(d => d.department_type === 'nextgen')} />
       ) : (
