@@ -55,8 +55,8 @@ setup_ssl() {
         STAGING_ARG="--staging"
     fi
     
-    # Clean up any broken renewal config
-    docker compose run --rm certbot sh -c "rm -f /etc/letsencrypt/renewal/$DOMAIN.conf" 2>/dev/null || true
+    # Clean up any broken renewal config (for fresh certificate request)
+    docker compose run --rm certbot bash -c "rm -f /etc/letsencrypt/renewal/$DOMAIN.conf" 2>/dev/null || true
     
     # Request real certificate (with wildcard for all subdomains)
     docker compose run --rm certbot certonly \
@@ -77,8 +77,11 @@ setup_ssl() {
     fi
     
     echo ">> Reloading nginx with real certificate..."
-    docker compose exec frontend nginx -s reload 2>/dev/null || \
-    docker compose exec -w /var/www milal-nginx nginx -s reload 2>/dev/null || true
+    if [ "$SERVICE" = "Frontend" ]; then
+        docker compose exec milal-frontend nginx -s reload 2>/dev/null || true
+    else
+        docker compose exec milal-nginx nginx -s reload 2>/dev/null || true
+    fi
     
     echo -e "${GREEN}✓ SSL certificate installed for $DOMAIN${NC}"
     echo "  Location: ./certs/live/$DOMAIN/"
@@ -125,8 +128,13 @@ echo "SSL Certificate Setup Complete!"
 echo "=========================================="
 echo ""
 echo "Domains configured:"
-echo "  • Frontend: $FRONTEND_DOMAIN"
-echo "  • Backend:  $BACKEND_DOMAIN"
+echo "  • Frontend: $FRONTEND_DOMAIN (including *.${FRONTEND_DOMAIN})"
+echo "  • Backend:  $BACKEND_DOMAIN (including *.${BACKEND_DOMAIN})"
+echo ""
+echo "IMPORTANT - Let's Encrypt Rate Limits:"
+echo "  • Max 5 new certs per exact domain set per 7 days"
+echo "  • If you hit the limit, use --force-renewal sparingly"
+echo "  • Set STAGING=1 in this script for testing to avoid limits"
 echo ""
 echo "Next step: Start all services"
 echo "  cd frontend && docker compose up -d"
