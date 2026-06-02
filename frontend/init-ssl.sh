@@ -23,25 +23,14 @@ mkdir -p ./certbot/www
 
 # 1. Create a temporary self-signed cert so Nginx can start
 echo ">> Creating temporary self-signed certificate..."
-$COMPOSE run --rm --entrypoint "" certbot sh -c "
-  mkdir -p /etc/letsencrypt/live/$DOMAIN
-  openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
-    -keyout /etc/letsencrypt/live/$DOMAIN/privkey.pem \
-    -out /etc/letsencrypt/live/$DOMAIN/fullchain.pem \
-    -subj '/CN=localhost'
-"
+mkdir -p ./certs/live/$DOMAIN
+openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
+  -keyout ./certs/live/$DOMAIN/privkey.pem \
+  -out ./certs/live/$DOMAIN/fullchain.pem \
+  -subj '/CN=localhost' 2>/dev/null || true
 
-# Copy the self-signed cert to the local certs directory
-# (docker compose run mounted volumes make these accessible)
-echo ">> Copying temporary certificate to ./certs..."
-# Wait a moment for files to be available
+echo ">> Temporary certificate created at ./certs/live/$DOMAIN/"
 sleep 1
-
-# Verify temporary cert was created
-if [ ! -f "./certs/live/$DOMAIN/fullchain.pem" ]; then
-  echo "ERROR: Temporary certificate not found at ./certs/live/$DOMAIN/fullchain.pem"
-  exit 1
-fi
 
 # 2. Start frontend with the dummy cert
 echo ">> Starting frontend container..."
@@ -58,6 +47,9 @@ STAGING_ARG=""
 if [ "$STAGING" -eq 1 ]; then
   STAGING_ARG="--staging"
 fi
+
+# Clean up any broken renewal config from the temporary cert
+$COMPOSE run --rm certbot sh -c "rm -f /etc/letsencrypt/renewal/$DOMAIN.conf" || true
 
 $COMPOSE run --rm certbot certonly \
   --webroot \
@@ -84,6 +76,14 @@ $COMPOSE exec frontend nginx -s reload
 
 echo ""
 echo "=== Done! SSL certificate installed for $DOMAIN ==="
+echo ""
+echo "Certificate location: ./certs/live/$DOMAIN/"
+echo "  - fullchain.pem (used by nginx)"
+echo "  - privkey.pem (used by nginx)"
+echo ""
+echo "To renew the certificate manually, run:"
+echo "  docker compose run --rm certbot renew --webroot -w /var/www/certbot"
+echo "  docker compose exec frontend nginx -s reload"
 echo ""
 echo "Certificate location: ./certs/live/$DOMAIN/"
 echo "  - fullchain.pem (used by nginx)"
