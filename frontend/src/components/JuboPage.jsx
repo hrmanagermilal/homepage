@@ -57,7 +57,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   const [noticeSearch, setNoticeSearch] = useState("");
   const [noticeSortOrder, setNoticeSortOrder] = useState("newest");
   const [noticeCurrentPage, setNoticeCurrentPage] = useState(1);
-
+  const [noticeData, setNoticeData] = useState(notices);
   // Obituary state
   const [obituarySearch, setObituarySearch] = useState("");
   const [obituaryCurrentPage, setObituaryCurrentPage] = useState(1);
@@ -97,6 +97,16 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
       });
     }
   }, [obituaries]);
+
+  useEffect(() => {
+    api.getNotices({ page: 1, limit: 500 }).then((response) => { 
+      const data = response?.data?.data ?? response?.data ?? [];
+      console.log("Fetched notices:", data);
+      // Sort by created_at descending
+      const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setNoticeData(sorted);
+    });
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -167,11 +177,11 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
 
   // Notice computed
   const noticeFiltered = useMemo(() => {
-    return notices.filter((item) =>
+    return noticeData.filter((item) =>
       item.title.toLowerCase().includes(noticeSearch.toLowerCase()) ||
       (item.author ?? "").toLowerCase().includes(noticeSearch.toLowerCase())
     );
-  }, [notices, noticeSearch]);
+  }, [noticeData, noticeSearch]);
 
   const noticeSorted = useMemo(() => {
     const data = [...noticeFiltered];
