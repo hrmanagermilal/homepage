@@ -93,6 +93,7 @@ setup_ssl() {
       --email "$EMAIL" \
       --agree-tos \
       --no-eff-email \
+      --expand \
       --non-interactive \
       $STAGING_ARG; then
         echo -e "${RED}ERROR: Certificate request failed for $DOMAIN${NC}"
