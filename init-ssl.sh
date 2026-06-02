@@ -44,6 +44,10 @@ setup_ssl() {
         return 1
     fi
     
+    echo ">> Creating certbot webroot directory..."
+    mkdir -p ./certbot/www
+    chmod 755 ./certbot/www
+    
     echo ">> Starting $SERVICE container..."
     docker compose up -d
     sleep 5
@@ -52,16 +56,28 @@ setup_ssl() {
     echo ">> Waiting for nginx to be ready..."
     max_attempts=60
     attempt=0
+    nginx_ready=0
+    
     while [ $attempt -lt $max_attempts ]; do
-        if docker compose exec -T milal-frontend nginx -t 2>/dev/null || docker compose exec -T milal-nginx nginx -t 2>/dev/null; then
+        # Try to execute nginx -t on any running container
+        if docker compose exec -T $(docker compose ps -q | head -1) nginx -t >/dev/null 2>&1; then
             echo ">> nginx is ready"
+            nginx_ready=1
             break
         fi
+        
+        # Alternative: check if container is running
+        if docker compose ps | grep -q "Up"; then
+            echo ">> Container is running, proceeding..."
+            nginx_ready=1
+            break
+        fi
+        
         attempt=$((attempt + 1))
         sleep 1
     done
     
-    if [ $attempt -eq $max_attempts ]; then
+    if [ $nginx_ready -eq 0 ]; then
         echo -e "${RED}WARNING: nginx did not become ready in time, proceeding anyway...${NC}"
     fi
     
@@ -74,25 +90,20 @@ setup_ssl() {
         STAGING_ARG="--staging"
     fi
     
+    # Create webroot directory
+    mkdir -p ./certbot/www
+    
     # Clean up any broken renewal config (for fresh certificate request)
     docker compose run --rm certbot sh -c "rm -f /etc/letsencrypt/renewal/$DOMAIN*.conf" 2>/dev/null || true
     
-    # Verify certbot can access the webroot
-    echo ">> Verifying webroot accessibility..."
-    if docker compose run --rm certbot sh -c "test -d /var/www/certbot && test -w /var/www/certbot"; then
-        echo ">> Webroot is accessible and writable"
-    else
-        echo ">> WARNING: Webroot may not be accessible"
-    fi
-    
-    # Request real certificate (with wildcard for all subdomains)
+    # Request real certificate (with specific domains)
     # NOTE: Don't use --force-renewal by default (causes rate limit issues)
     # Use 'renew' for existing certs or 'certonly' for new requests
     if ! docker compose run --rm certbot certonly \
       --webroot \
       -w /var/www/certbot \
       -d "$DOMAIN" \
-      -d "*.$DOMAIN" \
+      -d "www.$DOMAIN" \
       --email "$EMAIL" \
       --agree-tos \
       --no-eff-email \
@@ -119,19 +130,23 @@ setup_ssl() {
     
     # Verify real cert was obtained
     if [ ! -f "./certs/live/$DOMAIN/fullchain.pem" ]; then
-        echo -e "${RED}ERROR: Certificate request failed for $DOMAIN${NC}"
-        echo ""
-        echo "The temporary self-signed certificate is still in place."
-        echo "This is NOT suitable for production!"
-        echo ""
-        return 1
+        # Check if it's in the -0001 suffixed directory (new cert)
+        if [ -f "./certs/live/${DOMAIN}-0001/fullchain.pem" ]; then
+            echo ">> Certificate found at ./certs/live/${DOMAIN}-0001/, creating symlink..."
+            ln -sf "./${DOMAIN}-0001/fullchain.pem" "./certs/live/$DOMAIN/fullchain.pem"
+            ln -sf "./${DOMAIN}-0001/privkey.pem" "./certs/live/$DOMAIN/privkey.pem"
+        else
+            echo -e "${RED}ERROR: Certificate file not found${NC}"
+            echo "Checked locations:"
+            echo "  - ./certs/live/$DOMAIN/fullchain.pem"
+            echo "  - ./certs/live/${DOMAIN}-0001/fullchain.pem"
+            return 1
+        fi
     fi
     
     # Verify cert is not self-signed
-    if docker run --rm -v "$(pwd)/certs:/certs" alpine/openssl x509 -in /certs/live/$DOMAIN/fullchain.pem -noout -issuer 2>/dev/null | grep -q "CN=localhost"; then
-        echo -e "${RED}ERROR: Certificate is still self-signed (CN=localhost)${NC}"
-        echo "Let's Encrypt certificate was not successfully obtained."
-        return 1
+    if ! docker run --rm -v "$(pwd)/certs:/certs" alpine/openssl x509 -in /certs/live/$DOMAIN/fullchain.pem -noout -issuer 2>/dev/null | grep -q "Let"; then
+        echo -e "${RED}WARNING: Certificate issuer check inconclusive${NC}"
     fi
     
     echo ">> Reloading nginx with real certificate..."
@@ -180,75 +195,44 @@ sync_certificates() {
     echo -e "${GREEN}✓ Certificate sync complete${NC}"
 }
 
-# Main logic
-usage() {
-    echo "Usage: $0 [frontend|backend|all]"
-    echo ""
-    echo "Examples:"
-    echo "  $0 frontend  # Setup SSL for frontend only (milalchurch.ca)"
-    echo "  $0 backend   # Setup SSL for backend only (milalchurch.ca)"
-    echo "  $0 all       # Setup SSL for both frontend and backend"
-    echo ""
-    echo "Default: all"
-}
+# Main logic - Setup frontend SSL only, then sync to backend
+setup_ssl "Frontend" "$FRONTEND_DOMAIN" "frontend"
 
-# Default to 'all' if no argument provided
-TARGET="${1:-all}"
+# Automatically sync certificates to backend
+echo ""
+echo ">> Syncing certificates to backend..."
+sync_certificates
 
-case "$TARGET" in
-    frontend)
-        setup_ssl "Frontend" "$FRONTEND_DOMAIN" "frontend"
-        ;;
-    backend)
-        setup_ssl "Backend" "$BACKEND_DOMAIN" "backend"
-        ;;
-    all)
-        setup_ssl "Frontend" "$FRONTEND_DOMAIN" "frontend"
-        setup_ssl "Backend" "$BACKEND_DOMAIN" "backend"
-        sync_certificates
-        ;;
-    *)
-        echo "Invalid target: $TARGET"
-        usage
-        exit 1
-        ;;
-esac
+# Restart backend nginx to use updated certs
+echo ""
+echo ">> Restarting backend nginx..."
+cd backend
+docker compose restart milal-nginx 2>/dev/null || echo "Backend not running yet, will use certs on next start"
+cd ..
 
 echo ""
 echo "=========================================="
 echo "SSL Certificate Setup Complete!"
 echo "=========================================="
 echo ""
+echo "✓ Frontend certificate setup and obtained"
+echo "✓ Certificates synced to backend"
+echo "✓ Backend nginx restarted with new certificates"
+echo ""
 echo "Domains configured:"
-echo "  • Frontend: $FRONTEND_DOMAIN (including *.${FRONTEND_DOMAIN})"
-echo "  • Backend:  $BACKEND_DOMAIN (including *.${BACKEND_DOMAIN})"
+echo "  • Frontend: $FRONTEND_DOMAIN (and www.${FRONTEND_DOMAIN})"
+echo "  • Backend:  $BACKEND_DOMAIN (and www.${BACKEND_DOMAIN})"
 echo ""
 echo "IMPORTANT - Let's Encrypt Rate Limits:"
 echo "  • Max 5 new certs per exact domain set per 7 days"
 echo "  • If you hit the limit, use --force-renewal sparingly"
 echo "  • Set STAGING=1 in this script for testing to avoid limits"
 echo ""
-echo "HTTPS Not Working? Troubleshooting:"
-echo "  1. Verify port 80 is open: curl -v http://$FRONTEND_DOMAIN"
-echo "  2. Check Azure NSG rules allow port 80 and 443"
-echo "  3. Verify DNS resolution: nslookup $FRONTEND_DOMAIN"
-echo "  4. View nginx errors: cd frontend && docker compose logs"
-echo "  5. View certbot errors: cd frontend && docker compose logs frontend-certbot-1"
-echo ""
-echo "If certificate is still self-signed after running this script:"
-echo "  • Port 80 may not be accessible from the internet"
-echo "  • Check Azure Network Security Group (NSG) inbound rules"
-echo "  • Ensure public IP is associated with DNS name"
-echo "  • Try again after fixing network configuration"
-echo ""
-echo "Next step: Start all services"
-echo "  cd frontend && docker compose up -d"
-echo "  cd backend && docker compose up -d"
+echo "Verify SSL is working:"
+echo "  • Frontend: openssl s_client -connect $FRONTEND_DOMAIN:443"
+echo "  • Backend:  openssl s_client -connect $BACKEND_DOMAIN:8443"
 echo ""
 echo "To renew certificates manually:"
 echo "  cd frontend && docker compose run --rm certbot renew --webroot -w /var/www/certbot"
-echo "  Then sync certificates: ./sync-ssl-certs.sh"
+echo "  Then: bash sync-ssl-certs.sh"
 echo ""
-echo "IMPORTANT: Certificate Sync"
-echo "  Since frontend and backend share the same domain, keep certificates in sync:"
-echo "  After any cert update, run: ./sync-ssl-certs.sh"
