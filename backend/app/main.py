@@ -30,6 +30,7 @@ from .routers import (
     users,
     vision_statements,
     quick_links,
+    youtube,
 )
 
 app = FastAPI(title="밀알교회 API", version="2.0.0")
@@ -83,6 +84,7 @@ app.include_router(users.router, prefix=PREFIX)
 app.include_router(tracking.router, prefix=PREFIX)
 app.include_router(analytics.router, prefix=PREFIX)
 app.include_router(settings.router, prefix=PREFIX)
+app.include_router(youtube.router, prefix=PREFIX)
 
 # ── Nextgen / Ministry aliases (map to departments) ───────────────────────────
 from fastapi import Depends

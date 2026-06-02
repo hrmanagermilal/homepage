@@ -34,6 +34,7 @@ services:
       JWT_EXPIRY: 604800
       CORS_ORIGIN: "*"
       UPLOADS_PATH: /app/uploads
+      YOUTUBE_API_KEY: AIzaSyBzyNb56o41jl99he1pfv5k_etNw7OzLh0
     volumes:
       - uploads_data:/app/uploads
     depends_on:

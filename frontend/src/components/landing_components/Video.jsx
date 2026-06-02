@@ -14,55 +14,12 @@ function extractVideoId(url) {
 
 /**
  * Returns true if the YouTube URL is currently live.
- * Uses the hqdefault_live.jpg thumbnail trick:
- * YouTube returns a 120×90 placeholder when not live, full-size when live.
- * Fallback: If CORS blocks the image, attempts via fetch with crossorigin attribute.
+ * Uses is_live field from sermon data (backend already verified).
+ * Backend logic: is_live=0 means LIVE, is_live=1 means NON-LIVE
  */
-function useLiveCheck(url) {
-  const [isLive, setIsLive] = useState(false);
-
-  useEffect(() => {
-    const videoId = extractVideoId(url);
-    if (!videoId) { setIsLive(false); return; }
-    let cancelled = false;
-    
-    const checkLive = async () => {
-      try {
-        // Try direct image load with crossorigin
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        
-        const loadPromise = new Promise((resolve) => {
-          img.onload = () => {
-            if (!cancelled) {
-              // Image loaded; check dimensions
-              resolve(img.naturalWidth > 120);
-            }
-          };
-          img.onerror = () => {
-            if (!cancelled) {
-              // Image failed; assume not live (or try fallback)
-              resolve(false);
-            }
-          };
-          // Set timeout to prevent hanging
-          setTimeout(() => resolve(false), 5000);
-        });
-        
-        img.src = `https://img.youtube.com/vi/${videoId}/hqdefault_live.jpg`;
-        const result = await loadPromise;
-        if (!cancelled) setIsLive(result);
-      } catch (err) {
-        console.warn("Live check failed:", err);
-        if (!cancelled) setIsLive(false);
-      }
-    };
-    
-    checkLive();
-    return () => { cancelled = true; };
-  }, [url]);
-
-  return isLive;
+function useLiveCheck(isLiveField) {
+  // is_live=0 means LIVE, is_live=1 means NON-LIVE
+  return isLiveField === 0;
 }
 
 function getYoutubeThumb(url, index) {
@@ -92,7 +49,9 @@ export function VideoCard({
   thumbnail,
   hide_title = true,
 }) {
-  const isLive = useLiveCheck(url);
+  // Use is_live field from sermon data (backend already verified)
+  // Backend logic: is_live=0 means LIVE, is_live=1 means NON-LIVE
+  const isLive = useLiveCheck(live);
   const handleClick = () => {
     if (typeof window.gtag === "function") {
       window.gtag("event", "youtube_click", {

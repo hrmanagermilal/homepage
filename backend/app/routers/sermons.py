@@ -1,5 +1,10 @@
-from fastapi import APIRouter, Depends, Query
+import os
+import re
+import httpx
+from fastapi import APIRouter, Depends, Query, HTTPException
+from pydantic import BaseModel
 from pymysql.connections import Connection
+from datetime import date
 
 from ..database import get_db, serialize, serialize_all
 from ..response import success, error, paginated
@@ -13,8 +18,84 @@ _SELECT = """
 """
 
 
+# ── Data Models ───────────────────────────────────────────────────────────
+class SermonCreate(BaseModel):
+    title: str
+    category_id: int | None = None
+    youtube_url: str | None = None
+    description: str | None = None
+    preacher: str | None = None
+    sermon_date: date | None = None
+    thumbnail: str | None = None
+
+
+class SermonUpdate(BaseModel):
+    title: str | None = None
+    category_id: int | None = None
+    youtube_url: str | None = None
+    description: str | None = None
+    preacher: str | None = None
+    sermon_date: date | None = None
+    thumbnail: str | None = None
+
+
+# ── Helper Functions ──────────────────────────────────────────────────────
+def extract_video_id(url: str) -> str | None:
+    """Extract YouTube video ID from various URL formats."""
+    patterns = [
+        r'(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})',
+        r'(?:youtube\.com\/)?([a-zA-Z0-9_-]{11})',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, url)
+        if match:
+            return match.group(1)
+    return None
+
+
+async def check_youtube_is_live(video_id: str) -> bool:
+    """
+    Check if a YouTube video is currently live.
+    Returns True if LIVE, False if NOT live or error.
+    """
+    api_key = os.getenv("YOUTUBE_API_KEY", "")
+    if not api_key:
+        # If no API key, assume it's not live (fail-safe)
+        return False
+    
+    try:
+        url = "https://www.googleapis.com/youtube/v3/videos"
+        params = {
+            "id": video_id,
+            "part": "liveStreamingDetails,status",
+            "key": api_key
+        }
+        
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, params=params, timeout=10)
+            response.raise_for_status()
+        
+        data = response.json()
+        if not data.get("items"):
+            return False
+        
+        video = data["items"][0]
+        live_details = video.get("liveStreamingDetails", {})
+        
+        # Check if currently live (has actualStartTime but no actualEndTime)
+        is_live = bool(
+            live_details.get("actualStartTime") and
+            not live_details.get("actualEndTime")
+        )
+        return is_live
+        
+    except Exception:
+        # On error, assume not live (fail-safe)
+        return False
+
+
 @router.get("")
-def get_all(
+async def get_all(
     page: int = Query(1, ge=1),
     limit: int = Query(10, ge=1, le=100),
     db: Connection = Depends(get_db),
@@ -28,14 +109,184 @@ def get_all(
             (limit, offset),
         )
         rows = cur.fetchall()
-    return paginated(serialize_all(rows), total, page, limit)
+    
+    # Update live status for sermons marked as potentially live (is_live=0)
+    updated_rows = []
+    for row in rows:
+        if row.get("is_live") == 0 and row.get("youtube_id"):
+            # Check if still live and update database (is_live=0 means LIVE, need to verify)
+            is_live = await check_youtube_is_live(row["youtube_id"])
+            if not is_live:
+                # Video is NOT live anymore, update to is_live=1 (NON-LIVE)
+                with db.cursor() as cur:
+                    cur.execute("UPDATE sermons SET is_live = 1 WHERE id = %s", (row["id"],))
+                    db.commit()
+                row["is_live"] = 1
+        updated_rows.append(row)
+    
+    return paginated(serialize_all(updated_rows), total, page, limit)
 
 
 @router.get("/{item_id}")
-def get_one(item_id: int, db: Connection = Depends(get_db)):
+async def get_one(item_id: int, db: Connection = Depends(get_db)):
     with db.cursor() as cur:
         cur.execute(_SELECT + " WHERE s.id = %s", (item_id,))
         row = cur.fetchone()
     if not row:
         return error("Not found", "NOT_FOUND", 404)
+    
+    # Update live status if marked as potentially live (is_live=0 means LIVE, needs verification)
+    # If is_live=1, it's already verified as NON-LIVE, skip check
+    if row.get("is_live") == 0 and row.get("youtube_id"):
+        is_live = await check_youtube_is_live(row["youtube_id"])
+        if not is_live:
+            # Video is NOT live, update database to is_live=1 (NON-LIVE)
+            with db.cursor() as cur:
+                cur.execute("UPDATE sermons SET is_live = 1 WHERE id = %s", (item_id,))
+                db.commit()
+            row["is_live"] = 1
+    
     return success(serialize(row))
+
+
+@router.post("")
+async def create_sermon(payload: SermonCreate, db: Connection = Depends(get_db)):
+    """
+    Create a new sermon with is_live=0 by default (assume LIVE).
+    Live status will be verified on first GET request.
+    Logic: is_live=0 means LIVE, is_live=1 means NON-LIVE
+    """
+    try:
+        youtube_id = None
+        
+        # Validate YouTube URL if provided
+        if payload.youtube_url:
+            youtube_id = extract_video_id(payload.youtube_url)
+            if not youtube_id:
+                return error(
+                    "Invalid YouTube URL format",
+                    "INVALID_YOUTUBE_URL",
+                    400
+                )
+        
+        # Insert sermon with is_live=0 (default assume LIVE)
+        # Live status will be checked and updated on GET requests
+        with db.cursor() as cur:
+            cur.execute("""
+                INSERT INTO sermons (
+                    title, category_id, youtube_url, youtube_id, 
+                    description, preacher, sermon_date, thumbnail, is_live
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 0)
+            """, (
+                payload.title,
+                payload.category_id,
+                payload.youtube_url,
+                youtube_id,
+                payload.description,
+                payload.preacher,
+                payload.sermon_date,
+                payload.thumbnail,
+            ))
+            db.commit()
+            sermon_id = cur.lastrowid
+        
+        # Fetch and return created sermon
+        with db.cursor() as cur:
+            cur.execute(_SELECT + " WHERE s.id = %s", (sermon_id,))
+            row = cur.fetchone()
+        
+        return success(serialize(row), "Sermon created successfully (live status will be verified on retrieval)")
+        
+    except Exception as e:
+        db.rollback()
+        return error(str(e), "CREATION_ERROR", 500)
+
+
+@router.put("/{item_id}")
+async def update_sermon(
+    item_id: int,
+    payload: SermonUpdate,
+    db: Connection = Depends(get_db)
+):
+    """
+    Update an existing sermon.
+    If youtube_url is changed, resets is_live to 1 for re-verification on next GET.
+    """
+    try:
+        # Check if sermon exists
+        with db.cursor() as cur:
+            cur.execute("SELECT * FROM sermons WHERE id = %s", (item_id,))
+            existing = cur.fetchone()
+        
+        if not existing:
+            return error("Sermon not found", "NOT_FOUND", 404)
+        
+        # Build update fields
+        updates = {}
+        if payload.title is not None:
+            updates["title"] = payload.title
+        if payload.category_id is not None:
+            updates["category_id"] = payload.category_id
+        if payload.description is not None:
+            updates["description"] = payload.description
+        if payload.preacher is not None:
+            updates["preacher"] = payload.preacher
+        if payload.sermon_date is not None:
+            updates["sermon_date"] = payload.sermon_date
+        if payload.thumbnail is not None:
+            updates["thumbnail"] = payload.thumbnail
+        
+        # Handle YouTube URL update
+        if payload.youtube_url is not None:
+            youtube_id = extract_video_id(payload.youtube_url)
+            if not youtube_id:
+                return error(
+                    "Invalid YouTube URL format",
+                    "INVALID_YOUTUBE_URL",
+                    400
+                )
+            
+            updates["youtube_url"] = payload.youtube_url
+            updates["youtube_id"] = youtube_id
+            # Reset is_live to 0 (LIVE) so status is re-verified on next GET
+            updates["is_live"] = 0
+        
+        # Update sermon
+        if updates:
+            set_clause = ", ".join([f"{key} = %s" for key in updates.keys()])
+            values = list(updates.values()) + [item_id]
+            
+            with db.cursor() as cur:
+                cur.execute(f"UPDATE sermons SET {set_clause} WHERE id = %s", values)
+                db.commit()
+        
+        # Fetch and return updated sermon
+        with db.cursor() as cur:
+            cur.execute(_SELECT + " WHERE s.id = %s", (item_id,))
+            row = cur.fetchone()
+        
+        return success(serialize(row), "Sermon updated successfully")
+        
+    except Exception as e:
+        db.rollback()
+        return error(str(e), "UPDATE_ERROR", 500)
+
+
+@router.delete("/{item_id}")
+def delete_sermon(item_id: int, db: Connection = Depends(get_db)):
+    """Delete a sermon."""
+    try:
+        # Check if sermon exists
+        with db.cursor() as cur:
+            cur.execute("SELECT * FROM sermons WHERE id = %s", (item_id,))
+            if not cur.fetchone():
+                return error("Sermon not found", "NOT_FOUND", 404)
+            
+            cur.execute("DELETE FROM sermons WHERE id = %s", (item_id,))
+            db.commit()
+        
+        return success(None, "Sermon deleted successfully")
+        
+    except Exception as e:
+        db.rollback()
+        return error(str(e), "DELETE_ERROR", 500)
