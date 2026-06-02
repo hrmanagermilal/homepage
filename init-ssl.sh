@@ -58,11 +58,12 @@ setup_ssl() {
     # Clean up any broken renewal config
     docker compose run --rm certbot sh -c "rm -f /etc/letsencrypt/renewal/$DOMAIN.conf" 2>/dev/null || true
     
-    # Request real certificate
+    # Request real certificate (with wildcard for all subdomains)
     docker compose run --rm certbot certonly \
       --webroot \
       -w /var/www/certbot \
       -d "$DOMAIN" \
+      -d "*.$DOMAIN" \
       --email "$EMAIL" \
       --agree-tos \
       --no-eff-email \
