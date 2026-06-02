@@ -13,12 +13,12 @@ export default function Sermon({ items = [], section = null }) {
   const latestCards = useMemo(() => {
     if (!items.length) {
       return [
-        { id: "fallback-1", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "", live: true },
-        { id: "fallback-2", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "", live: false },
-        { id: "fallback-3", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "", live: false },
-        { id: "fallback-4", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "", live: false },
-        { id: "fallback-5", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "", live: false },
-        { id: "fallback-6", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "", live: false },
+        { id: "fallback-1", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "", is_live: 0 },
+        { id: "fallback-2", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "", is_live: 1 },
+        { id: "fallback-3", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "", is_live: 1 },
+        { id: "fallback-4", title: "[가스펠 프로젝트 신약 4-8]", preacher: '"환난(患難)" (26.04.12)', youtube_url: "", is_live: 1 },
+        { id: "fallback-5", title: "[밀알교회 청년부 주일예배]", preacher: '"SOJOURNER"', youtube_url: "", is_live: 1 },
+        { id: "fallback-6", title: "[밀알교회 말씀묵상]", preacher: "2026.04.23 - 시편 104:1-9 | 신효성 목사", youtube_url: "", is_live: 1 },
       ];
     }
     return items.slice(0, 6);
@@ -56,7 +56,7 @@ export default function Sermon({ items = [], section = null }) {
                   url={item.youtube_url}
                   title={item.title}
                   preacher={item.preacher}
-                  live={item.live}
+                  live={item.is_live}
                   index={idx}
                   className={idx > 2 ? " youtube-card--extra" : ""}
                   thumbnail={item.thumbnail}
@@ -88,7 +88,7 @@ export default function Sermon({ items = [], section = null }) {
                   url={item.youtube_url}
                   title={item.title}
                   preacher={item.preacher}
-                  live={item.live}
+                  live={item.is_live}
                   index={idx}
                   className={idx > 2 ? " youtube-card--extra" : ""}
                   thumbnail={item.thumbnail}
@@ -120,7 +120,7 @@ export default function Sermon({ items = [], section = null }) {
                   url={item.youtube_url}
                   title={item.title}
                   preacher={item.preacher}
-                  live={item.live}
+                  live={item.is_live}
                   index={idx}
                   className={idx > 2 ? " youtube-card--extra" : ""}
                   thumbnail={item.thumbnail}
