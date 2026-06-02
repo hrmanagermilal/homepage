@@ -99,7 +99,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   }, [obituaries]);
 
   useEffect(() => {
-    api.getNotices({ page: 1, limit: 500 }).then((response) => { 
+    api.getNotice({ page: 1, limit: 500 }).then((response) => { 
       const data = response?.data?.data ?? response?.data ?? [];
       console.log("Fetched notices:", data);
       // Sort by created_at descending
