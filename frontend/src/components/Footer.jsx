@@ -12,11 +12,11 @@ const FOOTER_NAV = [
     title: "다음세대",
     links: [
       { label: "청년부", path: "/nextgen#young-adults" },
-      { label: "KM 청소년부", path: "/nextgen#km-youth" },
-      { label: "EM 청소년부", path: "/nextgen#em-youth" },
-      { label: "아동부", path: "/nextgen#children" },
-      { label: "유치부", path: "/nextgen#kindergarten" },
-      { label: "영유아부", path: "/nextgen#infants" },
+      { label: "헤세드 청소년부(KM)", path: "/nextgen#km-youth" },
+      { label: "오하나 청소년부(EM)", path: "/nextgen#em-youth" },
+      { label: "카리스 아동부", path: "/nextgen#children" },
+      { label: "조이 유치부", path: "/nextgen#kindergarten" },
+      { label: "미라클 영유아부", path: "/nextgen#infants" },
     ],
   },
   {
