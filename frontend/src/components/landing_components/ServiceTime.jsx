@@ -16,9 +16,9 @@ const FALLBACK = {
     { name: "금요 찬양 집회", day: "금요일", time: "오후 7:30" },
   ],
   edu: [
-    { name: "영유아부",               day: null, time: "오전 9:45 / 오전 11:45" },
-    { name: "유치부",                 day: null, time: "오전 9:45 / 오전 11:45" },
-    { name: "아동부",                 day: null, time: "오전 9:45 / 오전 11:45" },
+    { name: "미라클 영유아부",               day: null, time: "오전 9:45 / 오전 11:45" },
+    { name: "조이 유치부",                 day: null, time: "오전 9:45 / 오전 11:45" },
+    { name: "카리스 아동부",                 day: null, time: "오전 9:45 / 오전 11:45" },
     { name: "청소년부 한국어권(KM)",  day: null, time: "오전 9:45" },
     { name: "청소년부 영어권(EM)",    day: null, time: "오전 11:45" },
   ],

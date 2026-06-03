@@ -1,5 +1,6 @@
 ﻿import { useState, useRef, useEffect, useCallback } from "react";
 import ThemeSwitcher from "./ThemeSwitcher";
+import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
 
 const NAV_ITEMS = [
   {
@@ -15,11 +16,11 @@ const NAV_ITEMS = [
     num: "02", label: "다음세대", path: "/nextgen#young-adults",
     subs: [
       { label: "청년부", path: "/nextgen#young-adults" },
-      { label: "KM 청소년부", path: "/nextgen#km-youth" },
-      { label: "EM 청소년부", path: "/nextgen#em-youth" },
-      { label: "아동부", path: "/nextgen#children" },
-      { label: "유치부", path: "/nextgen#kindergarten" },
-      { label: "영유아부", path: "/nextgen#infants" },
+      { label: "헤세드 청소년부(KM)", path: "/nextgen#km-youth" },
+      { label: "오하나 청소년부(EM)", path: "/nextgen#em-youth" },
+      { label: "카리스 아동부", path: "/nextgen#children" },
+      { label: "조이 유치부", path: "/nextgen#kindergarten" },
+      { label: "미라클 영유아부", path: "/nextgen#infants" },
     ],
   },
   {
@@ -357,9 +358,17 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
                     </a>
                   </li>
                   <li>
+                    <a className="full-menu__shortcut" href="https://captionkit.io/c/milal-etvynx/l/en-US" target="_blank" rel="noopener noreferrer">
+                      <span className="full-menu__shortcut-icon">
+                        <InterpreterModeIcon sx={{ display: 'block', fontSize: 'inherit' }} />
+                      </span>
+                      <span className="full-menu__shortcut-label">실시간예배 통역 바로가기</span>
+                    </a>
+                  </li>
+                  <li>
                     <a className="full-menu__shortcut" href="/ministry#ministry06" target="_blank" rel="noopener noreferrer">
                       <span className="full-menu__shortcut-icon">
-                        <img src="/images/common/ic-fullmenu02.svg" alt="" aria-hidden="true" />
+                        <img src="/images/common/ic-quick03.png" alt="" aria-hidden="true" />
                       </span>
                       <span className="full-menu__shortcut-label">다니엘한글문화학교 바로가기</span>
                     </a>
@@ -376,7 +385,7 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
                     <a className="full-menu__shortcut" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer">
                       <span className="full-menu__shortcut-icon">
                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                          <path d="M10.2697 2.2016C8.87249 1.4662 6.11888 2.88718 5.32785 4.13815C4.97545 4.69794 5.00038 5.10135 5.00038 5.33022V17.5746L15.3266 24L17.2684 22.9397V11.0152L6.66613 4.92793C7.23507 4.21189 8.51463 3.33875 9.47407 3.68943L18.9176 8.74022L18.9177 22.0242L20.8644 20.962V7.67834L10.2697 2.2016Z" fill="currentColor"/>
+                          <path d="M10.2697 2.2016C8.87249 1.4662 6.11888 2.88718 5.32785 4.13815C4.97545 4.69794 5.00038 5.10135 5.00038 5.33022V17.5746L15.3266 24L17.2684 22.9397V11.0152L6.66613 4.92793C7.23507 4.21189 8.51463 3.33875 9.47407 3.68943L18.9176 8.74022L18.9177 22.0242L20.8644 20.962V7.67834L10.2697 2.2016Z" fill="currentColor" />
                         </svg>
                       </span>
                       <span className="full-menu__shortcut-label">밀알도서관 바로가기</span>
@@ -397,8 +406,8 @@ export default function Header({ quickLinks = [], landingTitles = [], theme, set
           }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
           </svg>
         </button>
       </div>
