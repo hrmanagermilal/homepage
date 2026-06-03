@@ -734,6 +734,8 @@
     .quick-menu__btn img {display: block; flex-shrink: 0; max-width: 41rem; max-height: 37rem; object-fit: contain; pointer-events: none;}
     .quick-menu .quick-menu__btn.quick-menu__btn--book img {max-width: 20rem; max-height: 29rem;}
     .quick-menu .quick-menu__btn.quick-menu__btn--book svg {width: 20rem; height: 29rem; color: var(--icon-primary);}
+    .quick-menu .quick-menu__btn.quick-menu__btn--translate img {max-width: 25rem; max-height: 34rem;}
+    .quick-menu .quick-menu__btn.quick-menu__btn--translate svg {width: 25rem; height: 34rem; color: var(--icon-primary);}
     .quick-menu .quick-menu__btn.quick-menu__btn--love img {max-width: 25rem; max-height: 25rem;}
     .quick-menu .quick-menu__btn.quick-menu__btn--school img {max-width: 41rem; max-height: 37rem;}
     .quick-menu .quick-menu__btn.quick-menu__btn--live img {max-width: 25rem; max-height: 25rem;}

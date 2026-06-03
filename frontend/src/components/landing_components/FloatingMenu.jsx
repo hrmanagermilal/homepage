@@ -1,3 +1,5 @@
+import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
+
 export default function FloatingMenu() {
   return (
     <aside className="quick-menu" aria-label="빠른 메뉴">
@@ -7,7 +9,15 @@ export default function FloatingMenu() {
             <i><img src="/images/common/icon-live-stream.svg" alt="" /></i>
             <span>예배 영상</span>
           </a>
-        </li>        
+        </li>  
+        <li>
+          <a className="quick-menu__btn quick-menu__btn--translate" href="https://captionkit.io/c/milal-etvynx/l/en-US" target="_blank" rel="noopener noreferrer" aria-label="실시간 예배 동시통역">
+            <i>
+              <InterpreterModeIcon sx={{ display: 'block', fontSize: 'inherit' }} />
+            </i>
+            <span>실시간예배 통역</span>
+          </a>
+        </li>           
         <li>
           <a className="quick-menu__btn quick-menu__btn--book" href="https://milalbookcafe.com/" target="_blank" rel="noopener noreferrer" aria-label="밀알 도서관 바로가기">
             <i>
