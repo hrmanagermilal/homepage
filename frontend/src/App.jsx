@@ -164,7 +164,7 @@ export default function App() {
         ] = await Promise.all([
           api.getSermons({ page: 1, limit: 100 }),
           api.getLastBulletin(),
-          api.getNotice({ page: 1, limit: 50 }),
+          api.getNotice({ page: 1, limit: 500 }),
           api.getTogether(),
           api.getDepartments(),
           api.getServiceTimes(),
@@ -255,6 +255,7 @@ export default function App() {
   console.log("parkingMap", parkingMap);
   console.log("bannerImage", bannerImage);
   console.log("ministries", ministries);
+  console.log("notices", notices);
 
   return (
     <Box>

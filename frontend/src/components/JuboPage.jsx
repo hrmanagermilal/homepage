@@ -99,14 +99,17 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   }, [obituaries]);
 
   useEffect(() => {
-    api.getNotice({ page: 1, limit: 500 }).then((response) => { 
-      const data = response?.data?.data ?? response?.data ?? [];
-      console.log("Fetched notices:", data);
-      // Sort by created_at descending
-      const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      setNoticeData(sorted);
-    });
-  }, []);
+    console.log("Notices prop changed:", notices);
+    if (notices.length <= 0) {
+      api.getNotice({ page: 1, limit: 500 }).then((response) => { 
+        const data = response?.data?.data ?? response?.data ?? [];
+        console.log("Fetched notices:", data);
+        // Sort by created_at descending
+        const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setNoticeData(sorted);
+      });
+    }
+  }, [notices]);
 
   useEffect(() => {
     const container = containerRef.current;
