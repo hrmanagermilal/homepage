@@ -13,7 +13,7 @@ function getNewsImage(item, index) {
 }
 
 export default function Announcement({ items = [], section = null }) {
-  const withImage = items.filter((item) => item?.image);
+  const withImage = items.filter((item) => item?.image).slice(0, 20);
   const cards = withImage.length
     ? withImage.map((item, idx) => ({
         title: item.title || "새로운 소식",
