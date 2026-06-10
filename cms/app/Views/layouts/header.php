@@ -152,10 +152,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <?php endif; ?>
       <?php if(hasPerm('sermons.view')): ?>
       <a href="<?= BASE_URL ?>/sermons" class="nav-item sub <?= ($currentPage??'')==='sermons'?'active':'' ?>"><i class="fas fa-video"></i>설교</a>
-      <?php endif; ?>
-      <?php if(hasPerm('bulletins.view')): ?>
-      <a href="<?= BASE_URL ?>/bulletins" class="nav-item sub <?= ($currentPage??'')==='bulletins'?'active':'' ?>"><i class="fas fa-book-open"></i>주보</a>
-      <?php endif; ?>
+      <?php endif; ?>     
       <?php if(hasPerm('worship.view')): ?>
       <a href="<?= BASE_URL ?>/worship" class="nav-item sub <?= ($currentPage??'')==='worship'?'active':'' ?>"><i class="fas fa-clock"></i>예배</a>
       <?php endif; ?>
