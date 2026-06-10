@@ -160,12 +160,12 @@ function SubVisual({ title, image }) {
   return (
     <section className="sub-visual" aria-label="다음세대 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        (image ?
+        (image ? 
         <figure 
           className={`sub-visual__bg-img`} 
           style={image ? { backgroundImage: `url(${image})` } : undefined}
         />
-        :
+         :
         <figure className={`sub-visual__bg-img ${bgClass}`} />)
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
