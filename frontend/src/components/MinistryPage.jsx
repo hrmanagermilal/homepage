@@ -60,13 +60,13 @@ function SubVisual({ title, activeKey, image }) {
   return (
     <section className="sub-visual" aria-label="사역 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        (image ? 
+        {image ? 
         <figure 
           className={`sub-visual__bg-img`} 
           style={{ backgroundImage: `url(${image})` }}
         />
          :
-        <figure className={`sub-visual__bg-img ${bgClass}`} />)
+        <figure className={`sub-visual__bg-img ${bgClass}`} />}
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />
