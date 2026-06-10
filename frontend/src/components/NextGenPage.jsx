@@ -163,7 +163,7 @@ function SubVisual({ title, image }) {
         {image ? 
         <figure 
           className={`sub-visual__bg-img`} 
-          style={image ? { backgroundImage: `url(${image})` } : undefined}
+          style={{ backgroundImage: `url(${image})` }}
         />
          :
         <figure className={`sub-visual__bg-img ${bgClass}`} />}
