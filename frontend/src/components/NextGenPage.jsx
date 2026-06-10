@@ -148,7 +148,7 @@ const SUBTITLE_BY_TITLE = {
 };
 
 
-function SubVisual({ title }) {
+function SubVisual({ title, image }) {
   const isYoungAdults = title === "청년부";
   const isKmOrEm = title === "헤세드 청소년부(KM)" || title === "오하나 청소년부(EM)";
   const isChildren = title === "카리스 아동부";
@@ -156,10 +156,17 @@ function SubVisual({ title }) {
   const isInfantToddler = title === "미라클 영유아부";
   const subtitle = SUBTITLE_BY_TITLE[title] || "";
   const bgClass = isYoungAdults ? "nextgen-bg-young" : isKmOrEm ? "nextgen-bg-youth" : isChildren ? "nextgen-bg-children" : isKindergarten ? "nextgen-bg-kindergarten" : isInfantToddler ? "nextgen-bg-infant" : "nextgen-bg";
+  console.log("NetGenSubVisual render", { title, image, subtitle, bgClass });
   return (
     <section className="sub-visual" aria-label="다음세대 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        <figure className={`sub-visual__bg-img ${bgClass}`} />
+        (image ?
+        <figure 
+          className={`sub-visual__bg-img`} 
+          style={image ? { backgroundImage: `url(${image})` } : undefined}
+        />
+        :
+        <figure className={`sub-visual__bg-img ${bgClass}`} />)
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />
@@ -337,7 +344,7 @@ export default function NextGenPage({ departments = [] }) {
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">
-        <SubVisual title={safeTitle} />
+        <SubVisual title={safeTitle} image={apiDept.hero_image} />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
