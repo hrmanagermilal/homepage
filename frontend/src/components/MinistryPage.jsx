@@ -45,7 +45,7 @@ function getKeyFromHash(hash) {
   return VALID_KEYS.has(key) ? key : "ministry02";
 }
 
-function SubVisual({ title, activeKey }) {
+function SubVisual({ title, activeKey, image }) {
   const isDaniel = title === "다니엘한글문화학교";
   const isGajeong = title === "가정";
   const isYangyuk = title === "양육";
@@ -55,10 +55,18 @@ function SubVisual({ title, activeKey }) {
   const isGospel = activeKey === "ministry08";
   const subtitle = SUBTITLE_BY_KEY[activeKey] || "";
   const bgClass = isGospel ? "ministry-bg-gospel" : isDaniel ? "ministry-bg-daniel" : isGajeong ? "ministry-bg-gajeong" : isYangyuk ? "ministry-bg-yangyuk" : isSeonkyo ? "ministry-bg-seonkyo" : isJanghak ? "ministry-bg-janghak" : isSogroup ? "ministry-bg-sogroup" : "ministry-bg";
+  console.log("MinistryPage SubVisual render", { title, image, activeKey, bgClass });
+ 
   return (
     <section className="sub-visual" aria-label="사역 서브 비주얼">
       <div className="sub-visual__bg" aria-hidden="true">
-        <figure className={`sub-visual__bg-img ${bgClass}`} />
+        {image ? 
+        <figure 
+          className={`sub-visual__bg-img`} 
+          style={{ backgroundImage: `url(${image})` }}
+        />
+         :
+        <figure className={`sub-visual__bg-img ${bgClass}`} />}
       </div>
       <div className="sub-visual__ellipse" aria-hidden="true">
         <img src="/images/main/main-visual-ellipse.svg" alt="" />
@@ -234,11 +242,11 @@ export default function MinistryPage({ ministries = [] }) {
   const activeMinistry = ministries.find((m) => m.key === activeKey);
   const activeProps = mapMinistryToProps(activeMinistry);
   const activeLabel = LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역";
-
+  console.log("MinistryPage render", { activeKey, activeLabel, activeProps });
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">
-        <SubVisual title={activeLabel} activeKey={activeKey} />
+        <SubVisual title={activeLabel} activeKey={activeKey} image={activeMinistry.image} />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />

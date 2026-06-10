@@ -162,6 +162,7 @@ CREATE TABLE IF NOT EXISTS departments (
   department_type ENUM('nextgen', 'ministry') NOT NULL,
   name VARCHAR(100) NOT NULL,
   description TEXT,
+  hero_image VARCHAR(500) NULL,
   image VARCHAR(500),
   age_group VARCHAR(100),
   ministry_type VARCHAR(100),
