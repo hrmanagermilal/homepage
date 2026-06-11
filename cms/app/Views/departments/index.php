@@ -67,19 +67,32 @@
     <div class="modal-body">
       <input type="hidden" id="dm-id">
 
-      <!-- 이미지 -->
-      <div class="form-group">
-        <label class="form-label">대표 이미지 (최대 1MB)</label>
-        <div id="dm-current-wrap" style="display:none;margin-bottom:8px">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px"><i class="fas fa-check-circle" style="color:#16a34a"></i> 현재 저장된 이미지</div>
-          <img id="dm-current-img" src="" style="max-height:80px;border-radius:4px;border:1px solid var(--border)">
-        </div>
-        <div class="img-preview-row">
-          <div class="img-thumb-box" id="dm-img-box" style="display:none;position:relative">
-            <span style="position:absolute;top:2px;left:2px;font-size:9px;background:#d97706;color:#fff;padding:1px 4px;border-radius:3px">NEW</span>
-            <img id="dm-img-preview" src="" style="max-height:80px;object-fit:contain;border-radius:4px;">
+      <!-- 이미지 섹션 -->
+      <div class="img-section-block">
+        <div class="img-section-item">
+          <div class="img-section-header"><i class="fas fa-user-circle"></i> 부서 담당자 사진 <span class="img-section-sub">(최대 1MB)</span></div>
+          <div id="dm-current-wrap" style="display:none">
+            <div class="saved-img-label"><i class="fas fa-check-circle"></i> 현재 저장된 이미지</div>
+            <img id="dm-current-img" src="" class="img-display">
           </div>
-          <input type="file" id="dm-image" accept="image/*" onchange="previewDeptImg(this)">
+          <input type="file" id="dm-image" accept="image/*" onchange="previewDeptImg(this,'dm-img-preview','dm-new-wrap')">
+          <div id="dm-new-wrap" class="new-img-preview-wrap" style="display:none">
+            <div class="new-img-label"><i class="fas fa-upload"></i> 새 이미지 미리보기</div>
+            <img id="dm-img-preview" src="" class="img-display">
+          </div>
+        </div>
+        <div class="img-section-divider"></div>
+        <div class="img-section-item">
+          <div class="img-section-header"><i class="fas fa-panorama"></i> 히어로 이미지 <span class="img-section-sub">(최대 1MB)</span></div>
+          <div id="dm-hero-current-wrap" style="display:none">
+            <div class="saved-img-label"><i class="fas fa-check-circle"></i> 현재 저장된 이미지</div>
+            <img id="dm-hero-current-img" src="" class="img-display">
+          </div>
+          <input type="file" id="dm-hero-image" accept="image/*" onchange="previewDeptImg(this,'dm-hero-preview','dm-hero-new-wrap')">
+          <div id="dm-hero-new-wrap" class="new-img-preview-wrap" style="display:none">
+            <div class="new-img-label"><i class="fas fa-upload"></i> 새 이미지 미리보기</div>
+            <img id="dm-hero-preview" src="" class="img-display">
+          </div>
         </div>
       </div>
 
@@ -181,24 +194,33 @@
 .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 .col-span-2{grid-column:span 2;}
 .form-section-title{font-size:12px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.05em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.img-preview-row{display:flex;align-items:center;gap:12px;}
-.img-thumb-box{border:1px solid var(--border);border-radius:6px;width:90px;height:70px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa;}
-.img-ph-sm{color:var(--text-muted);font-size:20px;opacity:.4;}
+.img-section-block{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+.img-section-item{padding:14px 16px;}
+.img-section-divider{height:1px;background:var(--border);}
+.img-section-header{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.img-section-sub{font-weight:400;font-size:11px;color:var(--text-muted);}
+.img-display{width:100%;max-width:300px;height:140px;object-fit:cover;border-radius:6px;border:1px solid var(--border);display:block;}
+.saved-img-label{font-size:11px;color:#16a34a;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.new-img-preview-wrap{margin-top:10px;padding:10px;background:#f9fafb;border:1px dashed var(--border);border-radius:6px;}
+.new-img-label{font-size:11px;color:var(--text-muted);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
 </style>
 
 <script>
 let _deptPendingImg = null;
+let _deptPendingHeroImg = null;
 
-function previewDeptImg(input) {
+function previewDeptImg(input, previewId, wrapId) {
   if(!input.files[0]) return;
-  _deptPendingImg = input.files[0];
   const url = URL.createObjectURL(input.files[0]);
-  document.getElementById('dm-img-preview').src = url;
-  document.getElementById('dm-img-box').style.display = 'flex';
+  document.getElementById(previewId).src = url;
+  document.getElementById(wrapId).style.display = 'block';
+  if(input.id === 'dm-image') _deptPendingImg = input.files[0];
+  else if(input.id === 'dm-hero-image') _deptPendingHeroImg = input.files[0];
 }
 
 function openDeptModal(data={}) {
   _deptPendingImg = null;
+  _deptPendingHeroImg = null;
   document.getElementById('dm-id').value           = data.id||'';
   document.getElementById('dm-type').value         = data.department_type||'nextgen';
   document.getElementById('dm-name').value         = data.name||'';
@@ -219,14 +241,25 @@ function openDeptModal(data={}) {
   document.getElementById('dm-notice-btn-href').value  = data.notice_button_href||'';
   document.getElementById('dm-order').value        = data.order||0;
   document.getElementById('dm-active').value       = data.is_active??1;
-  const curWrap=document.getElementById('dm-current-wrap');
-  const curImg=document.getElementById('dm-current-img');
-  const newBox=document.getElementById('dm-img-box');
-  if(data.image){curImg.src=BASE_URL+data.image;curWrap.style.display='';}
-  else{curWrap.style.display='none';}
-  newBox.style.display='none';
-  document.getElementById('dm-img-preview').src='';
-  document.getElementById('dm-image').value='';
+
+  // 담당자 사진
+  const curWrap = document.getElementById('dm-current-wrap');
+  const curImg  = document.getElementById('dm-current-img');
+  if(data.image){ curImg.src = BASE_URL+data.image; curWrap.style.display=''; }
+  else { curWrap.style.display='none'; }
+  document.getElementById('dm-new-wrap').style.display = 'none';
+  document.getElementById('dm-img-preview').src = '';
+  document.getElementById('dm-image').value = '';
+
+  // 히어로 이미지
+  const heroWrap = document.getElementById('dm-hero-current-wrap');
+  const heroImg  = document.getElementById('dm-hero-current-img');
+  if(data.hero_image){ heroImg.src = BASE_URL+data.hero_image; heroWrap.style.display=''; }
+  else { heroWrap.style.display='none'; }
+  document.getElementById('dm-hero-new-wrap').style.display = 'none';
+  document.getElementById('dm-hero-preview').src = '';
+  document.getElementById('dm-hero-image').value = '';
+
   document.getElementById('dept-modal-title').textContent = data.id?'부서 수정':'부서 추가';
   openModal('dept-modal');
 }
@@ -252,6 +285,7 @@ async function saveDept() {
     fd.append(k, typeof v==='string'&&v.startsWith('dm-') ? document.getElementById(v).value : v);
   }
   if(_deptPendingImg) fd.append('image', _deptPendingImg);
+  if(_deptPendingHeroImg) fd.append('hero_image', _deptPendingHeroImg);
   const d = await apiUpload('/departments/'+(id?'update':'create'), fd, '저장 중...');
   if(!d.success) return toast(d.message,'error');
   toast(d.message); closeModal('dept-modal'); location.reload();

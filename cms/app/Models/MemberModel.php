@@ -12,13 +12,41 @@ class MemberModel extends BaseModel {
     public function findById(int $id): ?array { return $this->fetch('SELECT * FROM members WHERE id=?',[$id]); }
     public function create(array $d): string {
         return $this->insert(
-            'INSERT INTO members(name,email,title,role,picture,position,biography,sort_order,is_active) VALUES(?,?,?,?,?,?,?,?,?)',
-            [$d['name'],$d['email']??null,$d['title']??null,$d['role']??null,$d['picture']??null,$d['position']??null,$d['biography']??null,$d['sort_order']??0,$d['is_active']??1]
+            'INSERT INTO members(name,name_en,email,title,category,role,picture,position,biography,tags,tags_en,sort_order,is_active)
+             VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+            [
+                $d['name'],
+                $d['name_en']??null,
+                $d['email']??null,
+                $d['title']??null,
+                $d['category']??'간사',
+                $d['role']??null,
+                $d['picture']??null,
+                $d['position']??null,
+                $d['biography']??null,
+                $d['tags']??null,
+                $d['tags_en']??null,
+                $d['sort_order']??0,
+                $d['is_active']??1,
+            ]
         );
     }
     public function update(int $id, array $d): int {
-        $f=['name=?','email=?','title=?','role=?','position=?','biography=?','sort_order=?','is_active=?','updated_at=NOW()'];
-        $p=[$d['name'],$d['email']??null,$d['title']??null,$d['role']??null,$d['position']??null,$d['biography']??null,$d['sort_order']??0,$d['is_active']??1];
+        $f=['name=?','name_en=?','email=?','title=?','category=?','role=?','position=?','biography=?','tags=?','tags_en=?','sort_order=?','is_active=?','updated_at=NOW()'];
+        $p=[
+            $d['name'],
+            $d['name_en']??null,
+            $d['email']??null,
+            $d['title']??null,
+            $d['category']??'간사',
+            $d['role']??null,
+            $d['position']??null,
+            $d['biography']??null,
+            $d['tags']??null,
+            $d['tags_en']??null,
+            $d['sort_order']??0,
+            $d['is_active']??1,
+        ];
         if(isset($d['picture'])){$f[]='picture=?';$p[]=$d['picture'];}
         $p[]=$id;
         return $this->execute('UPDATE members SET '.implode(',',$f).' WHERE id=?',$p);

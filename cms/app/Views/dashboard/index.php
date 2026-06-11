@@ -21,7 +21,7 @@ $cards = [
   ['label'=>'설교',    'val'=>$stats['sermons'],     'icon'=>'video',         'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/sermons'],
   ['label'=>'주보',    'val'=>$stats['bulletins'],   'icon'=>'book-open',     'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/bulletins'],
   ['label'=>'섬기는분들','val'=>$stats['members'],   'icon'=>'users',         'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/members'],
-  ['label'=>'부서',    'val'=>$stats['departments'], 'icon'=>'sitemap',       'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/departments'],
+  ['label'=>'다음세대',    'val'=>$stats['departments'], 'icon'=>'child',       'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/departments'],
   ['label'=>'사역',    'val'=>$stats['ministry'],    'icon'=>'hands-helping', 'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/ministry'],
   ['label'=>'부고',    'val'=>$stats['obituary'],    'icon'=>'dove',          'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/obituary'],
   ['label'=>'사용자',  'val'=>$stats['users'],       'icon'=>'user-cog',      'bg'=>'#f3f4f6','color'=>'#374151','url'=>'/users'],
