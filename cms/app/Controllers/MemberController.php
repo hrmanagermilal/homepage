@@ -31,13 +31,26 @@ class MemberController extends BaseController {
         if(!$m) $this->error('교인을 찾을 수 없습니다.',404);
         $this->success($m);
     }
+    private function buildData(): array {
+        return [
+            'name'      => trim($this->post('name','')),
+            'name_en'   => trim($this->post('name_en','')),
+            'email'     => trim($this->post('email','')),
+            'title'     => trim($this->post('title','')),
+            'category'  => trim($this->post('category','간사')),
+            'role'      => trim($this->post('role','')),
+            'position'  => trim($this->post('position','')),
+            'biography' => trim($this->post('biography','')),
+            'tags'      => trim($this->post('tags','')),
+            'tags_en'   => trim($this->post('tags_en','')),
+            'sort_order'=> $this->intPost('sort_order',0),
+            'is_active' => $this->intPost('is_active',1),
+        ];
+    }
     public function create(): void {
         $this->assertPost(); AuthMiddleware::requirePermission('members.create');
         $err=$this->validateRequired(['name'=>'이름'],$_POST); if($err) $this->error($err);
-        $data=['name'=>trim($this->post('name')),'email'=>trim($this->post('email','')),
-               'title'=>trim($this->post('title','')),'role'=>trim($this->post('role','')),
-               'position'=>trim($this->post('position','')),'biography'=>trim($this->post('biography','')),
-               'sort_order'=>$this->intPost('sort_order',0),'is_active'=>$this->intPost('is_active',1)];
+        $data=$this->buildData();
         if(!empty($_FILES['picture'])&&$_FILES['picture']['error']===UPLOAD_ERR_OK){
             $upload=UploadHelper::uploadImage($_FILES['picture'],'members');
             if(!$upload['success']) $this->error($upload['message']);
@@ -51,10 +64,7 @@ class MemberController extends BaseController {
         $id=$this->intPost('id');
         $m=$this->memberModel->findById($id);
         if(!$m) $this->error('교인을 찾을 수 없습니다.',404);
-        $data=['name'=>trim($this->post('name',$m['name'])),'email'=>trim($this->post('email','')),
-               'title'=>trim($this->post('title','')),'role'=>trim($this->post('role','')),
-               'position'=>trim($this->post('position','')),'biography'=>trim($this->post('biography','')),
-               'sort_order'=>$this->intPost('sort_order',0),'is_active'=>$this->intPost('is_active',1)];
+        $data=$this->buildData();
         if(!empty($_FILES['picture'])&&$_FILES['picture']['error']===UPLOAD_ERR_OK){
             $upload=UploadHelper::uploadImage($_FILES['picture'],'members');
             if(!$upload['success']) $this->error($upload['message']);
