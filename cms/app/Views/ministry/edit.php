@@ -93,19 +93,51 @@
       <div class="card-header"><h2><i class="fas fa-image"></i> 대표 이미지</h2></div>
       <div class="card-body">
         <div class="img-upload-box" id="img-box">
-          <div id="img-current-wrap" style="<?= ($ministry['image']??'') ? '' : 'display:none' ?>">
+<div id="img-current-wrap"
+     style="<?= ($ministry['image']??'') ? 'margin-bottom:16px' : 'display:none' ?>">
           <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px"><i class="fas fa-check-circle" style="color:#16a34a"></i> 현재 저장된 이미지</div>
           <img id="img-current" src="<?= ($ministry['image']??'') ? BASE_URL.htmlspecialchars($ministry['image']) : '' ?>" style="max-width:100%;border-radius:6px;">
         </div>
-        <div id="img-new-wrap" style="display:none">
-          <div style="font-size:11px;color:#d97706;font-weight:600;margin-bottom:4px"><i class="fas fa-arrow-right"></i> 교체될 새 이미지</div>
-          <img id="img-preview" src="" style="max-width:100%;border-radius:6px;">
-          </div>
+        <div id="img-new-card"
+     style="display:none;margin-top:16px;">
+
+  <div style="
+      font-size:12px;
+      font-weight:600;
+      color:#374151;
+      margin-bottom:8px;
+  ">
+      교체될 새 이미지
+  </div>
+
+  <div style="
+      border:1px solid #d1d5db;
+      border-radius:8px;
+      padding:10px;
+      background:#fff;
+  ">
+      <img id="img-preview"
+           src=""
+           style="
+             max-width:100%;
+             border-radius:6px;
+             display:block;
+           ">
+  </div>
+
+</div>
+
+
+
+
         <div id="img-ph" class="img-ph" style="<?= ($ministry['image']??'') ? 'display:none' : '' ?>">
             <i class="fas fa-image" style="font-size:40px;opacity:.2;"></i>
             <span style="font-size:12px;color:var(--text-muted);margin-top:8px;">이미지를 선택하세요</span>
           </div>
         </div>
+        <div id="img-error"
+     style="display:none;font-size:12px;color:#dc2626;margin-top:8px;">
+</div>
         <input type="file" id="m-image" accept="image/*" style="margin-top:10px;width:100%" onchange="previewImg(this)">
         <p style="font-size:11px;color:var(--text-muted);margin-top:6px;"><i class="fas fa-info-circle"></i> 최대 1MB. 저장 버튼을 눌러야 서버에 적용됩니다.</p>
         <?php if(($ministry['image']??'')): ?>
@@ -124,7 +156,13 @@
 .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .form-grid-3{display:grid;grid-template-columns:1fr 1fr 120px;gap:16px;}
 .hint{font-size:11px;color:var(--text-muted);font-weight:400;margin-left:4px;}
-.img-upload-box{border:2px dashed var(--border);border-radius:8px;min-height:160px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa;}
+.img-upload-box{
+  border:2px dashed var(--border);
+  border-radius:8px;
+  min-height:160px;
+  padding:12px;
+  background:#fafafa;
+}
 .img-ph{display:flex;flex-direction:column;align-items:center;padding:20px;}
 </style>
 
@@ -133,13 +171,45 @@ let _pendingImg = null;
 let _clearImg   = false;
 
 function previewImg(input) {
-  if (!input.files[0]) return;
-  _pendingImg = input.files[0];
+
+  const file = input.files[0];
+
+  if (!file) return;
+
+  const previewWrap = document.getElementById('img-new-card');
+  const previewImg  = document.getElementById('img-preview');
+
+  const errorBox    = document.getElementById('img-error');
+
+  errorBox.style.display = 'none';
+  errorBox.innerHTML = '';
+
+  if (file.size > 1024 * 1024) {
+
+    _pendingImg = file;
+    _clearImg   = false;
+
+    previewWrap.style.display = 'none';
+
+    errorBox.innerHTML =
+      '<i class="fas fa-exclamation-circle"></i> 1MB 초과 이미지는 미리보기를 지원하지 않습니다.';
+    errorBox.style.display = 'block';
+
+    return;
+  }
+
+  _pendingImg = file;
   _clearImg   = false;
-  const url = URL.createObjectURL(input.files[0]);
-  document.getElementById('img-preview').src = url;
-  document.getElementById('img-preview').style.display = 'block';
-  document.getElementById('img-ph').style.display = 'none';
+
+  const url = URL.createObjectURL(file);
+
+  previewImg.src = url;
+
+previewImg.style.display = 'block';
+
+document.getElementById('img-new-card').style.display = 'block';
+
+document.getElementById('img-ph').style.display = 'none';
 }
 
 function clearImage() {
@@ -149,6 +219,10 @@ function clearImage() {
   document.getElementById('img-preview').style.display = 'none';
   document.getElementById('img-ph').style.display = 'flex';
   document.getElementById('m-image').value = '';
+  document.getElementById('img-new-card').style.display = 'none';
+   document.getElementById('img-error').style.display = 'none';
+
+document.getElementById('img-error').style.display = 'none';
 }
 
 async function saveMinistry() {
