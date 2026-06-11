@@ -164,7 +164,7 @@ export default function App() {
         ] = await Promise.all([
           api.getSermons({ page: 1, limit: 100 }),
           api.getLastBulletin(),
-          api.getNotice({ page: 1, limit: 500 }),
+          api.getNotice({ page: 1, limit: 100 }),
           api.getTogether(),
           api.getDepartments(),
           api.getServiceTimes(),
