@@ -40,6 +40,11 @@ class DepartmentController extends BaseController {
             if(!$up['success']) $this->error($up['message']);
             $data['image']=$up['path'];
         }
+        if(!empty($_FILES['hero_image'])&&$_FILES['hero_image']['error']===UPLOAD_ERR_OK){
+            $up=UploadHelper::uploadImage($_FILES['hero_image'],'departments');
+            if(!$up['success']) $this->error($up['message']);
+            $data['hero_image']=$up['path'];
+        }
         $id=$this->model->create($data);
         $this->success(['id'=>$id],'부서가 등록되었습니다.');
     }
@@ -55,6 +60,12 @@ class DepartmentController extends BaseController {
             if($row['image']) UploadHelper::deleteFile($row['image']);
             $data['image']=$up['path'];
         }
+        if(!empty($_FILES['hero_image'])&&$_FILES['hero_image']['error']===UPLOAD_ERR_OK){
+            $up=UploadHelper::uploadImage($_FILES['hero_image'],'departments');
+            if(!$up['success']) $this->error($up['message']);
+            if($row['hero_image']) UploadHelper::deleteFile($row['hero_image']);
+            $data['hero_image']=$up['path'];
+        }
         $this->model->update($id,$data);
         $this->success([],'부서가 수정되었습니다.');
     }
@@ -64,6 +75,7 @@ class DepartmentController extends BaseController {
         $row=$this->model->findById($id);
         if(!$row) $this->error('부서를 찾을 수 없습니다.',404);
         if($row['image']) UploadHelper::deleteFile($row['image']);
+        if($row['hero_image']) UploadHelper::deleteFile($row['hero_image']);
         $this->model->delete($id);
         $this->success([],'부서가 삭제되었습니다.');
     }

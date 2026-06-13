@@ -13,7 +13,7 @@
 <!-- 헤딩 카드 -->
 <?php if($dept['heading_title']): ?>
 <div class="heading-banner">
-  <?php if($dept['image']): ?><img src="<?= htmlspecialchars($dept['image']) ?>" alt="" class="heading-bg"><?php endif; ?>
+  <?php if($dept['hero_image']): ?><img src="<?= htmlspecialchars($dept['hero_image']) ?>" alt="" class="heading-bg"><?php endif; ?>
   <div class="heading-text"><?= nl2br(htmlspecialchars($dept['heading_title'])) ?></div>
 </div>
 <?php endif; ?>
@@ -81,7 +81,7 @@
 
     <?php if($dept['image']): ?>
     <div class="card">
-      <div class="card-header"><h2><i class="fas fa-image"></i> 대표 이미지</h2></div>
+      <div class="card-header"><h2><i class="fas fa-image"></i> 부서 담당자</h2></div>
       <div class="card-body p-0">
         <img src="<?= BASE_URL.htmlspecialchars($dept['image']) ?>" alt="<?= htmlspecialchars($dept['name']) ?>" style="width:100%;display:block;border-radius:0 0 8px 8px;max-height:200px;object-fit:cover;">
       </div>
@@ -123,13 +123,37 @@
       <button class="modal-close" onclick="closeModal('dept-edit-modal')"><i class="fas fa-times"></i></button></div>
     <div class="modal-body">
       <input type="hidden" id="em-id" value="<?= $dept['id'] ?>">
-      <div class="form-group"><label class="form-label">대표 이미지 (최대 1MB)</label>
-        <div class="img-preview-row">
-          <div class="img-thumb-box">
-            <img id="em-img-preview" src="<?= ($dept['image']??'') ? BASE_URL.htmlspecialchars($dept['image']) : '' ?>" style="<?= ($dept['image']??'')?'':'display:none' ?>;max-height:80px;object-fit:contain;border-radius:4px;">
-            <div id="em-img-ph" class="img-ph-sm" style="<?= ($dept['image']??'')?'display:none':'' ?>"><i class="fas fa-image"></i></div>
+
+      <!-- 이미지 섹션 -->
+      <div class="img-section-block">
+        <div class="img-section-item">
+          <div class="img-section-header"><i class="fas fa-user-circle"></i> 부서 담당자 사진 <span class="img-section-sub">(최대 1MB)</span></div>
+          <?php if($dept['image']??''): ?>
+          <div>
+            <div class="saved-img-label"><i class="fas fa-check-circle"></i> 현재 저장된 이미지</div>
+            <img src="<?= BASE_URL.htmlspecialchars($dept['image']) ?>" class="img-display">
           </div>
-          <input type="file" id="em-image" accept="image/*" onchange="previewEditImg(this)">
+          <?php endif; ?>
+          <input type="file" id="em-image" accept="image/*" onchange="previewEditImg(this,'em-new-img-preview','em-new-img-wrap')">
+          <div id="em-new-img-wrap" class="new-img-preview-wrap" style="display:none">
+            <div class="new-img-label"><i class="fas fa-upload"></i> 새 이미지 미리보기</div>
+            <img id="em-new-img-preview" src="" class="img-display">
+          </div>
+        </div>
+        <div class="img-section-divider"></div>
+        <div class="img-section-item">
+          <div class="img-section-header"><i class="fas fa-panorama"></i> 히어로 이미지 <span class="img-section-sub">(최대 1MB)</span></div>
+          <?php if($dept['hero_image']??''): ?>
+          <div>
+            <div class="saved-img-label"><i class="fas fa-check-circle"></i> 현재 저장된 이미지</div>
+            <img src="<?= BASE_URL.htmlspecialchars($dept['hero_image']) ?>" class="img-display">
+          </div>
+          <?php endif; ?>
+          <input type="file" id="em-hero-image" accept="image/*" onchange="previewEditImg(this,'em-new-hero-preview','em-new-hero-wrap')">
+          <div id="em-new-hero-wrap" class="new-img-preview-wrap" style="display:none">
+            <div class="new-img-label"><i class="fas fa-upload"></i> 새 이미지 미리보기</div>
+            <img id="em-new-hero-preview" src="" class="img-display">
+          </div>
         </div>
       </div>
       <div class="form-grid-2">
@@ -224,21 +248,36 @@
 .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 .form-section-title{font-size:12px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.05em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.img-preview-row{display:flex;align-items:center;gap:12px;}
-.img-thumb-box{border:1px solid var(--border);border-radius:6px;width:90px;height:70px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa;}
-.img-ph-sm{color:var(--text-muted);font-size:20px;opacity:.4;}
+.img-section-block{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+.img-section-item{padding:14px 16px;}
+.img-section-divider{height:1px;background:var(--border);}
+.img-section-header{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.img-section-sub{font-weight:400;font-size:11px;color:var(--text-muted);}
+.img-display{width:100%;max-width:300px;height:140px;object-fit:cover;border-radius:6px;border:1px solid var(--border);display:block;}
+.saved-img-label{font-size:11px;color:#16a34a;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.new-img-preview-wrap{margin-top:10px;padding:10px;background:#f9fafb;border:1px dashed var(--border);border-radius:6px;}
+.new-img-label{font-size:11px;color:var(--text-muted);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
 .p-0{padding:0;}
 </style>
 
 <script>
 const DEPT_ID = <?= $dept['id'] ?>;
 let _editPendingImg = null;
+let _editPendingHeroImg = null;
 
-function previewEditImg(input) {
-  if(!input.files[0]) return; _editPendingImg=input.files[0];
+function previewEditImg(input, newPreviewId, newWrapId) {
+  if(!input.files[0]) return;
   const url=URL.createObjectURL(input.files[0]);
-  document.getElementById('em-img-preview').src=url; document.getElementById('em-img-preview').style.display='block';
-  document.getElementById('em-img-ph').style.display='none';
+  const newPreview=document.getElementById(newPreviewId);
+  const newWrap=document.getElementById(newWrapId);
+  newPreview.src=url;
+  newWrap.style.display='block';
+  // Keep existing saved image visible; new preview appears below
+  if(input.id==='em-image'){
+    _editPendingImg=input.files[0];
+  } else if(input.id==='em-hero-image'){
+    _editPendingHeroImg=input.files[0];
+  }
 }
 function editDept() { openModal('dept-edit-modal'); }
 async function saveEdit() {
@@ -252,6 +291,7 @@ async function saveEdit() {
              'order':'em-order','is_active':'em-active'};
   for(const[k,v] of Object.entries(map)) fd.append(k, document.getElementById(v).value);
   if(_editPendingImg) fd.append('image',_editPendingImg);
+  if(_editPendingHeroImg) fd.append('hero_image',_editPendingHeroImg);
   const d=await apiUpload('/departments/update',fd,'저장 중...');
   if(!d.success) return toast(d.message,'error');
   toast(d.message); closeModal('dept-edit-modal');
