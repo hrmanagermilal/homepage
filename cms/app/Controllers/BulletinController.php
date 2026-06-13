@@ -90,7 +90,7 @@ class BulletinController extends BaseController {
             $d['attachment']=null;
         }
         $this->model->update($id,$d);
-        $this->success([],'주보가 수정되었습니다.');
+        $this->success(['id'=>$id,'stored_pdf_filename'=>$d['attachment']??$row['attachment']??null],'주보가 수정되었습니다.');
     }
     public function delete(): void {
         $this->assertPost(); AuthMiddleware::requirePermission('bulletins.delete');
