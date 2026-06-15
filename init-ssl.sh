@@ -7,6 +7,7 @@
 set -e
 
 FRONTEND_DOMAIN="milalchurch.ca"
+FRONTEND_DOMAIN_COM="milalchurch.com"
 BACKEND_DOMAIN="milalchurch.ca"
 EMAIL="it-team@milalchurch.com"
 STAGING=0  # Set to 1 for testing (avoids rate limits)
@@ -104,6 +105,8 @@ setup_ssl() {
       -w /var/www/certbot \
       -d "$DOMAIN" \
       -d "www.$DOMAIN" \
+      -d "$FRONTEND_DOMAIN_COM" \
+      -d "www.$FRONTEND_DOMAIN_COM" \
       --email "$EMAIL" \
       --agree-tos \
       --no-eff-email \
@@ -221,6 +224,7 @@ echo "✓ Backend nginx restarted with new certificates"
 echo ""
 echo "Domains configured:"
 echo "  • Frontend: $FRONTEND_DOMAIN (and www.${FRONTEND_DOMAIN})"
+echo "  • Frontend: $FRONTEND_DOMAIN_COM (and www.${FRONTEND_DOMAIN_COM})"
 echo "  • Backend:  $BACKEND_DOMAIN (and www.${BACKEND_DOMAIN})"
 echo ""
 echo "IMPORTANT - Let's Encrypt Rate Limits:"
