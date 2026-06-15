@@ -308,6 +308,8 @@ async function saveEdit() {
       }catch(e){
         console.error('[transform-pdf] error:', e);
         toast('PDF 변환 중 오류가 발생했습니다.','warning');
+      }finally{
+        hideSpinner();
       }
     }
   } catch(e) {
