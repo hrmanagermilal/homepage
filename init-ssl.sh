@@ -29,14 +29,19 @@ setup_ssl() {
     
     cd "$SERVICE_DIR"
     
-    echo ">> Creating temporary self-signed certificate..."
-    mkdir -p ./certs/live/$DOMAIN
-    openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
-      -keyout ./certs/live/$DOMAIN/privkey.pem \
-      -out ./certs/live/$DOMAIN/fullchain.pem \
-      -subj '/CN=localhost' 2>/dev/null || true
-    
-    echo ">> Certificate created at ./certs/live/$DOMAIN/"
+    echo ">> Checking for existing certificate..."
+    EXISTING_ISSUER=$(openssl x509 -in ./certs/live/$DOMAIN/fullchain.pem -noout -issuer 2>/dev/null || echo "")
+    if echo "$EXISTING_ISSUER" | grep -q "Let"; then
+        echo ">> Valid Let's Encrypt certificate already exists — skipping temp cert creation"
+    else
+        echo ">> Creating temporary self-signed certificate..."
+        mkdir -p ./certs/live/$DOMAIN
+        openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
+          -keyout ./certs/live/$DOMAIN/privkey.pem \
+          -out ./certs/live/$DOMAIN/fullchain.pem \
+          -subj '/CN=localhost' 2>/dev/null || true
+        echo ">> Temporary certificate created at ./certs/live/$DOMAIN/"
+    fi
     sleep 1
     
     # Verify temp cert exists
@@ -93,10 +98,16 @@ setup_ssl() {
     
     # Create webroot directory
     mkdir -p ./certbot/www
-    
-    # Clean up any broken renewal config (for fresh certificate request)
-    docker compose run --rm certbot sh -c "rm -f /etc/letsencrypt/renewal/$DOMAIN*.conf" 2>/dev/null || true
-    
+
+    # Remove duplicate certbot accounts to avoid interactive "choose an account" prompt.
+    # Keeps the newest account so existing renewal configs remain valid.
+    docker compose run --rm --entrypoint sh certbot \
+      -c 'DIR=/etc/letsencrypt/accounts/acme-v02.api.letsencrypt.org/directory; \
+          if [ -d "$DIR" ] && [ "$(ls "$DIR" 2>/dev/null | wc -l)" -gt 1 ]; then \
+            KEEP=$(ls -t "$DIR" | head -1); \
+            for d in $(ls "$DIR"); do [ "$d" != "$KEEP" ] && rm -rf "$DIR/$d" && echo ">> Removed duplicate account: $d"; done; \
+          fi' 2>/dev/null || true
+
     # Request real certificate (with specific domains)
     # NOTE: Don't use --force-renewal by default (causes rate limit issues)
     # Use 'renew' for existing certs or 'certonly' for new requests
@@ -131,20 +142,23 @@ setup_ssl() {
         return 1
     fi
     
+    # If certbot created a -0001 directory (because the base name already existed),
+    # redirect the base live/ symlinks to point at the newer cert.
+    # This happens when --expand issues a new cert alongside an existing one.
+    if [ -f "./certs/live/${DOMAIN}-0001/fullchain.pem" ]; then
+        echo ">> Newer certificate found at ./certs/live/${DOMAIN}-0001/ — updating symlinks..."
+        mkdir -p "./certs/live/$DOMAIN"
+        ln -sf "../${DOMAIN}-0001/fullchain.pem" "./certs/live/$DOMAIN/fullchain.pem"
+        ln -sf "../${DOMAIN}-0001/privkey.pem"   "./certs/live/$DOMAIN/privkey.pem"
+    fi
+
     # Verify real cert was obtained
     if [ ! -f "./certs/live/$DOMAIN/fullchain.pem" ]; then
-        # Check if it's in the -0001 suffixed directory (new cert)
-        if [ -f "./certs/live/${DOMAIN}-0001/fullchain.pem" ]; then
-            echo ">> Certificate found at ./certs/live/${DOMAIN}-0001/, creating symlink..."
-            ln -sf "./${DOMAIN}-0001/fullchain.pem" "./certs/live/$DOMAIN/fullchain.pem"
-            ln -sf "./${DOMAIN}-0001/privkey.pem" "./certs/live/$DOMAIN/privkey.pem"
-        else
-            echo -e "${RED}ERROR: Certificate file not found${NC}"
-            echo "Checked locations:"
-            echo "  - ./certs/live/$DOMAIN/fullchain.pem"
-            echo "  - ./certs/live/${DOMAIN}-0001/fullchain.pem"
-            return 1
-        fi
+        echo -e "${RED}ERROR: Certificate file not found${NC}"
+        echo "Checked locations:"
+        echo "  - ./certs/live/$DOMAIN/fullchain.pem"
+        echo "  - ./certs/live/${DOMAIN}-0001/fullchain.pem"
+        return 1
     fi
     
     # Verify cert is not self-signed
