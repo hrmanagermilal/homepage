@@ -296,6 +296,7 @@ async def auto_register_sermons(db: Connection = Depends(get_db)):
 
     PLAYLIST_ID = "PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky"
     api_key = os.getenv("YOUTUBE_API_KEY", "")
+    category_id = 1  # Default category ID for auto-registered sermons
     if not api_key:
         return error("YouTube API key not configured", "NO_API_KEY", 500)
 
@@ -375,11 +376,11 @@ async def auto_register_sermons(db: Connection = Depends(get_db)):
                 cur.execute(
                     """
                     INSERT INTO sermons (
-                        title, youtube_url, youtube_id,
+                        title, category_id, youtube_url, youtube_id,
                         description, preacher, sermon_date, thumbnail, is_live
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, 1)
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 1)
                     """,
-                    (title, youtube_url, video_id, description, preacher, sermon_date, thumbnail),
+                    (title, category_id, youtube_url, video_id, description, preacher, sermon_date, thumbnail),
                 )
                 db.commit()
                 sermon_id = cur.lastrowid
