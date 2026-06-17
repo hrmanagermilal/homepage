@@ -120,6 +120,51 @@ class UploadHelper {
         };
     }
 
+    /**
+     * PDF 파일 업로드 — 동일 파일명 충돌 시 자동으로 고유 이름 생성 (덮어쓰지 않음)
+     * $subDir : public/uploads 아래 저장할 하위 디렉터리 (예: 'departments')
+     */
+    public static function uploadPdf(array $file, string $subDir = ''): array {
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            return ['success' => false, 'message' => self::uploadErrorMsg($file['error'])];
+        }
+        if ($file['size'] > 50 * 1024 * 1024) {
+            return ['success' => false, 'message' => 'PDF 파일 크기가 50MB를 초과합니다.'];
+        }
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime  = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+        if ($mime !== 'application/pdf') {
+            return ['success' => false, 'message' => 'PDF 파일만 업로드 가능합니다.'];
+        }
+        $dir = UPLOAD_PATH . ($subDir ? rtrim($subDir, '/') . '/' : '');
+        if (!is_dir($dir)) mkdir($dir, 0755, true);
+
+        // 원본 파일명에서 안전한 이름 추출
+        $origName = pathinfo($file['name'], PATHINFO_FILENAME);
+        $origName = preg_replace('/[^a-zA-Z0-9가-힣_\-]/', '_', $origName);
+        $origName = trim($origName, '_') ?: 'file';
+
+        // 동일 파일명이 있으면 타임스탬프+랜덤 suffix로 고유 이름 생성 (덮어쓰지 않음)
+        $filename = $origName . '.pdf';
+        $destPath = $dir . $filename;
+        if (file_exists($destPath)) {
+            $filename = $origName . '_' . date('Ymd_His') . '_' . bin2hex(random_bytes(3)) . '.pdf';
+            $destPath = $dir . $filename;
+        }
+
+        $relPath = '/uploads/' . ($subDir ? rtrim($subDir, '/') . '/' : '') . $filename;
+        if (!move_uploaded_file($file['tmp_name'], $destPath)) {
+            return ['success' => false, 'message' => 'PDF 파일 저장에 실패했습니다.'];
+        }
+        return [
+            'success'  => true,
+            'path'     => $relPath,
+            'url'      => BASE_URL . $relPath,
+            'filename' => $filename,
+        ];
+    }
+
     private static function uploadErrorMsg(int $code): string {
         return match($code) {
             UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => '파일 크기가 너무 큽니다.',

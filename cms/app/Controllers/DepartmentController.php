@@ -45,6 +45,12 @@ class DepartmentController extends BaseController {
             if(!$up['success']) $this->error($up['message']);
             $data['hero_image']=$up['path'];
         }
+        if(!empty($_FILES['notice_pdf'])&&$_FILES['notice_pdf']['error']===UPLOAD_ERR_OK){
+            $up=UploadHelper::uploadPdf($_FILES['notice_pdf'],'departments/pdf');
+            if(!$up['success']) $this->error($up['message']);
+            $data['notice_button_href']=$up['path'];
+            $data['notice_button_type']='pdf';
+        }
         $id=$this->model->create($data);
         $this->success(['id'=>$id],'부서가 등록되었습니다.');
     }
@@ -65,6 +71,12 @@ class DepartmentController extends BaseController {
             if(!$up['success']) $this->error($up['message']);
             if($row['hero_image']) UploadHelper::deleteFile($row['hero_image']);
             $data['hero_image']=$up['path'];
+        }
+        if(!empty($_FILES['notice_pdf'])&&$_FILES['notice_pdf']['error']===UPLOAD_ERR_OK){
+            $up=UploadHelper::uploadPdf($_FILES['notice_pdf'],'departments/pdf');
+            if(!$up['success']) $this->error($up['message']);
+            $data['notice_button_href']=$up['path'];
+            $data['notice_button_type']='pdf';
         }
         $this->model->update($id,$data);
         $this->success([],'부서가 수정되었습니다.');
@@ -149,6 +161,7 @@ class DepartmentController extends BaseController {
             'notice_description'  => $this->post('notice_description',''),
             'notice_button_label' => trim($this->post('notice_button_label','')),
             'notice_button_href'  => trim($this->post('notice_button_href','')),
+            'notice_button_type'  => in_array($this->post('notice_button_type','url'),['url','pdf']) ? $this->post('notice_button_type','url') : 'url',
             'order'               => $this->intPost('order',0),
             'is_active'           => $this->intPost('is_active',1),
         ];

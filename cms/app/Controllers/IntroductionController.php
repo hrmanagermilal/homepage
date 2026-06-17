@@ -134,6 +134,11 @@ class IntroductionController extends BaseController {
             'career_en'      => $this->post('career_en', ''),
             'is_active'      => $this->intPost('is_active', 1),
         ];
+        if (!empty($_FILES['photo_image']) && $_FILES['photo_image']['error'] === UPLOAD_ERR_OK) {
+            $up = UploadHelper::uploadImage($_FILES['photo_image'], 'pastor');
+            if (!$up['success']) $this->error($up['message']);
+            $d['photo_image'] = $up['path'];
+        }
         $this->model->upsertPastor($d);
         $this->success([], '담임목사 소개가 저장되었습니다.');
     }

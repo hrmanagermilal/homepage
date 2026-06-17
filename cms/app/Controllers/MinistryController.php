@@ -40,6 +40,12 @@ class MinistryController extends BaseController {
             if (!$up['success']) $this->error($up['message']);
             $d['image'] = $up['path'];
         }
+        if (!empty($_FILES['notice_pdf']) && $_FILES['notice_pdf']['error'] === UPLOAD_ERR_OK) {
+            $up = UploadHelper::uploadPdf($_FILES['notice_pdf'], 'ministry/pdf');
+            if (!$up['success']) $this->error($up['message']);
+            $d['notice_button_href'] = $up['path'];
+            $d['notice_button_type'] = 'pdf';
+        }
         $id = $this->model->create($d);
         $this->success(['id' => $id], '사역이 등록되었습니다.');
     }
@@ -55,6 +61,12 @@ class MinistryController extends BaseController {
             if (!$up['success']) $this->error($up['message']);
             if ($row['image']) UploadHelper::deleteFile($row['image']);
             $d['image'] = $up['path'];
+        }
+        if (!empty($_FILES['notice_pdf']) && $_FILES['notice_pdf']['error'] === UPLOAD_ERR_OK) {
+            $up = UploadHelper::uploadPdf($_FILES['notice_pdf'], 'ministry/pdf');
+            if (!$up['success']) $this->error($up['message']);
+            $d['notice_button_href'] = $up['path'];
+            $d['notice_button_type'] = 'pdf';
         }
         $this->model->update($id, $d);
         $this->success([], '사역이 수정되었습니다.');
@@ -90,6 +102,7 @@ class MinistryController extends BaseController {
             'notice_description'     => $this->post('notice_description', ''),
             'notice_button_label'    => trim($this->post('notice_button_label', '')),
             'notice_button_href'     => trim($this->post('notice_button_href', '')),
+            'notice_button_type'     => in_array($this->post('notice_button_type','url'),['url','pdf']) ? $this->post('notice_button_type','url') : 'url',
             'notice_button_external' => $this->intPost('notice_button_external', 0),
             'cta_label'              => trim($this->post('cta_label', '')),
             'cta_href'               => trim($this->post('cta_href', '')),
