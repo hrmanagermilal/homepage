@@ -189,7 +189,25 @@
       <div class="form-group"><label class="form-label">공지 내용</label><textarea class="form-control" id="em-notice-desc" rows="2"><?= htmlspecialchars($dept['notice_description']??'') ?></textarea></div>
       <div class="form-grid-2">
         <div class="form-group"><label class="form-label">버튼 텍스트</label><input class="form-control" id="em-notice-btn-label" value="<?= htmlspecialchars($dept['notice_button_label']??'') ?>"></div>
-        <div class="form-group"><label class="form-label">버튼 링크</label><input class="form-control" id="em-notice-btn-href" value="<?= htmlspecialchars($dept['notice_button_href']??'') ?>"></div>
+        <div class="form-group"><label class="form-label">링크 유형</label>
+          <select class="form-control" id="em-notice-btn-type" onchange="toggleDetailNoticeType(this.value)">
+            <option value="url" <?= ($dept['notice_button_type']??'url')==='url'?'selected':'' ?>>URL</option>
+            <option value="pdf" <?= ($dept['notice_button_type']??'url')==='pdf'?'selected':'' ?>>PDF 첨부</option>
+          </select>
+        </div>
+      </div>
+      <div id="em-notice-url-wrap" class="form-group" <?= ($dept['notice_button_type']??'url')==='pdf'?'style="display:none"':'' ?>>
+        <label class="form-label">버튼 링크 (URL)</label>
+        <input class="form-control" id="em-notice-btn-href" value="<?= htmlspecialchars($dept['notice_button_href']??'') ?>" placeholder="https://...">
+      </div>
+      <div id="em-notice-pdf-wrap" class="form-group" <?= ($dept['notice_button_type']??'url')!=='pdf'?'style="display:none"':'' ?>>
+        <label class="form-label">PDF 파일 첨부</label>
+        <input type="file" id="em-notice-pdf" accept="application/pdf">
+        <?php if(($dept['notice_button_type']??'url')==='pdf' && !empty($dept['notice_button_href'])): ?>
+        <div class="pdf-current-info" id="em-notice-pdf-current"><i class="fas fa-file-pdf"></i> <?= htmlspecialchars(basename($dept['notice_button_href'])) ?></div>
+        <?php else: ?>
+        <div class="pdf-current-info" id="em-notice-pdf-current" style="display:none"><i class="fas fa-file-pdf"></i> <span id="em-notice-pdf-name"></span></div>
+        <?php endif; ?>
       </div>
       <div class="form-grid-2">
         <div class="form-group"><label class="form-label">순서</label><input class="form-control" type="number" id="em-order" value="<?= $dept['order']??0 ?>" min="0"></div>
@@ -257,6 +275,7 @@
 .saved-img-label{font-size:11px;color:#16a34a;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
 .new-img-preview-wrap{margin-top:10px;padding:10px;background:#f9fafb;border:1px dashed var(--border);border-radius:6px;}
 .new-img-label{font-size:11px;color:var(--text-muted);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.pdf-current-info{margin-top:8px;font-size:12px;color:#dc2626;font-weight:500;display:flex;align-items:center;gap:6px;}
 .p-0{padding:0;}
 </style>
 
@@ -264,6 +283,11 @@
 const DEPT_ID = <?= $dept['id'] ?>;
 let _editPendingImg = null;
 let _editPendingHeroImg = null;
+
+function toggleDetailNoticeType(type) {
+  document.getElementById('em-notice-url-wrap').style.display = type === 'url' ? '' : 'none';
+  document.getElementById('em-notice-pdf-wrap').style.display = type === 'pdf' ? '' : 'none';
+}
 
 function previewEditImg(input, newPreviewId, newWrapId) {
   if(!input.files[0]) return;
@@ -287,11 +311,17 @@ async function saveEdit() {
              'clergy_name':'em-clergy-name','clergy_position':'em-clergy-pos','pastor_email':'em-pastor-email',
              'kakao_link':'em-kakao-link','kakao_label':'em-kakao-label',
              'notice_title':'em-notice-title','notice_description':'em-notice-desc',
-             'notice_button_label':'em-notice-btn-label','notice_button_href':'em-notice-btn-href',
+             'notice_button_label':'em-notice-btn-label','notice_button_type':'em-notice-btn-type',
+             'notice_button_href':'em-notice-btn-href',
              'order':'em-order','is_active':'em-active'};
-  for(const[k,v] of Object.entries(map)) fd.append(k, document.getElementById(v).value);
+  for(const[k,v] of Object.entries(map)){
+    const el=document.getElementById(v);
+    if(el) fd.append(k, el.value);
+  }
   if(_editPendingImg) fd.append('image',_editPendingImg);
   if(_editPendingHeroImg) fd.append('hero_image',_editPendingHeroImg);
+  const pdfFile=document.getElementById('em-notice-pdf').files[0];
+  if(pdfFile) fd.append('notice_pdf', pdfFile);
   const d=await apiUpload('/departments/update',fd,'저장 중...');
   if(!d.success) return toast(d.message,'error');
   toast(d.message); closeModal('dept-edit-modal');
