@@ -4,40 +4,41 @@ import "./css/ObituaryViewPage.css";
 import ObituaryViewSubVisual from "./obituary_components/ObituaryViewSubVisual";
 import ObituaryViewContent from "./obituary_components/ObituaryViewContent";
 import ObituaryViewNavigation from "./obituary_components/ObituaryViewNavigation";
+import { api } from "../api/client";
 
 function getObituaryIdFromPath() {
   const match = window.location.pathname.match(/\/news\/obituary\/(\d+)/);
   return match ? Number(match[1]) : null;
 }
 
-function getObituaryIndexById(obituaries, id) {
-  if (!id || !obituaries.length) return 0;
-  const index = obituaries.findIndex((item) => item.id === id);
-  return index !== -1 ? index : 0;
-}
-
-export default function ObituaryViewPage({ obituaries = [] }) {
-  const [currentIndex, setCurrentIndex] = useState(() =>
-    getObituaryIndexById(obituaries, getObituaryIdFromPath())
-  );
+export default function ObituaryViewPage() {
+  const [obituary, setObituary] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setCurrentIndex(getObituaryIndexById(obituaries, getObituaryIdFromPath()));
-  }, [obituaries]);
+    const fetchObituary = () => {
+      const obituaryId = getObituaryIdFromPath();
+      console.log("Fetching obituary with ID:", obituaryId);
+      if (obituaryId) {
+        setLoading(true);
+        setObituary(null);
+        api.getObituaryById(obituaryId)
+          .then((response) => {
+            console.log("Obituary fetch response:", response);
+            
+              setObituary(response);
 
-  useEffect(() => {
-    const syncIndexFromPath = () => {
-      setCurrentIndex(getObituaryIndexById(obituaries, getObituaryIdFromPath()));
+          })
+          .catch((err) => console.error("Failed to fetch obituary:", err))
+          .finally(() => setLoading(false));
+      }
     };
 
-    window.addEventListener("popstate", syncIndexFromPath);
-    window.addEventListener("locationchange", syncIndexFromPath);
+    fetchObituary();
 
-    return () => {
-      window.removeEventListener("popstate", syncIndexFromPath);
-      window.removeEventListener("locationchange", syncIndexFromPath);
-    };
-  }, [obituaries]);
+    window.addEventListener("locationchange", fetchObituary);
+    return () => window.removeEventListener("locationchange", fetchObituary);
+  }, []);
 
   useEffect(() => {
     const el = document.getElementById("content");
@@ -46,42 +47,21 @@ export default function ObituaryViewPage({ obituaries = [] }) {
       const headerHeight = header ? header.offsetHeight + header.offsetTop : 0;
       window.scrollTo({ top: el.offsetTop - headerHeight - 16, behavior: "smooth" });
     }
-  }, [currentIndex]);
-
-  const currentObituary = obituaries[currentIndex];
-  const hasPrev = currentIndex > 0;
-  const hasNext = currentIndex < obituaries.length - 1;
-
-  const navigateToObituary = (id) => {
-    window.history.pushState({}, "", `/news/obituary/${id}`);
-    window.dispatchEvent(new Event("locationchange"));
-  };
-
-  const handlePrevClick = () => {
-    if (hasPrev) {
-      navigateToObituary(obituaries[currentIndex - 1].id);
-    }
-  };
-
-  const handleNextClick = () => {
-    if (hasNext) {
-      navigateToObituary(obituaries[currentIndex + 1].id);
-    }
-  };
+  }, [obituary]);
 
   const handleListClick = () => {
     window.history.pushState({}, "", "/news#obituary");
     window.dispatchEvent(new Event("locationchange"));
   };
 
-  if (!currentObituary) {
+  if (loading || !obituary) {
     return (
       <>
         <ObituaryViewSubVisual />
         <div className="sub-content" id="content">
           <section className="obituary board-view">
             <div className="wrap-narrow">
-              <p>부고 내용을 불러오는 중입니다...</p>
+              <p>{loading ? "부고 내용을 불러오는 중입니다..." : "부고 내용을 찾을 수 없습니다."}</p>
             </div>
           </section>
         </div>
@@ -95,14 +75,8 @@ export default function ObituaryViewPage({ obituaries = [] }) {
       <div className="sub-content" id="content">
         <section className="obituary board-view">
           <div className="wrap-narrow">
-            <ObituaryViewContent title={currentObituary.title} content={currentObituary.content} />
-            <ObituaryViewNavigation
-              onPrevClick={handlePrevClick}
-              onNextClick={handleNextClick}
-              onListClick={handleListClick}
-              hasPrev={hasPrev}
-              hasNext={hasNext}
-            />
+            <ObituaryViewContent title={obituary.title} content={obituary.content} />
+            <ObituaryViewNavigation onListClick={handleListClick} />
           </div>
         </section>
       </div>
