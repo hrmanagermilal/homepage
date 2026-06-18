@@ -36,6 +36,22 @@
         <button class="lang-tab" onclick="switchLang('en',this)">🇺🇸 영어</button>
       </div>
 
+      <!-- 담임목사 사진 업로드 -->
+      <div class="img-section-block" style="margin-bottom:20px">
+        <div class="img-section-item">
+          <div class="img-section-header"><i class="fas fa-camera"></i> 담임목사 사진 <span class="img-section-sub">(최대 10MB · JPG/PNG/WEBP)</span></div>
+          <div id="pastor-current-wrap" style="<?= !empty($pastor['photo_image']) ? '' : 'display:none' ?>">
+            <div class="saved-img-label"><i class="fas fa-check-circle"></i> 현재 저장된 사진</div>
+            <img id="pastor-current-img" src="<?= !empty($pastor['photo_image']) ? BASE_URL.htmlspecialchars($pastor['photo_image']) : '' ?>" class="img-display">
+          </div>
+          <input type="file" id="pastor-photo-input" accept="image/*" onchange="previewPastorPhoto(this)">
+          <div id="pastor-new-wrap" class="new-img-preview-wrap" style="display:none">
+            <div class="new-img-label"><i class="fas fa-upload"></i> 새 사진 미리보기</div>
+            <img id="pastor-photo-preview" src="" class="img-display">
+          </div>
+        </div>
+      </div>
+
       <div id="lang-ko">
         <div class="form-grid-2">
           <div class="form-group"><label class="form-label">사진 대체 텍스트</label>
@@ -103,6 +119,14 @@
 .pastor-meta-preview{font-size:13px;}
 .pastor-meta-preview strong{display:block;font-size:18px;font-weight:700;margin-top:4px;}
 .lang-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);}
+.img-section-block{background:var(--card-bg,#fff);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.img-section-item{}
+.img-section-header{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.img-section-sub{font-weight:400;font-size:11px;color:var(--text-muted);}
+.img-display{width:100%;max-width:300px;height:180px;object-fit:cover;border-radius:6px;border:1px solid var(--border);display:block;}
+.saved-img-label{font-size:11px;color:#16a34a;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.new-img-preview-wrap{margin-top:10px;padding:10px;background:#f9fafb;border:1px dashed var(--border);border-radius:6px;}
+.new-img-label{font-size:11px;color:var(--text-muted);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
 .lang-tab{padding:8px 16px;border:none;background:none;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-weight:500;color:var(--text-muted);}
 .lang-tab.active{color:var(--primary);border-bottom-color:var(--primary);}
 .hidden{display:none;}
@@ -117,15 +141,35 @@ function switchLang(lang, btn) {
   btn.classList.add('active');
 }
 
+let _pastorPendingPhoto = null;
+
+function previewPastorPhoto(input) {
+  if (!input.files[0]) return;
+  _pastorPendingPhoto = input.files[0];
+  const url = URL.createObjectURL(input.files[0]);
+  document.getElementById('pastor-photo-preview').src = url;
+  document.getElementById('pastor-new-wrap').style.display = 'block';
+}
+
 async function savePastor() {
   const fields = ['photo_alt_ko','photo_alt_en','title_line1_ko','title_line2_ko','title_line1_en','title_line2_en',
                    'paragraphs_ko','paragraphs_en','pastor_role_ko','pastor_role_en','pastor_name_ko','pastor_name_en',
                    'career_title_ko','career_title_en','career_ko','career_en'];
-  const data = {};
-  fields.forEach(f => { const el = document.getElementById(f); if(el) data[f] = el.value; });
-  data.is_active = 1;
-  const d = await api('/introduction/pastor-update', data);
+  const fd = new FormData();
+  fields.forEach(f => { const el = document.getElementById(f); if(el) fd.append(f, el.value); });
+  fd.append('is_active', '1');
+  if (_pastorPendingPhoto) fd.append('photo_image', _pastorPendingPhoto);
+  const d = await apiUpload('/introduction/pastor-update', fd, '저장 중...');
   if (!d.success) return toast(d.message, 'error');
+  // 저장 성공 시 미리보기 이미지 업데이트
+  if (_pastorPendingPhoto) {
+    const curWrap = document.getElementById('pastor-current-wrap');
+    const curImg  = document.getElementById('pastor-current-img');
+    curImg.src = URL.createObjectURL(_pastorPendingPhoto);
+    curWrap.style.display = '';
+    document.getElementById('pastor-new-wrap').style.display = 'none';
+    _pastorPendingPhoto = null;
+  }
   toast(d.message);
 }
 </script>

@@ -179,6 +179,7 @@ CREATE TABLE IF NOT EXISTS departments (
   notice_title VARCHAR(255) NULL,
   notice_description TEXT NULL,
   notice_button_label VARCHAR(100) NULL,
+  notice_button_type ENUM('url','pdf') NOT NULL DEFAULT 'url',
   notice_button_href VARCHAR(500) NULL,
   `order` INT DEFAULT 0,
   is_active TINYINT(1) NOT NULL DEFAULT 1,
@@ -206,6 +207,7 @@ CREATE TABLE IF NOT EXISTS ministry (
   notice_title VARCHAR(255) NULL,
   notice_description TEXT NULL,
   notice_button_label VARCHAR(100) NULL,
+  notice_button_type ENUM('url','pdf') NOT NULL DEFAULT 'url',
   notice_button_href VARCHAR(500) NULL,
   notice_button_external TINYINT(1) NOT NULL DEFAULT 0,
   cta_label VARCHAR(255) NULL,
@@ -319,6 +321,7 @@ CREATE TABLE IF NOT EXISTS banner_image (
 
 CREATE TABLE IF NOT EXISTS pastor_introduction (
   id               INT PRIMARY KEY AUTO_INCREMENT,
+  photo_image      VARCHAR(500)  NULL,
   photo_alt_ko     VARCHAR(255)  NULL,
   photo_alt_en     VARCHAR(255)  NULL,
   title_line1_ko   VARCHAR(255)  NULL,

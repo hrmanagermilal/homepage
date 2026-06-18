@@ -150,8 +150,20 @@
       <div class="form-grid-2">
         <div class="form-group"><label class="form-label">버튼 텍스트</label>
           <input class="form-control" id="dm-notice-btn-label" placeholder="공지사항 다운로드"></div>
-        <div class="form-group"><label class="form-label">버튼 링크</label>
-          <input class="form-control" id="dm-notice-btn-href" placeholder="#"></div>
+        <div class="form-group"><label class="form-label">링크 유형</label>
+          <select class="form-control" id="dm-notice-btn-type" onchange="toggleDeptNoticeType(this.value)">
+            <option value="url">URL</option>
+            <option value="pdf">PDF 첨부</option>
+          </select>
+        </div>
+      </div>
+      <div id="dm-notice-url-wrap" class="form-group"><label class="form-label">버튼 링크 (URL)</label>
+        <input class="form-control" id="dm-notice-btn-href" placeholder="https://..."></div>
+      <div id="dm-notice-pdf-wrap" class="form-group" style="display:none"><label class="form-label">PDF 파일 첨부</label>
+        <input type="file" id="dm-notice-pdf" accept="application/pdf">
+        <div id="dm-notice-pdf-current" class="pdf-current-info" style="display:none">
+          <i class="fas fa-file-pdf"></i> <span id="dm-notice-pdf-name"></span>
+        </div>
       </div>
 
       <div class="form-grid-2">
@@ -203,11 +215,17 @@
 .saved-img-label{font-size:11px;color:#16a34a;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
 .new-img-preview-wrap{margin-top:10px;padding:10px;background:#f9fafb;border:1px dashed var(--border);border-radius:6px;}
 .new-img-label{font-size:11px;color:var(--text-muted);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.pdf-current-info{margin-top:8px;font-size:12px;color:#dc2626;font-weight:500;display:flex;align-items:center;gap:6px;}
 </style>
 
 <script>
 let _deptPendingImg = null;
 let _deptPendingHeroImg = null;
+
+function toggleDeptNoticeType(type) {
+  document.getElementById('dm-notice-url-wrap').style.display = type==='url' ? '' : 'none';
+  document.getElementById('dm-notice-pdf-wrap').style.display = type==='pdf' ? '' : 'none';
+}
 
 function previewDeptImg(input, previewId, wrapId) {
   if(!input.files[0]) return;
@@ -239,6 +257,17 @@ function openDeptModal(data={}) {
   document.getElementById('dm-notice-desc').value  = data.notice_description||'';
   document.getElementById('dm-notice-btn-label').value = data.notice_button_label||'';
   document.getElementById('dm-notice-btn-href').value  = data.notice_button_href||'';
+  const btnType = data.notice_button_type||'url';
+  document.getElementById('dm-notice-btn-type').value = btnType;
+  toggleDeptNoticeType(btnType);
+  // 기존 PDF 경로 표시
+  const pdfCur = document.getElementById('dm-notice-pdf-current');
+  const pdfName = document.getElementById('dm-notice-pdf-name');
+  if(btnType==='pdf' && data.notice_button_href){
+    pdfName.textContent = data.notice_button_href.split('/').pop();
+    pdfCur.style.display='';
+  } else { pdfCur.style.display='none'; }
+  document.getElementById('dm-notice-pdf').value = '';
   document.getElementById('dm-order').value        = data.order||0;
   document.getElementById('dm-active').value       = data.is_active??1;
 
@@ -279,6 +308,7 @@ async function saveDept() {
     kakao_link:'dm-kakao-link', kakao_label:'dm-kakao-label',
     notice_title:'dm-notice-title', notice_description:'dm-notice-desc',
     notice_button_label:'dm-notice-btn-label', notice_button_href:'dm-notice-btn-href',
+    notice_button_type:'dm-notice-btn-type',
     order:'dm-order', is_active:'dm-active'
   };
   for(const[k,v] of Object.entries(fields)){
@@ -286,6 +316,8 @@ async function saveDept() {
   }
   if(_deptPendingImg) fd.append('image', _deptPendingImg);
   if(_deptPendingHeroImg) fd.append('hero_image', _deptPendingHeroImg);
+  const noticePdfFile = document.getElementById('dm-notice-pdf').files[0];
+  if(noticePdfFile) fd.append('notice_pdf', noticePdfFile);
   const d = await apiUpload('/departments/'+(id?'update':'create'), fd, '저장 중...');
   if(!d.success) return toast(d.message,'error');
   toast(d.message); closeModal('dept-modal'); location.reload();

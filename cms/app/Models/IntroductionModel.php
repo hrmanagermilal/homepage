@@ -64,8 +64,11 @@ class IntroductionModel extends BaseModel {
         $vals = array_map(fn($f) => $d[$f] ?? null, $fields);
         if ($existing) {
             $sets = implode(',', array_map(fn($f) => "$f=?", $fields));
+            // photo_image는 값이 있을 때만 업데이트
+            if (isset($d['photo_image'])) { $sets .= ',photo_image=?'; $vals[] = $d['photo_image']; }
             $this->execute("UPDATE pastor_introduction SET $sets,updated_at=NOW() WHERE id=?", array_merge($vals, [$existing['id']]));
         } else {
+            if (isset($d['photo_image'])) { $fields[] = 'photo_image'; $vals[] = $d['photo_image']; }
             $cols = implode(',', $fields);
             $phs  = implode(',', array_fill(0, count($fields), '?'));
             $this->insert("INSERT INTO pastor_introduction($cols) VALUES($phs)", $vals);

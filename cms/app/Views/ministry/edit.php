@@ -55,8 +55,22 @@
         <div class="form-grid-2">
           <div class="form-group"><label class="form-label">버튼 텍스트</label>
             <input class="form-control" id="m-notice-btn-label" value="<?= htmlspecialchars($ministry['notice_button_label']??'') ?>" placeholder="등록 안내 다운로드"></div>
-          <div class="form-group"><label class="form-label">버튼 링크</label>
-            <input class="form-control" id="m-notice-btn-href" value="<?= htmlspecialchars($ministry['notice_button_href']??'') ?>" placeholder="#"></div>
+          <div class="form-group"><label class="form-label">링크 유형</label>
+            <select class="form-control" id="m-notice-btn-type" onchange="toggleMinistryNoticeType(this.value)">
+              <option value="url" <?= ($ministry['notice_button_type']??'url')==='url' ? 'selected' : '' ?>>URL</option>
+              <option value="pdf" <?= ($ministry['notice_button_type']??'url')==='pdf' ? 'selected' : '' ?>>PDF 첨부</option>
+            </select>
+          </div>
+        </div>
+        <div id="m-notice-url-wrap" class="form-group" <?= ($ministry['notice_button_type']??'url')==='pdf' ? 'style="display:none"' : '' ?>>
+          <label class="form-label">버튼 링크 (URL)</label>
+          <input class="form-control" id="m-notice-btn-href" value="<?= htmlspecialchars($ministry['notice_button_href']??'') ?>" placeholder="https://..."></div>
+        <div id="m-notice-pdf-wrap" class="form-group" <?= ($ministry['notice_button_type']??'url')!=='pdf' ? 'style="display:none"' : '' ?>>
+          <label class="form-label">PDF 파일 첨부</label>
+          <input type="file" id="m-notice-pdf" accept="application/pdf">
+          <?php if(($ministry['notice_button_type']??'url')==='pdf' && !empty($ministry['notice_button_href'])): ?>
+          <div class="pdf-current-info"><i class="fas fa-file-pdf"></i> <?= htmlspecialchars(basename($ministry['notice_button_href'])) ?></div>
+          <?php endif; ?>
         </div>
         <div class="form-group"><label class="form-label">새 탭으로 열기</label>
           <select class="form-control" id="m-notice-external" style="max-width:200px">
@@ -164,11 +178,17 @@
   background:#fafafa;
 }
 .img-ph{display:flex;flex-direction:column;align-items:center;padding:20px;}
+.pdf-current-info{margin-top:8px;font-size:12px;color:#dc2626;font-weight:500;display:flex;align-items:center;gap:6px;}
 </style>
 
 <script>
 let _pendingImg = null;
 let _clearImg   = false;
+
+function toggleMinistryNoticeType(type) {
+  document.getElementById('m-notice-url-wrap').style.display = type==='url' ? '' : 'none';
+  document.getElementById('m-notice-pdf-wrap').style.display = type==='pdf' ? '' : 'none';
+}
 
 function previewImg(input) {
 
@@ -243,8 +263,11 @@ async function saveMinistry() {
   fd.append('notice_title',            document.getElementById('m-notice-title').value);
   fd.append('notice_description',      document.getElementById('m-notice-desc').value);
   fd.append('notice_button_label',     document.getElementById('m-notice-btn-label').value);
-  fd.append('notice_button_href',      document.getElementById('m-notice-btn-href').value);
+  fd.append('notice_button_type',      document.getElementById('m-notice-btn-type').value);
+  fd.append('notice_button_href',      document.getElementById('m-notice-btn-href')?.value||'');
   fd.append('notice_button_external',  document.getElementById('m-notice-external').value);
+  const noticePdfFile = document.getElementById('m-notice-pdf').files[0];
+  if(noticePdfFile) fd.append('notice_pdf', noticePdfFile);
   fd.append('cta_label',               document.getElementById('m-cta-label').value);
   fd.append('cta_href',                document.getElementById('m-cta-href').value);
   fd.append('cta_external',            document.getElementById('m-cta-external').value);
