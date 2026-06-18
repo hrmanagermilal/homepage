@@ -246,7 +246,7 @@ export default function MinistryPage({ ministries = [] }) {
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">
-        <SubVisual title={activeLabel} activeKey={activeKey} image={activeMinistry.image} />
+        <SubVisual title={activeLabel} activeKey={activeKey} image={activeMinistry?.image} />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
