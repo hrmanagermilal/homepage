@@ -276,25 +276,8 @@ async def update_sermon(
         db.rollback()
         return error(str(e), "UPDATE_ERROR", 500)
 
+async def auto_register_sermons_common(db: Connection = Depends(get_db), playlist_id: str = Query("PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky")): 
 
-@router.post("/auto-register")
-async def auto_register_sermons(db: Connection = Depends(get_db)):
-    """
-    Fetch the latest 5 videos from the church YouTube playlist and
-    automatically register any that are not yet in the sermons table.
-
-    Playlist: https://www.youtube.com/playlist?list=PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky
-
-    Runs at most once every 10 minutes; subsequent calls within the cooldown
-    return immediately without hitting the YouTube API.
-    """
-    global _auto_register_last_run
-    now = datetime.utcnow()
-    if _auto_register_last_run and (now - _auto_register_last_run) < _AUTO_REGISTER_COOLDOWN:
-        remaining = int((_AUTO_REGISTER_COOLDOWN - (now - _auto_register_last_run)).total_seconds())
-        return success(None, f"Auto-register skipped (cooldown: {remaining}s remaining)")
-
-    PLAYLIST_ID = "PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky"
     api_key = os.getenv("YOUTUBE_API_KEY", "")
     category_id = 1  # Default category ID for auto-registered sermons
     if not api_key:
@@ -306,9 +289,9 @@ async def auto_register_sermons(db: Connection = Depends(get_db)):
             pl_resp = await client.get(
                 "https://www.googleapis.com/youtube/v3/playlistItems",
                 params={
-                    "playlistId": PLAYLIST_ID,
+                    "playlistId": playlist_id,
                     "part": "contentDetails",
-                    "maxResults": 5,
+                    "maxResults": 3,
                     "key": api_key,
                 },
             )
@@ -389,11 +372,34 @@ async def auto_register_sermons(db: Connection = Depends(get_db)):
             db.rollback()
             return error(str(exc), "INSERT_ERROR", 500)
 
-    _auto_register_last_run = now
     return success(
         {"registered": registered, "skipped": skipped},
         f"{len(registered)} sermon(s) registered, {len(skipped)} already existed",
     )
+
+@router.post("/auto-register")
+async def auto_register_sermons(db: Connection = Depends(get_db)): 
+    """
+    Fetch the latest 3 videos from the church YouTube playlist and
+    automatically register any that are not yet in the sermons table.
+
+    Runs at most once every 10 minutes; subsequent calls within the cooldown
+    return immediately without hitting the YouTube API.
+    """
+    global _auto_register_last_run
+    now = datetime.utcnow()
+    if _auto_register_last_run and (now - _auto_register_last_run) < _AUTO_REGISTER_COOLDOWN:
+        remaining = int((_AUTO_REGISTER_COOLDOWN - (now - _auto_register_last_run)).total_seconds())
+        return success(None, f"Auto-register skipped (cooldown: {remaining}s remaining)")
+
+    #금찬예배 https://www.youtube.com/watch?v=y9ay6kiuGws&list=PLNJ54FCvyg8OtORHiJB9paTObvlBZDPh7
+    result2 = await auto_register_sermons_common(db, playlist_id="PLNJ54FCvyg8OtORHiJB9paTObvlBZDPh7")
+
+    #주일예배 https://www.youtube.com/playlist?list=PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky
+    result = await auto_register_sermons_common(db, playlist_id="PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky")
+
+    _auto_register_last_run = now
+    return result
 
 
 @router.delete("/{item_id}")
