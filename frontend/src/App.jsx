@@ -43,7 +43,6 @@ export default function App() {
   const [notices, setNotices] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [ministries, setMinistries] = useState([]);
-  const [obituaries, setObituaries] = useState([]);
   const [serviceTimes, setServiceTimes] = useState([]);
   const [shuttleBusSchedule, setShuttleBusSchedule] = useState([]);
   const [parkingLot, setParkingLot] = useState([]);
@@ -270,11 +269,11 @@ export default function App() {
       ) : isNoticeViewPage ? (
         <NoticeViewPage notices={notices} />
       ) : isObituaryViewPage ? (
-        <ObituaryViewPage obituaries={obituaries} />
+        <ObituaryViewPage />
       ) : isBulletinViewPage ? (
         <BulletinViewPage />
       ) : isJuboPage ? (
-        <JuboPage notices={notices} obituaries={obituaries} bulletins={bulletins} />
+        <JuboPage notices={notices} obituaries={[]} bulletins={bulletins} />
       ) : isNextGenSubmenuPage ? (
         <NextGenPage departments={departments.filter(d => d.department_type === 'nextgen')} />
       ) : (

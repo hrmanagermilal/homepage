@@ -4,12 +4,15 @@ import httpx
 from fastapi import APIRouter, Depends, Query, HTTPException
 from pydantic import BaseModel
 from pymysql.connections import Connection
-from datetime import date
+from datetime import date, datetime, timedelta
 
 from ..database import get_db, serialize, serialize_all
 from ..response import success, error, paginated
 
 router = APIRouter(prefix="/sermons", tags=["sermons"])
+
+_auto_register_last_run: datetime | None = None
+_AUTO_REGISTER_COOLDOWN = timedelta(minutes=10)
 
 _SELECT = """
     SELECT s.*, sc.title AS category_title, sc.image AS category_image
@@ -100,6 +103,8 @@ async def get_all(
     limit: int = Query(10, ge=1, le=100),
     db: Connection = Depends(get_db),
 ):
+    await auto_register_sermons(db)
+
     offset = (page - 1) * limit
     with db.cursor() as cur:
         cur.execute("SELECT COUNT(*) as total FROM sermons")
@@ -270,6 +275,125 @@ async def update_sermon(
     except Exception as e:
         db.rollback()
         return error(str(e), "UPDATE_ERROR", 500)
+
+
+@router.post("/auto-register")
+async def auto_register_sermons(db: Connection = Depends(get_db)):
+    """
+    Fetch the latest 5 videos from the church YouTube playlist and
+    automatically register any that are not yet in the sermons table.
+
+    Playlist: https://www.youtube.com/playlist?list=PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky
+
+    Runs at most once every 10 minutes; subsequent calls within the cooldown
+    return immediately without hitting the YouTube API.
+    """
+    global _auto_register_last_run
+    now = datetime.utcnow()
+    if _auto_register_last_run and (now - _auto_register_last_run) < _AUTO_REGISTER_COOLDOWN:
+        remaining = int((_AUTO_REGISTER_COOLDOWN - (now - _auto_register_last_run)).total_seconds())
+        return success(None, f"Auto-register skipped (cooldown: {remaining}s remaining)")
+
+    PLAYLIST_ID = "PLNJ54FCvyg8M63ptgyDvGYnzt768d19Ky"
+    api_key = os.getenv("YOUTUBE_API_KEY", "")
+    category_id = 1  # Default category ID for auto-registered sermons
+    if not api_key:
+        return error("YouTube API key not configured", "NO_API_KEY", 500)
+
+    try:
+        async with httpx.AsyncClient(timeout=15) as client:
+            # Step 1: get latest 5 video IDs from playlist
+            pl_resp = await client.get(
+                "https://www.googleapis.com/youtube/v3/playlistItems",
+                params={
+                    "playlistId": PLAYLIST_ID,
+                    "part": "contentDetails",
+                    "maxResults": 5,
+                    "key": api_key,
+                },
+            )
+            pl_resp.raise_for_status()
+            pl_data = pl_resp.json()
+
+            items = pl_data.get("items", [])
+            if not items:
+                return success({"registered": [], "skipped": []}, "No videos found in playlist")
+
+            video_ids = [item["contentDetails"]["videoId"] for item in items]
+
+            # Step 2: fetch video details (title, description, thumbnail, publishedAt)
+            vid_resp = await client.get(
+                "https://www.googleapis.com/youtube/v3/videos",
+                params={
+                    "id": ",".join(video_ids),
+                    "part": "snippet",
+                    "key": api_key,
+                },
+            )
+            vid_resp.raise_for_status()
+            vid_data = vid_resp.json()
+
+    except httpx.HTTPStatusError as exc:
+        return error(f"YouTube API error: {exc.response.status_code}", "YOUTUBE_API_ERROR", 502)
+    except Exception as exc:
+        return error(str(exc), "FETCH_ERROR", 500)
+
+    registered = []
+    skipped = []
+
+    for video in vid_data.get("items", []):
+        video_id = video["id"]
+        snippet = video.get("snippet", {})
+        title = snippet.get("title", "")
+        description = snippet.get("description", "")
+        published_at = snippet.get("publishedAt", "")
+        thumbnails = snippet.get("thumbnails", {})
+        thumbnail = (
+            thumbnails.get("maxres", {}).get("url")
+            or thumbnails.get("high", {}).get("url")
+            or thumbnails.get("default", {}).get("url")
+        )
+        youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+
+        # Derive sermon_date from publishedAt (YYYY-MM-DD)
+        sermon_date = published_at[:10] if published_at else None
+
+        # Extract preacher from description (following "설교: ")
+        preacher_match = re.search(r"설교[:\s]+([^\n]+)", description)
+        preacher = preacher_match.group(1).strip() if preacher_match else None
+
+        # Skip if already registered
+        with db.cursor() as cur:
+            cur.execute("SELECT id FROM sermons WHERE youtube_id = %s", (video_id,))
+            existing = cur.fetchone()
+
+        if existing:
+            skipped.append({"youtube_id": video_id, "title": title})
+            continue
+
+        try:
+            with db.cursor() as cur:
+                cur.execute(
+                    """
+                    INSERT INTO sermons (
+                        title, category_id, youtube_url, youtube_id,
+                        description, preacher, sermon_date, thumbnail, is_live
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 1)
+                    """,
+                    (title, category_id, youtube_url, video_id, description, preacher, sermon_date, thumbnail),
+                )
+                db.commit()
+                sermon_id = cur.lastrowid
+            registered.append({"id": sermon_id, "youtube_id": video_id, "title": title})
+        except Exception as exc:
+            db.rollback()
+            return error(str(exc), "INSERT_ERROR", 500)
+
+    _auto_register_last_run = now
+    return success(
+        {"registered": registered, "skipped": skipped},
+        f"{len(registered)} sermon(s) registered, {len(skipped)} already existed",
+    )
 
 
 @router.delete("/{item_id}")
