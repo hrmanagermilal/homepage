@@ -344,7 +344,7 @@ export default function NextGenPage({ departments = [] }) {
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">
-        <SubVisual title={safeTitle} image={apiDept.hero_image} />
+        <SubVisual title={safeTitle} image={apiDept?.hero_image} />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
