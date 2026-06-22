@@ -6,10 +6,10 @@ import "./css/MinistrySubSection.css";
 export default function MinistrySubSection({
   description,
   points = [],
-  noticeTitle = "4월 순모임 교재 공유드립니다.",
-  noticeDescription = "PDF파일을 다운 받으셔서 순모임에 활용하세요.",
-  noticeButtonLabel = "PDF 다운로드",
-  noticeButtonHref = "#",
+  noticeTitle = "",
+  noticeDescription = "",
+  noticeButtonLabel = "",
+  noticeButtonHref = "",
   noticeButtonExternal = false,
   ctaLabel,
   ctaHref = "#",
@@ -50,6 +50,7 @@ export default function MinistrySubSection({
           </a>
         ) : null}
 
+        {noticeTitle && (
         <div className="ministry-subsection__notice">
           <div className="ministry-subsection__notice-text">
             <p className="ministry-subsection__notice-title">{noticeTitle}</p>
@@ -76,6 +77,7 @@ export default function MinistrySubSection({
             <span>{noticeButtonLabel}</span>
           </a>
         </div>
+        )}
       </div>
       <PdfImagePreviewModal
         open={isPreviewOpen && isPdfNotice}

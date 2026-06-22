@@ -242,7 +242,7 @@ export default function MinistryPage({ ministries = [] }) {
   const activeMinistry = ministries.find((m) => m.key === activeKey);
   const activeProps = mapMinistryToProps(activeMinistry);
   const activeLabel = LNB_ITEMS.find((item) => item.key === activeKey)?.label ?? "사역";
-  console.log("MinistryPage render", { activeKey, activeLabel, activeProps });
+  console.log("MinistryPage render",  activeProps );
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">
