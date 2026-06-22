@@ -361,7 +361,7 @@ async def auto_register_sermons_common(db: Connection = Depends(get_db), playlis
                     INSERT INTO sermons (
                         title, category_id, youtube_url, youtube_id,
                         description, preacher, sermon_date, thumbnail, is_live
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 1)
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 0)
                     """,
                     (title, category_id, youtube_url, video_id, description, preacher, sermon_date, thumbnail),
                 )
