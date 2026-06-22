@@ -47,7 +47,18 @@ const CIRCLES = [
   },
 ];
 
-export default function MinistryYangyuk() {
+export default function MinistryYangyuk({
+  description,
+  points = [],
+  noticeTitle = "",
+  noticeDescription = "",
+  noticeButtonLabel = "",
+  noticeButtonHref = "",
+  noticeButtonExternal = false,
+  ctaLabel,
+  ctaHref = "#",
+  ctaExternal = false,
+}) {
   const [openStates, setOpenStates] = useState([true, true]);
 
   const toggleFaq = (idx) => {
@@ -113,17 +124,18 @@ export default function MinistryYangyuk() {
             );
           })}
         </div>
-
+        {noticeTitle && (
         <div className="ministry-download">
           <div className="ministry-download__text">
-            <p className="ministry-download__title">4월 순모임 교재 공유드립니다.</p>
-            <p className="ministry-download__desc">PDF파일을 다운 받으셔서 순모임에 활용하세요.</p>
+            <p className="ministry-download__title">{noticeTitle}</p>
+            <p className="ministry-download__desc">{noticeDescription}</p>
           </div>
-          <a className="btn-basic-big btn-basic-big--trans ministry-download__btn" href="#">
+          <a className="btn-basic-big btn-basic-big--trans ministry-download__btn" href={noticeButtonHref} target={noticeButtonExternal ? "_blank" : undefined} rel={noticeButtonExternal ? "noopener noreferrer" : undefined}>
             <i aria-hidden="true" />
-            <span>PDF 다운로드</span>
+            <span>{noticeButtonLabel}</span>
           </a>
         </div>
+        )}
       </div>
     </section>
   );
