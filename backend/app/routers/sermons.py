@@ -117,8 +117,9 @@ async def get_all(
     
     # Update live status for sermons marked as potentially live (is_live=0)
     updated_rows = []
-    for row in rows:
-        if row.get("youtube_id"):
+    for i, row in enumerate(rows):
+        # Only check is_live for the last row
+        if i == len(rows) - 1 and row.get("youtube_id"):
             # Check if still live and update database (is_live=0 means LIVE, need to verify)
             is_live = await check_youtube_is_live(row["youtube_id"])
             if not is_live:
