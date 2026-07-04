@@ -116,10 +116,13 @@ async def get_all(
         rows = cur.fetchall()
     
     # Update live status for sermons marked as potentially live (is_live=0)
+    # Find the row with the greatest id
+    max_id = max((row.get("id") for row in rows), default=None)
+    
     updated_rows = []
-    for i, row in enumerate(rows):
-        # Only check is_live for the last row
-        if i == len(rows) - 1 and row.get("youtube_id"):
+    for row in rows:
+        # Only check is_live for the row with greatest id
+        if row.get("id") == max_id and row.get("youtube_id"):
             # Check if still live and update database (is_live=0 means LIVE, need to verify)
             is_live = await check_youtube_is_live(row["youtube_id"])
             if not is_live:
