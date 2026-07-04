@@ -118,7 +118,7 @@ async def get_all(
     # Update live status for sermons marked as potentially live (is_live=0)
     updated_rows = []
     for row in rows:
-        if row.get("is_live") == 0 and row.get("youtube_id"):
+        if row.get("youtube_id"):
             # Check if still live and update database (is_live=0 means LIVE, need to verify)
             is_live = await check_youtube_is_live(row["youtube_id"])
             if not is_live:
@@ -127,6 +127,11 @@ async def get_all(
                     cur.execute("UPDATE sermons SET is_live = 1 WHERE id = %s", (row["id"],))
                     db.commit()
                 row["is_live"] = 1
+            else:
+                with db.cursor() as cur:
+                    cur.execute("UPDATE sermons SET is_live = 0 WHERE id = %s", (row["id"],))
+                    db.commit()
+                row["is_live"] = 0
         updated_rows.append(row)
     
     return paginated(serialize_all(updated_rows), total, page, limit)
