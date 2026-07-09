@@ -24,8 +24,9 @@ const INTRO_MINISTERS_COPY = {
 };
 
 const ROLE_LABELS = {
+  담임목사: { kr: "담임목사", en: "Senior Pastor" },
   목사: { kr: "목사", en: "Pastor" },
-  전도사: { kr: "전도사", en: "Minister" },
+  전도사: { kr: "전도사", en: "Associate Pastor" },
   장로: { kr: "장로", en: "Elder" },
   사무간사: { kr: "사무간사", en: "Administrative Staff" },
   음향간사: { kr: "음향간사", en: "Audio Staff" },
