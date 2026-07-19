@@ -30,6 +30,10 @@ const imagesAlias = {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const proxyTarget = env.VITE_API_PROXY_TARGET || "http://localhost";
+  const usePolling =
+    env.VITE_USE_POLLING === "true" ||
+    process.platform === "win32" ||
+    Boolean(process.env.WSL_DISTRO_NAME);
   const envAllowedHosts = (env.VITE_ALLOWED_HOSTS || "")
     .split(",")
     .map((host) => host.trim())
@@ -44,6 +48,12 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: true,
+      watch: usePolling
+        ? {
+            usePolling: true,
+            interval: 150,
+          }
+        : undefined,
       allowedHosts,
       proxy: {
         "/api": {

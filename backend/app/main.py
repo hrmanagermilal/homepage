@@ -18,6 +18,8 @@ from .routers import (
     ministry,
     notice,
     obituary,
+    nextgen,
+    album,
     parking_lot,
     parking_map,
     pastor_introduction,
@@ -73,6 +75,8 @@ app.include_router(departments.router, prefix=PREFIX)
 app.include_router(ministry.router, prefix=PREFIX)
 app.include_router(notice.router, prefix=PREFIX)
 app.include_router(obituary.router, prefix=PREFIX)
+app.include_router(nextgen.router, prefix=PREFIX)
+app.include_router(album.router, prefix=PREFIX)
 app.include_router(service_times.router, prefix=PREFIX)
 app.include_router(shuttle_bus.router, prefix=PREFIX)
 app.include_router(parking_lot.router, prefix=PREFIX)
@@ -85,52 +89,6 @@ app.include_router(tracking.router, prefix=PREFIX)
 app.include_router(analytics.router, prefix=PREFIX)
 app.include_router(settings.router, prefix=PREFIX)
 app.include_router(youtube.router, prefix=PREFIX)
-
-# ── Nextgen / Ministry aliases (map to departments) ───────────────────────────
-from fastapi import Depends
-from pymysql.connections import Connection
-from .database import get_db, serialize_all
-from .response import success, error
-
-
-@app.get(PREFIX + "/nextgen")
-def get_nextgen(db: Connection = Depends(get_db)):
-    with db.cursor() as cur:
-        cur.execute(
-            "SELECT * FROM departments WHERE department_type = 'nextgen' ORDER BY sort_order"
-        )
-        rows = cur.fetchall()
-    return success(serialize_all(rows))
-
-
-@app.get(PREFIX + "/nextgen/{item_id}")
-def get_nextgen_one(item_id: int, db: Connection = Depends(get_db)):
-    with db.cursor() as cur:
-        cur.execute("SELECT * FROM departments WHERE id = %s", (item_id,))
-        row = cur.fetchone()
-    if not row:
-        return error("Not found", "NOT_FOUND", 404)
-    return success(serialize_all([row])[0])
-
-
-@app.get(PREFIX + "/ministry")
-def get_ministry(db: Connection = Depends(get_db)):
-    with db.cursor() as cur:
-        cur.execute(
-            "SELECT * FROM departments WHERE department_type = 'ministry' ORDER BY sort_order"
-        )
-        rows = cur.fetchall()
-    return success(serialize_all(rows))
-
-
-@app.get(PREFIX + "/ministry/{item_id}")
-def get_ministry_one(item_id: int, db: Connection = Depends(get_db)):
-    with db.cursor() as cur:
-        cur.execute("SELECT * FROM departments WHERE id = %s", (item_id,))
-        row = cur.fetchone()
-    if not row:
-        return error("Not found", "NOT_FOUND", 404)
-    return success(serialize_all([row])[0])
 
 
 # ── Serve uploads as static files ─────────────────────────────────────────────

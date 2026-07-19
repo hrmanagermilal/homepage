@@ -35,3 +35,4 @@ def get_ministry_by_id(ministry_id: int, db: Connection = Depends(get_db)):
     if not row:
         raise HTTPException(status_code=404, detail="Ministry not found")
     return _row_to_dict(row)
+

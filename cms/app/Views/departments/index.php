@@ -104,7 +104,7 @@
           </select>
         </div>
         <div class="form-group col-span-2"><label class="form-label">부서명<span class="req">*</span></label>
-          <input class="form-control" id="dm-name" placeholder="청년부"></div>
+          <input class="form-control" id="dm-name" placeholder="밀라이트 청년부"></div>
       </div>
 
       <div class="form-group"><label class="form-label">소개 (description)</label>

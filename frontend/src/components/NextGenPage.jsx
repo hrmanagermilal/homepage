@@ -5,7 +5,7 @@ import "./css/SubPage.css";
 import "./css/NextGenPage.css";
 
 const KEY_TO_TITLE = {
-  "young-adults": "청년부",
+  "young-adults": "밀라이트 청년부",
   "km-youth": "헤세드 청소년부(KM)",
   "em-youth": "오하나 청소년부(EM)",
   "children": "카리스 아동부",
@@ -14,7 +14,7 @@ const KEY_TO_TITLE = {
 };
 
 const NEXTGEN_LNB_ITEMS = [
-  { label: "청년부", key: "young-adults", href: "/nextgen#young-adults" },
+  { label: "밀라이트 청년부", key: "young-adults", href: "/nextgen#young-adults" },
   { label: "헤세드 청소년부(KM)", key: "km-youth", href: "/nextgen#km-youth" },
   { label: "오하나 청소년부(EM)", key: "em-youth", href: "/nextgen#em-youth" },
   { label: "카리스 아동부", key: "children", href: "/nextgen#children" },
@@ -28,7 +28,7 @@ function getKeyFromHash(hash) {
 }
 
 const DEPARTMENT_CONTENT = {
-  "청년부": {
+  "밀라이트 청년부": {
     headingTitle: (
       <>
         Milight, Time to Shine. 하나님이여 우리를 돌이키시고

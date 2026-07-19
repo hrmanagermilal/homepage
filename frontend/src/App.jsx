@@ -15,6 +15,7 @@ import JuboPage from "./components/JuboPage";
 import NoticeViewPage from "./components/NoticeViewPage";
 import ObituaryViewPage from "./components/ObituaryViewPage";
 import BulletinViewPage from "./components/BulletinViewPage";
+import AlbumViewPage from "./components/AlbumViewPage";
 
 
 export default function App() {
@@ -28,7 +29,13 @@ export default function App() {
   const isNoticeViewPage = /^\/news\/notice\/\d+$/.test(currentPath);
   const isObituaryViewPage = /^\/news\/obituary\/\d+$/.test(currentPath);
   const isBulletinViewPage = /^\/news\/bulletin\/\d+$/.test(currentPath);
-  const isJuboPage = currentPath.startsWith("/news") && !isNoticeViewPage && !isObituaryViewPage && !isBulletinViewPage;
+  const isAlbumViewPage = /^\/news\/album\/\d+$/.test(currentPath);
+  const isJuboPage =
+    currentPath.startsWith("/news") &&
+    !isNoticeViewPage &&
+    !isObituaryViewPage &&
+    !isBulletinViewPage &&
+    !isAlbumViewPage;
   const isNextGenSubmenuPage = currentPath.startsWith("/nextgen");
   const [hero, setHero] = useState(null);
   const [quickLinks, setQuickLinks] = useState([]);
@@ -229,7 +236,7 @@ export default function App() {
     }
 
     const hasHash = Boolean(window.location.hash);
-    const isDetailPath = /^\/news\/(notice|obituary|bulletin)\/\d+$/.test(currentPath);
+    const isDetailPath = /^\/news\/(notice|obituary|bulletin|album)\/\d+$/.test(currentPath);
 
     // Hash-based pages and detail views already control their own scroll position.
     if (hasHash || isTabHashPage(currentPath) || isDetailPath) {
@@ -272,6 +279,8 @@ export default function App() {
         <ObituaryViewPage />
       ) : isBulletinViewPage ? (
         <BulletinViewPage />
+      ) : isAlbumViewPage ? (
+        <AlbumViewPage />
       ) : isJuboPage ? (
         <JuboPage notices={notices} obituaries={[]} bulletins={bulletins} />
       ) : isNextGenSubmenuPage ? (
@@ -294,7 +303,7 @@ export default function App() {
         />
       )}
       <Footer landingTitles={landingTitles} />
-      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isBulletinViewPage || isJuboPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
+      {isIntroductionPage || isMinistryPage || isOnlineGivingPage || isNoticeViewPage || isObituaryViewPage || isBulletinViewPage || isAlbumViewPage || isJuboPage || isNextGenSubmenuPage ? null : <FloatingMenu quickLinks={quickLinks} />}
     </Box>
   );
 }

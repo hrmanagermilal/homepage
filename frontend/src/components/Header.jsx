@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   {
     num: "02", label: "다음세대", path: "/nextgen#young-adults",
     subs: [
-      { label: "청년부", path: "/nextgen#young-adults" },
+      { label: "밀라이트 청년부", path: "/nextgen#young-adults" },
       { label: "헤세드 청소년부(KM)", path: "/nextgen#km-youth" },
       { label: "오하나 청소년부(EM)", path: "/nextgen#em-youth" },
       { label: "카리스 아동부", path: "/nextgen#children" },
@@ -42,6 +42,7 @@ const NAV_ITEMS = [
       { label: "온라인 주보", path: "/news#bulletin" },
       { label: "공지", path: "/news#notice" },
       { label: "부고", path: "/news#obituary" },
+      { label: "앨범", path: "/news#album" },
     ],
   },
   {

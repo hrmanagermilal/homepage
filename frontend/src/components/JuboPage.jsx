@@ -3,6 +3,7 @@ import { FEATURES } from "../config/features";
 import "./css/SubPage.css";
 import "./css/NoticePage.css";
 import "./css/ObituaryPage.css";
+import "./css/AlbumPage.css";
 import NoticeSubVisual from "./notice_components/NoticeSubVisual";
 import ObituarySubVisual from "./obituary_components/ObituarySubVisual";
 import NoticeTable from "./notice_components/NoticeTable";
@@ -11,21 +12,28 @@ import NoticePagination from "./notice_components/NoticePagination";
 import ObituarySearchForm from "./obituary_components/ObituarySearchForm";
 import ObituaryCard from "./obituary_components/ObituaryCard";
 import ObituaryPagination from "./obituary_components/ObituaryPagination";
+import AlbumViewSubVisual from "./album_components/AlbumViewSubVisual";
+import AlbumPagination from "./album_components/AlbumPagination";
+import AlbumSearchForm from "./album_components/AlbumSearchForm";
+import AlbumCard from "./album_components/AlbumCard";
 import BulletinSubVisual from "./bulletin_components/BulletinSubVisual";
 import BulletinTable from "./bulletin_components/BulletinTable";
 import BulletinPagination from "./bulletin_components/BulletinPagination";
+
 import {api} from "../api/client";
 
 const NEWS_LNB_ITEMS = [
   { label: "온라인 주보", key: "bulletin", href: "/news#bulletin" },
   { label: "공지", key: "notice", href: "/news#notice" },
   { label: "부고", key: "obituary", href: "/news#obituary" },
+  { label: "앨범", key: "album", href: "/news#album" },
 ];
 
 function getKeyFromHash(hash) {
   const key = (hash || "").replace("#", "");
   if (key === "obituary") return "obituary";
   if (key === "bulletin") return "bulletin";
+  if (key === "album") return "album";
   return "notice";
 }
 
@@ -49,7 +57,7 @@ function SubLnb({ activeKey }) {
   );
 }
 
-export default function JuboPage({ notices = [], obituaries = [], bulletins = [] }) {
+export default function JuboPage({ notices = [], obituaries = [], bulletins = [], albums = [] }) {
   const containerRef = useRef(null);
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
 
@@ -62,6 +70,11 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   const [obituarySearch, setObituarySearch] = useState("");
   const [obituaryCurrentPage, setObituaryCurrentPage] = useState(1);
   const [obituaryData, setObituaryData] = useState(obituaries);
+
+  // Album state
+  const [albumSearch, setAlbumSearch] = useState("");
+  const [albumCurrentPage, setAlbumCurrentPage] = useState(1);
+  const [albumData, setAlbumData] = useState(albums);
 
   // Bulletin state
   const [bulletinSearch, setBulletinSearch] = useState("");
@@ -97,6 +110,17 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
       });
     }
   }, [obituaries]);
+
+  useEffect(() => {
+    console.log("Albums prop changed:", albums);
+    if (albums.length <= 0) {
+      api.getAlbums({ page: 1, limit: 200 }).then((response) => {
+        const data = response?.data?.data ?? response?.data ?? [];
+        console.log("Fetched albums:", data);
+        setAlbumData(data);
+      });
+    }
+  }, [albums]);
 
   useEffect(() => {
     console.log("Notices prop changed:", notices);
@@ -233,6 +257,29 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
     document.getElementById("content")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  // Album computed
+  const albumFiltered = useMemo(() => {
+    if (!albumSearch) return albumData;
+    return albumData.filter(
+      (item) =>
+        item.title.toLowerCase().includes(albumSearch.toLowerCase()) ||
+        (item.description ?? "").toLowerCase().includes(albumSearch.toLowerCase())
+    );
+  }, [albumData, albumSearch]);
+
+  const albumTotalPages = Math.ceil(albumFiltered.length / ITEMS_PER_PAGE);
+  const albumPaginated = useMemo(() => {
+    const startIdx = (albumCurrentPage - 1) * ITEMS_PER_PAGE;
+    return albumFiltered.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  }, [albumFiltered, albumCurrentPage]);
+
+  const handleAlbumSearch = () => { setAlbumCurrentPage(1); };
+  const handleAlbumPageChange = (page) => {
+    setAlbumCurrentPage(page);
+    document.getElementById("content")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+
   // Bulletin computed
   const bulletinFiltered = useMemo(() => {
     return bulletinData.filter((item) =>
@@ -267,7 +314,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">
-        {activeKey === "bulletin" ? <BulletinSubVisual /> : activeKey === "obituary" ? <ObituarySubVisual /> : <NoticeSubVisual />}
+        {activeKey === "bulletin" ? <BulletinSubVisual /> : activeKey === "obituary" ? <ObituarySubVisual /> : activeKey === "album" ? <AlbumViewSubVisual /> : <NoticeSubVisual />}
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
@@ -299,7 +346,37 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
               <NoticePagination currentPage={noticeCurrentPage} totalPages={noticeTotalPages} onPageChange={handleNoticePageChange} />
             </div>
           </section>
-        ) : activeKey === "bulletin" ? (
+        ) :activeKey === "album" ? (
+          <section className="album">
+            <div className="wrap">
+              <div className="album-top">
+                <p className="album-count">
+                  총 <strong>{albumFiltered.length}</strong>건
+                </p>
+                <AlbumSearchForm
+                  searchQuery={albumSearch}
+                  onSearchChange={setAlbumSearch}
+                  onSearch={handleAlbumSearch}
+                />
+              </div>
+              <ul className="album-list" data-grid="4">
+                {albumPaginated.map((item) => (
+                  <AlbumCard
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    description={item.description?item.description:item.content}
+                    date={item.date}
+                    image={item.images?.[0]?.image_url}
+                    href={`/news/album/${item.id}`}
+                  />
+                ))}
+              </ul>
+              <AlbumPagination currentPage={albumCurrentPage} totalPages={albumTotalPages} onPageChange={handleAlbumPageChange} />
+            </div>
+          </section>
+
+        ): activeKey === "bulletin" ? (
           <section className="notice">
             <div className="wrap-narrow">
               <div className="notice-top">

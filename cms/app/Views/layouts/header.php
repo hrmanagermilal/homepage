@@ -212,7 +212,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
   </div>
 
   <!-- ── 소식 ── -->
-  <?php $newsActive=in_array($currentPage??'',['bulletins-news','notice','obituary']); ?>
+  <?php $newsActive=in_array($currentPage??'',['bulletins-news','albums','notice','obituary']); ?>
   <div class="nav-group">
     <div class="nav-group-header <?= $newsActive?'open':'' ?>" onclick="toggleGroup(this)">
       <i class="fas fa-newspaper"></i><span>소식</span><i class="fas fa-chevron-right toggle-icon"></i>
@@ -220,6 +220,9 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
     <div class="nav-group-body" style="<?= $newsActive?'':'display:none' ?>">
       <?php if(hasPerm('bulletins.view')): ?>
       <a href="<?= BASE_URL ?>/bulletins" class="nav-item sub <?= ($currentPage??'')==='bulletins-news'?'active':'' ?>"><i class="fas fa-newspaper"></i>온라인 주보</a>
+      <?php endif; ?>
+      <?php if(hasPerm('album.view')): ?>
+      <a href="<?= BASE_URL ?>/albums" class="nav-item sub <?= ($currentPage??'')==='albums'?'active':'' ?>"><i class="fas fa-images"></i>앨범관리</a>
       <?php endif; ?>
       <?php if(hasPerm('notice.view')): ?>
       <a href="<?= BASE_URL ?>/notice" class="nav-item sub <?= ($currentPage??'')==='notice'?'active':'' ?>"><i class="fas fa-bullhorn"></i>공지</a>
