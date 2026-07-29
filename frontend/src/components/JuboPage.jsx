@@ -38,6 +38,7 @@ function getKeyFromHash(hash) {
 }
 
 const ITEMS_PER_PAGE = 8;
+const EMPTY_ARRAY = [];
 
 function SubLnb({ activeKey }) {
   return (
@@ -57,7 +58,7 @@ function SubLnb({ activeKey }) {
   );
 }
 
-export default function JuboPage({ notices = [], obituaries = [], bulletins = [], albums = [] }) {
+export default function JuboPage({ notices = EMPTY_ARRAY, obituaries = EMPTY_ARRAY, bulletins = EMPTY_ARRAY, albums = EMPTY_ARRAY }) {
   const containerRef = useRef(null);
   const [activeKey, setActiveKey] = useState(() => getKeyFromHash(window.location.hash));
 
@@ -98,7 +99,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
         setBulletinData(data);
       });
     }
-  }, [bulletins]);
+  }, [bulletins.length]);
 
   useEffect(() => {
     console.log("Obituaries prop changed:", obituaries);
@@ -109,7 +110,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
         setObituaryData(data);
       });
     }
-  }, [obituaries]);
+  }, [obituaries.length]);
 
   useEffect(() => {
     console.log("Albums prop changed:", albums);
@@ -120,7 +121,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
         setAlbumData(data);
       });
     }
-  }, [albums]);
+  }, [albums.length]);
 
   useEffect(() => {
     console.log("Notices prop changed:", notices);
@@ -133,7 +134,7 @@ export default function JuboPage({ notices = [], obituaries = [], bulletins = []
         setNoticeData(sorted);
       });
     }
-  }, [notices]);
+  }, [notices.length]);
 
   useEffect(() => {
     const container = containerRef.current;

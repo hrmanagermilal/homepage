@@ -17,6 +17,8 @@ import ObituaryViewPage from "./components/ObituaryViewPage";
 import BulletinViewPage from "./components/BulletinViewPage";
 import AlbumViewPage from "./components/AlbumViewPage";
 
+const EMPTY_ARRAY = [];
+
 
 export default function App() {
   const [theme, setTheme] = useTheme();
@@ -282,7 +284,7 @@ export default function App() {
       ) : isAlbumViewPage ? (
         <AlbumViewPage />
       ) : isJuboPage ? (
-        <JuboPage notices={notices} obituaries={[]} bulletins={bulletins} />
+        <JuboPage notices={notices} obituaries={EMPTY_ARRAY} bulletins={bulletins} />
       ) : isNextGenSubmenuPage ? (
         <NextGenPage departments={departments.filter(d => d.department_type === 'nextgen')} />
       ) : (
