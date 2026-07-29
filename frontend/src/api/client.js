@@ -92,6 +92,11 @@ export const api = {
   getObituary: () => request("/api/obituary"),
   getObituaryById: (id) => request(`/api/obituary/${id}`),
 
+  // Album
+  getAlbums: (params = {}) => request(`/api/albums${toQueryString(params)}`),
+  getAlbumById: (id) => request(`/api/albums/${id}`),
+  getAlbumImages: (albumId) => request(`/api/albums/${albumId}/images`),
+
   // Notice
   getNotice: (params = {}) => request(`/api/notice${toQueryString(params)}`),
   getNoticeById: (id) => request(`/api/notice/${id}`),

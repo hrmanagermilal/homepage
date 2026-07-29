@@ -383,6 +383,34 @@ CREATE TABLE IF NOT EXISTS obituary (
   INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ===============================================
+-- 14-2. ALBUM (앨범) 테이블
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS album (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(500) NOT NULL,
+  description TEXT NULL,
+  content TEXT NULL,
+  date DATE NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_date (date),
+  INDEX idx_active (is_active),
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS album_images (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  album_id INT NOT NULL,
+  image_url VARCHAR(500) NOT NULL,
+  alt_text VARCHAR(255) NULL,
+  sort_order INT DEFAULT 0,
+  uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (album_id) REFERENCES album(id) ON DELETE CASCADE,
+  INDEX idx_album_order (album_id, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- ===============================================
