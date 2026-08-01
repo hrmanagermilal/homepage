@@ -145,6 +145,9 @@ async function saveAlbum(){
   if(!title){ toast('제목을 입력하세요.','error'); return; }
   if(!content){ toast('내용을 입력하세요.','error'); return; }
   if(!files.length){ toast('사진을 한 장 이상 추가해주세요.','error'); return; }
+  if(files.length > 30){ toast('사진은 최대 30장까지 업로드할 수 있습니다.','error'); return; }
+  const totalMB = files.reduce((s,f) => s + f.size, 0) / 1024 / 1024;
+  if(totalMB > 200){ toast(`총 파일 크기(${totalMB.toFixed(1)}MB)가 200MB를 초과합니다. 사진 수를 줄여주세요.`,'error'); return; }
 
   const fd = new FormData();
   fd.append('title', title);
