@@ -45,7 +45,7 @@ function getKeyFromHash(hash) {
   return VALID_KEYS.has(key) ? key : "ministry02";
 }
 
-function SubVisual({ title, activeKey, image }) {
+function SubVisual({ title, activeKey, image, subtitle: ministrySubtitle }) {
   const isDaniel = title === "다니엘한글문화학교";
   const isGajeong = title === "가정";
   const isYangyuk = title === "양육";
@@ -53,7 +53,7 @@ function SubVisual({ title, activeKey, image }) {
   const isJanghak = title === "장학";
   const isSogroup = title === "소그룹";
   const isGospel = activeKey === "ministry08";
-  const subtitle = SUBTITLE_BY_KEY[activeKey] || "";
+  const subtitle = ministrySubtitle ?? (SUBTITLE_BY_KEY[activeKey] || "");
   const bgClass = isGospel ? "ministry-bg-gospel" : isDaniel ? "ministry-bg-daniel" : isGajeong ? "ministry-bg-gajeong" : isYangyuk ? "ministry-bg-yangyuk" : isSeonkyo ? "ministry-bg-seonkyo" : isJanghak ? "ministry-bg-janghak" : isSogroup ? "ministry-bg-sogroup" : "ministry-bg";
   console.log("MinistryPage SubVisual render", { title, image, activeKey, bgClass });
  
@@ -246,7 +246,12 @@ export default function MinistryPage({ ministries = [] }) {
   return (
     <div ref={containerRef}>
       <div data-snap-section="true">
-        <SubVisual title={activeLabel} activeKey={activeKey} image={activeMinistry?.image} />
+        <SubVisual
+          title={activeLabel}
+          activeKey={activeKey}
+          image={activeMinistry?.image}
+          subtitle={activeMinistry?.subtitle}
+        />
       </div>
       <div className="sub-content" id="content" data-snap-section="true">
         <SubLnb activeKey={activeKey} />
