@@ -18,6 +18,7 @@ services:
     restart: unless-stopped
     networks:
       - milal-net
+      - milal-shared
 
   app:
     build:
@@ -81,3 +82,5 @@ networks:
   milal-net:
     name: milal-net
     driver: bridge
+  milal-shared:
+    external: true
