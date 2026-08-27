@@ -30,6 +30,16 @@ export default function DonationNoticeModal({ isOpen, onClose }) {
           [Other] 를 선택하시고 $0 Contribution을 입력하시면
           <br />
           수수료 없이 밀알교회에 헌금 됩니다.
+          <br />
+          Zeffy 후원 결제 안내드립니다. 
+          <br />
+          $1,000를 초과하는 후원금은 신용카드 결제가 제한되며,
+          <br />
+          ACH/PAD(은행 계좌 이체)를 통해 후원해 주시기 바랍니다.
+          <br />
+          $1,000 미만의 후원금은 기존과 같이 신용카드로
+          <br />
+          결제하실 수 있습니다.
         </p>
         <a
           className="btn-basic btn-basic--white donation-modal__btn"
