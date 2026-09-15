@@ -11,7 +11,9 @@ services:
       - "8090:8090"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./certs:/etc/nginx/certs:ro
+      # Mount frontend's certbot-managed certs directly so renewals
+      # (which only run against frontend) apply here too without copying.
+      - ../frontend/certs:/etc/nginx/certs:ro
       - uploads_data:/var/www/uploads:ro
     depends_on:
       - app
@@ -37,7 +39,7 @@ services:
       JWT_EXPIRY: 604800
       CORS_ORIGIN: "*"
       UPLOADS_PATH: /app/uploads
-      YOUTUBE_API_KEY: your_youtube_api_key_here
+      YOUTUBE_API_KEY: AIzaSyBzyNb56o41jl99he1pfv5k_etNw7OzLh0
     volumes:
       - uploads_data:/app/uploads
     depends_on:

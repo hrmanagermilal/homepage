@@ -1,9 +1,29 @@
-# SSL Certificate Issue - Self-Signed Certificate Error
+# SSL Certificate Troubleshooting
 
-## Problem
+## Expired Certificate
+
+If the live site reports `certificate has expired`, renew the shared frontend certificate and reload both nginx containers:
+
+```bash
+cd /path/to/homepage
+sudo ./renew-ssl.sh
+```
+
+Then verify the certificate served by the public endpoint, not only the file on disk:
+
+```bash
+openssl s_client -connect www.milalchurch.ca:443 -servername www.milalchurch.ca </dev/null 2>/dev/null \
+   | openssl x509 -noout -subject -issuer -dates -serial
+```
+
+Install the daily cron job from the SSL section in the root `README.md` after emergency renewal succeeds.
+
+## Self-Signed Certificate
+
+### Problem
 Frontend is serving a temporary self-signed certificate (CN=localhost) instead of the Let's Encrypt certificate.
 
-## Root Cause
+### Root Cause
 The `init-ssl.sh` script failed to obtain a Let's Encrypt certificate due to:
 ```
 Client with the currently selected authenticator does not support any combination of challenges
@@ -11,7 +31,7 @@ Client with the currently selected authenticator does not support any combinatio
 
 This typically means **port 80 is not accessible from the internet**, which is required for ACME domain verification.
 
-## Solution
+### Solution
 
 ### Step 1: Verify Port 80 is Accessible
 From WSL/Linux terminal in the workspace:
@@ -43,7 +63,7 @@ cd /mnt/c/workspace-milal/homepage
 sudo ./init-ssl.sh all
 ```
 
-## Troubleshooting
+### Troubleshooting
 
 ### If port 80 shows "blocked" in diagnostics:
 1. Open Azure Portal
@@ -67,12 +87,12 @@ openssl x509 -in frontend/certs/live/milalchurch.ca/fullchain.pem -noout -issuer
 # NOT: issuer=CN=localhost
 ```
 
-## Certificate Details
+### Certificate Details
 - **Current**: Self-signed (CN=localhost), valid 1 day
 - **Target**: Let's Encrypt wildcard cert for *.milalchurch.ca
-- **Renewal**: Automatic (handled by certbot)
+- **Renewal**: Run by the root cron entry that invokes `renew-ssl.sh`
 
-## Emergency Workaround (Not Recommended)
+### Emergency Workaround (Not Recommended)
 If you cannot open port 80:
 1. Use DNS-01 challenge (requires DNS API credentials)
 2. Use email-based verification

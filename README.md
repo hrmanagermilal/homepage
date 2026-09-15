@@ -114,11 +114,28 @@ bash compose-all.sh
 
 ## 7. SSL 설정 (프로덕션)
 
+만료되었거나 30일 이내에 만료되는 인증서를 갱신하고 Nginx에 적용합니다.
+
 ```bash
-cd backend
-nano init-ssl.sh  # 도메인 수정
-chmod +x init-ssl.sh
-./init-ssl.sh
+cd /path/to/homepage
+sudo ./renew-ssl.sh
+```
+
+인증서가 다시 만료되지 않도록 root crontab에 매일 실행 작업을 등록합니다. Certbot은 갱신 기간이 아닐 때 인증서를 변경하지 않습니다.
+
+```bash
+sudo crontab -e
+```
+
+```cron
+17 3 * * * /path/to/homepage/renew-ssl.sh >> /var/log/milalchurch-certbot.log 2>&1
+```
+
+등록 후 실제 서버가 제공하는 인증서를 확인합니다.
+
+```bash
+openssl s_client -connect www.milalchurch.ca:443 -servername www.milalchurch.ca </dev/null 2>/dev/null \
+  | openssl x509 -noout -subject -issuer -dates -serial
 ```
 
 
