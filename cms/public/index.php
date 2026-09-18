@@ -14,6 +14,7 @@ require_once BASE_PATH.'/app/Models/OnlineGivingModel.php';
 require_once BASE_PATH.'/app/Models/MemberModel.php';
 require_once BASE_PATH.'/app/Models/SermonModel.php';
 require_once BASE_PATH.'/app/Models/BulletinModel.php';
+require_once BASE_PATH.'/app/Models/AlbumModel.php';
 require_once BASE_PATH.'/app/Models/DepartmentModel.php';
 require_once BASE_PATH.'/app/Middleware/AuthMiddleware.php';
 require_once BASE_PATH.'/app/Helpers/UploadHelper.php';
@@ -29,6 +30,7 @@ require_once BASE_PATH.'/app/Controllers/OnlineGivingController.php';
 require_once BASE_PATH.'/app/Controllers/MemberController.php';
 require_once BASE_PATH.'/app/Controllers/SermonController.php';
 require_once BASE_PATH.'/app/Controllers/BulletinController.php';
+require_once BASE_PATH.'/app/Controllers/AlbumController.php';
 require_once BASE_PATH.'/app/Controllers/DepartmentController.php';
 // 선택적 파일 (없어도 에러 안 남)
 if(file_exists(BASE_PATH.'/app/Models/HeroModel.php'))              require_once BASE_PATH.'/app/Models/HeroModel.php';
@@ -157,6 +159,16 @@ $routes = [
         'image-reorder' => ['BulletinController','reorderImages'],
         'images-add'    => ['BulletinController','addImages'],
         'view'          => ['BulletinController','detail_page'],
+    ],
+    // ── Album (앨범) ─────────────────────────────────────
+    'albums' => [
+        ''       => ['AlbumController','index'],
+        'list'   => ['AlbumController','list'],
+        'detail' => ['AlbumController','detail'],
+        'create' => ['AlbumController','create'],
+        'delete' => ['AlbumController','delete'],
+        'images-add' => ['AlbumController','addImages'],
+        'view'   => ['AlbumController','detail_page'],
     ],
     // ── Notice (공지) ─────────────────────────────────────
     'notice' => [
