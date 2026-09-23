@@ -162,13 +162,16 @@ $routes = [
     ],
     // ── Album (앨범) ─────────────────────────────────────
     'albums' => [
-        ''       => ['AlbumController','index'],
-        'list'   => ['AlbumController','list'],
-        'detail' => ['AlbumController','detail'],
-        'create' => ['AlbumController','create'],
-        'delete' => ['AlbumController','delete'],
-        'images-add' => ['AlbumController','addImages'],
-        'view'   => ['AlbumController','detail_page'],
+        ''              => ['AlbumController','index'],
+        'list'          => ['AlbumController','list'],
+        'detail'        => ['AlbumController','detail'],
+        'create'        => ['AlbumController','create'],
+        'update'        => ['AlbumController','update'],
+        'delete'        => ['AlbumController','delete'],
+        'image-delete'  => ['AlbumController','deleteImage'],
+        'image-reorder' => ['AlbumController','reorderImages'],
+        'images-add'    => ['AlbumController','addImages'],
+        'view'          => ['AlbumController','detail_page'],
     ],
     // ── Notice (공지) ─────────────────────────────────────
     'notice' => [
