@@ -119,6 +119,26 @@ class AlbumController extends BaseController {
 
         $this->success(['id' => $albumId, 'image_count' => $savedCount], '앨범이 등록되었습니다.');
     }
+    
+    public function update(): void {
+        $this->assertPost();
+        AuthMiddleware::requirePermission('album.edit');
+        $id = $this->intPost('id');
+        $album = $this->model->findById($id);
+        if (!$album) $this->error('앨범을 찾을 수 없습니다.', 404);
+        
+        $err = $this->validateRequired(['title' => '제목', 'content' => '내용'], $_POST);
+        if ($err) $this->error($err);
+        
+        $this->model->update($id, [
+            'title'     => trim($this->post('title')),
+            'content'   => $this->post('content'),
+            'date'      => $this->post('date', $album['date'] ?? date('Y-m-d')),
+            'is_active' => $this->intPost('is_active', $album['is_active'] ?? 1),
+        ]);
+        
+        $this->success(['id' => $id], '앨범이 수정되었습니다.');
+    }
 
     public function addImages(): void {
         $this->assertPost();
@@ -182,6 +202,24 @@ class AlbumController extends BaseController {
         }
 
         $this->success(['images' => $results, 'count' => $savedCount], $savedCount.'장의 사진이 추가되었습니다.');
+    }
+    
+    public function deleteImage(): void {
+        $this->assertPost();
+        AuthMiddleware::requirePermission('album.edit');
+        $row = $this->model->deleteImage($this->intPost('id'));
+        if (!$row) $this->error('이미지를 찾을 수 없습니다.', 404);
+        UploadHelper::deleteFile($row['image_url']);
+        $this->success([], '이미지가 삭제되었습니다.');
+    }
+    
+    public function reorderImages(): void {
+        $this->assertPost();
+        AuthMiddleware::requirePermission('album.edit');
+        $orders = json_decode($this->post('orders', '[]'), true);
+        if (empty($orders)) $this->error('순서 데이터가 올바르지 않습니다.');
+        $this->model->reorderImages($orders);
+        $this->success([], '순서가 업데이트되었습니다.');
     }
 
     public function delete(): void {

@@ -1,5 +1,5 @@
 <?php include BASE_PATH.'/app/Views/layouts/header.php'; ?>
-<?php $canCreate = hasPerm('album.create'); $canDelete = hasPerm('album.delete'); ?>
+<?php $canCreate = hasPerm('album.create'); $canEdit = hasPerm('album.edit'); $canDelete = hasPerm('album.delete'); ?>
 
 <div class="card">
   <div class="card-header">
@@ -11,22 +11,38 @@
   <div class="card-body" style="padding:0">
     <div class="table-wrap"><table>
       <thead>
-        <tr><th>앨범 제목</th><th>등록 날짜</th><?php if ($canDelete): ?><th style="width:90px">관리</th><?php endif; ?></tr>
+        <tr>
+          <th>앨범 제목</th>
+          <th >사진</th>
+          <th >등록 날짜</th>
+          <th style="width:130px">관리</th>
+        </tr>
       </thead>
       <tbody>
       <?php foreach ($data['rows'] as $r): ?>
-      <tr data-id="<?= $r['id'] ?>" style="cursor:pointer" onclick="goDetail(<?= $r['id'] ?>)">
-        <td style="font-weight:500"><?= htmlspecialchars($r['title']) ?></td>
-        <td class="text-sm text-muted"><?= date('Y-m-d', strtotime($r['created_at'])) ?></td>
-        <?php if ($canDelete): ?>
+      <tr data-id="<?= $r['id'] ?>">
         <td>
-          <button type="button" class="btn btn-danger btn-sm btn-icon" title="삭제" onclick="event.stopPropagation(); deleteAlbum(<?= $r['id'] ?>)"><i class="fas fa-trash"></i></button>
+          <a href="<?= BASE_URL ?>/albums/view?id=<?= $r['id'] ?>" style="color:var(--text);font-weight:500">
+            <?= htmlspecialchars($r['title']) ?>
+          </a>
         </td>
-        <?php endif; ?>
+        <td><span class="badge badge-blue"><?= $r['image_count'] ?>장</span></td>
+        <td class="text-sm text-muted"><?= date('Y-m-d', strtotime($r['created_at'])) ?></td>
+        <td>
+          <div class="flex gap-8">
+            <a href="<?= BASE_URL ?>/albums/view?id=<?= $r['id'] ?>" class="btn btn-ghost btn-sm btn-icon" title="상세보기"><i class="fas fa-eye"></i></a>
+            <?php if ($canEdit): ?>
+            <button class="btn btn-warning btn-sm btn-icon" title="수정" onclick="openEdit(<?= $r['id'] ?>)"><i class="fas fa-pen"></i></button>
+            <?php endif; ?>
+            <?php if ($canDelete): ?>
+            <button class="btn btn-danger btn-sm btn-icon" title="삭제" onclick="deleteAlbum(<?= $r['id'] ?>)"><i class="fas fa-trash"></i></button>
+            <?php endif; ?>
+          </div>
+        </td>
       </tr>
       <?php endforeach; ?>
       <?php if (empty($data['rows'])): ?>
-      <tr><td colspan="<?= $canDelete ? '3' : '2' ?>" class="text-muted" style="text-align:center;padding:24px">등록된 앨범이 없습니다.</td></tr>
+      <tr><td colspan="4" class="text-muted" style="text-align:center;padding:24px">등록된 앨범이 없습니다.</td></tr>
       <?php endif; ?>
       </tbody>
     </table></div>
@@ -45,6 +61,7 @@
   <?php endif; ?>
 </div>
 
+<!-- ══ 앨범 추가 모달 ══════════════════════════════════════════ -->
 <div class="modal-overlay hidden" id="album-modal">
   <div class="modal modal-lg">
     <div class="modal-header">
@@ -58,11 +75,11 @@
       </div>
       <div class="form-group">
         <label class="form-label">내용 <span class="req">*</span></label>
-        <textarea id="a-content" class="form-control" rows="6" placeholder="앨범 내용을 입력하세요."></textarea>
+        <textarea id="a-content" class="form-control" rows="4" placeholder="앨범 내용을 입력하세요."></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">사진 추가 <span class="req">*</span></label>
-        <input type="file" id="a-images" name="images[]" class="form-control" accept="image/*" multiple onchange="appendCreateImages(this)">
+        <input type="file" id="a-images" class="form-control" accept="image/*" multiple onchange="appendCreateImages(this)">
       </div>
       <div id="a-image-list" style="display:grid;gap:10px"></div>
     </div>
@@ -73,25 +90,46 @@
   </div>
 </div>
 
+<!-- ══ 앨범 수정 모달 ══════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="album-edit-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <h3>앨범 수정</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('album-edit-modal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ae-id">
+      <div class="form-group">
+        <label class="form-label">제목 <span class="req">*</span></label>
+        <input type="text" id="ae-title" class="form-control" placeholder="앨범 제목">
+      </div>
+      <div class="form-group">
+        <label class="form-label">내용 <span class="req">*</span></label>
+        <textarea id="ae-content" class="form-control" rows="5" placeholder="앨범 내용을 입력하세요."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">날짜</label>
+        <input type="date" id="ae-date" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">상태</label>
+        <select id="ae-active" class="form-control">
+          <option value="1">활성</option>
+          <option value="0">비활성</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('album-edit-modal')">취소</button>
+      <button class="btn btn-primary" id="ae-save-btn" onclick="saveEdit()"><i class="fas fa-save"></i> 저장</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let albumCreateFiles = [];
 
-function goDetail(id){
-  location.href = BASE_URL + '/albums/view?id=' + id;
-}
-
-async function deleteAlbum(id){
-  confirmAction('이 앨범을 삭제하시겠습니까? 등록된 사진도 함께 삭제됩니다.', async()=>{
-    const d = await api('/albums/delete', { id });
-    if(d.success){
-      toast(d.message || '삭제되었습니다.');
-      document.querySelector(`tr[data-id="${id}"]`)?.remove();
-    } else {
-      toast(d.message || '삭제에 실패했습니다.','error');
-    }
-  });
-}
-
+/* ── 추가 ── */
 function openCreate(){
   albumCreateFiles = [];
   document.getElementById('a-title').value = '';
@@ -104,7 +142,7 @@ function openCreate(){
 function appendCreateImages(input){
   const picked = [...input.files];
   for(const f of picked){
-    const exists = albumCreateFiles.some(x => x.name === f.name && x.size === f.size && x.lastModified === f.lastModified);
+    const exists = albumCreateFiles.some(x => x.name===f.name && x.size===f.size && x.lastModified===f.lastModified);
     if(!exists) albumCreateFiles.push(f);
   }
   input.value = '';
@@ -138,16 +176,16 @@ function renderCreateImageInputs(){
 }
 
 async function saveAlbum(){
-  const title = document.getElementById('a-title').value.trim();
+  const title   = document.getElementById('a-title').value.trim();
   const content = document.getElementById('a-content').value.trim();
-  const files = albumCreateFiles;
+  const files   = albumCreateFiles;
 
-  if(!title){ toast('제목을 입력하세요.','error'); return; }
+  if(!title)  { toast('제목을 입력하세요.','error'); return; }
   if(!content){ toast('내용을 입력하세요.','error'); return; }
   if(!files.length){ toast('사진을 한 장 이상 추가해주세요.','error'); return; }
   if(files.length > 30){ toast('사진은 최대 30장까지 업로드할 수 있습니다.','error'); return; }
   const totalMB = files.reduce((s,f) => s + f.size, 0) / 1024 / 1024;
-  if(totalMB > 200){ toast(`총 파일 크기(${totalMB.toFixed(1)}MB)가 200MB를 초과합니다. 사진 수를 줄여주세요.`,'error'); return; }
+  if(totalMB > 200){ toast(`총 파일 크기(${totalMB.toFixed(1)}MB)가 200MB를 초과합니다.`,'error'); return; }
 
   const fd = new FormData();
   fd.append('title', title);
@@ -156,34 +194,73 @@ async function saveAlbum(){
   const titleInputs = [...document.querySelectorAll('.album-image-title')];
   for(let i = 0; i < files.length; i++){
     fd.append('images[]', files[i]);
-    const imageTitle = titleInputs.find(el => Number(el.dataset.index) === i)?.value?.trim() || '';
-    fd.append('image_titles[]', imageTitle);
+    fd.append('image_titles[]', titleInputs.find(el => Number(el.dataset.index) === i)?.value?.trim() || '');
   }
 
-  const btn = document.getElementById('album-save-btn');
-  btn.disabled = true;
+  const btn = document.getElementById('album-save-btn'); btn.disabled = true;
   showSpinner('앨범 저장 중...');
-
   let d;
   try {
-    d = await fetch(BASE_URL + '/albums/create', { method:'POST', body: fd }).then(r => r.json());
-  } catch(e){
-    hideSpinner();
-    btn.disabled = false;
-    toast('서버 오류가 발생했습니다.','error');
-    return;
+    d = await fetch(BASE_URL+'/albums/create', {method:'POST', body:fd}).then(r=>r.json());
+  } catch(e) {
+    hideSpinner(); btn.disabled = false;
+    toast('서버 오류가 발생했습니다.','error'); return;
   }
+  hideSpinner(); btn.disabled = false;
+  if(d.success){ toast(d.message); closeModal('album-modal'); location.reload(); }
+  else toast(d.message || '저장에 실패했습니다.','error');
+}
 
-  hideSpinner();
-  btn.disabled = false;
+/* ── 수정 ── */
+async function openEdit(id){
+  const d = await api('/albums/detail', {id});
+  if(!d.success){ toast(d.message,'error'); return; }
+  const r = d.data;
+  document.getElementById('ae-id').value      = r.id;
+  document.getElementById('ae-title').value   = r.title || '';
+  document.getElementById('ae-content').value = r.content || '';
+  document.getElementById('ae-date').value    = (r.date || '').substring(0, 10);
+  document.getElementById('ae-active').value  = r.is_active ?? 1;
+  openModal('album-edit-modal');
+}
+
+async function saveEdit(){
+  const id = document.getElementById('ae-id').value;
+  const title   = document.getElementById('ae-title').value.trim();
+  const content = document.getElementById('ae-content').value.trim();
+  if(!title)  { toast('제목을 입력하세요.','error'); return; }
+  if(!content){ toast('내용을 입력하세요.','error'); return; }
+
+  const fd = new FormData();
+  fd.append('id',        id);
+  fd.append('title',     title);
+  fd.append('content',   content);
+  fd.append('date',      document.getElementById('ae-date').value);
+  fd.append('is_active', document.getElementById('ae-active').value);
+
+  const btn = document.getElementById('ae-save-btn'); btn.disabled = true;
+  showSpinner('저장 중...');
+  const d = await fetch(BASE_URL+'/albums/update', {method:'POST', body:fd}).then(r=>r.json());
+  hideSpinner(); btn.disabled = false;
 
   if(d.success){
     toast(d.message);
-    closeModal('album-modal');
-    location.reload();
-  } else {
-    toast(d.message || '저장에 실패했습니다.','error');
-  }
+    closeModal('album-edit-modal');
+    // 목록 행 인라인 업데이트
+    const tr = document.querySelector(`tr[data-id="${id}"]`);
+    if(tr) tr.querySelector('td:first-child a').textContent = title;
+  } else toast(d.message,'error');
+}
+
+/* ── 삭제 ── */
+async function deleteAlbum(id){
+  confirmAction('이 앨범을 삭제하시겠습니까? 등록된 사진도 함께 삭제됩니다.', async()=>{
+    const d = await api('/albums/delete', {id});
+    if(d.success){
+      toast(d.message || '삭제되었습니다.');
+      document.querySelector(`tr[data-id="${id}"]`)?.remove();
+    } else toast(d.message || '삭제에 실패했습니다.','error');
+  });
 }
 </script>
 

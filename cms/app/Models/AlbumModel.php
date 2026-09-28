@@ -3,7 +3,12 @@ class AlbumModel extends BaseModel {
     public function getAll(int $page = 1, int $perPage = ITEMS_PER_PAGE): array {
         $offset = ($page - 1) * $perPage;
         $rows = $this->fetchAll(
-            'SELECT id, title, date, created_at FROM album ORDER BY created_at DESC LIMIT ? OFFSET ?',
+            'SELECT a.id, a.title, a.content, a.date, a.is_active, a.created_at,
+                    COUNT(ai.id) AS image_count
+             FROM album a
+             LEFT JOIN album_images ai ON ai.album_id = a.id
+             GROUP BY a.id
+             ORDER BY a.created_at DESC LIMIT ? OFFSET ?', 
             [$perPage, $offset]
         );
         $total = $this->countQuery('SELECT COUNT(*) FROM album');
@@ -20,7 +25,14 @@ class AlbumModel extends BaseModel {
             [$data['title'], $data['content'], $data['date'] ?? date('Y-m-d'), $data['is_active'] ?? 1]
         );
     }
-
+    
+    public function update(int $id, array $data): int {
+        return $this->execute(
+            'UPDATE album SET title=?, content=?, date=?, is_active=? WHERE id=?',
+            [$data['title'], $data['content'], $data['date'] ?? date('Y-m-d'), $data['is_active'] ?? 1, $id]
+            );
+    }
+    
     public function delete(int $id): int {
         return $this->execute('DELETE FROM album WHERE id = ?', [$id]);
     }
@@ -40,6 +52,21 @@ class AlbumModel extends BaseModel {
             'INSERT INTO album_images (album_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)',
             [$albumId, $imageUrl, $altText, $sortOrder]
         );
+    }
+    
+    public function deleteImage(int $id): ?array {
+        $row = $this->fetch('SELECT * FROM album_images WHERE id = ?', [$id]);
+        if ($row) $this->execute('DELETE FROM album_images WHERE id = ?', [$id]);
+        return $row;
+    }
+    
+    public function reorderImages(array $orders): void {
+        foreach ($orders as $item) {
+            $this->execute(
+                'UPDATE album_images SET sort_order = ? WHERE id = ?',
+                [(int)$item['order'], (int)$item['id']]
+                );
+        }
     }
 
     public function buildPagination(int $total, int $cur, int $perPage = ITEMS_PER_PAGE): array {
