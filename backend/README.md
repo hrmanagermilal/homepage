@@ -30,6 +30,26 @@ docker compose up --build -d
 
 API: **http://localhost:8080/api/**
 
+### Danielschool HTTPS (port 82)
+
+- `https://www.milalchurch.ca:82/` proxies to `daniel-service:80`.
+- `/api/` proxies to `daniel-service:8081`, stripping the `/api/` prefix.
+- Uses the existing certificate mounted from `../frontend/certs`; no new certificate is required.
+- Plain HTTP on port 82 is redirected (301) to the same path on HTTPS port 82. Only `milalchurch.ca/.com` hosts are echoed; any other Host header is redirected to `www.milalchurch.ca`.
+- `/api/docs`, `/api/redoc`, `/api/openapi.json` and `*.map` files are blocked (404) on this port.
+- Per-IP rate limits: 30 requests/min (burst 20) for sign-in endpoints, 20 requests/s (burst 100) for the rest of `/api/`; excess requests get 429.
+- `X-Forwarded-For` is overwritten with the real client address; the backend runs uvicorn with `--proxy-headers` so its per-IP limits apply per user, not per proxy.
+- Nginx publishes port 82; Danielschool's Apache port 80 is internal-only.
+- The room-reservation portal on HTTPS port 83 is unchanged.
+
+After rebuilding and recreating Danielschool (to release its old HTTP port 82),
+validate and recreate Nginx to publish the new TLS port:
+
+```bash
+docker exec milal-nginx nginx -t
+docker compose up -d --no-deps nginx
+```
+
 ## 데이터베이스 접속 정보
 
 | 항목 | 값 |

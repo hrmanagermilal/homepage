@@ -3,12 +3,13 @@ services:
     image: nginx:1.25-alpine
     container_name: milal-nginx
     ports:
-      - "8080:80"
-      - "8443:443"
-      - "81:81"
-      - "83:83"
-      - "93:93"
-      - "8090:8090"
+      - "${NGINX_HTTP_PORT:?}:80"
+      - "${NGINX_HTTPS_PORT:?}:443"
+      - "${NGINX_CMS_PORT:?}:81"
+      - "${NGINX_PORT_82:?}:82"
+      - "${NGINX_PORT_83:?}:83"
+      - "${NGINX_PORT_93:?}:93"
+      - "${NGINX_PORT_8090:?}:8090"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       # Mount frontend's certbot-managed certs directly so renewals
@@ -31,15 +32,15 @@ services:
       - "8000"
     environment:
       DB_HOST: db
-      DB_PORT: 3306
-      DB_NAME: milal_homepage
-      DB_USER: milal_user
-      DB_PASSWORD: milal_root_2024
-      JWT_SECRET: change-this-to-a-secure-random-string
-      JWT_EXPIRY: 604800
-      CORS_ORIGIN: "*"
+      DB_PORT: ${DB_PORT:?}
+      DB_NAME: ${DB_NAME:?}
+      DB_USER: ${DB_USER:?}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      JWT_EXPIRY: ${JWT_EXPIRY:-604800}
+      CORS_ORIGIN: "${CORS_ORIGIN:?}"
       UPLOADS_PATH: /app/uploads
-      YOUTUBE_API_KEY: AIzaSyBzyNb56o41jl99he1pfv5k_etNw7OzLh0
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
     volumes:
       - uploads_data:/app/uploads
     depends_on:
@@ -53,12 +54,12 @@ services:
     image: mysql:8.0
     container_name: milal-db
     ports:
-      - "3307:3306"
+      - "127.0.0.1:${DB_HOST_PORT:?}:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: milal_root_2024
-      MYSQL_DATABASE: milal_homepage
-      MYSQL_USER: milal_user
-      MYSQL_PASSWORD: milal_root_2024
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ${DB_NAME:?}
+      MYSQL_USER: ${DB_USER:?}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?}
       MYSQL_CHARSET: utf8mb4
       MYSQL_COLLATION: utf8mb4_unicode_ci
     volumes:

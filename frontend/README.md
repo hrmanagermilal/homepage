@@ -52,10 +52,10 @@ Docker 서비스: **http://localhost** (포트 80)
 
 
 ### Reset schema (drop & recreate all tables)
-sudo docker exec -i milal-db mysql -u root -pmilal_root_2024 milal_homepage < ./sql/create_tables.sql
+sudo docker exec -i milal-db mysql -u root -p"$MYSQL_ROOT_PASSWORD" milal_homepage < ./sql/create_tables.sql
 
 ### Insert seed data
-sudo docker exec -i milal-db mysql -u root -pmilal_root_2024 milal_homepage < ./sql/insert_test_data.sql
+sudo docker exec -i milal-db mysql -u root -p"$MYSQL_ROOT_PASSWORD" milal_homepage < ./sql/insert_test_data.sql
 
 ### to restart docker containers ##
 sudo docker stop $(sudo docker ps -aq)

@@ -11,8 +11,8 @@ services:
         # the frontend origin on the backend).
         VITE_API_BASE_URL: ""
     ports:
-      - "80:80"
-      - "443:443"
+      - "${FRONTEND_HTTP_PORT:?Set FRONTEND_HTTP_PORT in .env}:80"
+      - "${FRONTEND_HTTPS_PORT:?}:443"
     volumes:
       - uploads_data:/app/uploads
       - ./certs:/etc/nginx/certs:ro

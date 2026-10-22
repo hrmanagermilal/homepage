@@ -1,0 +1,55 @@
+.jubo-latest {
+  min-height: 100vh;
+  background: #1c1c1e;
+  color: #fff;
+  padding-bottom: 24px;
+}
+.jubo-latest__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin-bottom: 8px;
+  background: #fff;
+  color: #111;
+}
+.jubo-latest__title {
+  text-align: left;
+}
+.jubo-latest__logo {
+  display: block;
+  flex-shrink: 0;
+  order: 2;
+}
+.jubo-latest__logo img {
+  display: block;
+  height: 32px;
+  width: auto;
+}
+.jubo-latest__head h1 {
+  margin: 0;
+  font-size: 20px;
+}
+.jubo-latest__head p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  opacity: 0.7;
+}
+.jubo-latest__msg {
+  text-align: center;
+  padding: 48px 16px;
+}
+.jubo-latest__list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.jubo-latest__list img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

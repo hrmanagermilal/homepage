@@ -12,3 +12,5 @@ backend/sql/insert_members2.sql
 /frontend/cernts/
 /frontend/certs/
 /frontend/certs_backup/
+
+/backend/.env
